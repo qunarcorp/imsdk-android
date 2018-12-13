@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/atom_ui_item_padding"
+        android:paddingLeft="@dimen/atom_ui_item_padding"
+        android:paddingRight="@dimen/atom_ui_item_padding"
+        android:textSize="@dimen/atom_ui_text_size_smaller"
+        android:textColor="@color/atom_ui_black_212121"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/atom_ui_item_padding"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/imageview_left"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitXY"
+            fresco:atom_imagecache_actualImageScaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/atom_ui_text_size_micro"
+                android:textColor="@color/atom_ui_new_color_unselect"/>
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="@dimen/atom_ui_text_size_micro"
+                android:textColor="@color/atom_ui_red_67"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/atom_ui_light_gray_DD">
+
+    </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_qunar_logo"
+            android:textSize="@dimen/atom_ui_text_size_smaller"
+            android:textColor="@color/atom_ui_new_color_qunar_logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="去哪网APP"
+            android:textSize="@dimen/atom_ui_text_size_extra_micro"
+            android:textColor="@color/atom_ui_new_color_unselect"/>
+
+
+    </LinearLayout>
+</LinearLayout>

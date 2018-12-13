@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+//    buildToolsVersion '25.0.0'
+    defaultConfig {
+        applicationId "sdk.im.qunar.com.qtalksdkdemo"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 206
+        versionName "8.36"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi'//sdk 涉及的so文件只有armeabi一种类型（建议只过滤该类型，否则会导致sdk某些功能无法使用）
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    PACKAGE_NAME:"sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain: true,
+                    SCHEME      : "qtalkaphone",
+                    currentPlat : "QTalk",
+                    MAIN_SCHEMA : "start_qtalk_activity"
+            ]
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    PACKAGE_NAME:"sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain: true,
+                    SCHEME      : "qtalkaphone",
+                    currentPlat : "QTalk",
+                    MAIN_SCHEMA : "start_qtalk_activity"
+            ]
+        }
+
+    }
+
+    lintOptions{
+        abortOnError false
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        jumboMode = true
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+}
+
+repositories {
+    flatDir {
+        dirs "libs"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile ('com.android.support.constraint:constraint-layout:1.0.2'){
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    compile project(':imlib')
+    testCompile 'junit:junit:4.12'
+}

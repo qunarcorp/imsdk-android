@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_edit_frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginBottom="4dip"
+    android:layout_marginTop="4dip"
+    android:layout_weight="1"
+    android:background="@drawable/atom_ui_common_search_gary_bg"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="horizontal">
+
+    <com.qunar.im.ui.view.IconView
+        android:id="@+id/search_mag_icon"
+        android:layout_width="24dp"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:scaleType="centerInside"
+        android:text="@string/atom_ui_new_search"
+        android:textColor="#9e9e9e" />
+
+    <!-- Inner layout contains the app icon, button(s) and EditText -->
+    <LinearLayout
+        android:id="@+id/search_plate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search_src_text"
+            android:layout_width="0dp"
+            android:layout_height="36dip"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:dropDownAnchor="@id/search_edit_frame"
+            android:dropDownHeight="wrap_content"
+            android:dropDownHorizontalOffset="0dip"
+            android:dropDownVerticalOffset="0dip"
+            android:ellipsize="end"
+            android:hint="@string/atom_ui_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text|textAutoComplete|textNoSuggestions"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="@color/atom_ui_light_gray_99"
+            android:textCursorDrawable="@color/atom_ui_file_sys_cost"
+            android:textSize="@dimen/atom_ui_text_size_small" />
+
+
+
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/search_close_btn"
+            android:layout_width="@dimen/atom_ui_back_image_size"
+            android:layout_height="@dimen/atom_ui_back_image_size"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/atom_ui_image_margin"
+            android:layout_marginRight="@dimen/atom_ui_image_margin"
+            android:focusable="true"
+            android:scaleType="fitCenter"
+            android:text="@string/atom_ui_new_close"
+            android:textColor="#FF616161" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/submit_area"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/search_voice_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:focusable="true"
+            android:paddingEnd="16dip"
+            android:paddingStart="16dip"
+            android:visibility="gone" />
+    </LinearLayout>
+    <!-- android:background="?attr/selectableItemBackgroundBorderless"-->
+</LinearLayout>

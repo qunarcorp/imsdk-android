@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hongbao_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/atom_ui_conner_bg"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/aashouk_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:text="AA收款"
+        android:textColor="@color/atom_ui_black_212121"
+        android:textSize="@dimen/atom_ui_text_size_medium" />
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/atom_ui_hongbao_top_radius">
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/aashouk_icon"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/atom_ui_aashouk_background"
+            android:gravity="center"
+            android:text="@string/atom_ui_new_aashouk"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="32dp" />
+        <!--<ImageView-->
+        <!--android:id="@+id/aashouk_icon"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginLeft="@dimen/atom_ui_container_margin"-->
+        <!--android:layout_marginStart="@dimen/atom_ui_container_margin"-->
+        <!--android:src="@drawable/atom_ui_ic_lucky_money_red" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@id/aashouk_icon"
+            android:layout_toRightOf="@+id/aashouk_icon"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/aashouk_persons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="1人参与"
+                android:textColor="@color/atom_ui_new_color_unselect"
+                android:textSize="@dimen/atom_ui_text_size_smaller" />
+
+            <TextView
+                android:id="@+id/aashouk_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="共 元"
+                android:textColor="@color/atom_ui_new_color_unselect"
+                android:textSize="@dimen/atom_ui_text_size_smaller" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/atom_ui_light_gray_DD" />
+
+    <TextView
+        android:id="@+id/tv_aashouk_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:singleLine="true"
+        android:text="AA收款"
+        android:textColor="@color/atom_ui_new_color_unselect"
+        android:textSize="@dimen/atom_ui_text_size_extra_micro" />
+</LinearLayout>

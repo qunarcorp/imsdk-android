@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.qunar.im.ui.view.kpswitch.widget.KPSwitchPanelLinearLayout
+        android:id="@+id/panel_root"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#fffefefe"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include layout="@layout/atom_ui_activity_chat_opration_panel" />
+
+        <include layout="@layout/atom_ui_activity_chat_voice_panel" />
+
+        <include layout="@layout/atom_ui_activity_chat_emotion_panel" />
+
+        <include layout="@layout/atom_ui_activity_chat_quickreply_panel" />
+
+    </com.qunar.im.ui.view.kpswitch.widget.KPSwitchPanelLinearLayout>
+
+    <include layout="@layout/atom_ui_activity_chat_more_layout" />
+</LinearLayout>

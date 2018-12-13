@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footerView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#dddddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_menu_item_height"
+        android:background="@color/atom_ui_white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:paddingRight="@dimen/atom_ui_container_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/atom_ui_chat_group_name"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <TextView
+            android:id="@+id/cm_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:maxLines="2"
+            android:text="@string/atom_ui_tip_loading"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_menu_item_height"
+        android:background="@color/atom_ui_white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:paddingRight="@dimen/atom_ui_container_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/atom_ui_chat_group_topic"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <TextView
+            android:id="@+id/cm_subject"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:gravity="end|center_vertical"
+            android:paddingBottom="@dimen/atom_ui_item_padding"
+            android:paddingTop="@dimen/atom_ui_item_padding"
+            android:singleLine="true"
+            android:text="@string/atom_ui_tip_loading"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_menu_item_height"
+        android:paddingRight="@dimen/atom_ui_container_margin"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/atom_ui_chat_group_counts"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <TextView
+            android:id="@+id/cm_member_count"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:gravity="end|center_vertical"
+            android:paddingBottom="@dimen/atom_ui_item_padding"
+            android:paddingTop="@dimen/atom_ui_item_padding"
+            android:singleLine="true"
+            android:text="@string/atom_ui_tip_loading"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+
+    <LinearLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/atom_ui_white"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/cloud_record_of_chat"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_menu_item_height"
+            android:paddingRight="@dimen/atom_ui_container_margin"
+            android:paddingLeft="@dimen/atom_ui_container_margin"
+            android:visibility="gone"
+            android:drawableRight="@drawable/atom_ui_ic_right_arrow"
+            android:gravity="center_vertical"
+            android:text="@string/atom_ui_chat_cloud_history"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:background="@color/atom_ui_dark_white" />
+
+        <TextView
+            android:id="@+id/show_qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_menu_item_height"
+            android:paddingRight="@dimen/atom_ui_container_margin"
+            android:paddingLeft="@dimen/atom_ui_container_margin"
+            android:drawableRight="@drawable/atom_ui_ic_right_arrow"
+            android:gravity="center_vertical"
+            android:text="@string/atom_ui_group_qr_code"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/exit_chatroom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_button_height"
+        android:layout_marginBottom="@dimen/atom_ui_container_margin"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_common_button_blue_selector"
+        android:gravity="center"
+        android:text="@string/atom_ui_group_quit_menu"
+        android:textColor="@color/atom_ui_white"
+        android:textSize="@dimen/atom_ui_text_size_medium" />
+
+</LinearLayout>

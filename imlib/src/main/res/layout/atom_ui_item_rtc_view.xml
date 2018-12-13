@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:background="@drawable/atom_ui_white_gray_selector">
+<com.qunar.im.ui.view.IconView
+    android:id="@+id/atom_ui_left_icon"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:textSize="48dp"
+    android:textColor="@color/atom_ui_light_gray_33"/>
+    <TextView
+        android:id="@+id/atom_ui_text"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/atom_ui_item_padding"
+        android:paddingRight="@dimen/atom_ui_item_padding"
+        android:textSize="@dimen/atom_ui_text_size_medium"
+        android:textColor="@color/atom_ui_light_gray_33"/>
+</LinearLayout>

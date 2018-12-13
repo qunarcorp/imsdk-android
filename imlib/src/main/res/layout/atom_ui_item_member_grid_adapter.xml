@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ll_vertical_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/m_gravatar1"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+            fresco:atom_imagecache_roundAsCircle="true"
+            />
+
+        <TextView
+            android:id="@+id/m_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="left|center_vertical"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:text="@string/atom_ui_common_username"
+            android:textSize="@dimen/atom_ui_text_size_micro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_vertical_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/m_gravatar2"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+            fresco:atom_imagecache_roundAsCircle="true"
+            />
+
+        <TextView
+            android:id="@+id/m_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="left|center_vertical"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:text="@string/atom_ui_common_username"
+            android:textSize="@dimen/atom_ui_text_size_micro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_vertical_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/m_gravatar3"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+            fresco:atom_imagecache_roundAsCircle="true"
+            />
+
+        <TextView
+            android:id="@+id/m_name3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="left|center_vertical"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:text="@string/atom_ui_common_username"
+            android:textSize="@dimen/atom_ui_text_size_micro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_vertical_four"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/m_gravatar4"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+            fresco:atom_imagecache_roundAsCircle="true"
+            />
+
+        <TextView
+            android:id="@+id/m_name4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="left|center_vertical"
+            android:scrollbars="horizontal"
+            android:singleLine="true"
+            android:text="@string/atom_ui_common_username"
+            android:textSize="@dimen/atom_ui_text_size_micro" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="translate">#00000000</color>
+    <color name="atom_ui_white">#FFFFFFFF</color>
+    <color name="atom_ui_dark_white">#EEF2F4</color>
+    <color name="atom_ui_light_gray">#FFEFEFEF</color>
+    <color name="atom_ui_title_color">#FAFAFA</color>
+
+
+    <color name="atom_ui_trans_gray">#33B5B5B5</color>
+    <color name="atom_ui_trans_dark_gray">#c0000000</color>
+
+    <color name="atom_ui_file_sys_free">#FFCCCCCC</color>
+    <color name="atom_ui_file_sys_cost">#FF03BB64</color>
+    <color name="atom_ui_file_sys_other">#c2e75c</color>
+    
+    <color name="atom_ui_light_gray_DD">#FFDDDDDD</color>
+    <color name="atom_ui_light_gray_22">#ff222222</color>
+    <color name="atom_ui_light_gray_33">#FF333333</color>
+    <color name="atom_ui_light_gray_cc">#FFCCCCCC</color>
+    <color name="atom_ui_light_gray_99">#FF999999</color>
+    <color name="atom_ui_light_gray_66">#FF666666</color>
+    <color name="atom_ui_light_gray_f9">#FFF9F9F9</color>
+    <color name="atom_ui_light_gray_f1">#FFF1F1F1</color>
+    <color name="atom_ui_light_gray_f2">#FFF2F2F2</color>
+    <color name="atom_ui_light_gray_ee">#FFEEEEEE</color>
+    <color name="atom_ui_light_green2c">#2CBD79</color>
+        <color name="atom_ui_light_gray_c1">#FFC1C1C1</color>
+    <color name="atom_ui_laohe_green">#DCF8C6</color>
+    <color name="atom_ui_primary_color">#FF03BB64</color>
+    <color name="atom_ui_button_primary_color">#FF4CD092</color>
+    <color name="atom_ui_button_primary_color_pressed">#774CD092</color>
+    <color name="atom_ui_button_primary_gray_pressed">#909191</color>
+    <color name="atom_ui_button_primary_white">#ffffff</color>
+    <color name="atom_ui_button_primary_red_pressed">#ef7474</color>
+    <color name="atom_ui_button_primary_gray_red">#f4343d</color>
+    <color name="atom_ui_button_dark_red">#D74F43</color>
+    <color name="atom_ui_button_dark_red_5800">#FF5800</color>
+    <color name="atom_ui_primary_color_dark">#14000000</color>
+    <color name="atom_ui_green_8e">#FF45CF8E</color>
+    <color name="atom_ui_green_8e_trans_60">#9945CF8E</color>
+    <color name="atom_ui_green_8e_trans_40">#6645CF8E</color>
+    <color name="atom_ui_green_8e_trans_20">#3345CF8E</color>
+    <color name="atom_ui_trans_light_gray_ee">#32FFFFFF</color>
+    <color name="atom_ui_trans_white">#19FFFFFF</color>
+    <color name="atom_ui_red_67">#E86767</color>
+    <color name="atom_ui_red_67_trans_40">#66E86767</color>
+    <color name="atom_ui_red_67_trans_20">#33E86767</color>
+    <color name="atom_ui_hongbao_bg">#FF9D3B</color>
+    <color name="atom_ui_qchat_logo_color">#15b0f9</color>
+    <color name="atom_ui_black_212121">#FF212121</color>
+
+    <color name="atom_ui_outter_prompt_color">#FFFFB9</color>
+
+    <color name="atom_ui_search_more_color">#56AB88</color>
+    <!--imagepicker-->
+    <color name="ic_back_press">#323336</color>
+    <color name="ip_color_primary">#393A3F</color>
+    <color name="ip_color_primary_dark">#303135</color>
+    <color name="ip_color_primary_trans">#ec2f3335</color>
+    <color name="ip_color_press">#ffe0e0e0</color>
+    <color name="ip_camera_pre">#353535</color>
+    <color name="ip_color_accent">#1AAD19</color>
+    <color name="ip_text_secondary_inverted">#66ffffff</color>
+    <color name="ip_text_primary_inverted">#ffffff</color>
+
+    <color name="atom_ui_action_bar_new_bc">#87000000</color>
+
+
+    <!-- 新版ui所用颜色 -->
+    <color name="atom_ui_new_color_select">#5cc57f</color>
+    <color name="atom_ui_new_color_unselect">#9e9e9e</color>
+    <color name="atom_ui_new_color_ff9800">#FF9800</color>
+    <color name="atom_ui_new_color_qunar_logo">#1D9AAB</color>
+
+
+
+
+    <color name="test">#636363</color>
+
+    <color name="gray_color">#4b4b58</color>
+    <color name="item_bg">#FFFFFF</color>
+</resources>

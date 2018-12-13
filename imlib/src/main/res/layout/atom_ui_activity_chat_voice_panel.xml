@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qunar.im.ui.view.medias.record.RecordView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/record"
+    android:layout_width="match_parent"
+    android:layout_height="200dip"
+    android:layout_below="@id/edit_region"
+    android:background="@color/atom_ui_white"
+    tools:showIn="@layout/atom_ui_activity_chat" />

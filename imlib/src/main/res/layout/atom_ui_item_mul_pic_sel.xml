@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qunar.im.ui.view.baseView.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/show_local_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        fresco:atom_imagecache_placeholderImage="@drawable/atom_ui_sharemore_picture"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        />
+
+    <ImageButton
+        android:id="@+id/status_selector"
+        android:clickable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
+        android:background="@null"
+        android:src="@drawable/atom_ui_pictures_selected" />
+    <TextView
+        android:id="@+id/tv_edit_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="2dp"
+        android:text="点击编辑"
+        android:visibility="gone"
+        android:gravity="center_vertical|end"
+        android:textSize="@dimen/atom_ui_text_size_medium"
+        android:background="@drawable/atom_ui_gradient_linear_selector"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/atom_ui_white" />
+</com.qunar.im.ui.view.baseView.SquareLayout>

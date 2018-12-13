@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="atom_ui_tab_title">
+        <item>@string/atom_ui_tab_message</item>
+        <item>@string/atom_ui_tab_contacts</item>
+        <item>@string/atom_ui_tab_title_contact</item>
+        <item>@string/atom_ui_tab_mine</item>
+    </string-array>
+    <string-array name="atom_ui_tab_title_qtalk">
+        <item>@string/atom_ui_tab_message</item>
+        <item>@string/atom_ui_tab_trip</item>
+        <item>@string/atom_ui_tab_contacts</item>
+        <item>@string/atom_ui_tab_title_contact</item>
+        <item>@string/atom_ui_tab_mine</item>
+    </string-array>
+    <string-array name="atom_ui_image_menu">
+        <item>@string/atom_ui_menu_save_image</item>
+        <item>@string/atom_ui_menu_scan_qrcode</item>
+        <item>@string/atom_ui_common_more</item>
+    </string-array>
+
+    <integer-array name="aa"></integer-array>
+</resources>

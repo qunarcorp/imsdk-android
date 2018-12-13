@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        android:visibility="gone"
+        layout="@layout/atom_ui_layout_new_action_bar"
+         />
+
+    <ImageButton
+        android:id="@+id/qtuser_iv_nav_config"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_width="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/atom_ui_icon_setting"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/atom_ui_qtalk_icon_new"/>
+
+    <FrameLayout
+        android:id="@+id/qt_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 账户 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/atom_ui_black_212121"
+                    android:textSize="16sp"
+                    android:text="@string/atom_ui_account" />
+
+                <EditText
+                    android:id="@+id/qtuser_username_et"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_weight="1"
+                    android:hint="@string/atom_ui_login_account_hint"
+                    android:maxLength="50"
+                    android:background="@color/translate"
+                    android:singleLine="true" />
+
+                <com.qunar.im.ui.view.IconView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/atom_ui_new_arrow_down"
+                    android:textColor="#9e9e9e"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/atom_ui_light_gray_ee"/>
+            <LinearLayout
+                android:id="@+id/qtuser_login_password_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/atom_ui_black_212121"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        android:text="@string/atom_ui_common_password" />
+
+                    <EditText
+                        android:id="@+id/qtuser_password_et"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:background="@color/translate"
+                        android:inputType="textPassword"
+                        android:maxLength="30"
+                        android:singleLine="true" />
+                    <ImageView
+                        android:id="@+id/qtuser_img_show_pwd"
+                        android:layout_width="@dimen/atom_ui_icon_size"
+                        android:layout_height="@dimen/atom_ui_icon_size"
+                        android:src="@drawable/atom_ui_ic_eye"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/atom_ui_container_margin"
+                    android:layout_marginRight="@dimen/atom_ui_container_margin"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/qtuer_remember_me_cbx"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/atom_ui_btn_remember_me" />
+
+                    <CheckBox
+                        android:id="@+id/qtuser_auto_login_cbx"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/atom_ui_btn_auto_login" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/atom_ui_light_gray_ee"/>
+
+
+
+
+            <Button
+                android:id="@+id/qtuer_btnlogin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/atom_ui_button_height"
+                android:layout_marginLeft="@dimen/atom_ui_container_margin"
+                android:layout_marginRight="@dimen/atom_ui_container_margin"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/atom_ui_common_button_green_selector"
+                android:textSize="@dimen/atom_ui_text_size_medium"
+                android:textColor="@color/atom_ui_white"
+                android:text="@string/atom_ui_btn_login" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/qtuser_tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:background="@android:color/transparent"
+            android:textColor="@color/atom_ui_light_gray_99" />
+
+
+    </FrameLayout>
+</LinearLayout>

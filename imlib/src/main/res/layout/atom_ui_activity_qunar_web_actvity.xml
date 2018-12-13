@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    tools:context=".activity.QunarWebActvity">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_below="@+id/my_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></WebView>
+
+    <ProgressBar
+        android:id="@+id/pb_central"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

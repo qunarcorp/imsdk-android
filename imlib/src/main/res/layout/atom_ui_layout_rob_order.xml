@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:background="@color/atom_ui_white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/rob_order_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/atom_ui_qchat_logo_color"
+        tools:text="[抢单]北京-三亚2人 2017-09-24 出行"/>
+
+    <TextView
+        android:id="@+id/rob_order_yusuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        tools:text="人均预算：3422元-3444元" />
+
+    <TextView
+        android:id="@+id/rob_order_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        tools:text="下单时间：2017-09-21 14:20:31" />
+
+    <TextView
+        android:id="@+id/rob_order_mark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        tools:text="补充说明：希望直飞 不需要中转" />
+
+    <TextView
+        android:id="@+id/rob_order_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/atom_ui_qchat_logo_color"
+        android:padding="10dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@color/atom_ui_white"
+        android:text="抢单"/>
+</LinearLayout>

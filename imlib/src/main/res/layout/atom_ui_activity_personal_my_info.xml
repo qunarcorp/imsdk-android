@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_light_gray_f2">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF5F5F5"
+        android:orientation="vertical"
+        android:layout_below="@+id/my_action_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <LinearLayout
+            android:id="@+id/ll_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_header"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_common_avater"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/header_right_arrow"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/atom_ui_new_right_back"
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/user_gravatar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@id/header_right_arrow"
+                    android:layout_centerVertical="true"
+                    fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                    fresco:atom_imagecache_roundAsCircle="true"
+                    fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_white"
+                    fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+
+            </RelativeLayout>
+
+
+
+
+
+
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="18dp"
+                android:background="#EEEEEE"></View>
+
+            <RelativeLayout
+                android:id="@+id/rl_sign"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:id="@+id/sign_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_common_signature"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/sign_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/atom_ui_container_margin"
+                    android:text="@string/atom_ui_new_right_back"
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="right"
+                    android:layout_toLeftOf="@id/sign_arrow"
+                    android:layout_toRightOf="@id/sign_tv"
+                    android:maxLines="2"
+                    android:text=""
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="18dp"
+                android:background="#EEEEEE"></View>
+
+            <RelativeLayout
+                android:id="@+id/rl_qr"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_myself_tab_qrcode"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/right_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/atom_ui_container_margin"
+                    android:text="@string/atom_ui_new_right_back"
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/icon_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@id/right_back"
+                    android:text="@string/atom_ui_new_qr_code"
+                    android:textColor="#FF616161"
+                    android:textSize="28sp" />
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_1"
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff"
+            android:orientation="vertical">
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_tip_contact_name"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:text=""
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="18dp"
+                android:background="#EEEEEE"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_common_username"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:text=""
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="18dp"
+                android:background="#EEEEEE"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:id="@+id/t1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/atom_ui_common_deptname"
+                    android:textColor="#FF212121"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_organizational_structure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toRightOf="@id/t1"
+                    android:maxLines="2"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="#FF9E9E9E"
+                    android:textSize="14sp" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

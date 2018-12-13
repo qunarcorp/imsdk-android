@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/atom_ui_white"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_white"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/m_gravatar"
+            android:layout_width="@dimen/atom_ui_image_mid_size"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            android:paddingTop="@dimen/atom_ui_spacing"
+            android:paddingBottom="@dimen/atom_ui_spacing"
+            fresco:atom_imagecache_roundAsCircle="true"/>
+        <TextView
+            android:id="@+id/m_name"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:gravity="left|center_vertical"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:textSize="@dimen/atom_ui_text_size_large"/>
+        <CheckBox
+            android:id="@+id/cb_to_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/atom_ui_image_mid_size"
+            android:gravity="right|center_vertical"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:textSize="@dimen/atom_ui_text_size_large"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

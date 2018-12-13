@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_light_gray_f2">
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+         />
+
+    <ImageView
+        android:id="@+id/source_pic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_action_bar"
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        android:id="@+id/ll_option_origin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_input_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/atom_ui_trans_gray"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <CheckBox
+            android:id="@+id/chk_use_origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:gravity="center"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="原图"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+        <TextView
+            android:id="@+id/edit_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/atom_ui_small_red_button_selector"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:gravity="center"
+            android:text="编辑并发送"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+        />
+
+    <TextView
+        android:id="@+id/account_add"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_menu_item_height"
+        android:gravity="center_vertical|start"
+        android:paddingRight="@dimen/atom_ui_container_margin"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:textSize="@dimen/atom_ui_text_size_small"
+        android:background="@drawable/atom_ui_white_gray_selector"
+        android:textColor="@color/atom_ui_light_gray_66"
+        android:layout_marginTop="10dp"
+        android:text="@string/atom_ui_account_add"/>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/account_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp"
+        android:scrollbars="none"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="8dp"
+        android:listSelector="@drawable/atom_ui_white_gray_selector"/>
+
+
+</LinearLayout>

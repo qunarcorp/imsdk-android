@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_light_gray_f2">
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_search_action_bar"/>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/menber_of_chatroom_at"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

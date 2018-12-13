@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" content="text/html" http-equiv="Content-Type">
+	<script type="text/javascript">
+        function loadURL(url) {
+	        var iFrame;
+	        iFrame = document.createElement("iframe");
+	        iFrame.setAttribute("src", url);
+	        iFrame.setAttribute("style", "display:none;");
+	        iFrame.setAttribute("height", "0px");
+	        iFrame.setAttribute("width", "0px");
+	        iFrame.setAttribute("frameborder", "0");
+	        document.body.appendChild(iFrame);
+	        // 发起请求后这个iFrame就没用了，所以把它从dom上移除掉
+	        iFrame.parentNode.removeChild(iFrame);
+	        iFrame = null;
+	    }
+		function openSingle() {
+			loadURL("qtalkaphone://qunarchat/openSingleChat?jid=lu.li@qunar.com&realJid=lu.li@qunar.com");
+        }
+	</script>
+
+	<title>UIWebView拦截URL</title>
+</head>
+<body>
+    <h1>打开哈哈哈事</h1>
+	<input type="button" name="打开对话框" value="打开对话框" onclick="openSingle()"/>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="atom_ui_action_bar_padding">21dp</dimen>
+    <dimen name="atom_ui_top_action_height">76dp</dimen>
+</resources>

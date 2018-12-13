@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="atom_ui_ic_image">&#xf252;</string>
+    <string name="atom_ui_ic_plus">&#xf252;</string>
+    <string name="atom_ui_ic_audio">&#xe2f8;</string>
+    <string name="atom_ui_ic_pdf">&#xe2f3;</string>
+    <string name="atom_ui_ic_excel">&#xe2f2;</string>
+    <string name="atom_ui_ic_ppt">&#xe2f6;</string>
+    <string name="atom_ui_ic_text">&#xe213;</string>
+    <string name="atom_ui_ic_video">&#xe2df;</string>
+    <string name="atom_ui_ic_word">&#xe2f4;</string>
+    <string name="atom_ui_ic_zip">&#xe2f5;</string>
+    <string name="atom_ui_ic_unknow">&#xe3e9;</string>
+    <string name="atom_ui_ic_html">&#xe3eb;</string>
+    <string name="atom_ui_ic_apk">&#xe3ea;</string>
+    <string name="atom_ui_ic_txt">&#xe3ec;</string>
+    <string name="atom_ui_ic_search">&#xe608;</string>
+    <string name="atom_ui_ic_diconnect">&#xe616;</string>
+    <string name="atom_ui_ic_ting">&#xe6f6;</string>
+    <string name="atom_ui_ic_mute">&#xe60a;</string>
+    <string name="atom_ui_ic_call">&#xe6e5;</string>
+    <string name="atom_ui_ic_camera_turn">&#xe8e3;</string>
+    <string name="atom_ui_ic_mic">&#xe74e;</string>
+    <string name="atom_ui_ic_camera_shooting">&#xe612;</string>
+    <string name="atom_ui_ic_camera_switch">&#xe171;</string>
+    <string name="atom_ui_ic_arrow_down">&#xf3cb;</string>
+
+
+
+    <!-- 新改版所需要ui -->
+    <string name="atom_ui_new_back_unselect">&#xf3cd;</string>
+    <string name="atom_ui_new_message_unselect">&#xf0f3;</string>
+    <string name="atom_ui_new_contact_unselect">&#xf3e3;</string>
+    <string name="atom_ui_new_calendar_unselect">&#xe403;</string>
+    <string name="atom_ui_new_found_unselect">&#xf4be;</string>
+    <string name="atom_ui_new_my_unselect">&#xe29b;</string>
+
+    <string name="atom_ui_new_message_select">&#xf3e4;</string>
+    <string name="atom_ui_new_contact_select">&#xf4d8;</string>
+    <string name="atom_ui_new_calendar_select">&#xe402;</string>
+    <string name="atom_ui_new_found_select">&#xf4bd;</string>
+    <string name="atom_ui_new_my_select">&#xe29c;</string>
+
+    <string name="atom_ui_new_unread_circle">&#xf084;</string>
+    <string name="atom_ui_new_add">&#xf3e1;</string>
+    <string name="atom_ui_new_management">&#xe050;</string>
+    <string name="atom_ui_new_addfriend">&#xf0ca;</string>
+    <string name="atom_ui_new_select_calendar">&#xe53b;</string>
+    <string name="atom_ui_new_qr">&#xf0f5;</string>
+    <string name="atom_ui_new_right_back">&#xf3cc;</string>
+    <string name="atom_ui_new_qr_code">&#xf10d;</string>
+    <string name="atom_ui_new_hongbao">&#xf0e4;</string>
+    <string name="atom_ui_new_hongbao2">&#xf404;</string>
+    <string name="atom_ui_new_aashouk">&#xf21c;</string>
+    <string name="atom_ui_new_yue">&#xf0f1;</string>
+    <string name="atom_ui_new_account_info">&#xf0e2;</string>
+    <string name="atom_ui_new_my_file">&#xe213;</string>
+    <string name="atom_ui_new_feedback">&#xf0ef;</string>
+    <string name="atom_ui_new_setting">&#xf0ed;</string>
+    <string name="atom_ui_new_clock_in">&#xf12a;</string>
+    <string name="atom_ui_new_qtalk_token">&#xe123;</string>
+    <string name="atom_ui_new_send">&#xe0f5;</string>
+    <string name="atom_ui_new_person">&#xf0eb;</string>
+    <string name="atom_ui_new_share">&#xe080;</string>
+    <string name="atom_ui_new_account_switch">&#xe2e0;</string>
+    <string name="atom_ui_new_more">&#xf1cd;</string>
+    <string name="atom_ui_new_search">&#xf407;</string>
+    <string name="atom_ui_voice">&#xf503;</string>
+    <string name="atom_ui_new_close">&#xf093;</string>
+    <string name="atom_ui_new_info">&#xf0fc;</string>
+    <string name="atom_ui_new_delete">&#xf513;</string>
+    <string name="atom_ui_new_arrow_right">&#xf3c8;</string>
+    <string name="atom_ui_new_arrow_down">&#xf3c7;</string>
+    <string name="atom_ui_new_message">&#xf0f4;</string>
+    <string name="atom_ui_new_public_number">&#xf130;</string>
+    <string name="atom_ui_new_organization">&#xf11d;</string>
+    <string name="atom_ui_new_hungup">&#xe0b5;</string>
+    <string name="atom_ui_new_qunar_logo">&#xe189;</string>
+    <string name="atom_ui_new_close_notification">&#xf48f;</string>
+    <string name="atom_ui_new_star_contacts">&#xf038;</string>
+</resources>

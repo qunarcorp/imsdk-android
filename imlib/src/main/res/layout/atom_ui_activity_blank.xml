@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_blanck_content">
+    <include android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar">
+    </include>
+</LinearLayout>

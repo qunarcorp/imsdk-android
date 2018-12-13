@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.qunar.im.ui.view.kpswitch.widget.KPSwitchRootLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/resizelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_light_gray_f2"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <include layout="@layout/atom_ui_activity_chat_msglist_layout" />
+
+    <LinearLayout
+        android:id="@+id/total_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/atom_ui_activity_chat_input_layout" />
+
+        <ViewStub
+            android:id="@+id/bottom_stub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/atom_ui_activity_chat_bottom_stub"
+            />
+    </LinearLayout>
+
+
+</com.qunar.im.ui.view.kpswitch.widget.KPSwitchRootLinearLayout>

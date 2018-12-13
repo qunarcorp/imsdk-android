@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/personal_info"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_button_height"
+            android:text="@string/atom_ui_mine_account_info"
+            android:textSize="@dimen/atom_ui_text_size_largest"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:layout_margin="@dimen/atom_ui_container_margin"/>
+        <TextView
+            android:id="@+id/setting_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_setting_title"
+            android:textSize="@dimen/atom_ui_text_size_largest"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:layout_margin="@dimen/atom_ui_container_margin"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/account_exit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_button_height"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginBottom="@dimen/atom_ui_container_margin"
+        android:layout_alignParentBottom="true"
+        android:text="@string/atom_ui_btn_exit"
+        android:textSize="@dimen/atom_ui_text_size_large"
+        android:background="@color/atom_ui_primary_color"
+        android:gravity="center"
+        android:visibility="gone"/>
+</RelativeLayout>

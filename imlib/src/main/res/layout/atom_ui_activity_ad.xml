@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#87000000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.qunar.im.ui.view.MyWebView
+        android:id="@+id/webview"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
+    <com.qunar.im.ui.view.medias.video.VideoView
+        android:id="@+id/videoView"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:padding="5dp"
+        android:background="@color/atom_ui_white"
+        android:textColor="@color/atom_ui_black_212121"
+        android:text="@string/atom_ui_common_skip"/>
+</RelativeLayout>

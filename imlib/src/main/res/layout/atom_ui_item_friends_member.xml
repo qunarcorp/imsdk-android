@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/atom_ui_white_gray_selector"
+    android:gravity="center"
+    android:orientation="horizontal">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/m_gravatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        fresco:atom_imagecache_roundAsCircle="true"/>
+    <TextView
+        android:id="@+id/m_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start|center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="@dimen/atom_ui_text_size_small"
+        android:textColor="@color/atom_ui_light_gray_33"/>
+</LinearLayout>

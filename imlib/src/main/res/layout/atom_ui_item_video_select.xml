@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingBottom="@dimen/atom_ui_text_margin"
+    android:paddingTop="@dimen/atom_ui_text_margin"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/cb_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:clickable="false"
+        android:focusable="false"/>
+
+    <ImageView
+        android:id="@+id/iv_frist_frame"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/atom_ui_sharemore_picture"
+        android:layout_toRightOf="@id/cb_selected"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:paddingLeft="@dimen/atom_ui_text_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/iv_frist_frame" />
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:paddingLeft="@dimen/atom_ui_text_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/iv_frist_frame" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:paddingLeft="@dimen/atom_ui_text_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/iv_frist_frame" />
+</RelativeLayout>

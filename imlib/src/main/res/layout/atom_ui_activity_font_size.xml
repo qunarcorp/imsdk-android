@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    tools:context="com.qunar.im.ui.activity.FontSizeActivity">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+        />
+
+    <TextView
+        android:id="@+id/tv_message1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/my_action_bar"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_balloon_right"
+        android:text="@string/atom_ui_tip_fontsize_desc"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:id="@+id/iv_head1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/tv_message1"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_default_gravatar" />
+
+    <TextView
+        android:id="@+id/tv_message2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_head1"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_toRightOf="@+id/iv_head1"
+        android:background="@drawable/atom_ui_balloon_left"
+        android:text="@string/atom_ui_tip_fontsize_desc_one"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:id="@+id/iv_head2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/iv_head1"
+        android:layout_below="@+id/tv_message2"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_default_gravatar" />
+
+    <TextView
+        android:id="@+id/tv_message3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_head2"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_toRightOf="@+id/iv_head2"
+        android:background="@drawable/atom_ui_balloon_left"
+        android:text="@string/atom_ui_tip_fontsize_desc_two"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_small_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sb_change_font_size"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:text="@string/atom_ui_setting_fontsize_small" />
+
+    <TextView
+        android:id="@+id/tv_middle_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_small_font"
+        android:layout_centerHorizontal="true"
+        android:text="@string/atom_ui_setting_fontsize_medium" />
+    <TextView
+        android:id="@+id/tv_big_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_small_font"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:text="@string/atom_ui_setting_fontsize_large"/>
+    <SeekBar
+        android:id="@+id/sb_change_font_size"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/atom_ui_container_margin" />
+</RelativeLayout>

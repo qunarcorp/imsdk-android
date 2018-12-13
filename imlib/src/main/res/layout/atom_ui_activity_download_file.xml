@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/atom_ui_container_margin">
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/file_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="50sp"
+            android:text="@string/atom_ui_ic_text"/>
+
+        <TextView
+
+            android:id="@+id/file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/atom_ui_container_margin"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <TextView
+            android:id="@+id/file_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/atom_ui_container_margin"
+            android:textColor="@color/atom_ui_light_gray_99"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+        <TextView
+            android:id="@+id/file_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/atom_ui_container_margin"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium"
+            android:visibility="gone"/>
+
+        <com.qunar.im.ui.view.progressbarview.NumberProgressBar
+            android:id="@+id/number_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/atom_ui_container_margin"
+            android:visibility="gone">
+        </com.qunar.im.ui.view.progressbarview.NumberProgressBar>
+
+        <Button
+            android:id="@+id/download"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_button_height"
+            android:layout_marginTop="@dimen/atom_ui_container_margin"
+            android:layout_gravity="bottom"
+            android:text="@string/atom_ui_btn_download_file"
+            android:background="@drawable/atom_ui_common_button_gray_selector"
+            android:textSize="@dimen/atom_ui_text_size_small"
+            android:textColor="@color/atom_ui_white"/>
+    </LinearLayout>
+
+
+</LinearLayout>
