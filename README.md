@@ -1,6 +1,7 @@
 QTalk IM SDK
 =====
-提供im通讯能力，包含单聊、群聊，通知推送。支持发送文本、图片、表情、语音、文件、地理位置….支持音视频通话。
+Qtalk是一款企业级im工具,由去哪儿网自主研发，在内部稳定运行3年多，同时为去哪儿网上万商家提供售前及售后咨询。Qtalk基本支持所有的消息类型，如：文本、表情、文件、音视频、图片、位置、红包、代码……
+支持全平台接入，iOS、安卓、Windows、Mac、Linux。
 
 Gradle
 --------
@@ -85,6 +86,34 @@ Compatibility
 
  * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
  * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
-## 问题反馈
+ 
+ 开始使用(主要api)
+ -------------
+ ```init
+  1.初始化SDK
+  
+  QIMSdk.getInstance().init(Application application)
+  ```
+ ```config
+  2.配置导航地址
+  
+  QIMSdk.getInstance().setNavigationUrl(String url)
+  ```  
+ ```login
+  3.用户名密码登录
+  
+  QIMSdk.getInstance().login(String uid,String password,LoginStatesListener loginStatesListener)
+  ```   
+ ```Autologin
+  4.自动登录(本地缓存用户之前登录的用户名、token后可自动登录)
+  
+  QIMSdk.getInstance().autoLogin(LoginStatesListener loginStatesListener)
+  ```   
+ ```logout
+  5.登出
+  
+  QIMSdk.getInstance().signOut()
+  ```   
+## 意见反馈
 
--   qchat@qunar.com（邮件）
+-   qchat@qunar.com（Email）

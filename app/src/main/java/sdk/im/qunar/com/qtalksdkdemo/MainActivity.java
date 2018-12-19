@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qunar.im.ui.activity.TabMainActivity;
 import com.qunar.im.ui.sdk.QIMSdk;
 
 
@@ -28,7 +29,7 @@ public class MainActivity extends Activity {
         logcat_text = (TextView) findViewById(R.id.logcat_text);
 
 //        startPlatForm.setText("启动" + CommonConfig.currentPlat);
-        startPlatForm.setText("shcema跳转");
+        startPlatForm.setText("启动qtalk");
     }
 
     /**
@@ -108,7 +109,7 @@ public class MainActivity extends Activity {
 
     public void startMainActivity(View view) {
 
-        startActivity(new Intent(this,TestActivity.class));
+        startActivity(new Intent(this,TabMainActivity.class));
     }
 
     /**
