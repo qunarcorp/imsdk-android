@@ -3,7 +3,7 @@ QTalk IM SDK
 Qtalk是一款企业级im工具,由去哪儿网自主研发，在内部稳定运行3年多，同时为去哪儿网上万商家提供售前及售后咨询。Qtalk基本支持所有的消息类型，如：文本、表情、文件、音视频、图片、位置、红包、代码……
 支持全平台接入，iOS、安卓、Windows、Mac、Linux。
 
-Gradle
+配置Gradle
 --------
 ```gradle
 buildscript {
@@ -38,7 +38,7 @@ dependencies {
 }
 ```
 
-manifestPlaceholders
+配置manifestPlaceholders
 --------
 
 ```manifestPlaceholders
@@ -70,25 +70,9 @@ buildTypes {
 
     }
 ```
-ProGuard
+如何使用(主要接口)
 --------
-Depending on your ProGuard (DexGuard) config and usage, you may need to include the following lines in your proguard.cfg
-
-```pro
--dontwarn com.mqunar.**
--keep class com.mqunar.**{*;}
--dontwarn com.qunar.**
--keep class com.qunar.**{*;}
-```
-
-Compatibility
--------------
-
- * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
- * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
- 
- 开始使用(主要api)
- -------------
+首先需要对sdk进行初始化操作，之后配置导航Url，然后进行登录。
  ```init
   1.初始化SDK
   
@@ -114,6 +98,29 @@ Compatibility
   
   QIMSdk.getInstance().signOut()
   ```   
+  其他参考[api.md](doc/api.md)
+  
+Scheme Support
+--------
+参考文档[scheme文档](https://github.com/qunarcorp/imsdk-android/wiki/Scheme-Support)
+
+ProGuard
+--------
+Depending on your ProGuard (DexGuard) config and usage, you may need to include the following lines in your proguard.cfg
+
+```pro
+-dontwarn com.mqunar.**
+-keep class com.mqunar.**{*;}
+-dontwarn com.qunar.**
+-keep class com.qunar.**{*;}
+```
+
+Compatibility
+-------------
+
+ * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
+ * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
+ 
 ## 意见反馈
 
 -   qchat@qunar.com（Email）
