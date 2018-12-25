@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void configNavigation(View view) {
-        String url = "xxxx";
+        String url = "xxxx";//导航URl
         QIMSdk.getInstance().setNavigationUrl(url);
         toast("导航配置成功");
         logcat_text.append("导航地址：" + url + "\n");
@@ -73,8 +73,8 @@ public class MainActivity extends Activity {
                     }
                 });
             }else {
-                final String uid = "xxx";
-                final String password = "xxxx";
+                final String uid = "xxx";//用户名
+                final String password = "xxxx";//密码
                 QIMSdk.getInstance().login(uid, password, new QIMSdk.LoginStatesListener() {
                     @Override
                     public void isScuess(boolean b, String s) {

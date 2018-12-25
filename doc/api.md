@@ -58,3 +58,51 @@
   
   QIMSDK.getInstance().clearMemoryCache()
   ``` 
+ ```getConversations
+  12.获取消息列表Fragment
+  
+  QIMSDK.getInstance().getConversationListFragment()
+  ```     
+ ```getContacts
+  13.获取通讯录Fragment
+  
+  QIMSDK.getInstance().getContactsFragment()
+  ```   
+ ```getUserCard
+  14.获取个人名片
+       /**
+       * 名片获取逻辑 内存缓存->DB->网络
+       * @param jid 
+       * @param callBack
+       * @param enforce 是否强制获取 true会走网络
+       * @param todb 是否更新DB
+       */
+  QIMSDK.getInstance().getUserCard(String jid, IMLogicManager.NickCallBack callBack,boolean enforce,boolean todb)
+  ```  
+ ```getMucCard
+  15.获取群名片
+       /**
+       * 群名片获取逻辑 同个人
+       */
+  QIMSDK.getInstance().getMucCard(String jid, IMLogicManager.NickCallBack callBack,boolean enforce,boolean todb)
+  ```
+ ```getUserId
+  16.获取无domain的userid
+  
+  QIMSDK.getInstance().getUserIDNoDomain();
+  ```  
+ ```getUserIdwithdomain
+  17.获取带domain的userid
+  
+  QIMSDK.getInstance().getUserIDWithDomain();
+  ```    
+ ```getnavurl
+  16.获取当前导航地址
+  
+  QIMSDK.getInstance().getCurrentNavUrl();
+  ```    
+ ```getdomain
+  17.获取当前域 domain
+  
+  QIMSDK.getInstance().getCurrentDomain();
+  ```   
