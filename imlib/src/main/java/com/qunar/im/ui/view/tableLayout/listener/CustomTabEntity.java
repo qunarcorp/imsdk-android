@@ -1,6 +1,5 @@
 package com.qunar.im.ui.view.tableLayout.listener;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.StringRes;
 
 public interface CustomTabEntity {

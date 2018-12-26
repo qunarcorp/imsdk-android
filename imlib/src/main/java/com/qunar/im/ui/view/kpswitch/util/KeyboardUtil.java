@@ -164,7 +164,7 @@ public class KeyboardUtil {
                                                                  IPanelHeightTarget target,
                                                                  /* Nullable */
                                                                  OnKeyboardShowingListener lis) {
-        final ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
+        final ViewGroup contentView = activity.findViewById(android.R.id.content);
         final boolean isFullScreen = ViewUtil.isFullScreen(activity);
         final boolean isTranslucentStatus = ViewUtil.isTranslucentStatus(activity);
         final boolean isFitSystemWindows = ViewUtil.isFitsSystemWindows(activity);
@@ -210,7 +210,7 @@ public class KeyboardUtil {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void detach(Activity activity, ViewTreeObserver.OnGlobalLayoutListener l) {
-        ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
+        ViewGroup contentView = activity.findViewById(android.R.id.content);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             contentView.getViewTreeObserver().removeOnGlobalLayoutListener(l);
         } else {

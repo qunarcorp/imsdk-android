@@ -30,11 +30,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'io.pristine:libjingle:11139@aar'
+    compile 'com.android.support:design:26.1.0'
     //baidu map
     compile 'com.qunar.im:baidu.map:4.4.1'
     //pull down listview
     compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
-    compile 'io.pristine:libjingle:11139@aar'
     compile 'com.squareup.okio:okio:1.0.1'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'net.zetetic:android-database-sqlcipher:3.5.4'
@@ -45,9 +46,9 @@ dependencies {
     //日期选择器
     compile 'com.contrarywind:Android-PickerView:4.1.6'
 
-    compile 'com.qunar.im:sdk-base:2.0.0'
-    compile 'com.qunar.im:sdk-common:2.0.0'
-    compile 'com.qunar.im:sdk-push:2.0.0'
-    compile 'com.qunar.im:sdk-rn:2.0.0'
-    compile 'com.qunar.im:sdk-rtc:2.0.0'
+    compile 'com.qunar.im:sdk-base:3.0.0'
+    compile 'com.qunar.im:sdk-common:3.0.0'
+    compile 'com.qunar.im:sdk-push:3.0.0'
+    compile 'com.qunar.im:sdk-rn:3.0.0'
+    compile 'com.qunar.im:sdk-rtc:3.0.0'
 }

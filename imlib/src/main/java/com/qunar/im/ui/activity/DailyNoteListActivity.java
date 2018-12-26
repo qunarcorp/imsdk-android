@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -151,12 +150,7 @@ public class DailyNoteListActivity extends SwipeBackActivity implements PullToRe
 
     @Override
     public void showErrMsg(final String error) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toast(error);
-            }
-        });
+        toast(error);
     }
 
     private AlertDialog noteDialog;
@@ -215,10 +209,6 @@ public class DailyNoteListActivity extends SwipeBackActivity implements PullToRe
         params.put("desc", desc);
         params.put("content", desc);
         evernotePresenter.operateDailyMindFromHttp(DailyMindConstants.SAVE_TO_MAIN, params);
-    }
-
-    private void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

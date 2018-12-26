@@ -3,6 +3,10 @@
  */
 package com.qunar.im.ui.schema;
 
+/**
+ * jerry.li
+ * 度假scheme跳转的枚举类
+ */
 public enum QchatSchemaEnum {
     select_user(QSelectUserImpl.instance,"/select_user"),
     chat(QchatSchemaImpl.instance,"/chat"),
@@ -23,6 +27,7 @@ public enum QchatSchemaEnum {
     openGroupChat(QOpenGroupCaht.instance,"/openGroupChat"),
     openSingleChat(QOpenSingleChat.instance,"/openSingleChat"),
     openChatForSearch(QOpenChatForSearch.instance,"/openChatForSearch"),
+    openSearchChatImage(QOpenSearchChatImage.instance,"/openSearchChatImage"),
     unreadList(QOpenUnReadListImpl.instance,"/unreadList"),
     publicNumber(QPublicImpl.instance,"/publicNumber"),
     addFriend(QAddFriend.instance,"/addFriend"),
@@ -40,7 +45,9 @@ public enum QchatSchemaEnum {
     openSingleChatInfo(QOpenSingleChatInfoSchemaImpl.getInstance(),"/openSingleChatInfo"),
     openGroupChatInfo(QOpenGroupChatInfoSchemaImpl.getInstance(),"/openGroupChatInfo"),
     openAccountSwitch(QAccountSwitchSchemaImpl.getInstance(),"/accountSwitch"),
+    openDownLoad(QOpenFileDownLoadImpl.instance,"/openDownLoad"),
     openHeadLine(QOpenHeadLineSchemaImpl.getInstance(),"/headLine");
+
 
 
 

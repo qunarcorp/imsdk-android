@@ -34,7 +34,7 @@ public abstract class DefaultMessageProcessor implements MessageProcessor {
     @Override
     public void processProgressbar(ProgressBar progressBar, IMessageItem item) {
         if (progressBar != null) {
-            if (item.getMessage().getReadState() == MessageStatus.STATUS_PROCESSION) {
+            if (item.getMessage().getMessageState() == MessageStatus.LOCAL_STATUS_PROCESSION) {
                 progressBar.setVisibility(View.VISIBLE);
             } else {
                 progressBar.setVisibility(View.GONE);
@@ -45,7 +45,7 @@ public abstract class DefaultMessageProcessor implements MessageProcessor {
     @Override
     public void processErrorImageView(ImageView errImgView, IMessageItem item) {
         if (errImgView != null) {
-            if (item.getMessage().getReadState() == MessageStatus.STATUS_FAILED) {
+            if (item.getMessage().getMessageState() == MessageStatus.LOCAL_STATUS_FAILED) {
                 errImgView.setVisibility(View.VISIBLE);
             } else {
                 errImgView.setVisibility(View.GONE);

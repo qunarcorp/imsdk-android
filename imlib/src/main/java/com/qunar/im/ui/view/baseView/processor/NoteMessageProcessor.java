@@ -8,10 +8,8 @@ import android.widget.LinearLayout;
 
 import com.qunar.im.base.jsonbean.NoteMsgJson;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.base.util.Utils;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.NoteActionView;

@@ -25,6 +25,8 @@ import com.qunar.im.ui.entity.NavConfigInfo;
  */
 
 public class NavConfigNormalFragment extends DialogFragment implements NavConfigFragment.OnSaveListener {
+    private static final int SCAN_REQUEST = PermissionDispatcher.getRequestCode();
+    private static final String DEFALT_PUBLIC_NAV_URL = "https://qt.qunar.com/package/static/qtalk/publicnav?c=";
 
     private EditText nav_config_domian;
     private TextView nav_config_dialog_confir, nav_config_dialog_cancel, nav_config_dialog_advanced;
@@ -43,6 +45,7 @@ public class NavConfigNormalFragment extends DialogFragment implements NavConfig
         nav_config_dialog_advanced = (TextView) view.findViewById(R.id.nav_config_dialog_advanced);
         nav_config_domian = (EditText) view.findViewById(R.id.nav_config_domian);
 
+//        nav_config_url.setText("https://qt.qunar.com/package/static/qtalk/publicnav?c=qunar.com");
         nav_config_dialog_advanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

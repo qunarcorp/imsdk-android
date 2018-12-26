@@ -3,7 +3,7 @@ package com.qunar.im.ui.view.recyclerview;
 import android.view.ViewGroup;
 
 
-import com.qunar.im.ui.view.recyclerview.entity.SectionEntity;
+import com.qunar.im.base.module.SectionEntity;
 
 import java.util.List;
 

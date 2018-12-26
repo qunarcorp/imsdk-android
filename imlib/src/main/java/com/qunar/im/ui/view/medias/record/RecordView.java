@@ -1,7 +1,6 @@
 package com.qunar.im.ui.view.medias.record;
 
 import android.content.Context;
-import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class RecordView extends LinearLayout implements VoiceView.OnRecordListen
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_recorder, this, true);
-        mVoiceView = (VoiceView) this.findViewById(R.id.record_btn);
+        mVoiceView = this.findViewById(R.id.record_btn);
     }
 
     public void setStatusView(TextView view,Handler h)

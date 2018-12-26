@@ -48,6 +48,8 @@ public class ChatViewAdapter extends BaseAdapter implements IMNotificaitonCenter
     }
 
     protected boolean showNick = true;
+
+    protected boolean showReadState= false;
     protected List<IMMessage> messages = new ArrayList<>();
 
     public ChatViewAdapter() {
@@ -102,6 +104,10 @@ public class ChatViewAdapter extends BaseAdapter implements IMNotificaitonCenter
 
     public void setShowNick(boolean showNick) {
         this.showNick = showNick;
+    }
+
+    public void setShowReadState(boolean showReadState){
+        this.showReadState = showReadState;
     }
 
     public void addNewMsg(IMMessage msg) {

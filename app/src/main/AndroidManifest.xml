@@ -160,21 +160,6 @@
                     android:scheme="${SCHEME}" />
             </intent-filter>
         </activity>
-        <!-- camelhelp lib -->
-        <activity
-            android:name="com.qunar.im.camelhelp.HyMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="camelhelp"
-                    android:scheme="${SCHEME}" />
-            </intent-filter>
-        </activity>
         <activity
             android:name="com.qunar.rn_service.activity.QtalkServiceRNActivity"
             android:screenOrientation="portrait"
@@ -189,24 +174,10 @@
                     android:scheme="${SCHEME}" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.qunar.im.camelhelp.OpsStoreActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"></activity>
-        <activity
-            android:name="com.qunar.im.camelhelp.activity.QTalkSearchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
 
-                <data
-                    android:host="rnsearch"
-                    android:scheme="${SCHEME}" />
-            </intent-filter>
-        </activity>
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

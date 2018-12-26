@@ -37,13 +37,13 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
+import com.qunar.im.base.module.IExpandable;
 import com.qunar.im.ui.view.recyclerview.animation.AlphaInAnimation;
 import com.qunar.im.ui.view.recyclerview.animation.BaseAnimation;
 import com.qunar.im.ui.view.recyclerview.animation.ScaleInAnimation;
 import com.qunar.im.ui.view.recyclerview.animation.SlideInBottomAnimation;
 import com.qunar.im.ui.view.recyclerview.animation.SlideInLeftAnimation;
 import com.qunar.im.ui.view.recyclerview.animation.SlideInRightAnimation;
-import com.qunar.im.ui.view.recyclerview.entity.IExpandable;
 import com.qunar.im.ui.view.recyclerview.loadmore.LoadMoreView;
 import com.qunar.im.ui.view.recyclerview.loadmore.SimpleLoadMoreView;
 import com.qunar.im.ui.view.recyclerview.util.MultiTypeDelegate;

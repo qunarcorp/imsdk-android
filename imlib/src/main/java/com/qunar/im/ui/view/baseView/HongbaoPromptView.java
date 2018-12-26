@@ -47,8 +47,8 @@ public class HongbaoPromptView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_hongbao_prompt, this, true);
-        hongbao_prompt = (TextView) findViewById(R.id.hongbao_prompt);
-        hongbao_icon = (ImageView) findViewById(R.id.hongbao_icon);
+        hongbao_prompt = findViewById(R.id.hongbao_prompt);
+        hongbao_icon = findViewById(R.id.hongbao_icon);
     }
 
     public void bindData(final HongbaoBroadcast broadcast, final String fromJid,

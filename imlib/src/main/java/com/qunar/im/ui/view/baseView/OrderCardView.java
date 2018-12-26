@@ -41,11 +41,11 @@ public class OrderCardView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_order_card, this, true);
-        title_icon = (SimpleDraweeView) findViewById(R.id.title_icon);
-        title = (TextView) findViewById(R.id.title);
-        product_icon = (SimpleDraweeView) findViewById(R.id.product_icon);
-        product_info = (LinearLayout) findViewById(R.id.product_info);
-        ll_product = (LinearLayout) findViewById(R.id.ll_product);
+        title_icon = findViewById(R.id.title_icon);
+        title = findViewById(R.id.title);
+        product_icon = findViewById(R.id.product_icon);
+        product_info = findViewById(R.id.product_info);
+        ll_product = findViewById(R.id.ll_product);
         padding = Utils.dipToPixels(context,4);
     }
 

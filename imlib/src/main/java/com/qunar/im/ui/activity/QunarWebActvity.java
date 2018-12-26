@@ -609,10 +609,6 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
             cookieManager.setCookie(DOMAIN, "_k=null; domain=" + DOMAIN);
             cookieManager.setCookie(DOMAIN, "q_d=null; domain=" + DOMAIN);
         }
-
-//        LogUtil.d("QunarWebActvity", "userid=" + CurrentPreference.getInstance().getUserId() + "|username=" + CurrentPreference.getInstance().getFullName() + "|q_ckey=" + Protocol.getCKEY());
-//        LogUtil.d("QunarWebActvity", cookieManager.getCookie(mUrl));
-//        Logger.i("QunarWebActvity getCookie:"+ cookieManager.getCookie(mUrl));
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.flush();
         } else {

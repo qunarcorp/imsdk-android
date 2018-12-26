@@ -154,12 +154,7 @@ public class DailyToDoListActivity extends SwipeBackActivity implements PullToRe
 
     @Override
     public void showErrMsg(final String error) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toast(error);
-            }
-        });
+        toast(error);
     }
 
     private void getCloudMain() {
@@ -167,10 +162,6 @@ public class DailyToDoListActivity extends SwipeBackActivity implements PullToRe
         params.put("version", "0");
         params.put("type", String.valueOf(DailyMindConstants.TODOLIST));
         todolistPresenter.operateDailyMindFromHttp(DailyMindConstants.GET_CLOUD_MAIN, params);
-    }
-
-    private void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

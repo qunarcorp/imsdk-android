@@ -124,22 +124,22 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     }
 
     protected void findViewById() {
-        mLeftWrapper = (RelativeLayout) findViewById(R.id.chatview_left_wrapper);
-        mRightWrapper = (LinearLayout) findViewById(R.id.chatview_right_wrapper);
-        mLeftChatView = (LinearLayout) findViewById(R.id.chatview_left);
-        mLeftNickName = (TextView) findViewById(R.id.nickname_left);
-        mLeftProgressBar = (ProgressBar) findViewById(R.id.message_progress_left);
-        mLeftSendFailureImageView = (ImageView) findViewById(R.id.send_failure_icon_left);
-        mLeftRoundedImageView = (SimpleDraweeView) findViewById(R.id.imageview_left);
-        mRightChatView = (LinearLayout) findViewById(R.id.chatview_right);
-        mRightProgressBar = (ProgressBar) findViewById(R.id.message_progress_right);
-        mRightSendFailureImageView = (ImageView) findViewById(R.id.send_failure_icon_right);
-        mRightRoundedImageView = (SimpleDraweeView) findViewById(R.id.imageview_right);
-        mTimeTextView = (TextView) findViewById(R.id.textview_time);
-        statusView = (TextView) findViewById(R.id.txt_status);
-        send_states_text = (TextView) findViewById(R.id.send_states_text);
-        bubble_layout_left = (BubbleLayout) findViewById(R.id.bubble_layout_left);
-        bubble_layout_right = (BubbleLayout) findViewById(R.id.bubble_layout_right);
+        mLeftWrapper = findViewById(R.id.chatview_left_wrapper);
+        mRightWrapper = findViewById(R.id.chatview_right_wrapper);
+        mLeftChatView = findViewById(R.id.chatview_left);
+        mLeftNickName = findViewById(R.id.nickname_left);
+        mLeftProgressBar = findViewById(R.id.message_progress_left);
+        mLeftSendFailureImageView = findViewById(R.id.send_failure_icon_left);
+        mLeftRoundedImageView = findViewById(R.id.imageview_left);
+        mRightChatView = findViewById(R.id.chatview_right);
+        mRightProgressBar = findViewById(R.id.message_progress_right);
+        mRightSendFailureImageView = findViewById(R.id.send_failure_icon_right);
+        mRightRoundedImageView = findViewById(R.id.imageview_right);
+        mTimeTextView = findViewById(R.id.textview_time);
+        statusView = findViewById(R.id.txt_status);
+        send_states_text = findViewById(R.id.send_states_text);
+        bubble_layout_left = findViewById(R.id.bubble_layout_left);
+        bubble_layout_right = findViewById(R.id.bubble_layout_right);
 //        mLeftChatView.setBackgroundResource(R.drawable.atom_ui_balloon_left);
 //        mRightChatView.setBackgroundResource(R.drawable.atom_ui_balloon_right);
     }

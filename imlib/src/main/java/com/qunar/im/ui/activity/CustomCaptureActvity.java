@@ -33,7 +33,7 @@ import com.qunar.im.base.util.graphics.BitmapHelper;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.CameraManager;
 import com.qunar.im.ui.util.CameraPreview;
-import com.qunar.im.ui.util.QRUtil;
+import com.qunar.im.utils.QRUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

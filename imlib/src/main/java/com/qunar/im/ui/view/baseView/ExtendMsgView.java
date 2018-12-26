@@ -51,9 +51,9 @@ public class ExtendMsgView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_extend_msg, this, true);
-        desc = (TextView) findViewById(R.id.desc);
-        title = (TextView) findViewById(R.id.txt_title);
-        thumb = (SimpleDraweeView) findViewById(R.id.imageview_left);
+        desc = findViewById(R.id.desc);
+        title = findViewById(R.id.txt_title);
+        thumb = findViewById(R.id.imageview_left);
     }
 
     public void bindData(final ExtendMessageEntity entity, final String id, final boolean isGroup,boolean as667) {

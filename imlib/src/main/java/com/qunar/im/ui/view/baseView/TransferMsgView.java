@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.activity.ChatActivity;
+import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.base.util.ProfileUtils;
 
@@ -37,11 +37,11 @@ public class TransferMsgView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_server_transfer, this, true);
-        from_server = (TextView) findViewById(R.id.from_server);
-        transfer_reason = (TextView) findViewById(R.id.transfer_reason);
-        history_url = (TextView) findViewById(R.id.history_url);
-        to_customer = (TextView) findViewById(R.id.to_customer);
-        start_conv = (TextView) findViewById(R.id.start_conv);
+        from_server = findViewById(R.id.from_server);
+        transfer_reason = findViewById(R.id.transfer_reason);
+        history_url = findViewById(R.id.history_url);
+        to_customer = findViewById(R.id.to_customer);
+        start_conv = findViewById(R.id.start_conv);
     }
 
     public void initServer(String from,String r, final String history, final String to)
@@ -90,7 +90,7 @@ public class TransferMsgView extends LinearLayout {
         start_conv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), ChatActivity.class);
+                Intent i = new Intent(getContext(), PbChatActivity.class);
                 i.putExtra("jid",to);
                 i.putExtra("isFromChatRoom", false);
                 getContext().startActivity(i);
@@ -114,7 +114,7 @@ public class TransferMsgView extends LinearLayout {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), ChatActivity.class);
+                Intent i = new Intent(getContext(), PbChatActivity.class);
                 i.putExtra("jid", to);
                 i.putExtra("isFromChatRoom", false);
                 getContext().startActivity(i);

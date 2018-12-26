@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import com.qunar.im.ui.R;
 
-/**
- * Created by saber on 16-1-5.
- */
 public class MainTabView extends RelativeLayout {
     TextView tabName,unreadCount;
 

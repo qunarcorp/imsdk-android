@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
  * from Android bitmaps. It does not support cropping or rotation.
  * 
  */
-public final class RGBLuminanceSource extends LuminanceSource {
+public final class  RGBLuminanceSource extends LuminanceSource {
 
 	private final byte[] luminances;
 

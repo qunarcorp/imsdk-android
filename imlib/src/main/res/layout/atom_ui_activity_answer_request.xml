@@ -15,8 +15,7 @@
 
         <include
             android:id="@+id/my_action_bar"
-            layout="@layout/atom_ui_layout_new_action_bar"
-            ></include>
+            layout="@layout/atom_ui_layout_new_action_bar" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/user_gravatar"

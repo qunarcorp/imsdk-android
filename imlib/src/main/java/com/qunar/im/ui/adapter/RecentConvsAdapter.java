@@ -198,6 +198,17 @@ public class RecentConvsAdapter extends BaseAdapter {
                 }
             },data.isToNetWork(), data.isToDB());
 
+            connectionUtil.getUserCard(data.getLastFrom(), new IMLogicManager.NickCallBack() {
+                @Override
+                public void onNickCallBack(Nick nick) {
+                    if (nick != null) {
+                        data.setFullname((TextUtils.isEmpty(nick.getName()) ? nick.getXmppId() : nick.getName()));
+                    }
+
+
+                }
+            }, false, false);
+
         } else if (data.getConversationType() == ConversitionType.MSG_TYPE_CHAT) {
             final String jid = data.getId();//consult消息 jid为realuser
             connectionUtil.getUserCard(jid, new IMLogicManager.NickCallBack() {
@@ -286,22 +297,7 @@ public class RecentConvsAdapter extends BaseAdapter {
             FacebookImageUtil.loadFromResource(R.drawable.atom_ui_rbt_system, holder.mImageView);
         }
         holder.mTimeTextView.setText(DateTimeUtils.getTime(data.getLastMsgTime(), false));
-        if (data.getConversationType() == ConversitionType.MSG_TYPE_GROUP) {
-            connectionUtil.getUserCard(data.getLastFrom(), new IMLogicManager.NickCallBack() {
-                @Override
-                public void onNickCallBack(Nick nick) {
-                    if (nick != null) {
-                        data.setFullname((TextUtils.isEmpty(nick.getName()) ? nick.getXmppId() : nick.getName()));
-                        showMessage(data, holder);
-                    }
-
-
-                }
-            }, false, false);
-        } else {
-            showMessage(data, holder);
-        }
-
+        showMessage(data, holder);
 
         return convertView;
     }

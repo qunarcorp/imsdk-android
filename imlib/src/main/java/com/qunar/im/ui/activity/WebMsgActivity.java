@@ -8,18 +8,18 @@ import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 
 import com.google.gson.reflect.TypeToken;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.jsonbean.NoticeBean;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.presenter.IRobotSessionPresenter;
 import com.qunar.im.base.presenter.ISaveConvMap;
 import com.qunar.im.base.presenter.impl.RobotSessionPresenter;
 import com.qunar.im.base.presenter.views.IChatView;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.events.WeiDaoOrderEvent;
+import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +88,7 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
         if(robotSessionPresenter instanceof ISaveConvMap)
         {
             ((ISaveConvMap)robotSessionPresenter).saveConvMap(sessionId);
-            Intent intent =new Intent(this, ChatActivity.class);
+            Intent intent =new Intent(this, PbChatActivity.class);
             intent.putExtra("jid",QtalkStringUtils.userId2Jid(sessionId));
             intent.putExtra("isFromChatRoom",
                     false);
@@ -120,6 +120,11 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
         return "";
     }
 
+    @Override
+    public void setInputMsg(String text) {
+
+    }
+
     public void onEvent(final EventBusEvent.HasNewMessageEvent event) {
         final IMMessage message = event.mMessage;
         if (message != null && message.getConversationID().equals(robotId)) {
@@ -129,7 +134,7 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
 
     @Override
     public void setNewMsg2DialogueRegion(IMMessage imMessage) {
-        if(imMessage !=null&&imMessage.getMsgType()==MessageType.MSG_WEILVXING_ORDER) {
+        if(imMessage !=null&&imMessage.getMsgType()== ProtoMessageOuterClass.MessageType.MessageTypeMicroTourGuide_VALUE) {
             String ext = imMessage.getExt();
             Map<String, Object> data = JsonUtils.getGson().fromJson(ext, new TypeToken<HashMap<String, Object>>() {
             }.getType());
@@ -166,7 +171,7 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
 
     @Override
     public String getFromId() {
-        return QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getUserId());
+        return QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getUserid());
     }
 
     @Override
@@ -186,7 +191,7 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
 
     @Override
     public String getUserId() {
-        return CurrentPreference.getInstance().getUserId();
+        return CurrentPreference.getInstance().getUserid();
     }
 
     @Override
@@ -223,7 +228,7 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
     public void setHistoryMessage(List<IMMessage> list,int unread) {
         for(IMMessage msg:list)
         {
-            if(msg !=null&&msg.getMsgType()==MessageType.MSG_WEILVXING_ORDER) {
+            if(msg !=null&&msg.getMsgType()==ProtoMessageOuterClass.MessageType.MessageTypeMicroTourGuide_VALUE) {
                 String ext = msg.getExt();
                 Map<String, Object> data = JsonUtils.getGson().fromJson(ext, new TypeToken<HashMap<String, Object>>() {
                 }.getType());
@@ -344,8 +349,14 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
 
     }
 
+
     @Override
     public String getBackupInfo() {
         return null;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

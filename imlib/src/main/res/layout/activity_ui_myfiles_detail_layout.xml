@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/atom_ui_container_margin"
-            android:visibility="gone"></com.qunar.im.ui.view.progressbarview.NumberProgressBar>
+            android:visibility="gone" />
     </LinearLayout>
 
 `

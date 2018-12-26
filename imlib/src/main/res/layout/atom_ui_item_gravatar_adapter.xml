@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/atom_ui_light_gray_33"
+        android:textColor="@color/atom_rtc_light_gray_33"
         />
 </LinearLayout>

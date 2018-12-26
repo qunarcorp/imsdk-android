@@ -76,6 +76,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
     }
     compile project(':imlib')
-//    compile 'com.qunar.im:sdk-im:2.0.0'
+//    compile 'com.qunar.im:sdk-im:3.0.0'
     testCompile 'junit:junit:4.12'
 }

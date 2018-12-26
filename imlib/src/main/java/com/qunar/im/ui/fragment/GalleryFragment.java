@@ -41,9 +41,10 @@ import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 import com.qunar.im.ui.imagepicker.view.ViewPagerFixed;
 import com.qunar.im.ui.imagepicker.zoomview.DragPhotoView;
 import com.qunar.im.ui.imagepicker.zoomview.PhotoViewAttacher;
-import com.qunar.im.ui.util.QRUtil;
+import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.zxing.decode.DecodeBitmap;
+import com.qunar.im.utils.QRUtil;
 
 import java.io.File;
 import java.util.List;
@@ -64,7 +65,6 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
     ViewPagerFixed pager;
     TextView pageNum;
     String mImageUrl;
-    String id;
     String localPath;
     String converserId = "";
     String ofrom;
@@ -212,7 +212,6 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
         pager = (ViewPagerFixed) view.findViewById(R.id.image_gallery);
         pageNum = (TextView) view.findViewById(R.id.page_num);
         mImageUrl = getArguments().getString(Constants.BundleKey.IMAGE_URL);
-        id = getArguments().getString(Constants.BundleKey.MESSAGE_ID);
         localPath = getArguments().getString(Constants.BundleKey.IMAGE_ON_LOADING);
         converserId = getArguments().getString(Constants.BundleKey.CONVERSATION_ID);
         ofrom = getArguments().getString(Constants.BundleKey.ORIGIN_FROM);
@@ -240,7 +239,7 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
     @Override
     public void setImageList(final List<PreImage> urls) {
         PreImage cur = new PreImage();
-        cur.id = id;
+        cur.originUrl = mImageUrl;
         int curPage = urls.indexOf(cur);
         if(curPage == -1) {
             PreImage image = new PreImage();
@@ -391,7 +390,7 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
                         if (TextUtils.isEmpty(decode)) {
                             Toast.makeText(getContext(), R.string.atom_ui_tip_parse_failed, Toast.LENGTH_SHORT).show();
                         } else {
-                            QRUtil.handleQRCode(decode, getContext());
+                            QRRouter.handleQRCode(decode, getContext());
                             getActivity().finish();
                         }
                     }
@@ -416,7 +415,7 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
             if (result == null) {
 
             }else{
-                QRUtil.handleQRCode(result.toString(), getContext());
+                QRRouter.handleQRCode(result.toString(), getContext());
                 getActivity().finish();
             }
         } catch (InterruptedException e) {
@@ -427,16 +426,8 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
     }
 
     private File savePicture() {
-//        File imageFile = MyDiskCache.getFile(mImageUrl);
         File imageFile = null;
         try {
-            //glide 4+
-//            imageFile = Glide.with(getActivity())
-//                    .downloadOnly()
-//                    .load(mImageUrl)
-//                    .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-//                    .get();
-            //glide 3+
             imageFile = Glide.with(getActivity())
                     .load(mImageUrl)
                     .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)

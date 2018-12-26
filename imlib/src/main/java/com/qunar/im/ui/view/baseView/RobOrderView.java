@@ -39,11 +39,11 @@ public class RobOrderView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_rob_order, this, true);
-        rob_order_title = (TextView) findViewById(R.id.rob_order_title);
-        rob_order_yusuan = (TextView) findViewById(R.id.rob_order_yusuan);
-        rob_order_time = (TextView) findViewById(R.id.rob_order_time);
-        rob_order_mark = (TextView) findViewById(R.id.rob_order_mark);
-        rob_order_button = (TextView) findViewById(R.id.rob_order_button);
+        rob_order_title = findViewById(R.id.rob_order_title);
+        rob_order_yusuan = findViewById(R.id.rob_order_yusuan);
+        rob_order_time = findViewById(R.id.rob_order_time);
+        rob_order_mark = findViewById(R.id.rob_order_mark);
+        rob_order_button = findViewById(R.id.rob_order_button);
     }
 
     public void bindData(final IMMessage message) {

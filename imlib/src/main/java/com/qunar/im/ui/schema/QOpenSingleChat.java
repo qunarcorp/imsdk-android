@@ -39,7 +39,7 @@ public class QOpenSingleChat implements QChatSchemaService {
                 }
             }
         }
-        intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, converType);
+        intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, String.valueOf(converType));
         intent.putExtra(PbChatActivity.KEY_IS_CHATROOM, false);
         context.startActivity(intent);
         return false;

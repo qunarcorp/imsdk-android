@@ -499,16 +499,7 @@ public class DailyNoteEditorActivity extends SwipeBackActivity implements View.O
 
     @Override
     public void showErrMsg(final String error) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toast(error);
-            }
-        });
-    }
-
-    private void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        toast(error);
     }
 
 

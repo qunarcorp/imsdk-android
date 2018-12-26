@@ -26,9 +26,9 @@ public class MeetingRemindView extends LinearLayout {
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_meeting_remind, this, true);
 
-        meetingTextView = (TextView) findViewById(R.id.meeting_data);
+        meetingTextView = findViewById(R.id.meeting_data);
 
-        click_to_detail = (TextView) findViewById(R.id.click_to_detail);
+        click_to_detail = findViewById(R.id.click_to_detail);
         click_to_detail.setText(Html.fromHtml("<u>"+"点击查看详情 >>"+"</u>"));
     }
 

@@ -1,7 +1,6 @@
 package com.qunar.im.ui.view.medias.video;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.Build;
 import android.view.Window;
 

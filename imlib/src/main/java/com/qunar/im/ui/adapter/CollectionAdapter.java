@@ -8,6 +8,7 @@ import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.messageHandler.ConversitionType;
@@ -19,11 +20,10 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.AccountSwitchActivity;
 import com.qunar.im.ui.activity.CollectionChatActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
-import com.qunar.im.ui.entity.CollectionConvItemDate;
-import com.qunar.im.ui.entity.CollectionUserDate;
+import com.qunar.im.base.module.CollectionConvItemDate;
+import com.qunar.im.base.module.CollectionUserDate;
 import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
-import com.qunar.im.ui.view.recyclerview.entity.MultiItemEntity;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.Comparator;
@@ -31,14 +31,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.qunar.im.base.module.CollectionAdapterConstant.TYPE_LEVEL_0;
+import static com.qunar.im.base.module.CollectionAdapterConstant.TYPE_LEVEL_1;
+
 /**
  * Created by hubin on 2017/11/21.
  */
 
 public class CollectionAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
 
-    public static final int TYPE_LEVEL_0 = 0;
-    public static final int TYPE_LEVEL_1 = 1;
+
     private Context context;
 
     public Map<Integer,Boolean> map;
