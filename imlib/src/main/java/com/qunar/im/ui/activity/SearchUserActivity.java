@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qunar.im.base.common.BackgroundExecutor;
+import com.qunar.im.base.jsonbean.ImgVideoBean;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.PublishPlatform;
@@ -77,6 +78,8 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
     private boolean isFromShare = false;
     private String shareMsgJson;
 
+    private boolean isTransMultiImg;
+
     /****
      * !!暂时!!转发列表放在此处
      */
@@ -104,12 +107,6 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
         initViews();
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     private void injectExtra(Intent intent) {
         tempIntent = intent;
         Bundle bundle = intent.getExtras();
@@ -119,6 +116,9 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
             }
             if (bundle.containsKey(Constants.BundleKey.IS_TRANS)) {
                 isSelectTransUser = bundle.getBoolean(Constants.BundleKey.IS_TRANS);
+            }
+            if(bundle.containsKey(Constants.BundleKey.IS_TRANS_MULTI_IMG)){//转发多张图片&视频
+                isTransMultiImg = bundle.getBoolean(Constants.BundleKey.IS_TRANS_MULTI_IMG);
             }
             if (isSelectTransUser) {
                 transMsg = bundle.getSerializable(Constants.BundleKey.TRANS_MSG);
@@ -156,7 +156,7 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
                 onBackPressed();
             }
         });
-        if (getIntent().getIntExtra("requestcode", 0) == ChatActivity.TRANSFER_CONVERSATION_REQUEST_CODE) {
+        if (getIntent().getIntExtra("requestcode", 0) == PbChatActivity.TRANSFER_CONVERSATION_REQUEST_CODE) {
             fl_fragment.setVisibility(View.VISIBLE);
             DeptFragment deptFragment = new DeptFragment();
             Bundle args = new Bundle();
@@ -203,7 +203,7 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
             searchActionBar.getSearchView().setVisibility(View.GONE);
         }
         searchResults.setOnTouchListener(this);
-        if (isSelectTransUser && !isCurrentSearch) {
+        if ((isSelectTransUser || isTransMultiImg) && !isCurrentSearch) {
             if (simpleRecentConvsAdapter == null) {
                 simpleRecentConvsAdapter = new RecentConvsAdapter(this);
             }
@@ -304,10 +304,9 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
                     // TODO: 2017/9/11  //这个方法是查询公众号,现在还没有做公众号先屏蔽
 //                    presenter.doSearchPublishPlatform();
                 }
-                if ((scope & FRIENDS) == FRIENDS) {
-                    // TODO: 2017/9/11  //这个方法是查询好友,现在还没有做公众号先屏蔽
+//                if ((scope & FRIENDS) == FRIENDS) {
 //                    presenter.doSearchFriend();
-                }
+//                }
                 getHandler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -466,7 +465,15 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
             EventBus.getDefault().post(new EventBusEvent.SendTransMsg(transMsg, jid));
 //            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.TRANS_MESSAGE, transMsg, jid);
             SearchUserActivity.this.finish();
-        } else {//处理正常搜索
+        } else if(isTransMultiImg){//处理转发多条图片视频
+            Intent i = getIntent();
+            i.setClass(this, PbChatActivity.class);
+            i.putExtra(PbChatActivity.KEY_JID, jid);
+            i.putExtra(PbChatActivity.KEY_IS_CHATROOM, isMuc);
+            startActivity(i);
+
+            finish();
+        } else{//处理正常搜索
             if (isMuc) {
                 Intent i = new Intent(this, PbChatActivity.class);
                 i.putExtra(PbChatActivity.KEY_JID, jid);
@@ -484,7 +491,7 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
         public void ItemClickEvent(BaseInfoBinderable item) {
             if (item.type == BaseInfoBinderable.CONTACT_TYPE) {
                 LogUtil.d(TAG, item.id);
-                if (getIntent().getIntExtra("requestcode", 0) == ChatActivity.TRANSFER_CONVERSATION_REQUEST_CODE) {//转移会话
+                if (getIntent().getIntExtra("requestcode", 0) == PbChatActivity.TRANSFER_CONVERSATION_REQUEST_CODE) {//转移会话
                     Intent intent = new Intent();
                     intent.putExtra("userid", item.id);
                     setResult(Activity.RESULT_OK, intent);
@@ -538,6 +545,9 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
 
     private void putIntentExtras(Intent intent){
         Bundle bundle = tempIntent.getExtras();
+        if(bundle == null){
+            return;
+        }
         if (bundle.containsKey(Constants.BundleKey.IS_TRANS)) {
             isSelectTransUser = bundle.getBoolean(Constants.BundleKey.IS_TRANS);
         }

@@ -83,7 +83,8 @@ public class ExtendChatViewAdapter extends ChatViewAdapter {
         }
         extendBaseView.setNickStatus(showNick
                 && message.position == BaseIMMessage.LEFT);
-        extendBaseView.setReadStateShow(QtalkNavicationService.getInstance().isShowmsgstat() && !showNick);
+//        extendBaseView.setReadStateShow(QtalkNavicationService.getInstance().isShowmsgstat() && !showNick);
+        extendBaseView.setReadStateShow(QtalkNavicationService.getInstance().isShowmsgstat() && showReadState );
         if(shareStatus) {
             extendBaseView.setCheckboxEvent(null);
             if (ProcessorFactory.getMiddleType().contains(message.getMsgType()) ||

@@ -17,16 +17,16 @@ import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.presenter.impl.FavourityMessagePresenter;
 import com.qunar.im.base.presenter.views.IFavourityMsgView;
 import com.qunar.im.base.presenter.views.ITagView;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ProfileUtils;
-import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.QtActionBar;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.processor.MessageProcessor;
 import com.qunar.im.ui.view.baseView.processor.ProcessorFactory;
+import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +86,7 @@ public class MyFavourityMessageInfoActivity extends IMBaseActivity implements IT
                     imMessage.getFromID());
             MessageProcessor processor = ProcessorFactory.getProcessorMap().get(imMessage.getMsgType());
             if (processor == null) {
-                processor = ProcessorFactory.getProcessorMap().get(MessageType.TEXT_MESSAGE);
+                processor = ProcessorFactory.getProcessorMap().get(ProtoMessageOuterClass.MessageType.MessageTypeText_VALUE);
             }
             llContent.removeAllViews();
             if (llContent != null) {

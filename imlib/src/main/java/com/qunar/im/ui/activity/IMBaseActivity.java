@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.utils.ConnectionUtil;
@@ -61,19 +63,6 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
     //仿ios风格弹窗
     protected CommonDialog.Builder commonDialog;
     protected Vibrator vibrator;
-//    protected class HandleLoginComplete {
-//        public void onEventMainThread(EventBusEvent.LoginComplete loginComplete) {
-//            if (myActionBar != null) {
-//                if (loginComplete.loginStatus) {
-//                    restoreTitle();
-//                } else {
-//                    changeTitle2Error();
-//                }
-//            }
-//        }
-//    }
-
-//    protected HandleLoginComplete loginComplete = new HandleLoginComplete();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +90,10 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
 
     }
 
+    public void PBinit() {
+//        connectionUtil = ConnectionUtil.getInstance(getApplicationContext());
+//        connectionUtil.setNavigationUrl("https://qt.qunar.com/package/static/qtalk/nav");
+    }
 
 //    public void setActionBar(QtActionBar bar) {
 //        myActionBar = bar;
@@ -290,6 +283,16 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         setActionBarLeftText(str);
         setActionBarLeftCount(count);
     }
+    public void setActionBarLeft(@ColorInt int leftColor, boolean isShow, String str, int count){
+        if (mNewActionBar == null) {
+            return;
+        }
+        setActionBarLeftColor(leftColor);
+        setActionBarLeftIcon(isShow);
+        setActionBarLeftText(str);
+        setActionBarLeftCount(count);
+    }
+
     public void setActionBarLeft(@StringRes int iconStr, String str, int count) {
         if (mNewActionBar == null) {
             return;
@@ -306,6 +309,17 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         setActionBarLeftIcon(iconStr);
         setActionBarLeftText(str);
         setActionBarLeftCount(count);
+    }
+
+    public void setActionBarLeftColor(@ColorInt int color){
+        if (mNewActionBar == null) {
+            return;
+        }
+        mNewActionBar.getLeftLayout().setVisibility(View.VISIBLE);
+        mNewActionBar.getLeftText().setTextColor(color);
+        mNewActionBar.getLeftIcon().setTextColor(color);
+
+
     }
 
     public void setActionBarLeftIcon(boolean isShow) {
@@ -424,7 +438,6 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         super.onPause();
         isFront = false;
     }
-
 
     @Override
     protected void onStop() {
@@ -579,6 +592,15 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.atom_ui_in_from_left, R.anim.atom_ui_out_to_right);
+    }
+
+    protected void toast(final String msg){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(IMBaseActivity.this,msg,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     protected void shake(){

@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.qunar.im.base.jsonbean.ThirdRequestMsgJson;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.protocol.ThirdProviderAPI;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.R;
@@ -39,9 +38,9 @@ public class ThirdMessageView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_third_message, this, true);
-        tv_source = (TextView) findViewById(R.id.tv_source);
-        tv_message_content = (TextView) findViewById(R.id.tv_message_content);
-        tv_action = (TextView) findViewById(R.id.tv_action);
+        tv_source = findViewById(R.id.tv_source);
+        tv_message_content = findViewById(R.id.tv_message_content);
+        tv_action = findViewById(R.id.tv_action);
 
     }
 

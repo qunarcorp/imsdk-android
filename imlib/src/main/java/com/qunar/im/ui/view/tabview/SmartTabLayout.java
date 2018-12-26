@@ -575,7 +575,7 @@ public class SmartTabLayout extends HorizontalScrollView {
       }
 
       if (tabViewTextViewId != NO_ID && tabView != null) {
-        tabTitleView = (TextView) tabView.findViewById(tabViewTextViewId);
+        tabTitleView = tabView.findViewById(tabViewTextViewId);
       }
 
       if (tabTitleView == null && TextView.class.isInstance(tabView)) {

@@ -36,8 +36,8 @@ public class OperationView extends RelativeLayout {
 
     public void init(Context context,FuncMap map){
         mContext = context;
-        vp_oprations = (ViewPager) this.findViewById(R.id.vp_oprations);
-        ll_inicatore = (LinearLayout) this.findViewById(R.id.ll_inicatore);
+        vp_oprations = this.findViewById(R.id.vp_oprations);
+        ll_inicatore = this.findViewById(R.id.ll_inicatore);
         mChatOperationsAdapter  = new ChatOperationsAdapter(context,map);
         vp_oprations.setAdapter(mChatOperationsAdapter);
         initIndicator(0);

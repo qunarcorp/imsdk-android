@@ -70,6 +70,12 @@ buildTypes {
 
     }
 ```
+主工程Manifest配置
+--------
+
+```
+参照app下的AndroidManifest配置
+```
 如何使用(主要接口)
 --------
 首先需要对sdk进行初始化操作，之后配置导航Url，然后进行登录。

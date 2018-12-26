@@ -56,7 +56,7 @@ public class VoiceMessageProcessor extends DefaultMessageProcessor {
                 @Override
                 public void onComplete(boolean isSuccess) {
                     if (isSuccess) {
-                        message.setReadState(MessageStatus.STATUS_SUCCESS);
+                        message.setMessageState(MessageStatus.LOCAL_STATUS_SUCCESS);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -68,7 +68,7 @@ public class VoiceMessageProcessor extends DefaultMessageProcessor {
                         });
 
                     } else {
-                        message.setReadState(MessageStatus.STATUS_FAILED);
+                        message.setMessageState(MessageStatus.LOCAL_STATUS_FAILED);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -110,7 +110,7 @@ public class VoiceMessageProcessor extends DefaultMessageProcessor {
                 statusView.setVisibility(View.GONE);
             }
             if (TextUtils.isEmpty(message.getFromID())) {
-                message.setReadState(MessageStatus.STATUS_FAILED);
+                message.setMessageState(MessageStatus.LOCAL_STATUS_FAILED);
 //                errorImage.setVisibility(View.VISIBLE);
                 return;
             }
@@ -126,7 +126,7 @@ public class VoiceMessageProcessor extends DefaultMessageProcessor {
                 @Override
                 public void onComplete(boolean isSuccess) {
                     if (isSuccess) {
-                        message.setReadState(MessageStatus.STATUS_SUCCESS);
+                        message.setMessageState(MessageStatus.LOCAL_STATUS_SUCCESS);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -135,7 +135,7 @@ public class VoiceMessageProcessor extends DefaultMessageProcessor {
                         });
 
                     } else {
-                        message.setReadState(MessageStatus.STATUS_FAILED);
+                        message.setMessageState(MessageStatus.LOCAL_STATUS_FAILED);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {

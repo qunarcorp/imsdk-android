@@ -46,12 +46,12 @@ public class ActiveMsgView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_active_msg, this, true);
-        active_title = (TextView) findViewById(R.id.active_title);
-        active_addr_category = (TextView) findViewById(R.id.active_addr_category);
-        active_endtime = (TextView) findViewById(R.id.active_endtime);
-        active_time = (TextView) findViewById(R.id.active_time);
-        active_type = (TextView) findViewById(R.id.active_type);
-        active_img = (SimpleDraweeView) findViewById(R.id.active_img);
+        active_title = findViewById(R.id.active_title);
+        active_addr_category = findViewById(R.id.active_addr_category);
+        active_endtime = findViewById(R.id.active_endtime);
+        active_time = findViewById(R.id.active_time);
+        active_type = findViewById(R.id.active_type);
+        active_img = findViewById(R.id.active_img);
     }
 
     public void bindData(final ActivityMessageEntity entity, final String id, final boolean isGroup) {

@@ -58,9 +58,9 @@ public class ActionView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_action_view, this, true);
-        action_introduce = (TextView) findViewById(R.id.action_introduce);
-        action_linear = (LinearLayout) findViewById(R.id.action_linear);
-        action_image_rich = (SimpleDraweeView) findViewById(R.id.action_image_rich);
+        action_introduce = findViewById(R.id.action_introduce);
+        action_linear = findViewById(R.id.action_linear);
+        action_image_rich = findViewById(R.id.action_image_rich);
         line = findViewById(R.id.action_richline_top);
     }
 
@@ -82,9 +82,9 @@ public class ActionView extends LinearLayout {
         action_introduce.setText(Html.fromHtml(action.introduce));
         for (final ActionRichText.SubTitle title : action.subtitles) {
             LinearLayout linearLayout = (LinearLayout) View.inflate(context, R.layout.atom_ui_item_subtitle, null);
-            SimpleDraweeView imageView = (SimpleDraweeView) linearLayout.findViewById(R.id.image);
+            SimpleDraweeView imageView = linearLayout.findViewById(R.id.image);
             imageView.setLayoutParams(new LayoutParams(size,size));
-            TextView textView = (TextView) linearLayout.findViewById(R.id.text);
+            TextView textView = linearLayout.findViewById(R.id.text);
             FacebookImageUtil.loadWithCache(title.iconurl, imageView,
                     false, null);
             linearLayout.setOnClickListener(new OnClickListener() {

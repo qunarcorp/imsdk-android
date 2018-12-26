@@ -56,7 +56,7 @@ public class DecodeBitmap {
      * @return
      */
     public static Result scanningImage(String path) {
-        if(TextUtils.isEmpty(path)){
+        if(TextUtils .isEmpty(path)){
             return null;
         }
 

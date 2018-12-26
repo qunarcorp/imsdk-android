@@ -113,15 +113,6 @@ public class BugreportActivity extends SwipeBackActivity implements IMNotificait
         BugreportActivity.this.startActivity(intent);
     }
 
-    private void toast(final String msg){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(BugreportActivity.this,msg,Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     public void didReceivedNotification(String key, Object... args) {
         switch (key){

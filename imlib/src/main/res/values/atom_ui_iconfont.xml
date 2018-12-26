@@ -55,6 +55,7 @@
     <string name="atom_ui_new_yue">&#xf0f1;</string>
     <string name="atom_ui_new_account_info">&#xf0e2;</string>
     <string name="atom_ui_new_my_file">&#xe213;</string>
+    <string name="aton_ui_new_my_folder">&#xe211;</string>
     <string name="atom_ui_new_feedback">&#xf0ef;</string>
     <string name="atom_ui_new_setting">&#xf0ed;</string>
     <string name="atom_ui_new_clock_in">&#xf12a;</string>
@@ -78,4 +79,10 @@
     <string name="atom_ui_new_qunar_logo">&#xe189;</string>
     <string name="atom_ui_new_close_notification">&#xf48f;</string>
     <string name="atom_ui_new_star_contacts">&#xf038;</string>
+    <string name ="atom_ui_new_computer">&#xf491;</string>
+    <string name="atom_ui_new_error_line">&#xf077;</string>
+    <string name="atom_ui_new_trans">&#xe0cf;</string>
+    <string name="atom_ui_new_download_save">&#xf0aa;</string>
+    <string name="atom_ui_new_video_small">&#xe0e9;</string>
+    <string name="atom_ui_highlight_search">&#xf3b9;</string>
 </resources>

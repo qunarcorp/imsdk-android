@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.qunar.im.ui.activity.MainActivity;
+import com.qunar.im.ui.activity.TabMainActivity;
 
 /**
  * Created by xinbo.wang on 2016/6/30.
@@ -23,7 +23,7 @@ public class ShareReceiver extends BroadcastReceiver {
         if(extra!=null&&extra.containsKey(SHARE_EXTRA_KEY))
         {
             Intent intentActivty = new Intent();
-            intentActivty.setClass(context, MainActivity.class);
+            intentActivty.setClass(context, TabMainActivity.class);
             intentActivty.putExtra(SHARE_EXTRA_KEY,extra.getString(SHARE_EXTRA_KEY));
             intentActivty.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentActivty);

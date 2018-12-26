@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.CommonDownloader;
 import com.qunar.im.base.jsonbean.DownloadImageResult;
 import com.qunar.im.base.jsonbean.EncryptMsg;
@@ -38,6 +39,7 @@ import com.qunar.im.ui.view.progressbarview.NumberProgressBar;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
 
 /**
@@ -50,12 +52,15 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
     private static final int UPDATE_PROGRESS = 1001;
     private static final String PROGRESS = "progress";
     private NumberProgressBar numberProgressBar;
-    private TextView tvFileName,tvFileSize,tvfile_path;
+    private TextView tvFileName, tvFileSize, tvfile_path;
     private Button btnDownload;
     private String url;
     private String fileName;
     private String fileSize;
     private String fileMd5Path;
+    private TransitFileJSON jsonObject;
+
+    private IMMessage message;
 
     protected class FileDownloadHandler extends Handler {
         WeakReference<DownloadFileActivity> weakReference;
@@ -95,43 +100,54 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         setContentView(R.layout.atom_ui_activity_download_file);
         bindViews();
         IMMessage message = (IMMessage) getIntent().getSerializableExtra("file_message");
-        TransitFileJSON jsonObject = null;
+        jsonObject = null;
         //加密消息 先解密
         if (message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeEncrypt_VALUE) {
             EncryptMsg encryptMsg = ChatTextHelper.getEncryptMessageBody(message);
-            if(encryptMsg != null)
+            if (encryptMsg != null)
                 jsonObject = JsonUtils.getGson().fromJson(encryptMsg.Content, TransitFileJSON.class);
-        }else {
+        } else {
             jsonObject = JsonUtils.getGson().fromJson(message.getBody(), TransitFileJSON.class);
         }
         url = QtalkStringUtils.addFilePathDomain(jsonObject.HttpUrl);
-        StringBuilder urlbuilder =new StringBuilder(url);
+        StringBuilder urlbuilder = new StringBuilder(url);
         Protocol.addBasicParamsOnHead(urlbuilder);
         url = urlbuilder.toString();
 
         fileName = jsonObject.FileName;
         fileSize = jsonObject.FileSize;
 
-        tvFileName.setText(getText(R.string.atom_ui_tip_filename)+": "+fileName);
+        tvFileName.setText(getText(R.string.atom_ui_tip_filename) + ": " + fileName);
 
         Uri uri = Uri.parse(url);
 
-        if(TextUtils.isEmpty(fileName)){//json没有的filename从url里面获取
+        if (TextUtils.isEmpty(fileName)) {//json没有的filename从url里面获取
             String temp = uri.getQueryParameter("name");
-            if(TextUtils.isEmpty(temp)){//url 没有默认一个.temp后缀的文件
+            if (TextUtils.isEmpty(temp)) {//url 没有默认一个.temp后缀的文件
                 fileName = System.currentTimeMillis() + ".temp";
-            }else {
+            } else {
                 fileName = temp;
             }
         }
+//        fileMd5Path="";
+        if (TextUtils.isEmpty(jsonObject.FILEMD5)) {
+            if (!jsonObject.noMD5) {
+                fileMd5Path = uri.getLastPathSegment();
 
-        fileMd5Path = uri.getLastPathSegment();
-        if(fileMd5Path.lastIndexOf(".") != -1){//含后缀的md5需要截取
-            fileMd5Path = fileMd5Path.substring(0,fileMd5Path.lastIndexOf("."));
+
+                if (fileMd5Path != null && fileMd5Path.lastIndexOf(".") != -1) {//含后缀的md5需要截取
+                    fileMd5Path = fileMd5Path.substring(0, fileMd5Path.lastIndexOf("."));
+                }
+            }
+
+        } else {
+            fileMd5Path = jsonObject.FILEMD5;
         }
-        if(!TextUtils.isEmpty(fileMd5Path)){
+
+         if (!TextUtils.isEmpty(fileMd5Path)) {
             fileName = fileMd5Path + File.separator + fileName;
         }
+//        }
 
         mHandler = new FileDownloadHandler(new WeakReference<DownloadFileActivity>(this));
         initViews();
@@ -139,7 +155,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
 
     @Override
     protected void onDestroy() {
-        if(mHandler != null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }
@@ -162,7 +178,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         request.requestComplete = new IDownloadRequestComplete() {
             @Override
             public void onRequestComplete(DownloadImageResult result) {
-                if(mHandler != null) {
+                if (mHandler != null) {
                     Message msg = mHandler.obtainMessage();
                     msg.what = DOWNLOAD_FINISH;
                     mHandler.sendMessage(msg);
@@ -172,7 +188,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         request.progressListener = new ProgressResponseListener() {
             @Override
             public void onResponseProgress(long bytewriten, long length, boolean complete) {
-                if(mHandler != null) {
+                if (mHandler != null) {
                     int current = (int) (bytewriten * 100 / length);
                     Message msg = mHandler.obtainMessage();
                     msg.what = UPDATE_PROGRESS;
@@ -191,11 +207,11 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         String prefix = param;
         String fileType = "text/plain";
         int index = param.lastIndexOf(".");
-        if(index != -1){
+        if (index != -1) {
             prefix = param.substring(index);
         }
-        for(int i=0;i< Utils.MIME_MapTable.length;i++){
-            if(prefix.equals(Utils.MIME_MapTable[i][0])){
+        for (int i = 0; i < Utils.MIME_MapTable.length; i++) {
+            if (prefix.equals(Utils.MIME_MapTable[i][0])) {
                 fileType = Utils.MIME_MapTable[i][1];
                 break;
             }
@@ -209,7 +225,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri fileUri = FileProvider.getUriForFile(CommonConfig.globalContext, ProviderUtil.getFileProviderName(DownloadFileActivity.this), file);//android 7.0以上
             intent.setDataAndType(fileUri, fileType);
-        }else {
+        } else {
             intent.setDataAndType(Uri.fromFile(file), fileType);
         }
         return intent;
@@ -218,8 +234,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
     @Override
     public void onStart() {
         super.onStart();
-        if(HttpUtils.checkDownloading(url))
-        {
+        if (HttpUtils.checkDownloading(url)) {
             downloadFile();
         }
         btnDownload.setOnClickListener(this);
@@ -235,37 +250,55 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         setNewActionBar(actionBar);
         setActionBarTitle(R.string.atom_ui_btn_download_file);
 
-        tvFileSize.setText(getText(R.string.atom_ui_tip_filesize)+": "+fileSize);
+        tvFileSize.setText(getText(R.string.atom_ui_tip_filesize) + ": " + fileSize);
         final File file = new File(FileUtils.savePath + fileName);
         if (file.exists()) {
-            DispatchHelper.Async("getFileMd5", true,new Runnable() {//文件存在校验md5是否一致
+            DispatchHelper.Async("getFileMd5", true, new Runnable() {//文件存在校验md5是否一致
                 @Override
                 public void run() {
-                    String md5 = FileUtils.fileToMD5(file);
-                    if(md5 != null && fileMd5Path!=null && md5.equals(fileMd5Path.toLowerCase())){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tvfile_path.setText(getText(R.string.atom_ui_tip_filepath)+": "+file.getAbsolutePath());
-                                tvfile_path.setVisibility(View.VISIBLE);
-                                btnDownload.setText(R.string.atom_ui_tip_open_other_app);
-                                btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
-                                btnDownload.setId(R.id.atom_ui_open_file);
-                                showShareTitleView(file);
 
-                            }
-                        });
+//                    String md5 = FileUtils.fileToMD5(file);
+                    String md5 = "";
+                    if (TextUtils.isEmpty(jsonObject.FILEMD5)) {
+                        md5 = FileUtils.fileToMD5(file);
+                    } else {
+                        md5 = jsonObject.FILEMD5;
+                    }
+                    if (!jsonObject.noMD5) {
 
-                    }else {
-                        file.delete();
+
+                        if (md5 != null && fileMd5Path != null && md5.equals(fileMd5Path.toLowerCase())) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tvfile_path.setText(getText(R.string.atom_ui_tip_filepath) + ": " + file.getAbsolutePath());
+                                    tvfile_path.setVisibility(View.VISIBLE);
+                                    btnDownload.setText(R.string.atom_ui_tip_open_other_app);
+                                    btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
+                                    btnDownload.setId(R.id.atom_ui_open_file);
+                                    showShareTitleView(file);
+
+                                }
+                            });
+
+                        } else {
+                            file.delete();
+                        }
+                    } else {
+                        tvfile_path.setText(getText(R.string.atom_ui_tip_filepath) + ": " + file.getAbsolutePath());
+                        tvfile_path.setVisibility(View.VISIBLE);
+                        btnDownload.setText(R.string.atom_ui_tip_open_other_app);
+                        btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
+                        btnDownload.setId(R.id.atom_ui_open_file);
+                        showShareTitleView(file);
                     }
                 }
             });
         }
     }
 
-    private void showShareTitleView(final File file){
-        if(!file.exists()){
+    private void showShareTitleView(final File file) {
+        if (!file.exists()) {
             return;
         }
         setActionBarRightSpecial(R.string.atom_ui_new_share);
@@ -277,7 +310,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         });
     }
 
-    private void externalShare(File file){
+    private void externalShare(File file) {
         Intent share_intent = new Intent();
         share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
         share_intent.setType("*/*");  //设置分享内容的类型
@@ -285,7 +318,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         if (Build.VERSION.SDK_INT >= 24) {
             share_intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             uri = FileProvider.getUriForFile(this, ProviderUtil.getFileProviderName(DownloadFileActivity.this), file);//android 7.0以上
-        }else {
+        } else {
             uri = Uri.fromFile(file);
         }
         share_intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -298,15 +331,13 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
     public void onClick(View v) {
         if (v.getId() == R.id.download) {
             downloadFile();
-        }
-        else if(v.getId() == R.id.atom_ui_open_file)
-        {
+        } else if (v.getId() == R.id.atom_ui_open_file) {
             Intent intent = getFileIntent(FileUtils.savePath + fileName);
             try {
                 startActivity(intent);
             } catch (Exception e) {
-                LogUtil.e(TAG,"ERROR",e);
-                Toast.makeText(this,R.string.atom_ui_tip_file_open_failed,Toast.LENGTH_LONG).show();
+                LogUtil.e(TAG, "ERROR", e);
+                Toast.makeText(this, R.string.atom_ui_tip_file_open_failed, Toast.LENGTH_LONG).show();
             }
         }
     }

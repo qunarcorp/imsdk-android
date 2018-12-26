@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.module.Nick;
@@ -68,7 +69,6 @@ import com.qunar.im.ui.fragment.PersonalInfoFragment;
 import com.qunar.im.ui.services.PullPatchService;
 import com.qunar.im.ui.services.PushServiceUtils;
 import com.qunar.im.ui.util.ParseErrorEvent;
-import com.qunar.im.ui.util.QRUtil;
 import com.qunar.im.ui.util.UpdateManager;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.OnDoubleClickListener;
@@ -78,6 +78,7 @@ import com.qunar.im.ui.view.tabview.MainTabView;
 import com.qunar.im.ui.view.tabview.SmartTabLayout;
 import com.qunar.im.ui.view.tabview.SmartTabStrip;
 import com.qunar.im.ui.view.zxing.activity.CaptureActivity;
+import com.qunar.im.utils.QRUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
@@ -1222,7 +1223,7 @@ public class MainActivity extends IMBaseActivity implements PermissionCallback, 
             if (data != null) {
                 if (!TextUtils.isEmpty(data.getStringExtra("content"))) {
                     String content = data.getStringExtra("content");
-                    QRUtil.handleQRCode(content, this);
+                    QRRouter.handleQRCode(content, this);
                 }
             }
         }

@@ -29,12 +29,12 @@ import com.qunar.im.base.presenter.IRushOrderPresenter;
 import com.qunar.im.base.presenter.impl.RobotSessionPresenter;
 import com.qunar.im.base.presenter.views.IChatView;
 import com.qunar.im.base.presenter.views.IRobotChatView;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.adapter.ExtendChatViewAdapter;
@@ -351,7 +351,7 @@ public class RobotChatActivity extends PbChatActivity implements IRobotChatView 
             IMMessage message = (IMMessage) v.getTag();
             Intent intent = new Intent();
             intent.putExtra(Constants.BundleKey.MESSAGE, message);
-            if (message.getMsgType() == MessageType.TEXT_MESSAGE) {
+            if (message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeText_VALUE) {
                 menu.add(0, MENU5, 0, getString(R.string.atom_ui_menu_copy)).setIntent(intent);
             }
             menu.add(0, MENU4, 0, getString(R.string.atom_ui_common_delete)).setIntent(intent);
@@ -492,7 +492,7 @@ public class RobotChatActivity extends PbChatActivity implements IRobotChatView 
 //                String chanelId = QtalkStringUtils.userId2Jid(responseMsgJson.sessionid);
 //                ((IRushOrderPresenter) chatingPresenter).updateRushResult(responseMsgJson);
 //                ((IRushOrderPresenter) chatingPresenter).initChanelId(chanelId, responseMsgJson.dealid);
-//                Intent intent = new Intent(this, ChatActivity.class);
+//                Intent intent = new Intent(this, PbChatActivity.class);
 //                intent.putExtra("jid", chanelId);
 //                intent.putExtra("isFromChatRoom", false);
 //                startActivity(intent);
@@ -555,11 +555,11 @@ public class RobotChatActivity extends PbChatActivity implements IRobotChatView 
         finish();
     }
 
-    @Override
-    protected void initGridView(FuncMap map) {
-        map.unregisger(FuncMap.AA);
-        map.unregisger(FuncMap.FIREAFTERREAD);
-        map.unregisger(FuncMap.HONGBAO);
-        linearlayout_tab.init(this, map);
-    }
+//    @Override
+//    protected void initGridView() {
+//        super.initGridView();
+//        funcMap.unregisger(FuncMap.AA);
+//        funcMap.unregisger(FuncMap.HONGBAO);
+//        linearlayout_tab.init(this, funcMap);
+//    }
 }

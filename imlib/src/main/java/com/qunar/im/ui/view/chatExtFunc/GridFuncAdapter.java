@@ -1,7 +1,6 @@
 package com.qunar.im.ui.view.chatExtFunc;
 
 import android.content.Context;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;

@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.GetUpdateInfoResult;
 import com.qunar.im.base.jsonbean.UpdateResponse;
@@ -35,6 +34,7 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 
@@ -347,7 +347,7 @@ public class UpdateManager {
                         public void run() {
                             if(mUpdate.version!=CurrentPreference.getInstance().getSkipVersion()) {
                                 CurrentPreference.getInstance().setSkipVersion(mUpdate.version);
-                                CurrentPreference.getInstance().saveExtConfig();
+//                                CurrentPreference.getInstance().saveExtConfig();
                             }
                             dialog.dismiss();
                         }
@@ -374,8 +374,8 @@ public class UpdateManager {
 
 		final LayoutInflater inflater = LayoutInflater.from(mContext);
 		View v = inflater.inflate(R.layout.atom_ui_update_progress, null);
-		mProgress = (ProgressBar)v.findViewById(R.id.update_progress);
-		mProgressText = (TextView) v.findViewById(R.id.update_progress_text);
+		mProgress = v.findViewById(R.id.update_progress);
+		mProgressText = v.findViewById(R.id.update_progress_text);
 
 		builder.setView(v);
 		builder.setNegativeButton("取消", new OnClickListener() {

@@ -8,6 +8,10 @@
         <!--<item name="windowNoTitle">true</item>-->
     </style>
 
+    <style name="AtomNoTranslucent" parent="AtomAppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
     <style name="atom_ui_MyTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item> //标题字体
         <item name="android:textStyle">bold</item>

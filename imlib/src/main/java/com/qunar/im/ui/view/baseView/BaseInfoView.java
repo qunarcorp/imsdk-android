@@ -36,10 +36,10 @@ public class BaseInfoView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_searched_user, this, true);
-        gravatar = (SimpleDraweeView) findViewById(R.id.gravatar);
-        deptName = (TextView) findViewById(R.id.deptName);
-        userName = (TextView) findViewById(R.id.userName);
-        hint = (TextView) findViewById(R.id.hint);
+        gravatar = findViewById(R.id.gravatar);
+        deptName = findViewById(R.id.deptName);
+        userName = findViewById(R.id.userName);
+        hint = findViewById(R.id.hint);
     }
 
 

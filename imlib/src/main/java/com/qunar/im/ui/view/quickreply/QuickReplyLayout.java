@@ -57,10 +57,10 @@ public class QuickReplyLayout extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_quickreply, this);
-        this.quickReplyListView = (QuickReplyListView) findViewById(R.id.quickreply_rview);
-        this.tabLayout = (LinearLayout) findViewById(R.id.quickreply_tab_layout);
-        scrollView = (HorizontalScrollView) findViewById(R.id.quickreply_scroll);
-        emptyView = (TextView) findViewById(R.id.empty_view);
+        this.quickReplyListView = findViewById(R.id.quickreply_rview);
+        this.tabLayout = findViewById(R.id.quickreply_tab_layout);
+        scrollView = findViewById(R.id.quickreply_scroll);
+        emptyView = findViewById(R.id.empty_view);
         quickReplyListView.setPageChangedListener(new QuickReplyListView.OnPageChangedListener() {
             @Override
             public void onChanged(boolean isleft, String groupname, List<String> list) {

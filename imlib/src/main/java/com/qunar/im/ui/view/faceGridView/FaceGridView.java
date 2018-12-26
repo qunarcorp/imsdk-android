@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.gc;
-
 /**
  * Created by xinbo.wang on 2015/2/5.
  */

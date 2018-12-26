@@ -5,6 +5,9 @@ import android.graphics.*;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 
+/**
+ * Created by peng on 16-10-18. The CircleProgress class extends BaseProgress
+ */
 public class CircleProgress extends BaseProgress {
 
 	// The Paint of the Ring

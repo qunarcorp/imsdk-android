@@ -9,9 +9,6 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 
-/**
- * Created by Bogdan Melnychuk on 2/13/15.
- */
 public class SDHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
 
     protected IconView iconView;

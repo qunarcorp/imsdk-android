@@ -18,6 +18,7 @@ import com.qunar.im.protobuf.Event.QtalkEvent;
 public class ConnectionStateReceiver extends BroadcastReceiver {
 
     private static String lastType = "";
+    private long time;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -31,6 +32,11 @@ public class ConnectionStateReceiver extends BroadcastReceiver {
         //如果info有信息
         if(info!=null){
             Logger.i("info信息:" + info.toString());
+            if(System.currentTimeMillis() - time < 500){
+                return;
+            }else {
+                time = System.currentTimeMillis();
+            }
 
         }else{
             Logger.i("没有相关info信息:");
@@ -71,7 +77,7 @@ public class ConnectionStateReceiver extends BroadcastReceiver {
 //            if (!loginStatus) {
 //            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Connect_Interrupt, "");
             lastType = info.getTypeName();
-            ConnectionUtil.getInstance().reConnection(true);
+            ConnectionUtil.getInstance().reConnectionForce();
 //            }
         }
 

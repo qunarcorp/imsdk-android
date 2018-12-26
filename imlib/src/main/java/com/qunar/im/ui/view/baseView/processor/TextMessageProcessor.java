@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcelable;
@@ -73,7 +71,6 @@ import com.qunar.im.ui.view.bubbleLayout.BubbleLayout;
 import com.qunar.im.ui.view.emojiconTextView.EmojiconTextView;
 import com.qunar.im.utils.QtalkStringUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -197,7 +194,7 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
         return body;
     }
 
-    private void setTextOrImageView(List<Map<String, String>> list, ViewGroup parent, final Context context, IMMessage message) {
+    protected void setTextOrImageView(List<Map<String, String>> list, ViewGroup parent, final Context context, IMMessage message) {
         //在每次有非textView生成需要加入parent的时候务必将newTextView置为true,主要解决图文混排的问题
         boolean newTextView = true;
         EmojiconTextView textView = null;
@@ -218,11 +215,15 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
                     int width = 0;
                     int height = 0;
                     if (extra != null && extra.contains("width") && extra.contains("height")) {
-                        String[] str = extra.trim().split("\\s+");
-                        if (str.length > 1) {
-                            //处理width = 240.000000　问题
-                            width = Double.valueOf(str[0].substring(str[0].indexOf("width") + 6)).intValue();
-                            height = Double.valueOf(str[1].substring(str[1].indexOf("height") + 7)).intValue();
+                        try{
+                            String[] str = extra.trim().split("\\s+");
+                            if (str.length > 1) {
+                                //处理width = 240.000000　问题
+                                width = Double.valueOf(str[0].substring(str[0].indexOf("width") + 6)).intValue();
+                                height = Double.valueOf(str[1].substring(str[1].indexOf("height") + 7)).intValue();
+
+                            }
+                        }catch (Exception e){
 
                         }
                     }
@@ -243,7 +244,6 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
                     final Intent intent = new Intent(context, ImageBrowersingActivity.class);
                     intent.putExtra(Constants.BundleKey.IMAGE_ON_LOADING, params.savedFilePath.getPath());
                     intent.putExtra(Constants.BundleKey.IMAGE_URL, params.sourceUrl);
-                    intent.putExtra(Constants.BundleKey.MESSAGE_ID,message.getMessageId());
                     //加密的图片消息 特殊处理 点击只显示一张
                     if (message.getMsgType() != ProtoMessageOuterClass.MessageType.MessageTypeEncrypt_VALUE) {
                         intent.putExtra(Constants.BundleKey.CONVERSATION_ID, message.getConversationID());

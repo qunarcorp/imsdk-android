@@ -245,10 +245,10 @@ public class MediaPlayerImpl {
                     @Override
                     public void onComplete(boolean isSuccess) {
                         if (isSuccess) {
-                            msg.setReadState(MessageStatus.STATUS_SUCCESS);
+                            msg.setReadState(MessageStatus.REMOTE_STATUS_CHAT_SUCCESS);
 
                         } else {
-                            msg.setReadState(MessageStatus.STATUS_FAILED);
+                            msg.setReadState(MessageStatus.REMOTE_STATUS_CHAT_SUCCESS);
                         }
                     }
                 });

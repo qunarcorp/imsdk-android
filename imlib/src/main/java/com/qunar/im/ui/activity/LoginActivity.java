@@ -1,11 +1,13 @@
 package com.qunar.im.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -21,10 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.other.IQTalkLoginDelegate;
-import com.qunar.im.other.TestAccount;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILoginPresenter;
@@ -35,13 +33,18 @@ import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.core.services.QtalkHttpRequest;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.other.IQTalkLoginDelegate;
+import com.qunar.im.other.TestAccount;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ParseErrorEvent;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -273,7 +276,7 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
             remember_me_cbx.setEnabled(false);
         }
         if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isRememberMe()) {
-            final String userName = CurrentPreference.getInstance().getUserId();
+            final String userName = CurrentPreference.getInstance().getUserid();
             if (userName != null) {
                 editText_username.setText(userName);
             }
@@ -339,6 +342,17 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.showSoftInput(verify_code,0);
                             isTimerRunning = true;
+                        } else if(code == QtalkHttpRequest.NO_NETWORK_CODE){
+                            new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle(getString(R.string.atom_ui_common_prompt))
+                                    .setMessage(errCode)
+                                    .setPositiveButton(getString(R.string.atom_ui_ok), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                                        }
+                                    })
+                                    .create().show();
                         } else {
                             Toast.makeText(LoginActivity.this, errCode+";status_id:"+code, Toast.LENGTH_SHORT).show();
                             timer.cancel();

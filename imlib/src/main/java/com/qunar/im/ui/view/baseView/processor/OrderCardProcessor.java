@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.qunar.im.base.jsonbean.HongbaoContent;
 import com.qunar.im.base.jsonbean.OrderCardInfoResult;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.util.JsonUtils;

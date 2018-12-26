@@ -16,16 +16,16 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.FavouriteMessage;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ProfileUtils;
-import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.processor.MessageProcessor;
 import com.qunar.im.ui.view.baseView.processor.ProcessorFactory;
+import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class FavouriteMessageAdapter extends BaseAdapter {
         MessageProcessor processor = ProcessorFactory.getProcessorMap().get(imMessage.getMsgType());
         if(processor == null)
         {
-            processor = ProcessorFactory.getProcessorMap().get(MessageType.TEXT_MESSAGE);
+            processor = ProcessorFactory.getProcessorMap().get(ProtoMessageOuterClass.MessageType.MessageTypeText_VALUE);
         }
         holder.ll_content.removeAllViews();
         if (holder.ll_content != null) {

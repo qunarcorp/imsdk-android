@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
@@ -14,7 +13,6 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.ui.R;
 import com.qunar.im.base.util.graphics.BitmapHelper;
-import com.qunar.im.utils.DeviceUtil;
 
 /**
  * Created by saber on 15-8-19.

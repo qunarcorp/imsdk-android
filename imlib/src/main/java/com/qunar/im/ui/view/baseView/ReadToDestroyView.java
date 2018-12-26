@@ -72,7 +72,7 @@ public class ReadToDestroyView extends TextView {
 //                        model.insertMultipleMsg(message, jid);
 //                    }
 
-                    IMDatabaseManager.getInstance().InsertChatMessage(message);
+                    IMDatabaseManager.getInstance().InsertChatMessage(message, false);
 
                     setText(context.getText(R.string.atom_ui_message_has_destroy));
                     setTextColor(Color.GRAY);
@@ -90,7 +90,7 @@ public class ReadToDestroyView extends TextView {
                     tmpIMMessage.setDirection(message.getDirection());
                     tmpIMMessage.setToID(message.getToID());
                     tmpIMMessage.setFromID(message.getFromID());
-                    tmpIMMessage.setReadState(MessageStatus.STATUS_SUCCESS);
+                    tmpIMMessage.setReadState(MessageStatus.REMOTE_STATUS_CHAT_SUCCESS);
                     setOnClickListener(null);
                     Intent intent = new Intent(context, ReadToDestroyActivity.class);
                     intent.putExtra("message", tmpIMMessage);

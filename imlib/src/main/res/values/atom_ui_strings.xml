@@ -51,7 +51,7 @@
     <string name="atom_ui_set_stick">Stick</string>
     <string name="atom_ui_cancel_stick">Cancel stick</string>
     <string name="atom_ui_stick_tips">[Stick]</string>
-    <string name="atom_ui_collection_tips"></string>
+    <string name="atom_ui_collection_tips" />
     <string name="atom_ui_all_members">all members</string>
     <string name="atom_ui_new_friend_title">New Friend</string>
     <string name="atom_ui_system_title">System</string>
@@ -246,7 +246,7 @@
     <string name="atom_ui_user_from_album">From Album Select</string>
     <string name="atom_ui_user_selected">Select</string>
     <string name="atom_ui_search_bar_placeholder">Enter user name, user ID search element</string>
-    <string name="atom_ui_search_bar_tab"></string>
+    <string name="atom_ui_search_bar_tab" />
     <string name="atom_ui_qrcode_tips_group">Sweep, quickly open the group name card</string>
     <string name="atom_ui_qrcode_tips_user">Sweep, quickly open the name card</string>
     <string name="atom_ui_qrcode_tips_public_number">Sweep, the number of public concern</string>
@@ -812,4 +812,5 @@
     <string name="atom_ui_tab_trip">Calendar</string>
 
     <string name="atom_ui_quickreply_empty">Please set up a quick reply on the computer</string>
+    <string name="atom_ui_look_forward">No support, please look forward to it!</string>
 </resources>

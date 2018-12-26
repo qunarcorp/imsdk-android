@@ -141,11 +141,11 @@ public class QCameraView extends FrameLayout implements CameraInterface.CameraOp
     private void initView() {
         setWillNotDraw(false);
         View view = LayoutInflater.from(mContext).inflate(R.layout.atom_ui_activity_camera_view, this);
-        mVideoView = (VideoView) view.findViewById(R.id.video_preview);
-        mPhoto = (ImageView) view.findViewById(R.id.image_photo);
-        mSwitchCamera = (ImageView) view.findViewById(R.id.image_switch);
+        mVideoView = view.findViewById(R.id.video_preview);
+        mPhoto = view.findViewById(R.id.image_photo);
+        mSwitchCamera = view.findViewById(R.id.image_switch);
         mSwitchCamera.setImageResource(iconSrc);
-        mFlashLamp = (ImageView) view.findViewById(R.id.image_flash);
+        mFlashLamp = view.findViewById(R.id.image_flash);
         setFlashRes();
         mFlashLamp.setOnClickListener(new OnClickListener() {
             @Override
@@ -156,10 +156,10 @@ public class QCameraView extends FrameLayout implements CameraInterface.CameraOp
                 setFlashRes();
             }
         });
-        mCaptureLayout = (CaptureLayout) view.findViewById(R.id.capture_layout);
+        mCaptureLayout = view.findViewById(R.id.capture_layout);
         mCaptureLayout.setDuration(duration);
         mCaptureLayout.setIconSrc(iconLeft, iconRight);
-        mFoucsView = (FoucsView) view.findViewById(R.id.fouce_view);
+        mFoucsView = view.findViewById(R.id.fouce_view);
         mVideoView.getHolder().addCallback(this);
         //切换摄像头
         mSwitchCamera.setOnClickListener(new OnClickListener() {

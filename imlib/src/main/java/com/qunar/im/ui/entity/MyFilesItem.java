@@ -1,8 +1,8 @@
 package com.qunar.im.ui.entity;
 
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.ui.adapter.MyFilesAdapter;
-import com.qunar.im.ui.view.recyclerview.entity.MultiItemEntity;
 
 /**
  * Created by Lex lex on 2018/5/30.

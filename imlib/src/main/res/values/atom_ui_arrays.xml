@@ -19,5 +19,14 @@
         <item>@string/atom_ui_common_more</item>
     </string-array>
 
-    <integer-array name="aa"></integer-array>
+    <string-array name="atom_ui_robot_config">
+
+        <item>dujia_warning</item>
+    </string-array>
+
+    <string-array name="atom_ui_otehr_manager">
+        <item>file-transfer</item>
+    </string-array>
+
+    <integer-array name="aa" />
 </resources>

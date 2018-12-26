@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.qunar.im.base.module.BaseIMMessage;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.view.baseView.processor.MessageProcessor;
@@ -65,8 +65,8 @@ public class ExtendBaseView extends IMChatBaseView {
     @Override
     protected void findViewById() {
         super.findViewById();
-        richText = (LinearLayout) findViewById(R.id.rich_text);
-        chb_share_msg = (CheckBox) findViewById(R.id.chb_share_msg);
+        richText = findViewById(R.id.rich_text);
+        chb_share_msg = findViewById(R.id.chb_share_msg);
     }
 
     public void setCheckboxEvent(CompoundButton.OnCheckedChangeListener checkboxEvent)
@@ -121,7 +121,7 @@ public class ExtendBaseView extends IMChatBaseView {
         super.position = position;
         super.handler = handler;
         setInVisible();
-        int type = MessageType.TEXT_MESSAGE;
+        int type = ProtoMessageOuterClass.MessageType.MessageTypeText_VALUE;
         MessageProcessor processor = ProcessorFactory.getProcessorMap().get(message.getMsgType());
         if (processor == null) {
             processor = ProcessorFactory.getProcessorMap().get(ProcessorFactory.DEFAULT_PROCESSOR);
@@ -144,7 +144,7 @@ public class ExtendBaseView extends IMChatBaseView {
             processor.processTimeText(mTimeTextView,this,adapter);
         }
         else {
-            if(message.getMsgType() == MessageType.INVITE_MESSAGE)
+            if(message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeGroupNotify_VALUE)
             {
                 message.setDirection(IMMessage.DIRECTION_MIDDLE);
             }

@@ -71,7 +71,7 @@ public abstract class BaseProgress extends Drawable {
 	@Override
 	public void draw(Canvas canvas) {
 		// if progress = 0 ,not show
-		 if (mProgress == 0||(int)((double)((double)mProgress/(double)mMaxValue)*100)==100) {
+		 if (mProgress == 0||(int)((double)mProgress/(double)mMaxValue *100)==100) {
 			 return;
 		 }
 		DrawOther(canvas);
@@ -90,7 +90,7 @@ public abstract class BaseProgress extends Drawable {
 		Rect size = getBounds();
 		Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();
 		int baseline = size.top + (size.bottom - size.top - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
-		canvas.drawText(mCustomStr==null?(int)((double)((double)mProgress/(double)mMaxValue)*100) + "%":mCustomStr, size.centerX()+mTextXOffset, baseline+mTextYOffset, mTextPaint);
+		canvas.drawText(mCustomStr==null?(int)((double)mProgress/(double)mMaxValue *100) + "%":mCustomStr, size.centerX()+mTextXOffset, baseline+mTextYOffset, mTextPaint);
 	}
 
 
@@ -140,7 +140,7 @@ public abstract class BaseProgress extends Drawable {
 				if (levelDrawable.getNumberOfLayers()==2){
 					if(levelDrawable.getDrawable(1).getClass().isAssignableFrom(BaseProgress.class)&&!levelDrawable.getDrawable(1).equals(this)) {
 						//let the progress not show
-						((BaseProgress) levelDrawable.getDrawable(1)).setLevel(0);
+						levelDrawable.getDrawable(1).setLevel(0);
 						// let the origin progress's target imageview point to null
 						((BaseProgress) levelDrawable.getDrawable(1)).inject(null);
 						//reinject new target

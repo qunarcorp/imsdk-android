@@ -71,6 +71,7 @@ public class NavConfigFragment extends DialogFragment implements PermissionCallb
         et_xmpp_port = (EditText) view.findViewById(R.id.et_xmpp_port);
         et_xmpp_domain = (EditText) view.findViewById(R.id.et_xmpp_domain);
 
+//        nav_config_url.setText("https://qt.qunar.com/package/static/qtalk/publicnav?c=qunar.com");
         btnload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
