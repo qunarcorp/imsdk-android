@@ -1,7 +1,26 @@
-QTalk IM SDK
+公有云（Startalk APP）
 =====
-Qtalk是一款企业级im工具,由去哪儿网自主研发，在内部稳定运行3年多，同时为去哪儿网上万商家提供售前及售后咨询。Qtalk基本支持所有的消息类型，如：文本、表情、文件、音视频、图片、位置、红包、代码……
-支持全平台接入，iOS、安卓、Windows、Mac、Linux。
+基于Startalk服务器及客户端，用户可建立属于自己的域,
+
+注册账号、新建域、添加域用户、下载客户端、配置域导航，
+
+仅需5步，您就可以拥有强大的im能力，
+
+客户端下载[下载](https://im.qunar.com/new/#/download)
+
+客户端导航配置[配置导航](https://im.qunar.com/new/#/platform/access_guide/manage_nav?id=manage_nav_mb)
+
+私有云（Startalk SDK）
+=====
+Startalk私有云是一种去中心化的部署方式，
+
+用户或企业将Startalk后端代码完全部署在自己的服务器上，
+
+选择SDK嵌入自己的APP中，
+
+每个公司都是一个单独的节点，每个节点独立运营，数据只保存在节点中，
+
+下面是Android sdk的嵌入方式以及配置。
 
 配置Gradle
 --------
@@ -127,6 +146,6 @@ Compatibility
  * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
  * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
  
-## 意见反馈
-
+意见反馈
+=====
 -   qchat@qunar.com（Email）
