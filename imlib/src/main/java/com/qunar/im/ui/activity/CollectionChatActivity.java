@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.qunar.im.base.presenter.impl.CollectionChatPresenter;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.ui.presenter.CollectionChatPresenter;
 
 /**
  * Created by hubin on 2017/11/27.

@@ -29,9 +29,9 @@ public class HongbaoView extends RelativeLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_hongbao, this, true);
-        titleTextView = (TextView) findViewById(R.id.hongbao_title);
-        hongbaoType = (TextView) findViewById(R.id.tv_hongbao_type);
-        hongbao_icon = (IconView) findViewById(R.id.hongbao_icon);
+        titleTextView = findViewById(R.id.hongbao_title);
+        hongbaoType = findViewById(R.id.tv_hongbao_type);
+        hongbao_icon = findViewById(R.id.hongbao_icon);
     }
 
     public void setTitle(String title) {

@@ -6,8 +6,8 @@ import android.util.SparseIntArray;
 import android.view.ViewGroup;
 
 
-import com.qunar.im.ui.view.recyclerview.entity.IExpandable;
-import com.qunar.im.ui.view.recyclerview.entity.MultiItemEntity;
+import com.qunar.im.base.module.IExpandable;
+import com.qunar.im.base.module.MultiItemEntity;
 
 import java.util.List;
 

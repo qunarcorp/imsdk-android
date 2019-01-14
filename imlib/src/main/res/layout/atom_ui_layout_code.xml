@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:maxLines="1"
+            android:maxLength="15"
             android:singleLine="true"
             android:ellipsize="end"
             android:textColor="@color/atom_ui_light_gray_66"

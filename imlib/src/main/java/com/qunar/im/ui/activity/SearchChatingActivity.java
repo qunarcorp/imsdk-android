@@ -58,11 +58,6 @@ public class SearchChatingActivity extends IMBaseActivity implements ISearchChat
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     void initViews() {
         actionBar= (QtSearchActionBar) this.findViewById(R.id.my_action_bar);
         setSupportActionBar(actionBar);

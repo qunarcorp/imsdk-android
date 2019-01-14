@@ -21,11 +21,10 @@ import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.presenter.ICloudRecordPresenter;
 import com.qunar.im.base.presenter.impl.CloudRecordPresent;
 import com.qunar.im.base.presenter.views.IChatView;
-import com.qunar.im.base.structs.MessageStatus;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.Utils;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.adapter.ExtendChatViewAdapter;
@@ -126,10 +125,10 @@ public class CloudChatRecordActivity extends SwipeActivity implements IChatView 
             IMMessage message = (IMMessage) v.getTag();
             Intent intent = new Intent();
             intent.putExtra(Constants.BundleKey.MESSAGE, message);
-            if (message.getMsgType() !=MessageType.READ_TO_DESTROY_MESSAGE) {
-                if (message.getReadState() == MessageStatus.STATUS_SUCCESS) {
+            if (message.getMsgType() != ProtoMessageOuterClass.MessageType.MessageTypeBurnAfterRead_VALUE) {
+//                if (message.getReadState() == MessageStatus.STATUS_SUCCESS) {
                     menu.add(0, MENU1, 0, getText(R.string.atom_ui_menu_copy)).setIntent(intent);
-                }
+//                }
             }
         }
     }
@@ -177,6 +176,11 @@ public class CloudChatRecordActivity extends SwipeActivity implements IChatView 
     @Override
     public String getInputMsg() {
         return "";
+    }
+
+    @Override
+    public void setInputMsg(String text) {
+
     }
 
     @Override
@@ -386,6 +390,11 @@ public class CloudChatRecordActivity extends SwipeActivity implements IChatView 
 
     }
 
+//    @Override
+//    public void setMsg(String msg) {
+//
+//    }
+
     @Override
     public String getBackupInfo() {
         return null;
@@ -399,5 +408,10 @@ public class CloudChatRecordActivity extends SwipeActivity implements IChatView 
     @Override
     public int getUnreadMsgCount() {
         return 0;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

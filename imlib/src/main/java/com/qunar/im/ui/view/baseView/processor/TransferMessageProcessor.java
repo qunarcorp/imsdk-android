@@ -7,16 +7,16 @@ import android.widget.LinearLayout;
 import com.qunar.im.base.jsonbean.TransferConsult;
 import com.qunar.im.base.jsonbean.TransferWebChat;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.TransferMsgView;
 import com.qunar.im.ui.view.baseView.ViewPool;
+import com.qunar.im.utils.QtalkStringUtils;
 
 /**
  * Created by saber on 16-3-22.
@@ -33,7 +33,7 @@ public class TransferMessageProcessor extends DefaultMessageProcessor {
                 TransferConsult json =
                         JsonUtils.getGson().fromJson(message.getBody(), TransferConsult.class);
                 TransferWebChat transferWebChat = JsonUtils.getGson().fromJson(message.getBody(), TransferWebChat.class);
-                if(message.getMsgType() == MessageType.TRANSFER_TO_SERVER) {
+                if(message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeTransChatToCustomerService_VALUE) {
                     String from = QtalkStringUtils.parseBareJid(message.getFromID());
                     if(from.equals(CurrentPreference.getInstance().getUserid())){
 

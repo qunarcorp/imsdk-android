@@ -71,18 +71,11 @@
             </RelativeLayout>
 
 
-
-
-
-
-
-
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="18dp"
-                android:background="#EEEEEE"></View>
+                android:background="#EEEEEE" />
 
             <RelativeLayout
                 android:id="@+id/rl_sign"
@@ -133,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="18dp"
-                android:background="#EEEEEE"></View>
+                android:background="#EEEEEE" />
 
             <RelativeLayout
                 android:id="@+id/rl_qr"
@@ -212,11 +205,12 @@
 
 
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="18dp"
-                android:background="#EEEEEE"></View>
+                android:background="#EEEEEE" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -250,7 +244,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="18dp"
-                android:background="#EEEEEE"></View>
+                android:background="#EEEEEE" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

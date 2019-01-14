@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.structs.TransitFileJSON;
@@ -16,7 +17,6 @@ import com.qunar.im.ui.adapter.MyFilesAdapter;
 import com.qunar.im.ui.entity.MyFilesItem;
 import com.qunar.im.ui.entity.MyFilesTitle;
 import com.qunar.im.ui.view.QtNewActionBar;
-import com.qunar.im.ui.view.recyclerview.entity.MultiItemEntity;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 
 import java.text.ParseException;

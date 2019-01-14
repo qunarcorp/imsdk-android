@@ -11,8 +11,8 @@ import android.widget.ProgressBar;
 
 import com.qunar.im.ui.R;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.ui.util.QRUtil;
 import com.qunar.im.base.util.graphics.ImageUtils;
+import com.qunar.im.utils.QRUtil;
 
 
 /**

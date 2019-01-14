@@ -40,11 +40,11 @@ public class BuddyRequestView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_buddy_request, this, true);
-        gravatar = (SimpleDraweeView) findViewById(R.id.gravatar);
-        name = (TextView) findViewById(R.id.name);
-        reason = (TextView) findViewById(R.id.reason);
-        accept = (Button) findViewById(R.id.accept);
-        proceed = (TextView) findViewById(R.id.proceed);
+        gravatar = findViewById(R.id.gravatar);
+        name = findViewById(R.id.name);
+        reason = findViewById(R.id.reason);
+        accept = findViewById(R.id.accept);
+        proceed = findViewById(R.id.proceed);
     }
 
     public void bindData(final BuddyRequest request) {

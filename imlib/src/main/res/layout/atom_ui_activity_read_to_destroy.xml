@@ -49,5 +49,5 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical" />
 </LinearLayout>

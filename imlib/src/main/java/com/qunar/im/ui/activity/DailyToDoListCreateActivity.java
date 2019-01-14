@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.qunar.im.base.common.DailyMindConstants;
 import com.qunar.im.base.jsonbean.DailyMindMain;
@@ -99,15 +98,6 @@ public class DailyToDoListCreateActivity extends SwipeBackActivity implements ID
 
     @Override
     public void showErrMsg(final String error) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toast(error);
-            }
-        });
-    }
-
-    private void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        toast(error);
     }
 }

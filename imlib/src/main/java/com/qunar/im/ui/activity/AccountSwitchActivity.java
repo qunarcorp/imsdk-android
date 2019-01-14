@@ -127,6 +127,7 @@ public class AccountSwitchActivity extends SwipeBackActivity implements ILoginVi
         IMUserDefaults.getStandardUserDefaults().newEditor(this).putObject(Constants.Preferences.usertoken, password).synchronize();
         Logger.i("切换账号开始重连");
         CurrentPreference.getInstance().setSwitchAccount(true);
+        ConnectionUtil.getInstance().setInitialized(false);
         ConnectionUtil.getInstance().reConnection();
     }
 

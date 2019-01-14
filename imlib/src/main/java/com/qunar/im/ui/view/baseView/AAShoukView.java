@@ -32,11 +32,11 @@ public class AAShoukView extends RelativeLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_aashouk, this, true);
-        aashouk_persons = (TextView) findViewById(R.id.aashouk_persons);
-        titleTextView = (TextView) findViewById(R.id.aashouk_title);
-        aashouk_total = (TextView) findViewById(R.id.aashouk_total);
-        aashoukType = (TextView) findViewById(R.id.tv_aashouk_type);
-        aashoukaashouk_icon = (IconView) findViewById(R.id.aashouk_icon);
+        aashouk_persons = findViewById(R.id.aashouk_persons);
+        titleTextView = findViewById(R.id.aashouk_title);
+        aashouk_total = findViewById(R.id.aashouk_total);
+        aashoukType = findViewById(R.id.tv_aashouk_type);
+        aashoukaashouk_icon = findViewById(R.id.aashouk_icon);
     }
 
     public void bindView(AAShoukContent aaShoukContent) {

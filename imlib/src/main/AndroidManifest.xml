@@ -120,12 +120,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity
-            android:name="com.qunar.im.ui.activity.ChatActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AtomSplashTheme" />
+
         <activity
             android:name="com.qunar.im.ui.activity.ImageBrowersingActivity"
             android:launchMode="singleTask"
@@ -394,6 +389,15 @@
         <activity android:name="com.qunar.im.ui.activity.CodeActivty"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.BackgroundTipActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/AtomSplashTheme"
+            />
+        <activity android:name=".activity.SearchChatPicVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
+            />
         <!--<activity-->
         <!--android:name="com.qunar.im.rtc.scheme.QchatSchemeActivity">-->
         <!--<intent-filter>-->
@@ -414,6 +418,11 @@
             android:exported="false" />
         <service android:name="com.qunar.im.core.services.FeedBackServcie"
             android:exported="false" />
+        <!--<service android:name="com.qunar.im.ui.services.JobHandlerService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="true"-->
+        <!--android:process="push"-->
+        <!--android:permission="android.permission.BIND_JOB_SERVICE"/>-->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

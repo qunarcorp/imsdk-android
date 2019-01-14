@@ -13,11 +13,9 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -34,8 +32,6 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.orhanobut.logger.Logger;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILoginPresenter;
@@ -59,9 +55,9 @@ import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.Event.ConnectionErrorEvent;
 import com.qunar.im.protobuf.Event.QtalkEvent;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
@@ -75,8 +71,9 @@ import com.qunar.im.ui.fragment.MineFragment;
 import com.qunar.im.ui.schema.QOpenHomeTabImpl;
 import com.qunar.im.ui.services.PullPatchService;
 import com.qunar.im.ui.services.PushServiceUtils;
+import com.qunar.im.ui.util.NotificationUtils;
 import com.qunar.im.ui.util.ParseErrorEvent;
-import com.qunar.im.ui.util.QRUtil;
+import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.ui.util.UpdateManager;
 import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.OnDoubleClickListener;
@@ -88,6 +85,8 @@ import com.qunar.im.ui.view.tableLayout.listener.OnTabSelectListener;
 import com.qunar.im.ui.view.tableLayout.utils.ViewFindUtils;
 import com.qunar.im.ui.view.zxing.activity.CaptureActivity;
 import com.qunar.im.utils.AppFrontBackHelper;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 import com.qunar.rn_service.fragment.RNCalendarFragment;
@@ -508,6 +507,8 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         handleShareAction(intent);
         injectExtra(intent);
 
+        handleLogin();
+
         //退出登录
         if (!connectionUtil.isLoginStatus() || !connectionUtil.isConnected()) {
             login();
@@ -527,7 +528,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             //三天清空状态，如通知未打开，继续提示
             DataUtils.getInstance(TabMainActivity.this).putPreferences("CheckNotification", false);
         }
-        if (!NotificationManagerCompat.from(this).areNotificationsEnabled() && !isNoneedCheck) {
+        if (!NotificationUtils.areNotificationsEnabled(this) && !isNoneedCheck) {
             CommonDialog.Builder remindDialog = new CommonDialog.Builder(this);
             remindDialog.setTitle(getString(R.string.atom_ui_tip_dialog_prompt));
             remindDialog.setMessage(getString(R.string.atom_ui_open_notification_switch));
@@ -537,22 +538,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     dialog.dismiss();
 //                    Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS, Uri.parse("package:" + MainActivity.this.getPackageName()));
 //                    startActivity(intent);
-                    Intent intent = new Intent();
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-                        //"android.settings.APP_NOTIFICATION_SETTINGS"
-                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, TabMainActivity.this.getPackageName());
-                        //"android.provider.extra.APP_PACKAGE"
-                    } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-                        intent.putExtra("app_package", TabMainActivity.this.getPackageName());
-                        intent.putExtra("app_uid", TabMainActivity.this.getApplicationInfo().uid);
-                    } else if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.addCategory(Intent.CATEGORY_DEFAULT);
-                        intent.setData(Uri.parse("package:" + TabMainActivity.this.getPackageName()));
-                    }
-                    startActivity(intent);
+                    NotificationUtils.startNotificationSettings(TabMainActivity.this);
 
                 }
             });
@@ -575,7 +561,10 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
     }
 
     private void injectExtra(Intent intent) {
+        if(intent == null) return;
         Uri uri = intent.getData();
+        Logger.i("injectExtra  uri = " + uri);
+        Logger.i("injectExtra  intent = " + intent.getExtras());
         if (uri != null) {
             String jid = uri.getQueryParameter("jid");
             if (!TextUtils.isEmpty(jid) && !jid.equals("null")) {
@@ -607,9 +596,9 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                         || type == ProtoMessageOuterClass.SignalType.SignalTypeConsult_VALUE)
                         && jid.contains("@")) {
                     int converType = 0;
-                    if(ConnectionUtil.getInstance().isHotline(jid)) {
-                        converType = ConversitionType.MSG_TYPE_CONSULT;
-                    } else {
+//                    if(ConnectionUtil.getInstance().isHotline(jid)) {
+//                        converType = ConversitionType.MSG_TYPE_CONSULT;
+//                    } else {
                         String chatid = intent.getExtras().getString("chatid");
                         converType = ConversitionType.getConversitionType(type, chatid);
                         if(converType == ConversitionType.MSG_TYPE_CONSULT) {
@@ -618,7 +607,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                         } else if (converType == ConversitionType.MSG_TYPE_CONSULT_SERVER) {
                             converType = ConversitionType.MSG_TYPE_CONSULT;
                         }
-                    }
+//                    }
                     intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, converType);
 
                     boolean isFromChatRoom = jid.contains("@conference");
@@ -646,6 +635,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         }
     }
 
+    int titileClickCount;
     private void initActionBar() {
         mNewActionBar = (QtNewActionBar) findViewById(R.id.my_new_action_bar);
         setNewActionBar(mNewActionBar);
@@ -661,6 +651,17 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
             }
         }));
+        mNewActionBar.getTextTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titileClickCount++;
+                if(titileClickCount > 10){
+                    titileClickCount = 0;
+                    connectionUtil.resetUnreadCount();
+                    toast("unread count reseted");
+                }
+            }
+        });
     }
 
     private void initAction() {
@@ -812,33 +813,28 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         });
 //        mCommonTabLayou.setMsgMargin(0,-10,0);
 
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(4);
         setTitleContentByIndex(0);
 
-//        mViewPager.setCurrentItem(0);
-//        mViewPager.setCurrentItem(1);
-//        mViewPager.setCurrentItem(0);
-//        mCommonTabLayou.getMsgView(0).setOnTouchListener(new OnDoubleClickListener(new OnDoubleClickListener.DoubleClickCallback() {
-//            @Override
-//            public void onDoubleClick() {
-//                conversationFragment.MoveToUnread();
-//            }
-//        }));
+        //启动程序默认进来显示 已断开连接
+        setActionBarTitle(getString(R.string.atom_ui_tip_disconnected));
     }
 
     private void startSearchActivity(){
-        if (CommonConfig.isQtalk) {
-            try{
-                Class clazz = Class.forName("com.qunar.im.camelhelp.activity.QTalkSearchActivity");
-                Intent i = new Intent(TabMainActivity.this, clazz);
-                startActivity(i);
-            }catch (ClassNotFoundException e){
-
-            }
-        } else {
-            Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
+        startActivity(intent);
+//        if (CommonConfig.isQtalk) {
+//            try{
+//                Class clazz = Class.forName("com.qunar.im.camelhelp.activity.QTalkSearchActivity");
+//                Intent i = new Intent(TabMainActivity.this, clazz);
+//                startActivity(i);
+//            }catch (ClassNotFoundException e){
+//
+//            }
+//        } else {
+//            Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
+//            startActivity(intent);
+//        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -1135,7 +1131,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             if (data != null) {
                 if (!TextUtils.isEmpty(data.getStringExtra("content"))) {
                     String content = data.getStringExtra("content");
-                    QRUtil.handleQRCode(content, this);
+                    QRRouter.handleQRCode(content, this);
                 }
             }
         }
@@ -1268,13 +1264,13 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     mFragments.add(3, new RNFoundFragment());
                 }
             }else{
-                mFragments.remove(3);
+                mFragments.remove(2);
                 if ("ejabhost1".equals(QtalkNavicationService.getInstance().getXmppdomain())
                         || "ejabhost2".equals(QtalkNavicationService.getInstance().getXmppdomain())) {
-                    mFragments.add(3, getDiscoverFragment());
+                    mFragments.add(2, getDiscoverFragment());
 //            mFragments.add(new RNFoundFragment());
                 } else {
-                    mFragments.add(3, new RNFoundFragment());
+                    mFragments.add(2, new RNFoundFragment());
                 }
             }
 
@@ -1296,8 +1292,8 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
     @Override
     public void startOPS() {
-
     }
+
 
 
     @Override
@@ -1322,9 +1318,15 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             Intent intent = new Intent(TabMainActivity.this, MyFavourityMessageActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_wiki) {
-            Uri uri = Uri.parse(QtalkNavicationService.getInstance().getWikiurl());
-            Intent intent = new Intent(this, QunarWebActvity.class);
-            intent.setData(uri);startActivity(intent);
+            String wikiUrl = QtalkNavicationService.getInstance().getWikiurl();
+            if(!TextUtils.isEmpty(wikiUrl)){
+                Uri uri = Uri.parse(wikiUrl);
+                Intent intent = new Intent(this, QunarWebActvity.class);
+                intent.setData(uri);startActivity(intent);
+            }else {
+                toast(getString(R.string.atom_ui_look_forward));
+            }
+
         }else if(id ==R.id.action_creat_group){
             NativeApi.openCreateGroup();
         }else if(id == R.id.action_ever_note){
@@ -1354,12 +1356,16 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             intent.setClass(this, SearchUserActivity.class);
             intent.putExtra(Constants.BundleKey.IS_TRANS, true);
             intent.putExtra(Constants.BundleKey.IS_FROM_SHARE, true);
+//            if(intent.hasExtra(Constants.BundleKey.TRANS_MSG_JSON)){//内部DownloadActivity文件分享
+//                intent.putExtra(Constants.BundleKey.TRANS_MSG,JsonUtils.getGson().fromJson(intent.getStringExtra(Constants.BundleKey.TRANS_MSG_JSON), IMMessage.class));
+//            }
             startActivity = true;
         } else {
             String title = "";
             String content = "";
             ArrayList<String> iconPaths = new ArrayList<String>();
             ArrayList<String> videoPaths = new ArrayList<String>();
+            ArrayList<String> filePaths = new ArrayList<String>();
             if (intent.getStringExtra(Intent.EXTRA_SUBJECT) != null) {
                 title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
             }
@@ -1392,7 +1398,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                         }
                     }
                 }
-            } else if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            } else if (Intent.ACTION_SEND.equals(intent.getAction())) {//处理分析逻辑
 
                 // chrome分享会有截图
                 final Uri screenshot_as_stream = intent.getParcelableExtra("share_screenshot_as_stream");
@@ -1401,22 +1407,12 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     if (imagePath != null) {
                         iconPaths.add(imagePath);
                     }
-//                    try {
-//                        content = intent.getStringExtra(Intent.EXTRA_SUBJECT) + " " + intent.getStringExtra(Intent.EXTRA_TEXT);
-//                    } catch (Exception e) {
-//                        // do nothing
-//                    }
                 }
                 // UC浏览器分享会有截图
                 final String file = intent.getStringExtra("file");
                 if (file != null) {
                     final String imagePath = new File(file).getAbsolutePath();
                     iconPaths.add(imagePath);
-//                    try {
-//                        content = intent.getStringExtra(Intent.EXTRA_SUBJECT) + " " + intent.getStringExtra(Intent.EXTRA_TEXT);
-//                    } catch (Exception e) {
-//                        // do nothing
-//                    }
                 }
 
                 final String type = intent.getType();
@@ -1452,22 +1448,16 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                             if (!ListUtil.isEmpty(phones))
                                 content += getString(R.string.atom_ui_tip_contact_mobile) + ": " + phones.get(0);
                         }
+                    } else {// if (type.equalsIgnoreCase("text/plain"))
+                        Uri turi = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                        String filepath = FileUtils.getPath(this, turi);
+                        if(!TextUtils.isEmpty(filepath)) {
+                            filePaths.add(filepath);
+                        }
                     }
                 }
                 //有些分享链接再content中
                 String url = intent.getStringExtra("url");//分享链接
-//                if(TextUtils.isEmpty(url) && !TextUtils.isEmpty(content)){
-//                    String[] infos = content.split(" ");//分解content，看是否有url
-//                    if(infos != null && infos.length > 1){
-//                        if(Utils.IsUrl(infos[infos.length - 1])){
-//                            url = infos[infos.length - 1];
-//                            if(infos.length > 2){
-//                                title = infos[0];
-//                                content = infos[1];
-//                            }
-//                        }
-//                    }
-//                }
                 if(TextUtils.isEmpty(url)){
                     //判断content内是否有url
                     try {
@@ -1478,13 +1468,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                         if(_match.find()){
                             url = _match.group();
                             content.replace(url, "");
-//                            ExtendMessageEntity entity = new ExtendMessageEntity();
-//                            entity.title = title;
-//                            entity.linkurl = _match.group();
-//                            entity.img = file;
-//                            entity.desc = content;
-//                            String jsonStr = JsonUtils.getGson().toJson(entity);
-//                            intent.putExtra(ShareReceiver.SHARE_EXTRA_KEY, jsonStr);
                         }
                     } catch (Exception e) {
                         Logger.e("分享url解析异常：" + e.getMessage() + "  content=" + content);
@@ -1508,13 +1491,62 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                 }
 
                 intent.putExtra(ShareReceiver.SHARE_TEXT, content);
-
                 if (!ListUtil.isEmpty(iconPaths)) {
                     intent.putStringArrayListExtra(ShareReceiver.SHARE_IMG, iconPaths);
                 }
 
                 if (!ListUtil.isEmpty(videoPaths)) {
                     intent.putStringArrayListExtra(ShareReceiver.SHARE_VIDEO, videoPaths);
+                }
+                if (!ListUtil.isEmpty(filePaths)) {
+                    intent.putStringArrayListExtra(ShareReceiver.SHARE_FILE, filePaths);
+                }
+                intent.setClass(this, SearchUserActivity.class);
+                intent.putExtra(Constants.BundleKey.IS_TRANS, true);
+                intent.putExtra(Constants.BundleKey.IS_FROM_SHARE, true);
+                startActivity = true;
+            } else if(Intent.ACTION_VIEW.equals(intent.getAction())) {//处理文件打开方式使用qtalk发送好友
+                Uri uri = intent.getData();
+                if(uri == null) {
+                    return;
+                }
+                if(CommonConfig.schema.equalsIgnoreCase(uri.getScheme())) {
+                    return;
+                }
+                final String type = intent.getType();
+                if(TextUtils.isEmpty(type)) {
+                    String filepath = FileUtils.getPath(this, uri);
+                    if(!TextUtils.isEmpty(filepath)) {
+                        filePaths.add(filepath);
+                    }
+                } else {
+                    if (type.startsWith("image")) {
+                        String imagePath = FileUtils.getPath(this, uri);
+                        if(!TextUtils.isEmpty(imagePath)) {
+                            iconPaths.add(imagePath);
+                        }
+                    } else if (type.startsWith("video/")) {
+                        final String videoPath = FileUtils.getPath(this, uri);
+                        if (!TextUtils.isEmpty(videoPath)) {
+                            videoPaths.add(videoPath);
+                        }
+                    } else {// if (type.equalsIgnoreCase("text/plain"))
+                        String filepath = FileUtils.getPath(this, uri);
+                        if(!TextUtils.isEmpty(filepath)) {
+                            filePaths.add(filepath);
+                        }
+                    }
+                }
+                intent.putExtra(ShareReceiver.SHARE_TAG, true);
+                if (!ListUtil.isEmpty(iconPaths)) {
+                    intent.putStringArrayListExtra(ShareReceiver.SHARE_IMG, iconPaths);
+                }
+
+                if (!ListUtil.isEmpty(videoPaths)) {
+                    intent.putStringArrayListExtra(ShareReceiver.SHARE_VIDEO, videoPaths);
+                }
+                if (!ListUtil.isEmpty(filePaths)) {
+                    intent.putStringArrayListExtra(ShareReceiver.SHARE_FILE, filePaths);
                 }
                 intent.setClass(this, SearchUserActivity.class);
                 intent.putExtra(Constants.BundleKey.IS_TRANS, true);
@@ -1583,7 +1615,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             @Override
             public void onCompleted(Boolean aBoolean) {
                 retry = 0;
-                ConnectionUtil.getInstance().reConnection(true);
+                ConnectionUtil.getInstance().reConnectionForce();
             }
 
             @Override

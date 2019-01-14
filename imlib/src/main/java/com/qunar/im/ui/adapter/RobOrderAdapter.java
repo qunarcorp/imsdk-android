@@ -5,8 +5,8 @@ import android.os.Handler;
 
 import com.qunar.im.base.jsonbean.RobOrderMsgJson;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public class RobOrderAdapter extends ExtendChatViewAdapter {
 
     private void handleMessage(List<IMMessage> messages) {
         for (IMMessage message : messages) {
-            if (message.getMsgType() == MessageType.MSG_TYPE_ROB_ORDER_RESPONSE) {
+            if (message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE) {
                 RobOrderMsgJson robOrderMsgJson = JsonUtils.getGson().fromJson(message.getExt(), RobOrderMsgJson.class);
                 if (robOrderMsgJson != null)
                     satusMessages.put(robOrderMsgJson.getMsgId(), message);
@@ -43,7 +43,7 @@ public class RobOrderAdapter extends ExtendChatViewAdapter {
         Iterator<IMMessage> it = messages.iterator();
         while(it.hasNext()){
             IMMessage imMessage = it.next();
-            if(satusMessages.containsKey(imMessage.getId()) && imMessage.getMsgType() == MessageType.MSG_TYPE_ROB_ORDER){
+            if(satusMessages.containsKey(imMessage.getId()) && imMessage.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuVcard_VALUE){
                 it.remove();
             }
         }

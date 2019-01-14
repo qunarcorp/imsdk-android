@@ -383,7 +383,7 @@
     <string name="atom_ui_password_share_undestand">我已了解</string>
     <string name="atom_ui_todolist_pull_add">下拉添加新的待办事项</string>
     <string name="atom_ui_todolist_think">我想...</string>
-    <string name="atom_ui_everNote"></string>
+    <string name="atom_ui_everNote" />
     <string name="atom_ui_tab_mine">我的</string>
     <string name="atom_ui_open_notification_switch">打开通知开关</string>
     <string name="atom_ui_open_permission_title">权限申请</string>
@@ -813,4 +813,7 @@
     <string name="atom_ui_quickreply_empty">请在电脑端设置快捷回复</string>
 
     <string name="atom_ui_tab_trip">日程</string>
+
+    <string name="atom_ui_look_forward">暂不支持，敬请期待!</string>
+    <string name="atom_ui_copy_message_content">消息内容</string>
 </resources>

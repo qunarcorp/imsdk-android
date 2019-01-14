@@ -31,10 +31,10 @@ public class ReceiveFileView extends RelativeLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_item_file_view, this, true);
-        fileName = (TextView) findViewById(R.id.file_name);
-        fileSize = (TextView) findViewById(R.id.file_size);
-        fileIcon = (IconView) findViewById(R.id.file_icon);
-        progressBar = (CHorizontalProgressBar) findViewById(R.id.file_progress);
+        fileName = findViewById(R.id.file_name);
+        fileSize = findViewById(R.id.file_size);
+        fileIcon = findViewById(R.id.file_icon);
+        progressBar = findViewById(R.id.file_progress);
 
     }
 

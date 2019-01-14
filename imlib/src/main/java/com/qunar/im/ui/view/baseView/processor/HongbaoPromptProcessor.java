@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import com.qunar.im.base.jsonbean.HongbaoBroadcast;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.presenter.messageHandler.ConversitionType;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.view.baseView.HongbaoPromptView;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.ViewPool;
+import com.qunar.im.utils.QtalkStringUtils;
 
 /**
  * Created by saber on 16-1-6.
@@ -28,7 +28,7 @@ public class HongbaoPromptProcessor extends DefaultMessageProcessor {
             promptView.bindData(broadcast,
                     QtalkStringUtils.parseBareJid(message.getFromID()),
                     message.getType()== ConversitionType.MSG_TYPE_GROUP,
-                    message.getMsgType() == MessageType.MSG_AA_PROMPT);
+                    message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeAAInfo_VALUE);
             parent.setVisibility(View.VISIBLE);
             parent.addView(promptView);
         }catch (Exception e)

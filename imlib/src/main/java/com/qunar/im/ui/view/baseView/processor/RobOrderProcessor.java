@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.structs.MessageType;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.RobOrderView;
 import com.qunar.im.ui.view.baseView.ViewPool;
@@ -18,7 +18,7 @@ public class RobOrderProcessor extends DefaultMessageProcessor {
     @Override
     public void processChatView(ViewGroup parent, IMessageItem item) {
         IMMessage imMessage = item.getMessage();
-        if (imMessage.getMsgType() == MessageType.MSG_TYPE_ROB_ORDER_RESPONSE){
+        if (imMessage.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE){
             parent.setVisibility(View.GONE);
             return;
         }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:background="@drawable/atom_ui_left_round_bg"
+        android:orientation="horizontal"
+        android:layout_height="36dp">
+        <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_width="26dp"
+            android:background="@drawable/green_radius_bg"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="26dp">
+            <com.qunar.im.ui.view.IconView
+                android:layout_gravity="center"
+                android:id="@+id/search_icon"
+                android:layout_width="20dp"
+
+                android:layout_height="20dp"
+                android:text="@string/atom_ui_highlight_search"
+                android:textSize="20sp"
+                android:textColor="#FFffffff" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="快速搜到你想找的"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

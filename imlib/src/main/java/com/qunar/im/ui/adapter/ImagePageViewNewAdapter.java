@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.rastermill.FrameSequence;
 import android.support.rastermill.FrameSequenceDrawable;
 import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,7 +89,7 @@ public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener listener)
         CircleProgress.Builder builder = new CircleProgress.Builder();
         final CircleProgress circleProgress = builder.build();
         circleProgress.inject(photoView);
-        final String url = imageItem.originUrl;
+        final String url = TextUtils.isEmpty(imageItem.localPath) ? imageItem.originUrl : imageItem.localPath;
         if (Utils.isGifUrl(url)) {
 //          //glide 3+
             Glide.with(mActivity)                             //配置上下文
@@ -136,7 +137,7 @@ public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener listener)
                             circleProgress.setMaxValue(msg.arg2);
                         }
                     }))
-                    .load(imageItem.originUrl)      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
+                    .load(url)      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
                     .error(R.drawable.atom_ui_ic_default_image)           //设置错误图片
                     .placeholder(R.drawable.atom_ui_ic_default_image)     //设置占位图片
                     .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存全尺寸

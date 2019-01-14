@@ -39,10 +39,10 @@ public class NoteActionView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_note_action, this, true);
-        price = (TextView) findViewById(R.id.price);
-        title = (TextView) findViewById(R.id.txt_title);
-        tag = (TextView) findViewById(R.id.tag);
-        thumb = (SimpleDraweeView) findViewById(R.id.imageview_left);
+        price = findViewById(R.id.price);
+        title = findViewById(R.id.txt_title);
+        tag = findViewById(R.id.tag);
+        thumb = findViewById(R.id.imageview_left);
     }
 
     public void bindData(NoteMsgJson json) {

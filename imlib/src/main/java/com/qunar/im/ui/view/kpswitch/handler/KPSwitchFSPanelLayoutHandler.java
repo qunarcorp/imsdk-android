@@ -21,6 +21,12 @@ import android.view.Window;
 import com.qunar.im.ui.view.kpswitch.IFSPanelConflictLayout;
 import com.qunar.im.ui.view.kpswitch.util.KeyboardUtil;
 
+
+/**
+ * Created by Jacksgong on 3/31/16.
+ * <p/>
+ * The handler for handling the layout-conflict in the full-screen panel-layout.
+ */
 public class KPSwitchFSPanelLayoutHandler implements IFSPanelConflictLayout {
 
     private final View panelLayout;

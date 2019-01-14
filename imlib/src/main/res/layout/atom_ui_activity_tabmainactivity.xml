@@ -14,12 +14,12 @@
         android:layout_above="@+id/tab_common_tablayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#383838"
-        android:layout_above="@id/tab_common_tablayout"
-        ></View>
+        android:layout_above="@id/tab_common_tablayout" />
 
     <com.qunar.im.ui.view.tableLayout.CommonTabLayout
         android:id="@+id/tab_common_tablayout"

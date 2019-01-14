@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.qunar.im.base.module.MultiItemEntity;
+import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.Nick;
@@ -22,9 +24,7 @@ import com.qunar.im.ui.activity.MyFilesDetailActivity;
 import com.qunar.im.ui.entity.MyFilesItem;
 import com.qunar.im.ui.entity.MyFilesTitle;
 import com.qunar.im.ui.util.FileTypeUtil;
-import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
-import com.qunar.im.ui.view.recyclerview.entity.MultiItemEntity;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;

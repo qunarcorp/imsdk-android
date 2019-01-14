@@ -24,7 +24,6 @@ import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ISystemPresenter;
 import com.qunar.im.base.presenter.impl.SystemPresenter;
 import com.qunar.im.base.shortutbadger.ShortcutBadger;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
@@ -34,6 +33,7 @@ import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.entity.OpsPushMessage;
@@ -107,8 +107,8 @@ public class PushReceiver extends BroadcastReceiver {
                     Logger.i("收到推送消息：" + msg);
                     final OpsPushMessage opsMessage = JsonUtils.getGson().fromJson(msg, OpsPushMessage.class);
                     final int msgType = Integer.parseInt(opsMessage.Mtype);
-                    if (msgType == MessageType.MSG_HONGBAO_PROMPT ||
-                            msgType == MessageType.MSG_AA_PROMPT) return;
+                    if (msgType == ProtoMessageOuterClass.MessageType.MessageTypeRedPackInfo_VALUE ||
+                            msgType == ProtoMessageOuterClass.MessageType.MessageTypeAAInfo_VALUE) return;
 
                     final String notification = ChatTextHelper.showContentType(opsMessage.B, msgType);
                     switch (opsMessage.type) {

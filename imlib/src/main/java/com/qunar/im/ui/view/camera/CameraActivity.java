@@ -33,7 +33,7 @@ public class CameraActivity extends IMBaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.atom_ui_activity_camera_layout);
-        qCameraView = (QCameraView) findViewById(R.id.qcameraview);
+        qCameraView = findViewById(R.id.qcameraview);
         //设置视频保存路径
         qCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "QCamera");
         qCameraView.setFeatures(QCameraView.BUTTON_STATE_BOTH);

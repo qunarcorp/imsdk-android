@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:id="@+id/atom_ui_rtcview"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/atom_ui_white_gray_selector"
     android:gravity="center_vertical"
-    android:background="@drawable/atom_ui_white_gray_selector">
-<com.qunar.im.ui.view.IconView
-    android:id="@+id/atom_ui_left_icon"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:textSize="48dp"
-    android:textColor="@color/atom_ui_light_gray_33"/>
+    android:paddingLeft="@dimen/atom_ui_item_padding"
+    android:paddingRight="@dimen/atom_ui_item_padding"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/atom_ui_left_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pub_imsdk_rtc_video_chat" />
+
     <TextView
         android:id="@+id/atom_ui_text"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/atom_ui_item_padding"
-        android:paddingRight="@dimen/atom_ui_item_padding"
-        android:textSize="@dimen/atom_ui_text_size_medium"
-        android:textColor="@color/atom_ui_light_gray_33"/>
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/atom_ui_light_gray_33"
+        android:textSize="@dimen/atom_ui_text_size_medium" />
 </LinearLayout>

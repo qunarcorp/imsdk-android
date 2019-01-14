@@ -41,11 +41,11 @@ public class RichActionView extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_rich_action_view, this, true);
-        title = (TextView) findViewById(R.id.title);
-        date = (TextView) findViewById(R.id.date);
-        introduce = (TextView) findViewById(R.id.introduce);
-        image_rich = (SimpleDraweeView) findViewById(R.id.image_rich);
-        container = (LinearLayout) findViewById(R.id.rich_view_container);
+        title = findViewById(R.id.title);
+        date = findViewById(R.id.date);
+        introduce = findViewById(R.id.introduce);
+        image_rich = findViewById(R.id.image_rich);
+        container = findViewById(R.id.rich_view_container);
         this.context = context;
     }
 

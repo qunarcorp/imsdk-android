@@ -25,10 +25,23 @@ public class QLogoutImpl implements QChatSchemaService {
         PushServiceUtils.stopAMDService(context);
         final ILoginPresenter loginPresenter = new LoginPresenter();
         loginPresenter.logout();
+//        QtalkApplicationLike.f`inishAllActivity();
 
         Intent intent = new Intent(context, TabMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
+
+//        Intent i = context.getPackageManager()
+//                .getLaunchIntentForPackage(context.getPackageName());
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        context.startActivity(i);
+//
+//        Intent intent = new Intent("android.intent.action.VIEW",
+//                Uri.parse(CommonConfig.schema + "://qchatplatform"));
+//        PendingIntent restartIntent = PendingIntent.getActivity(QunarIMApp.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager mgr = (AlarmManager) QunarIMApp.getContext().getSystemService(Context.ALARM_SERVICE);
+//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent);
+//        System.exit(2);
         return false;
     }
 }

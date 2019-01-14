@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.base.jsonbean.SystemResult;
@@ -50,13 +51,13 @@ public class SystemMessageProcessor extends DefaultMessageProcessor {
         actionIntroduce.setText(systemMsg.title);
         for (final SystemResult.Content content : systemMsg.content) {
             LinearLayout linearLayout = (LinearLayout) View.inflate(context, R.layout.atom_ui_item_system_sub, null);
-            TextView left = (TextView) linearLayout.findViewById(R.id.left);
-            TextView right = (TextView) linearLayout.findViewById(R.id.right);
+            TextView left = linearLayout.findViewById(R.id.left);
+            TextView right = linearLayout.findViewById(R.id.right);
             left.setText(content.sub_title);
             right.setText(content.sub_content);
             action_linear.addView(linearLayout);
         }
-        TextView promtTextView = (TextView) parent.findViewById(R.id.new_msg_prompt);
+        TextView promtTextView = parent.findViewById(R.id.new_msg_prompt);
         if (promtTextView == null) {
             promtTextView = new TextView(item.getContext());
             promtTextView.setId(R.id.new_msg_prompt);
@@ -75,7 +76,7 @@ public class SystemMessageProcessor extends DefaultMessageProcessor {
             v.setId(R.id.line);
             parent.addView(v, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
         }
-        TextView orderTextView = (TextView) parent.findViewById(R.id.tv_action);
+        TextView orderTextView = parent.findViewById(R.id.tv_action);
         if (orderTextView== null) {
             orderTextView = new TextView(item.getContext());
             orderTextView.setPadding(0, Utils.dipToPixels(context,8),
@@ -96,7 +97,7 @@ public class SystemMessageProcessor extends DefaultMessageProcessor {
                 EventBus.getDefault().post(new EventBusEvent.HandleOrderOperation(message));
             }
         });
-        if (message.getIsRead() == IMMessage.MSG_UNREAD) {
+        if (!MessageStatus.isExistStatus(message.getReadState(), MessageStatus.REMOTE_STATUS_CHAT_READED)) {
             //没有读过该消息
             orderTextView.setText("现在去处理");
             orderTextView.setTextColor(Color.BLUE);

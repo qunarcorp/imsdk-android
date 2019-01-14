@@ -30,8 +30,8 @@ public class MapView extends RelativeLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_map, this, true);
-        image = (SimpleDraweeView) findViewById(R.id.image);
-        text = (TextView) findViewById(R.id.text);
+        image = findViewById(R.id.image);
+        text = findViewById(R.id.text);
     }
 
     public void setMapInfo(Uri uri, String position) {

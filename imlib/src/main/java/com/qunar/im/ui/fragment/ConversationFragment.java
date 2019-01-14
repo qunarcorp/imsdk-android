@@ -17,10 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.jsonbean.QchatCousltIdBean;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.RecentConversation;
 import com.qunar.im.base.presenter.IChatingPanelPresenter;
@@ -31,17 +28,15 @@ import com.qunar.im.base.presenter.messageHandler.ConversitionType;
 import com.qunar.im.base.presenter.views.IConversationListView;
 import com.qunar.im.base.presenter.views.IRefreshConversation;
 import com.qunar.im.base.presenter.views.ITopMeesageView;
-import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.EncryptMessageType;
 import com.qunar.im.base.structs.MessageStatus;
-import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.base.util.ProfileUtils;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.activity.BackgroundTipActivity;
 import com.qunar.im.ui.activity.BuddyRequestActivity;
 import com.qunar.im.ui.activity.CollectionActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
@@ -49,9 +44,11 @@ import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.activity.RobotChatActivity;
 import com.qunar.im.ui.activity.RobotExtendChatActivity;
 import com.qunar.im.ui.adapter.RecentConvsAdapter;
+import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by zhao.liu on 2014/8/21.
@@ -66,6 +63,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
     final int MENU5 = 0x115;
     final int MENU6 = 0X116;
     ListView list;
+     View header;
     TextView tvEmpty;
     private boolean isFirstShow = true;
     IConversationsManagePresenter convPresenter;
@@ -165,7 +163,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-                RecentConversation rc = recentConvsAdapter.getItem(info.position);
+                RecentConversation rc = recentConvsAdapter.getItem(info.position - list.getHeaderViewsCount());
                 if (rc.getConversationType() == 1 || rc.getConversationType() == 0 || rc.getConversationType() == 3) {
 
 
@@ -218,6 +216,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
             case ConversitionType.MSG_TYPE_CONSULT_SERVER:
             case ConversitionType.MSG_TYPE_GROUP:
             case ConversitionType.MSG_TYPE_CHAT:
+
                 intent = new Intent(getContext(), PbChatActivity.class);
                 intent.putExtra(PbChatActivity.KEY_UNREAD_MSG_COUNT,item.getUnread_msg_cont());
                 currentJid = item.getId();
@@ -225,58 +224,6 @@ public class ConversationFragment extends BaseFragment implements IConversationL
 
                 intent.putExtra(PbChatActivity.KEY_JID, item.getId());
                 if (item.getConversationType() == 4) {
-                    if (CommonConfig.isQtalk) {
-//                        intent.putExtra(PbChatActivity.KEY_INPUTTYPE, true);
-//                        intent.putExtra(PbChatActivity.KEY_AUTO_REPLY, "该客服暂时不在");
-                    } else {
-                        final Intent finalIntent = intent;
-                        HttpUtil.getQchatCousltId(item.getId(), new ProtocolCallback.UnitCallback<QchatCousltIdBean>() {
-                            @Override
-                            public void onCompleted(QchatCousltIdBean s) {
-                                if(s != null) {
-                                    if (s.isRet()) {
-                                        if (s.getData() != null && s.getData().getSeat() != null && s.getData().getSupplier().getBusiName() != null) {
-                                            finalIntent.putExtra(PbChatActivity.KEY_REAL_JID, s.getData().getSeat().getQunarName() + "@" + QtalkNavicationService.getInstance().getXmppdomain());
-                                            finalIntent.putExtra(PbChatActivity.KEY_BUSI_NAME, s.getData().getSupplier().getBusiName().toString());
-                                            finalIntent.putExtra(PbChatActivity.KEY_SUPPLIER_ID, s.getData().getSupplier().getBusiSupplierId());
-                                        }
-                                    } else {
-                                        finalIntent.putExtra(PbChatActivity.KEY_REAL_JID, item.getId());
-                                        finalIntent.putExtra(PbChatActivity.KEY_INPUTTYPE, true);
-                                        finalIntent.putExtra(PbChatActivity.KEY_AUTO_REPLY, "该客服暂时不在");
-                                    }
-                                }
-                                finalIntent.putExtra(PbChatActivity.KEY_CHAT_TYPE, item.getConversationType() + "");
-                                //设置是否是群聊
-                                boolean isChatRoom = item.getConversationType() == ConversitionType.MSG_TYPE_GROUP;
-                                finalIntent.putExtra(PbChatActivity.KEY_IS_CHATROOM, isChatRoom);
-
-                                startActivity(finalIntent);
-                            }
-
-                            @Override
-                            public void onFailure(String errMsg) {
-//                                finalIntent.putExtra(PbChatActivity.KEY_REAL_JID, item.getId());
-//                                finalIntent.putExtra(PbChatActivity.KEY_INPUTTYPE, true);
-//                                finalIntent.putExtra(PbChatActivity.KEY_AUTO_REPLY, "该客服暂时不在");
-//
-//                                finalIntent.putExtra(PbChatActivity.KEY_CHAT_TYPE, item.getConversationType() + "");
-//                                //设置是否是群聊
-//                                boolean isChatRoom = item.getConversationType() == ConversitionType.MSG_TYPE_GROUP;
-//                                finalIntent.putExtra(PbChatActivity.KEY_IS_CHATROOM, isChatRoom);
-//                                if (isChatRoom) {
-//                                    finalIntent.putExtra(PbChatActivity.KEY_ATMSG_INDEX, item.getAtMsgIndex());
-//                                }
-//
-//
-//                                startActivity(finalIntent);
-
-                            }
-                        });
-
-                        return;
-//                        //todo  通过接口查询,模仿大客户端的逻辑
-                    }
 
                 } else if (item.getConversationType() == 5) {
                     intent.putExtra(PbChatActivity.KEY_REAL_JID, item.getRealUser());
@@ -311,8 +258,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
                     startActivity(intent);
                     //抢单消息 特殊处理 点击后 设置成已读
                     ConnectionUtil.getInstance().sendSingleAllRead(item.getId(), MessageStatus.STATUS_SINGLE_READED + "");
-                } else if (item.getMsgType() == MessageType.MSG_TYPE_RBT_NOTICE
-                        || item.getMsgType() == MessageType.MSG_TYPE_RBT_SYSTEM) {//qchat的系统通知消息
+                } else if (item.getId().contains("rbt-system") || item.getId().contains("rbt-notice")) {//qchat的系统通知消息
                     intent = new Intent(getContext(), RobotExtendChatActivity.class);
                     intent.putExtra(PbChatActivity.KEY_JID, item.getId());
                     //设置真实id
@@ -403,7 +349,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
     public boolean onContextItemSelected(MenuItem mi) {
         AdapterView.AdapterContextMenuInfo menuInfo;
         menuInfo = (AdapterView.AdapterContextMenuInfo) mi.getMenuInfo();
-        final RecentConversation rc = (RecentConversation) recentConvsAdapter.getItem(menuInfo.position);
+        final RecentConversation rc = (RecentConversation) recentConvsAdapter.getItem(menuInfo.position - list.getHeaderViewsCount());
         XmppId = rc.getId();
         RealUserId = rc.getRealUser();
         mCurrentConv = rc;
@@ -474,21 +420,17 @@ public class ConversationFragment extends BaseFragment implements IConversationL
     }
 
     //    private static int count;
-    private static int position;
+    private int position;
 
     public void MoveToUnread() {
         if (recentConvsAdapter == null) return;
         int count = recentConvsAdapter.getCount();
-//        int count = recentConvsAdapter.getItemCount();
-//        if(!(position>0)){
-//
-//        }
 
         for (int i = position; i < count; i++) {
             RecentConversation rc = recentConvsAdapter.getItem(i);
             //逻辑是判断是否有未读,并且没有设置不提醒
             if (rc.getUnread_msg_cont() > 0 && rc.getRemind() != 1) {
-                list.setSelection(i);
+                list.setSelection(i + list.getHeaderViewsCount());
 //                list.scrollToPosition(i);
 
                 position = i + 1;
@@ -566,6 +508,27 @@ public class ConversationFragment extends BaseFragment implements IConversationL
                 }
             });
         }
+    }
+
+    @Override
+    public void showFileSharing() {
+        if(header==null){
+            header = LayoutInflater.from(getActivity()).inflate(R.layout.atom_ui_header_file_sharing,null);
+            header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), BackgroundTipActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+        list.removeHeaderView(header);
+        list.addHeaderView(header);
+    }
+
+    @Override
+    public void hidenFileSharing(){
+        list.removeHeaderView(header);
     }
 
     @Override

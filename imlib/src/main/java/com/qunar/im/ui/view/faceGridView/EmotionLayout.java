@@ -80,14 +80,14 @@ public class EmotionLayout extends LinearLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_layout_emotion, this);
-        this.faceGridView = (FaceGridView) findViewById(R.id.faceGridView);
-        this.tabLayout = (LinearLayout) findViewById(R.id.tab_layout);
-        this.defaultEmotionView = (TextView) findViewById(R.id.default_emotion);
-        this.defaultEmotionView1 = (TextView) findViewById(R.id.default_emotion1);
-        this.deleteImageView = (ImageView) findViewById(R.id.delete_emotion);
-        ImageView addEmotion = (ImageView) findViewById(R.id.add_emotion);
-        favoriteEmotion = (TextView) findViewById(R.id.favorite_emotion);
-        scrollView = (HorizontalScrollView) findViewById(R.id.scroll);
+        this.faceGridView = findViewById(R.id.faceGridView);
+        this.tabLayout = findViewById(R.id.tab_layout);
+        this.defaultEmotionView = findViewById(R.id.default_emotion);
+        this.defaultEmotionView1 = findViewById(R.id.default_emotion1);
+        this.deleteImageView = findViewById(R.id.delete_emotion);
+        ImageView addEmotion = findViewById(R.id.add_emotion);
+        favoriteEmotion = findViewById(R.id.favorite_emotion);
+        scrollView = findViewById(R.id.scroll);
         addEmotion.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

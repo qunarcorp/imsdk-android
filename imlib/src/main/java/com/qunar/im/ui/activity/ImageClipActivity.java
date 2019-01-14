@@ -144,7 +144,7 @@ public class ImageClipActivity extends IMBaseActivity implements View.OnTouchLis
             file.getParentFile().mkdirs();
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturePath);
-        startActivityForResult(intent, ChatActivity.ACTIVITY_GET_CAMERA_IMAGE);
+        startActivityForResult(intent, PbChatActivity.ACTIVITY_GET_CAMERA_IMAGE);
     }
 
     public String getPath(Uri uri) {
@@ -222,7 +222,7 @@ public class ImageClipActivity extends IMBaseActivity implements View.OnTouchLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         boolean isCacel = true;
-        if (resultCode == RESULT_OK && requestCode == ChatActivity.ACTIVITY_GET_CAMERA_IMAGE) {
+        if (resultCode == RESULT_OK && requestCode == PbChatActivity.ACTIVITY_GET_CAMERA_IMAGE) {
             if (cameraPath != null) {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -251,7 +251,7 @@ public class ImageClipActivity extends IMBaseActivity implements View.OnTouchLis
                     }
                 }
             }
-        } else if (requestCode == ChatActivity.ACTIVITY_GET_CAMERA_IMAGE) {
+        } else if (requestCode == PbChatActivity.ACTIVITY_GET_CAMERA_IMAGE) {
             File file = new File(cameraPath);
             if (file.exists()) file.delete();
             String[] params = new String[]{cameraPath};

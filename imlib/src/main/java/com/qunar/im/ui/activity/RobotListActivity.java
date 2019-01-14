@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qunar.im.base.presenter.messageHandler.ConversitionType;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.adapter.BaseInfoAdapter;
 import com.qunar.im.base.common.BackgroundExecutor;
@@ -187,6 +188,7 @@ public class RobotListActivity extends SwipeBackActivity implements
             }
             else {
                 intent = new Intent(RobotListActivity.this, RobotChatActivity.class);
+                intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, ConversitionType.MSG_TYPE_SUBSCRIPT + "");
             }
             intent.putExtra(RobotChatActivity.ROBOT_ID_EXTRA,jid);
             intent.putExtra(PbChatActivity.KEY_REAL_JID,jid);

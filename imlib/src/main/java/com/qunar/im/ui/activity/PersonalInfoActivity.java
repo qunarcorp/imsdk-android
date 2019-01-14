@@ -376,6 +376,7 @@ public class PersonalInfoActivity extends SwipeBackActivity implements IMyProfil
                 && !TextUtils.isEmpty(QtalkNavicationService.getInstance().getNavConfigResult().ops.host)
                 && !TextUtils.isEmpty(QtalkNavicationService.getInstance().getNavConfigResult().ops.checkversion)
                 && !TextUtils.isEmpty(QtalkNavicationService.getInstance().getNavConfigResult().ops.conf)){
+            //TODO 暂时注释掉
 //            Bundle bundle = getDefaultBundle();
 //            mReactInstanceManager = QtalkCardRNViewInstanceManager.getInstanceManager(getApplication());
 //            if(mrn!=null){
@@ -393,60 +394,12 @@ public class PersonalInfoActivity extends SwipeBackActivity implements IMyProfil
         }
     }
 
-    //初始化编辑签名的Dialog
-//    private void setSignView() {
-//        sign.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final EditText editText = new EditText(PersonalInfoActivity.this);
-//                editText.setGravity(Gravity.CENTER_VERTICAL);
-//                editText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dipToPixels(PersonalInfoActivity.this,48)));
-//                Dialog moodDialog = new AlertDialog.Builder(PersonalInfoActivity.this)
-//                        .setTitle(R.string.tip_input_signature)
-//                        .setView(editText)
-//                        .setPositiveButton(R.string.atom_ui_common_confirm, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                String tmpMood  = editText.getText().toString();
-//                                if(!TextUtils.isEmpty(tmpMood)&&!tmpMood.equals(mood)) {
-//                                    mood = tmpMood;
-//                                    editMyProfilePresenter.updateMood();
-//                                }
-//                                dialog.dismiss();
-//                            }
-//
-//                        })
-//                        .setNegativeButton(R.string.atom_ui_common_cancel, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                mood = null;
-//                                dialog.dismiss();
-//                            }
-//                        })
-//                        .create();
-//
-//                editText.setText(sign.getText());
-//                editText.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        editText.selectAll();
-//                        editText.requestFocusFromTouch();
-//                        editText.requestFocus();
-//                    }
-//                });
-//                moodDialog.show();
-//            }
-//        });
-//    }
-
     void restartChat() {
-//        EventBus.getDefault().post(new EventBusEvent.restartChat());
         Intent intent = new Intent(this, PbChatActivity.class);
         intent.putExtra("jid", jid);
         intent.putExtra("isFromChatRoom", false);
         intent.putExtra("realJid", TextUtils.isEmpty(realUser)?jid:realUser);
         intent.putExtra("chatType", hotLine);
-//        intent.putExtra("newChat",true);
         startActivity(intent);
         finish();
     }
@@ -454,9 +407,6 @@ public class PersonalInfoActivity extends SwipeBackActivity implements IMyProfil
     @Override
     public void onStart() {
         super.onStart();
-
-//        markup = ProfileUtils.getMarkupByKey(jid);
-//        tv_markup.setText(markup);
     }
 
     //更改群名称
@@ -793,16 +743,6 @@ public class PersonalInfoActivity extends SwipeBackActivity implements IMyProfil
             if (jid.equals(CurrentPreference.getInstance().getPreferenceUserId())) {
                 send_message.setVisibility(View.GONE);
                 add_buddy.setVisibility(View.GONE);
-////                CurrentPreference.getInstance().getFullName();
-////                CurrentPreference.getInstance().getPreferenceUserId();
-//                setSignView();
-//                sign.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.atom_ui_edit, 0);
-//                isHideBtn = true;
-//                comment_txt.setVisibility(View.GONE);
-//                cloud_record_of_chat.setVisibility(View.GONE);
-//                bottom_container.setVisibility(View.VISIBLE);
-//                ll_markup_container.setVisibility(View.GONE);
-//                initProgressDialog();
             }
         } else {
             send_message.setVisibility(View.VISIBLE);

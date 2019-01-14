@@ -2,23 +2,17 @@ package com.qunar.im.ui.view.chatExtFunc;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
 
 import com.qunar.im.ui.R;
-import com.qunar.im.base.common.CurrentPreference;
-import com.qunar.im.base.util.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by xingchao.song on 2/29/2016.
@@ -32,12 +26,12 @@ public class ChatOperationsAdapter extends PagerAdapter {
 
     private static final int ITEM_PER_PAGE = 8;
 
-    private Integer[] funcKeys;
+    private String[] funcKeys;
 
     public ChatOperationsAdapter(Context context,FuncMap map){
         mContext = context;
         funcMap = map;
-        funcKeys = new Integer[funcMap.getCount()];
+        funcKeys = new String[funcMap.getCount()];
         funcMap.getKeys().toArray(funcKeys);
     }
     @Override
@@ -56,8 +50,8 @@ public class ChatOperationsAdapter extends PagerAdapter {
 
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.atom_ui_item_grid_operations, container,false);
-        mGridView = (GridView) view.findViewById(R.id.gv_options);
-        ll_inicatore = (LinearLayout) view.findViewById(R.id.ll_inicatore);
+        mGridView = view.findViewById(R.id.gv_options);
+        ll_inicatore = view.findViewById(R.id.ll_inicatore);
         initGridView(position);
         container.addView(view);
 
@@ -76,7 +70,7 @@ public class ChatOperationsAdapter extends PagerAdapter {
                 funcMap.getCount():(position+1)*ITEM_PER_PAGE;
         for(int i=position*ITEM_PER_PAGE;i<nextPage;i++)
         {
-            Integer key = funcKeys[i];
+            String key = funcKeys[i];
             FuncItem item = funcMap.getItem(key);
             thisPageData.add(item);
         }
