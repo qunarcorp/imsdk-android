@@ -106,3 +106,11 @@
   
   QIMSDK.getInstance().getCurrentDomain();
   ```   
+ ```loginByQvt
+  18.使用qvt登录(仅限使用去哪儿账号登录的用户)
+       * @param uid 用户名
+       * @param qvt 去哪儿用户登录凭证
+       * @param plat 平台
+       * @param loginStatesListener
+  QIMSDK.getInstance().loginByQvt(String uid,String qvt,String plat,LoginStatesListener loginStatesListener);
+  ```    
