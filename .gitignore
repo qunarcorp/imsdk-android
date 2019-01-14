@@ -15,6 +15,11 @@ target/
 *.iml
 *.iws
 
+#gradle
+.gradle/
+build/
+gradle/
+
 # temp ignore
 *.log
 *.cache
