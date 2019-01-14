@@ -21,16 +21,30 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            manifestPlaceholders = [
+//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+//                    serverDoMain  : true,
+//                    SCHEME : "qtalkaphone",
+//                    currentPlat  : "QTalk",
+//                    MAIN_SCHEMA : "start_qtalk_activity"
+//            ]
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            manifestPlaceholders = [
+//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+//                    serverDoMain  : true,
+//                    SCHEME : "qtalkaphone",
+//                    currentPlat  : "QTalk",
+//                    MAIN_SCHEMA : "start_qtalk_activity"
+//            ]
         }
 
     }
 
     flavorDimensions "qim"
-    //分渠道 分站点打包 分配服务器路径等
+    //分渠道
     productFlavors {
         //QTalk
         qtalk {
