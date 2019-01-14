@@ -57,33 +57,37 @@ dependencies {
 }
 ```
 
-配置manifestPlaceholders
+配置manifestPlaceholders(如果自己的app不分渠道，可直接在buildTypes里配置manifestPlaceholders，反之需在每个Flavor下配置manifestPlaceholders)
 --------
 
 ```manifestPlaceholders
-buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+flavorDimensions "qim"
+    //分渠道
+    productFlavors {
+        //QTalk
+        qtalk {
+            applicationId "com.qunar.im"
+            dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME:"your application id",
-                    serverDoMain: true,
-                    SCHEME      : "qtalkaphone",
-                    currentPlat : "QTalk",
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain  : true,
+                    SCHEME : "qtalkaphone",
+                    currentPlat  : "QTalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
             ]
         }
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        // QChat
+        qchat {
+            applicationId "sdk.im.qunar.com.qtalksdkdemo"
+            dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME:"your application id",
-                    serverDoMain: true,
-                    SCHEME      : "qchataphone",
-                    currentPlat : "QChat",
-                    MAIN_SCHEMA : "start_qchat_activity"
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain  : false,
+                    SCHEME : "qchataphone",
+                    currentPlat  : "QChat",
+                    MAIN_SCHEMA : "start_qchat_activity",
             ]
         }
 
