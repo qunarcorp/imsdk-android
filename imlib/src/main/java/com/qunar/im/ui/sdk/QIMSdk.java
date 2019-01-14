@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.qunar.im.base.presenter.impl.QChatLoginPresenter;
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.fragment.ConversationFragment;
@@ -255,6 +257,28 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
             return;
         }
         ConnectionUtil.getInstance().pbLogin(uid,password,true);
+    }
+
+    /**
+     * 使用qvt进行登录
+     * @param uid 用户名
+     * @param qvt
+     * @param plat
+     * @param loginStatesListener
+     */
+    public void loginByQvt(String uid,String qvt,String plat,LoginStatesListener loginStatesListener){
+        loginListener = loginStatesListener;
+        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(qvt) || TextUtils.isEmpty(plat)) {
+            if (loginListener != null) {
+                loginListener.isScuess(false, "用户名、qvt、plat不能为空!");
+                return;
+            }
+            return;
+        }
+        DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.qchat_qvt, qvt);
+        CurrentPreference.getInstance().setQvt(qvt);
+        QChatLoginPresenter qChatLoginPresenter = new QChatLoginPresenter();
+        qChatLoginPresenter.loginByToken(plat);
     }
 
     /**

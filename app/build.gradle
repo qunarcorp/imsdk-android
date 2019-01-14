@@ -21,25 +21,55 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-            manifestPlaceholders = [
-                    PACKAGE_NAME:"sdk.im.qunar.com.qtalksdkdemo",
-                    serverDoMain: true,
-                    SCHEME      : "qtalkaphone",
-                    currentPlat : "QTalk",
-                    MAIN_SCHEMA : "start_qtalk_activity"
-            ]
+//            manifestPlaceholders = [
+//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+//                    serverDoMain  : true,
+//                    SCHEME : "qtalkaphone",
+//                    currentPlat  : "QTalk",
+//                    MAIN_SCHEMA : "start_qtalk_activity"
+//            ]
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            manifestPlaceholders = [
+//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+//                    serverDoMain  : true,
+//                    SCHEME : "qtalkaphone",
+//                    currentPlat  : "QTalk",
+//                    MAIN_SCHEMA : "start_qtalk_activity"
+//            ]
+        }
+
+    }
+
+    flavorDimensions "qim"
+    //分渠道
+    productFlavors {
+        //QTalk
+        qtalk {
+            applicationId "com.qunar.im"
+            dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME:"sdk.im.qunar.com.qtalksdkdemo",
-                    serverDoMain: true,
-                    SCHEME      : "qchataphone",
-                    currentPlat : "QChat",
-                    MAIN_SCHEMA : "start_qchat_activity"
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain  : true,
+                    SCHEME : "qtalkaphone",
+                    currentPlat  : "QTalk",
+                    MAIN_SCHEMA : "start_qtalk_activity"
+            ]
+        }
+        // QChat
+        qchat {
+            applicationId "sdk.im.qunar.com.qtalksdkdemo"
+            dimension "qim"
+
+            manifestPlaceholders = [
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    serverDoMain  : false,
+                    SCHEME : "qchataphone",
+                    currentPlat  : "QChat",
+                    MAIN_SCHEMA : "start_qchat_activity",
             ]
         }
 
