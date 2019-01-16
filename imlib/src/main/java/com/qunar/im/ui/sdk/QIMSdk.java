@@ -261,16 +261,15 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
 
     /**
      * 使用qvt进行登录
-     * @param uid 用户名
      * @param qvt
      * @param plat
      * @param loginStatesListener
      */
-    public void loginByQvt(String uid,String qvt,String plat,LoginStatesListener loginStatesListener){
+    public void loginByQvt(String qvt,String plat,LoginStatesListener loginStatesListener){
         loginListener = loginStatesListener;
-        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(qvt) || TextUtils.isEmpty(plat)) {
+        if (TextUtils.isEmpty(qvt) || TextUtils.isEmpty(plat)) {
             if (loginListener != null) {
-                loginListener.isScuess(false, "用户名、qvt、plat不能为空!");
+                loginListener.isScuess(false, "qvt、plat不能为空!");
                 return;
             }
             return;
