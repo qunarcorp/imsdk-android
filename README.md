@@ -70,7 +70,6 @@ flavorDimensions "qim"
     productFlavors {
         //QTalk
         qtalk {
-            applicationId "com.qunar.im"
             dimension "qim"
 
             manifestPlaceholders = [
@@ -83,7 +82,6 @@ flavorDimensions "qim"
         }
         // QChat
         qchat {
-            applicationId "sdk.im.qunar.com.qtalksdkdemo"
             dimension "qim"
 
             manifestPlaceholders = [
