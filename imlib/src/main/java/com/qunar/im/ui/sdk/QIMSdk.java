@@ -276,6 +276,7 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
         }
         DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.qchat_qvt, qvt);
         CurrentPreference.getInstance().setQvt(qvt);
+        ConnectionUtil.getInstance().initNavConfig(true);
         QChatLoginPresenter qChatLoginPresenter = new QChatLoginPresenter();
         qChatLoginPresenter.loginByToken(plat);
     }
