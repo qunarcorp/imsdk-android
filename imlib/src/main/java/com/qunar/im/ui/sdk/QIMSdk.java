@@ -55,11 +55,15 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
 
     private LoginStatesListener loginListener;
 
-    private static QIMSdk instance;
+    private static volatile QIMSdk instance;
 
     public static QIMSdk getInstance() {
-        if (instance == null) {
-            instance = new QIMSdk();
+        if(instance == null){
+            synchronized (QIMSdk.class){
+                if (instance == null) {
+                    instance = new QIMSdk();
+                }
+            }
         }
         return instance;
     }
