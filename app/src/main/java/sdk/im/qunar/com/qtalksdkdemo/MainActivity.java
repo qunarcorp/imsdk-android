@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -48,7 +49,11 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void configNavigation(View view) {
-        String url = "xxxx";//导航URl
+        String url = "";//导航URl
+        if(TextUtils.isEmpty(url)){
+            toast("请配置正确的导航地址");
+            return;
+        }
         QIMSdk.getInstance().setNavigationUrl(url);
         toast("导航配置成功");
         logcat_text.append("导航地址：" + url + "\n");
@@ -73,8 +78,8 @@ public class MainActivity extends Activity {
                     }
                 });
             }else {
-                final String uid = "xxx";//用户名
-                final String password = "xxxx";//密码
+                final String uid = "";//用户名
+                final String password = "";//密码
                 QIMSdk.getInstance().login(uid, password, new QIMSdk.LoginStatesListener() {
                     @Override
                     public void isScuess(boolean b, String s) {
