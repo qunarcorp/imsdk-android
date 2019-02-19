@@ -26,7 +26,7 @@ import com.qunar.im.ui.imagepicker.DataHolder;
 import com.qunar.im.ui.imagepicker.ImageDataSource;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.imagepicker.bean.ImageFolder;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.dapter.ImageFolderAdapter;
 import com.qunar.im.ui.imagepicker.dapter.ImageRecyclerAdapter;
 import com.qunar.im.ui.imagepicker.util.Utils;

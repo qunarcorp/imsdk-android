@@ -21,24 +21,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            manifestPlaceholders = [
-//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
-//                    serverDoMain  : true,
-//                    SCHEME : "qtalkaphone",
-//                    currentPlat  : "QTalk",
-//                    MAIN_SCHEMA : "start_qtalk_activity"
-//            ]
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            manifestPlaceholders = [
-//                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
-//                    serverDoMain  : true,
-//                    SCHEME : "qtalkaphone",
-//                    currentPlat  : "QTalk",
-//                    MAIN_SCHEMA : "start_qtalk_activity"
-//            ]
         }
 
     }
@@ -104,6 +90,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
     }
 //    compile project(':imlib')
-    compile 'com.qunar.im:sdk-im:3.0.0'
+    compile 'com.qunar.im:sdk-im:3.0.1'
     testCompile 'junit:junit:4.12'
 }

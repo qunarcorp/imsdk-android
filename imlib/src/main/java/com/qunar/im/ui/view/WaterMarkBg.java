@@ -14,6 +14,10 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
+/**
+ * Created by fulushan on 18/4/5.
+ */
+
 public class WaterMarkBg extends Drawable {
 
     private Paint paint = new Paint();
@@ -22,6 +26,13 @@ public class WaterMarkBg extends Drawable {
     private int degress;//角度
     private int fontSize;//字体大小 单位sp
 
+    /**
+     * 初始化构造
+     * @param context 上下文
+     * @param labels 水印文字列表 多行显示支持
+     * @param degress 水印角度
+     * @param fontSize 水印文字大小
+     */
     public WaterMarkBg(Context context,List<String> labels,  int degress,int fontSize) {
         this.labels = labels;
         this.context = context;

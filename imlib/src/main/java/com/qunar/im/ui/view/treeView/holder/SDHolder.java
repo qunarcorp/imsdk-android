@@ -9,6 +9,9 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 
+/**
+ * Created by Bogdan Melnychuk on 2/13/15.
+ */
 public class SDHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
 
     protected IconView iconView;
@@ -26,10 +29,10 @@ public class SDHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.Ico
     public View createNodeView(TreeNode node, IconTreeItemHolder.IconTreeItem value) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.atom_ui_view_tree_node_profile, null, false);
-        TextView tvValue = (TextView) view.findViewById(R.id.node_value);
+        TextView tvValue = view.findViewById(R.id.node_value);
         tvValue.setText(value.text);
 
-        iconView = (IconView) view.findViewById(R.id.node_icon);
+        iconView = view.findViewById(R.id.node_icon);
         iconView.setText(context.getResources().getString(value.icon));
 
         return view;

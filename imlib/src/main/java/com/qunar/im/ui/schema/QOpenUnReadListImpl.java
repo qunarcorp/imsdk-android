@@ -2,7 +2,6 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.ui.activity.AboutActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.UnReadChatListActivity;
 

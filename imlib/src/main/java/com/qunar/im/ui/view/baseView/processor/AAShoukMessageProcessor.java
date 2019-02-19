@@ -13,6 +13,7 @@ import com.qunar.im.base.presenter.messageHandler.ConversitionType;
 import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
@@ -44,6 +45,8 @@ public class  AAShoukMessageProcessor extends DefaultMessageProcessor {
                         .append("&company=qunar&")
                         .append("user_id=")
                         .append(user_id)
+                        .append("&q_d=")
+                        .append(QtalkNavicationService.getInstance().getXmppdomain())
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             } else {
                 sb.append("&username=").append(username).append("&sign=")
@@ -51,6 +54,8 @@ public class  AAShoukMessageProcessor extends DefaultMessageProcessor {
                         .append("&company=qunar&")
                         .append("group_id=")
                         .append(QtalkStringUtils.parseBareJid(item.getMessage().getConversationID()))
+                        .append("&q_d=")
+                        .append(QtalkNavicationService.getInstance().getXmppdomain())
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             }
             AAShoukView view = ViewPool.getView(AAShoukView.class,item.getContext());
@@ -67,15 +72,6 @@ public class  AAShoukMessageProcessor extends DefaultMessageProcessor {
                     item.getContext().startActivity(intent);
                 }
             });
-//            view.setTitle(content.typestr);
-//            view.setAashoukType(content.type);
-//            if(message.getMsgType() == MessageType.MSG_HONGBAO_MESSAGE)
-//            {
-//                view.setIcon(R.drawable.atom_ui_ic_lucky_money_red);
-//            }
-//            else {
-//                view.setIcon(R.drawable.atom_ui_ic_aa_pay);
-//            }
             parent.addView(view);
         } catch (Exception ex) {
             TextView textView = ViewPool.getView(TextView.class,item.getContext());

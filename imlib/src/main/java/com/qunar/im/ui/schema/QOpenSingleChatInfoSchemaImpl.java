@@ -28,7 +28,7 @@ public class QOpenSingleChatInfoSchemaImpl implements QChatSchemaService{
         private static final QOpenSingleChatInfoSchemaImpl INSTANCE = new QOpenSingleChatInfoSchemaImpl();
     }
 
-    public static final QOpenSingleChatInfoSchemaImpl getInstance(){
+    public static QOpenSingleChatInfoSchemaImpl getInstance(){
         return QOpenSingleChatInfoSchemaImpl.LazyHolder.INSTANCE;
     }
 }

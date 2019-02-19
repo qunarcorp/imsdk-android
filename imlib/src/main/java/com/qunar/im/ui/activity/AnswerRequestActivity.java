@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.presenter.IAnswerBuddyPresenter;
 import com.qunar.im.base.presenter.IPersonalInfoPresenter;
 import com.qunar.im.base.presenter.impl.BuddyPresenter;
@@ -26,8 +25,8 @@ import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.graphics.BitmapHelper;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.view.QtActionBar;
 import com.qunar.im.ui.view.QtNewActionBar;
 
 import de.greenrobot.event.EventBus;
@@ -192,7 +191,7 @@ public class AnswerRequestActivity extends IMBaseActivity implements IAnswerBudd
     public String getResean() {
         if(radio_allow.isChecked())return String.valueOf(getText(R.string.atom_ui_message_agree_friend));
         return edit_deny_reason.getText().length()==0?
-            CurrentPreference.getInstance().getFullName()+getText(R.string.atom_ui_message_refuse_friend):
+            CurrentPreference.getInstance().getPreferenceUserId()+getText(R.string.atom_ui_message_refuse_friend):
                 edit_deny_reason.getText().toString();
     }
 

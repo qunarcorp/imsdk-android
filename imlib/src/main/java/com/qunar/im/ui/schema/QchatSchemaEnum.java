@@ -26,6 +26,7 @@ public enum QchatSchemaEnum {
     logout(QLogoutImpl.instance,"/logout"),
     openGroupChat(QOpenGroupCaht.instance,"/openGroupChat"),
     openSingleChat(QOpenSingleChat.instance,"/openSingleChat"),
+    openUserWorkWorld(QOpenUserWorkWorld.instance,"/openUserWorkWorld"),
     openChatForSearch(QOpenChatForSearch.instance,"/openChatForSearch"),
     openSearchChatImage(QOpenSearchChatImage.instance,"/openSearchChatImage"),
     unreadList(QOpenUnReadListImpl.instance,"/unreadList"),

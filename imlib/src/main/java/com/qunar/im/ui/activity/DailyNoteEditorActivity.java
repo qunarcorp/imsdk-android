@@ -38,7 +38,7 @@ import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.RichEditor;

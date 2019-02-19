@@ -5,9 +5,7 @@ import android.net.Uri;
 
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 
 import java.util.Map;
 

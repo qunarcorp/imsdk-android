@@ -2,9 +2,11 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#F8F8F9"
     android:layout_height="@dimen/dp_40">
 
     <LinearLayout
+        android:background="#F8F8F9"
         android:id="@+id/load_more_loading_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,6 +34,7 @@
         android:id="@+id/load_more_load_fail_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F8F8F9"
         android:visibility="gone">
 
 
@@ -48,6 +51,7 @@
         android:id="@+id/load_more_load_end_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F8F8F9"
         android:visibility="gone">
 
         <TextView

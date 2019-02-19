@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.jsonbean.HongbaoBroadcast;
 import com.qunar.im.base.module.Nick;
@@ -61,6 +62,8 @@ public class HongbaoPromptView extends LinearLayout {
                     .append("&company=qunar&")
                     .append("user_id=")
                     .append(fromJid)
+                    .append("&q_d=")
+                    .append(QtalkNavicationService.getInstance().getXmppdomain())
                     .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
         } else {
             sb.append("&username=").append(username).append("&sign=")
@@ -68,6 +71,8 @@ public class HongbaoPromptView extends LinearLayout {
                     .append("&company=qunar&")
                     .append("group_id=")
                     .append(fromJid)
+                    .append("&q_d=")
+                    .append(QtalkNavicationService.getInstance().getXmppdomain())
                     .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
         }
         if(broadcast.Open_User.equals(CurrentPreference.getInstance().getUserid()))
@@ -104,39 +109,6 @@ public class HongbaoPromptView extends LinearLayout {
                     hongbao_prompt.setText(spannableStringBuilder);
                 }
             }, false, true);
-//            ProfileUtils.loadNickName(broadcast.From_User, false,
-//                    new ProfileUtils.LoadNickNameCallback() {
-//
-//                        @Override
-//                        public void finish(String name) {
-//                            String content;
-//                            if (isAA) {
-//                                content = "你支付了"+name+"的"+ broadcast.Typestr + broadcast.Type;
-//                                hongbao_icon.setImageResource(R.drawable.atom_ui_ic_aa_pay);
-//                            } else {
-//                                content = "你领取了"+name+"的红包";
-//                                hongbao_icon.setImageResource(R.drawable.atom_ui_ic_lucky_money_red);
-//                            }
-//                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-//                            URLSpan span = new URLSpan(sb.toString()) {
-//                                @Override
-//                                public void onClick(View widget) {
-//                                    String url = getURL();
-//                                    Intent intent = new Intent(ctx, QunarWebActvity.class);
-//                                    intent.setData(Uri.parse(url));
-//                                    intent.putExtra(Constants.BundleKey.WEB_FROM,
-//                                            Constants.BundleValue.HONGBAO);
-//                                    ctx.startActivity(intent);
-//                                }
-//                            };
-//                            SpannableString spannableString = new SpannableString(content);
-//                            spannableString.setSpan(span, content.length() - 2, content.length(),
-//                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                            spannableStringBuilder.append(spannableString);
-//                            hongbao_prompt.setMovementMethod(LinkMovementMethod.getInstance());
-//                            hongbao_prompt.setText(spannableStringBuilder);
-//                        }
-//                    });
         }
         else {
             if(broadcast.From_User.equals(CurrentPreference.getInstance().getUserid())){
@@ -241,55 +213,6 @@ public class HongbaoPromptView extends LinearLayout {
                     }
                 }, false, true);
             }
-//            ProfileUtils.loadNickName(broadcast.Open_User, false,
-//                    new ProfileUtils.LoadNickNameCallback() {
-//                        @Override
-//                        public void finish(String name) {
-//                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-//                            String content = name;
-//                            if (isAA) {
-//                                content += "支付了你的" + broadcast.Typestr + broadcast.Type;
-//                            } else {
-//                                content += "领取了你的红包";
-//                            }
-//                            URLSpan span = new URLSpan(sb.toString()) {
-//                                @Override
-//                                public void onClick(View widget) {
-//                                    String url = getURL();
-//                                    Intent intent = new Intent(ctx, QunarWebActvity.class);
-//                                    intent.setData(Uri.parse(url));
-//                                    intent.putExtra(Constants.BundleKey.WEB_FROM,
-//                                            Constants.BundleValue.HONGBAO);
-//                                    ctx.startActivity(intent);
-//                                }
-//                            };
-//                            SpannableString spannableString = new SpannableString(content);
-//                            spannableString.setSpan(span, content.length() - 2, content.length(),
-//                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                            spannableStringBuilder.append(spannableString);
-//                            if (isAA) {
-//                                if (broadcast.Balance > 0) {
-//                                    spannableStringBuilder.append(",还剩");
-//                                    spannableStringBuilder.append(String.valueOf(broadcast.Balance));
-//                                    spannableStringBuilder.append("人未收齐");
-//                                } else {
-//                                    spannableStringBuilder.append(",已收齐");
-//                                }
-//                                hongbao_icon.setImageResource(R.drawable.atom_ui_ic_aa_pay);
-//                            } else {
-//                                if (broadcast.Balance > 0) {
-//                                    spannableStringBuilder.append(",还剩");
-//                                    spannableStringBuilder.append(String.valueOf(broadcast.Balance));
-//                                    spannableStringBuilder.append("个红包");
-//                                } else {
-//                                    spannableStringBuilder.append(",你的红包已经被领完了");
-//                                }
-//                                hongbao_icon.setImageResource(R.drawable.atom_ui_ic_lucky_money_red);
-//                            }
-//                            hongbao_prompt.setMovementMethod(LinkMovementMethod.getInstance());
-//                            hongbao_prompt.setText(spannableStringBuilder);
-//                        }
-//                    });
         }
     }
 }

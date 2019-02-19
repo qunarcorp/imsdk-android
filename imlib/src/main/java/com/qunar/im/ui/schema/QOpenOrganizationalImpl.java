@@ -5,7 +5,6 @@ import android.content.Intent;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.activity.DepartmentActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.PbChatActivity;
 
 import java.util.Map;
 

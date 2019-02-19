@@ -2,13 +2,11 @@ package com.qunar.im.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.view.QtActionBar;
 import com.qunar.im.ui.view.QtNewActionBar;
 
 /**

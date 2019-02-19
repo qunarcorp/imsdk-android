@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.module.DepartmentItem;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.UserVCard;
@@ -32,6 +31,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.base.view.multilLevelTreeView.Node;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.InvitationAdapter;
 import com.qunar.im.ui.adapter.InviteToChatroomHorizonalListviewAdapter;
@@ -176,15 +176,15 @@ public class ChatroomInvitationActivity extends IMBaseActivity implements
                         if (TextUtils.isEmpty(othername)) {
                             othername = QtalkStringUtils.parseLocalpart(mSelectedNodes.get(i).getKey());
                         }
-                        if (CurrentPreference.getInstance().getFullName().equalsIgnoreCase(othername) ||
-                                CurrentPreference.getInstance().getUserId().equalsIgnoreCase(othername))
+                        if (CurrentPreference.getInstance().getPreferenceUserId().equalsIgnoreCase(othername) ||
+                                CurrentPreference.getInstance().getUserid().equalsIgnoreCase(othername))
                             continue;
                         // 只添加不是自己的人
                         chatroomName.append(othername);
                         chatroomName.append(",");
                     }
                     // 最后追加上自己的名字，方便搜索
-                    chatroomName.append(CurrentPreference.getInstance().getFullName());
+                    chatroomName.append(CurrentPreference.getInstance().getPreferenceUserId());
 
                     cName = chatroomName.toString();
                     return cName;

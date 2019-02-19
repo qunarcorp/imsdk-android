@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.zoomview.PhotoView;
 import com.qunar.im.ui.imagepicker.zoomview.PhotoViewAttacher;

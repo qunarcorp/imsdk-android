@@ -20,8 +20,6 @@ import com.qunar.im.base.util.EmotionUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 
-import java.io.File;
-
 /**
  * Created by zhaokai on 16-1-19.
  */

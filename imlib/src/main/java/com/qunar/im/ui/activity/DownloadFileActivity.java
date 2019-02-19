@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.CommonDownloader;
 import com.qunar.im.base.jsonbean.DownloadImageResult;
 import com.qunar.im.base.jsonbean.EncryptMsg;
@@ -39,7 +38,6 @@ import com.qunar.im.ui.view.progressbarview.NumberProgressBar;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
 
 /**

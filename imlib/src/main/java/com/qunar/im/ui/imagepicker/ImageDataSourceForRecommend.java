@@ -8,7 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
 
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 
 /**
  * Created by lihaibin.li on 2017/12/28.

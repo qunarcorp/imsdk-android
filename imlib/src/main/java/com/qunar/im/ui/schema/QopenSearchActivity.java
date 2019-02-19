@@ -1,12 +1,11 @@
 package com.qunar.im.ui.schema;
 
-import android.app.Fragment;
 import android.content.Intent;
 
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.SearchUserActivity;
+import com.qunar.rn_service.activity.QTalkSearchActivity;
 
 import java.util.Map;
 
@@ -22,11 +21,7 @@ public class QopenSearchActivity implements QChatSchemaService {
 
         if (CommonConfig.isQtalk) {
             Intent i = null;
-            try {
-                i = new Intent(context.getApplicationContext(), (Class<? extends Fragment>) Class.forName("com.qunar.im.camelhelp.activity.QTalkSearchActivity"));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            i = new Intent(context.getApplicationContext(), QTalkSearchActivity.class);
             context.startActivity(i);
         } else {
             Intent intent = new Intent(context.getApplicationContext(), SearchUserActivity.class);

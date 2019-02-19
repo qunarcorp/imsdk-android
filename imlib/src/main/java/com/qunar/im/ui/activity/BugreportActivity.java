@@ -118,7 +118,7 @@ public class BugreportActivity extends SwipeBackActivity implements IMNotificait
         switch (key){
             case QtalkEvent.FEED_BACK_RESULT:
                 boolean result = (boolean) args[0];
-                toast(result ? "反馈成功，谢谢您的反馈！" : "ops反馈失败，请重试！");
+                toast(result ? "反馈成功，谢谢您的反馈！" : "oops反馈失败，请重试！");
                 break;
         }
     }

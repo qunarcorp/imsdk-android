@@ -16,7 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.qunar.im.ui.imagepicker.bean.ImageFolder;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.loader.ImageLoader;
 import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 import com.qunar.im.ui.imagepicker.util.Utils;

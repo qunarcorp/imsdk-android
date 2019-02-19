@@ -3,7 +3,6 @@ package com.qunar.im.ui.schema;
 import android.content.Intent;
 
 import com.qunar.im.ui.activity.AboutActivity;
-import com.qunar.im.ui.activity.FontSizeActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
 
 import java.util.Map;

@@ -3,6 +3,7 @@ package com.qunar.im.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;

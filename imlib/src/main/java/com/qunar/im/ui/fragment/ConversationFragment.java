@@ -37,7 +37,6 @@ import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.BackgroundTipActivity;
-import com.qunar.im.ui.activity.BuddyRequestActivity;
 import com.qunar.im.ui.activity.CollectionActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
@@ -108,26 +107,6 @@ public class ConversationFragment extends BaseFragment implements IConversationL
         super.onResume();
         currentJid = null;
         convPresenter.showRecentConvs(false);
-//        List<RecentConversation> list;
-//        //如果是第一次打开不进行操作
-//        if (isFirstShow) {
-//            list  = SerializableUtils.getInstance().readData();
-//            if(list != null){
-//                if(recentConvsAdapter != null){
-//                    recentConvsAdapter.setRecentConversationList(list,true);
-//                }
-//            }else {
-//                convPresenter.showRecentConvs();
-//            }
-//            isFirstShow = false;
-//        } else {
-//            //如果不是第一次打开去获取数据
-////            convPresenter.initReload(false);
-////            recentConvsAdapter.notifyDataSetChanged();
-//            list = recentConvsAdapter.getRecentConversationList();
-//            SerializableUtils.getInstance().saveAsSerializable(list);
-//            convPresenter.showRecentConvs();
-//        }
     }
 
     @Override
@@ -197,7 +176,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recentConvClick(((RecentConversation) parent.getAdapter().getItem(position)), view);
+                recentConvClick(recentConvsAdapter.getItem(position - list.getHeaderViewsCount()), view);
             }
         });
     }
@@ -257,7 +236,7 @@ public class ConversationFragment extends BaseFragment implements IConversationL
                     intent.putExtra(QunarWebActvity.IS_HIDE_BAR, true);
                     startActivity(intent);
                     //抢单消息 特殊处理 点击后 设置成已读
-                    ConnectionUtil.getInstance().sendSingleAllRead(item.getId(), MessageStatus.STATUS_SINGLE_READED + "");
+                    ConnectionUtil.getInstance().sendSingleAllRead(item.getId(),item.getId(),MessageStatus.STATUS_SINGLE_READED + "");
                 } else if (item.getId().contains("rbt-system") || item.getId().contains("rbt-notice")) {//qchat的系统通知消息
                     intent = new Intent(getContext(), RobotExtendChatActivity.class);
                     intent.putExtra(PbChatActivity.KEY_JID, item.getId());
@@ -280,8 +259,6 @@ public class ConversationFragment extends BaseFragment implements IConversationL
                 }
                 break;
             case ConversitionType.MSG_TYPE_FRIENDS_REQUEST:
-                intent = new Intent(getContext(), BuddyRequestActivity.class);
-                startActivity(intent);
                 break;
             default:
                 break;
@@ -456,33 +433,6 @@ public class ConversationFragment extends BaseFragment implements IConversationL
 //        convPresenter.showRecentConvs();
     }
 
-//    class HandleConvEvent {
-//        boolean loginHandleComplete = false;
-//
-//        public void onEvent(EventBusEvent.LoginComplete loginComplete) {
-//            if (loginComplete.loginStatus) {
-//                if (loginHandleComplete) return;
-//                chatRoomManagePresenter.onClientConnected();
-//                RobotListPresenter presenter =
-//                        new RobotListPresenter();
-//                presenter.loadRobotIdList4mNet();
-//                ReloadDataAfterReconnect.startGetP2PHistory();
-//                ReloadDataAfterReconnect.startGetFriendRequests();
-//
-//            } else {
-//                if (chatRoomManagePresenter != null) {
-//                    chatRoomManagePresenter.forceReloadChatRooms();
-//                }
-//            }
-//            loginHandleComplete = loginComplete.loginStatus;
-//        }
-//
-//        public void onEvent(EventBusEvent.HasNewMessageEvent event) {
-//            refreshConversation();
-//        }
-//    }
-
-
     @Override
     public void parseEncryptMessage(final IMMessage message) {
         if (!message.getConversationID().equals(currentJid)) {
@@ -512,17 +462,17 @@ public class ConversationFragment extends BaseFragment implements IConversationL
 
     @Override
     public void showFileSharing() {
-        if(header==null){
-            header = LayoutInflater.from(getActivity()).inflate(R.layout.atom_ui_header_file_sharing,null);
-            header.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), BackgroundTipActivity.class);
-                    startActivity(intent);
-                }
-            });
+        if(header!=null){
+            list.removeHeaderView(header);
         }
-        list.removeHeaderView(header);
+        header = LayoutInflater.from(getActivity()).inflate(R.layout.atom_ui_header_file_sharing,null);
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), BackgroundTipActivity.class);
+                startActivity(intent);
+            }
+        });
         list.addHeaderView(header);
     }
 

@@ -74,10 +74,12 @@
     <color name="atom_ui_new_color_qunar_logo">#1D9AAB</color>
 
 
-
+    <color name="atom_ui_new_like_select">#00CABE</color>
 
     <color name="test">#636363</color>
 
     <color name="gray_color">#4b4b58</color>
     <color name="item_bg">#FFFFFF</color>
+    <color name="send_no">#d6d4d4</color>
+    <color name="atom_ui_new_color_4DC1B5">#4DC1B5</color>
 </resources>

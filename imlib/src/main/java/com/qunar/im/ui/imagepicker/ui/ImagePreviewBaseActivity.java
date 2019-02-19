@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.DataHolder;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.dapter.ImagePageAdapter;
 import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.view.ViewPagerFixed;

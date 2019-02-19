@@ -258,6 +258,7 @@
     <string name="atom_ui_common_confirm">确定</string>
     <string name="atom_ui_contact_tab_public_number">公众号</string>
     <string name="atom_ui_common_delete">删除</string>
+    <string name="atom_ui_ip_select_delete">删除(%1$d/%2$d)</string>
     <string name="atom_ui_common_close">关闭</string>
     <string name="atom_ui_textbar_button_shake">窗口抖动</string>
     <string name="atom_ui_my_is">我是</string>
@@ -816,4 +817,5 @@
 
     <string name="atom_ui_look_forward">暂不支持，敬请期待!</string>
     <string name="atom_ui_copy_message_content">消息内容</string>
+    <string name="atom_ui_release_circle">发布工作圈</string>
 </resources>

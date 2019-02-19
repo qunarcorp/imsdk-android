@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import com.qunar.im.ui.R;
 
-
+/**
+ * Created by xinbo.wang on 2016/5/3.
+ */
 public class MyDialog extends AlertDialog {
     TextView textView;
     public MyDialog(Context context) {
@@ -27,7 +29,7 @@ public class MyDialog extends AlertDialog {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atom_ui_layout_my_dialog);
-        textView = (TextView) findViewById(R.id.toast_content);
+        textView = findViewById(R.id.toast_content);
     }
 
     public void setContent(String content)

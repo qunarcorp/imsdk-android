@@ -30,7 +30,7 @@ public class QOpenGroupChatInfoSchemaImpl implements QChatSchemaService{
         private static final QOpenGroupChatInfoSchemaImpl INSTANCE = new QOpenGroupChatInfoSchemaImpl();
     }
 
-    public static final QOpenGroupChatInfoSchemaImpl getInstance(){
+    public static QOpenGroupChatInfoSchemaImpl getInstance(){
         return QOpenGroupChatInfoSchemaImpl.LazyHolder.INSTANCE;
     }
 }

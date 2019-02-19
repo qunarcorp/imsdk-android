@@ -1,7 +1,7 @@
 package com.qunar.im.ui.imagepicker;
 
 
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +36,9 @@ public class DataHolder {
             data.put(id, object);
         }
     }
+
+
+
 
     public Object retrieve(String id) {
         if (data == null || mInstance == null){

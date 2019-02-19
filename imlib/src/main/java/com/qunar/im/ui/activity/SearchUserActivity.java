@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.jsonbean.ImgVideoBean;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.PublishPlatform;

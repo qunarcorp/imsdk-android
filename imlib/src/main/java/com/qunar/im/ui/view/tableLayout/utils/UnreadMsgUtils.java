@@ -26,8 +26,8 @@ public class UnreadMsgUtils {
             msgView.setStrokeWidth(0);
             msgView.setText("");
 
-            lp.width = (int) (12 * dm.density);
-            lp.height = (int) (12 * dm.density);
+            lp.width = (int) (8 * dm.density);
+            lp.height = (int) (8 * dm.density);
             msgView.setLayoutParams(lp);
         } else {
             lp.height = (int) (18 * dm.density);

@@ -1,6 +1,7 @@
 package com.qunar.im.ui.imagepicker;
 
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
@@ -10,7 +11,7 @@ import android.support.v4.content.Loader;
 
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.bean.ImageFolder;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,14 +88,25 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                     continue;
                 }
 
+                String path = imagePath;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(path, options);
+                //这种方式才可以获取到webp类型图片
+//                String type = options.outMimeType;
+//                if("image/webp".equals(type)){
+//                    continue;
+//                }
+
                 long imageSize = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
                 int imageWidth = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[3]));
                 int imageHeight = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
                 String imageMimeType = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
                 long imageAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]));
-                if("image/webp".equals(imageMimeType)){
-                    continue;
-                }
+//                if("image/webp".equals(imageMimeType)){
+//                    new String();
+//                    continue;
+//                }
                 //封装实体
                 ImageItem imageItem = new ImageItem();
                 imageItem.name = imageName;

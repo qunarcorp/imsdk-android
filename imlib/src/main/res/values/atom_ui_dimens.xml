@@ -66,4 +66,9 @@
     <dimen name="max_panel_height">380dp</dimen>
     <dimen name="min_keyboard_height">80dp</dimen>
     <!--end-->
+
+
+    <dimen name="atom_ui_work_world_head">43dp</dimen>
+    <dimen name="atom_ui_work_world_details_self_head">36dp</dimen>
+    <dimen name="atom_ui_work_world_56dp">56dp</dimen>
 </resources>

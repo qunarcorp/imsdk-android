@@ -16,11 +16,10 @@ import com.qunar.im.base.util.EmotionUtils;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ManageEmojiconAdapter;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;
 import com.qunar.im.ui.view.QtNewActionBar;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

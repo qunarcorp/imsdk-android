@@ -28,8 +28,6 @@ import com.qunar.im.base.presenter.ILoginPresenter;
 import com.qunar.im.base.presenter.IServiceStatePresenter;
 import com.qunar.im.base.presenter.impl.LoginPresenter;
 import com.qunar.im.base.presenter.impl.ServiceStatePresenter;
-import com.qunar.im.base.presenter.model.IProfileDataModel;
-import com.qunar.im.base.presenter.model.impl.ProfileDataModel;
 import com.qunar.im.base.presenter.views.IServiceStateView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -229,11 +227,8 @@ public class MainSettingFragment extends BaseFragment implements View.OnClickLis
     }
 
     void clearFileEvent() {
-        IProfileDataModel dataModel = new ProfileDataModel();
-        //TODO clear File
         Intent intent = new Intent(getContext(), CalculateCacheActivity.class);
         startActivity(intent);
-        dataModel.resetVersion();
     }
 
     void fontSize() {

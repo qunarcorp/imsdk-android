@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.ui.ImageBaseActivity;
 import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;
 import com.qunar.im.ui.imagepicker.util.Utils;

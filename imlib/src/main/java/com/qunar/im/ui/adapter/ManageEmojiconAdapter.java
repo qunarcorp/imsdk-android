@@ -13,10 +13,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.base.common.FacebookImageUtil;
 import com.qunar.im.base.module.UserConfigData;
 import com.qunar.im.base.util.EmotionUtils;
-import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.activity.PbChatActivity;
 
 import java.io.File;
 import java.util.ArrayList;
