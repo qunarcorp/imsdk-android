@@ -2,14 +2,14 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Base64;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.structs.TransitFileJSON;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.ui.activity.DownloadFileActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.MyFilesActivity;
 import com.qunar.rn_service.protocal.NativeApi;
 
 import java.util.Map;
@@ -22,7 +22,10 @@ public class QOpenFileDownLoadImpl implements QChatSchemaService  {
         IMMessage message = new IMMessage();
         TransitFileJSON transitFileJSON = new TransitFileJSON();
         transitFileJSON.FileSize = map.get(NativeApi.KEY_FILE_SIZE);
-        transitFileJSON.HttpUrl = map.get(NativeApi.KEY_FILE_URL);
+        String url = map.get(NativeApi.KEY_FILE_URL).replace(" ","+");
+        String pUrl = new String(Base64.decode(url,Base64.NO_PADDING));
+        Logger.i("解析后的下载地址:"+pUrl+",解析前的下载地址:"+url);
+        transitFileJSON.HttpUrl = pUrl;
         transitFileJSON.FileName = map.get(NativeApi.KEY_FILE_NAME);
         transitFileJSON.FILEMD5 =map.get(NativeApi.KEY_FILE_MD5);
         transitFileJSON.noMD5 = Boolean.parseBoolean(map.get(NativeApi.KEY_FILE_NOMD5));

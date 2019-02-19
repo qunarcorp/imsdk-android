@@ -43,7 +43,6 @@ import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.permission.PermissionCallback;
@@ -429,7 +428,6 @@ public class PersonalInfoActivity extends SwipeBackActivity implements IMyProfil
                             return;
                         }
                         String markup = et.getText().toString();
-                        ProfileUtils.markupName(markup, jid);
 //                        tv_markup.setText(markup);
                     }
                 })

@@ -12,32 +12,35 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
-import com.qunar.im.base.presenter.impl.QChatLoginPresenter;
-import com.qunar.im.base.util.Constants;
-import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.ui.fragment.ConversationFragment;
+import com.qunar.im.log.LogDatabaseManager;
+import com.qunar.im.utils.CapabilityUtil;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.RecentConversation;
+import com.qunar.im.base.presenter.impl.QChatLoginPresenter;
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.MemoryCache;
 import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.enums.LoginStatus;
+import com.qunar.im.core.manager.IMLogicManager;
+import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.thirdpush.QTPushConfiguration;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.fragment.BuddiesFragment;
+import com.qunar.im.ui.fragment.ConversationFragment;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.imagepicker.loader.GlideImageLoader;
 import com.qunar.im.ui.imagepicker.view.CropImageView;
+import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.rn_service.fragment.RNContactsFragment;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
@@ -55,15 +58,11 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
 
     private LoginStatesListener loginListener;
 
-    private static volatile QIMSdk instance;
+    private static QIMSdk instance;
 
     public static QIMSdk getInstance() {
-        if(instance == null){
-            synchronized (QIMSdk.class){
-                if (instance == null) {
-                    instance = new QIMSdk();
-                }
-            }
+        if (instance == null) {
+            instance = new QIMSdk();
         }
         return instance;
     }
@@ -76,6 +75,7 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
     public void init(Application application) {
         CommonConfig.globalContext = application.getApplicationContext();
         ProfileUtils.setDefaultRes(R.drawable.atom_ui_error_img);
+        ProfileUtils.setWorkworldDefault(R.drawable.atom_work_world_p);
         ViewTarget.setTagId(R.id.tag_glide);
 
         try {
@@ -122,6 +122,8 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
         Logger.setLogger(CommonConfig.globalContext, newLogger);
         //初始化push
         QTPushConfiguration.initPush(CommonConfig.globalContext);
+
+        LogDatabaseManager.getInstance().initDB(CommonConfig.globalContext);
 
         if (!ConnectionUtil.getInstance().isCanAutoLogin()) {
             QTPushConfiguration.unRegistPush(CommonConfig.globalContext);

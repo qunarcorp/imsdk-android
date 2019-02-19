@@ -43,7 +43,6 @@ import com.qunar.im.ui.adapter.RobotItemAdapter;
 import com.qunar.im.ui.events.RushOrderEvent;
 import com.qunar.im.ui.view.HorizontalListView;
 import com.qunar.im.ui.view.MyDialog;
-import com.qunar.im.ui.view.chatExtFunc.FuncMap;
 import com.qunar.im.ui.view.zxing.activity.CaptureActivity;
 import com.qunar.im.utils.QtalkStringUtils;
 

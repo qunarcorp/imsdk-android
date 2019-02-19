@@ -2,11 +2,9 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.ui.activity.AboutActivity;
 import com.qunar.im.ui.activity.AddAuthMessageActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
-import com.qunar.im.ui.activity.PersonalInfoActivity;
 
 import java.util.Map;
 

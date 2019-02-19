@@ -1,15 +1,10 @@
 package com.qunar.im.ui.schema;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.text.TextUtils;
 
-import com.qunar.im.base.util.Constants;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.ui.activity.BugreportActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
-import com.qunar.im.ui.activity.QunarWebActvity;
 
 import java.util.Map;
 import java.util.Random;

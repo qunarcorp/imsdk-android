@@ -2,11 +2,8 @@ package com.qunar.im.ui.activity;
 
 import android.os.Bundle;
 
-import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.fragment.ConversationFragment;
-import com.qunar.im.ui.fragment.GalleryFragment;
-import com.qunar.im.ui.util.StatusBarUtil;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 

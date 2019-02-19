@@ -122,7 +122,7 @@ public class VideoSelectorActivity extends IMBaseActivity implements VideoAdapte
                             MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
                             thumbColumns, MediaStore.Video.Thumbnails.VIDEO_ID
                                     + "=" + id, null, null);
-                    if (thumbCursor.moveToFirst()) {
+                    if (thumbCursor != null && thumbCursor.moveToFirst()) {
                         info.thumbPath = thumbCursor.getString(thumbCursor.getColumnIndex(MediaStore.Video.Thumbnails.DATA));
                     }
 

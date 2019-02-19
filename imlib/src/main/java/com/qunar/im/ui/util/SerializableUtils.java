@@ -22,7 +22,7 @@ public class SerializableUtils {
         private static final SerializableUtils INSTANCE = new SerializableUtils();
     }
 
-    public static final SerializableUtils getInstance(){
+    public static SerializableUtils getInstance(){
         return LazyHolder.INSTANCE;
     }
 

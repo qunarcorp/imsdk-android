@@ -1,13 +1,10 @@
 package com.qunar.im.ui.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;

@@ -46,9 +46,9 @@ dependencies {
     //日期选择器
     compile 'com.contrarywind:Android-PickerView:4.1.6'
 
-    compile 'com.qunar.im:sdk-base:3.0.0'
-    compile 'com.qunar.im:sdk-common:3.0.0'
-    compile 'com.qunar.im:sdk-push:3.0.0'
-    compile 'com.qunar.im:sdk-rn:3.0.0'
-    compile 'com.qunar.im:sdk-rtc:3.0.0'
+    compile 'com.qunar.im:sdk-base:3.0.1'
+    compile 'com.qunar.im:sdk-common:3.0.1'
+    compile 'com.qunar.im:sdk-push:3.0.1'
+    compile 'com.qunar.im:sdk-rn:3.0.1'
+    compile 'com.qunar.im:sdk-rtc:3.0.1'
 }

@@ -1,10 +1,8 @@
 package com.qunar.im.ui.schema;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.RobotInfoActivity;
 import com.qunar.im.ui.activity.RobotListActivity;
 
 import java.util.Map;

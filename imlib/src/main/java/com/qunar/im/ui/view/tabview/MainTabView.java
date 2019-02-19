@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import com.qunar.im.ui.R;
 
+/**
+ * Created by saber on 16-1-5.
+ */
 public class MainTabView extends RelativeLayout {
     TextView tabName,unreadCount;
 
@@ -24,8 +27,8 @@ public class MainTabView extends RelativeLayout {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.atom_ui_tab_layout, this, true);
-        tabName = (TextView) findViewById(R.id.tab_name);
-        unreadCount = (TextView) findViewById(R.id.textView_new_msg);
+        tabName = findViewById(R.id.tab_name);
+        unreadCount = findViewById(R.id.textView_new_msg);
     }
 
     public void setTitle(String title)

@@ -33,7 +33,7 @@ public class QOpenHomeTabImpl implements QChatSchemaService{
         private static final QOpenHomeTabImpl INSTANCE = new QOpenHomeTabImpl();
     }
 
-    public static final QOpenHomeTabImpl getInstance(){
+    public static QOpenHomeTabImpl getInstance(){
         return LazyHolder.INSTANCE;
     }
 

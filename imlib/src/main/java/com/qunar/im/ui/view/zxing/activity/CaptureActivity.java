@@ -37,9 +37,8 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PictureSelectorActivity;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;
-import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.zxing.camera.CameraManager;
 import com.qunar.im.ui.view.zxing.decode.DecodeBitmap;
 import com.qunar.im.ui.view.zxing.decode.DecodeThread;
@@ -100,11 +99,11 @@ public class CaptureActivity extends IMBaseActivity implements
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.atom_ui_activity_capture_new);
         captureType = getIntent().getIntExtra("type", 0);
-        scanPreview = (SurfaceView) findViewById(R.id.capture_preview1);
-        scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
-        scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        tvAlbum = (TextView) findViewById(R.id.tv_capture_select_album);
+        scanPreview = findViewById(R.id.capture_preview1);
+        scanContainer = findViewById(R.id.capture_container);
+        scanCropView = findViewById(R.id.capture_crop_view);
+        scanLine = findViewById(R.id.capture_scan_line);
+        tvAlbum = findViewById(R.id.tv_capture_select_album);
         tvAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +142,7 @@ public class CaptureActivity extends IMBaseActivity implements
     }
 
     private void initActionBar() {
-        mNewActionBar = (QtNewActionBar) findViewById(R.id.my_new_action_bar);
+        mNewActionBar = findViewById(R.id.my_new_action_bar);
         setNewActionBar(mNewActionBar);
         setActionBarTitle(R.string.atom_ui_qrcode_title);
 //        setActionBarSingleTitle("QTalk");

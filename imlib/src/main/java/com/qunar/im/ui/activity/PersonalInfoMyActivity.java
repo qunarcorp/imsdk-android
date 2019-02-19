@@ -40,7 +40,6 @@ import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.permission.PermissionCallback;
@@ -289,8 +288,6 @@ public class PersonalInfoMyActivity extends SwipeBackActivity implements IMyProf
         super.onStart();
         personalInfoPresenter.loadPersonalInfo();
         editMyProfilePresenter.loadMood();
-        markup = ProfileUtils.getMarkupByKey(jid);
-//        tv_markup.setText(markup);
     }
 
     //更改群名称
@@ -313,8 +310,6 @@ public class PersonalInfoMyActivity extends SwipeBackActivity implements IMyProf
                             return;
                         }
                         String markup = et.getText().toString();
-                        ProfileUtils.markupName(markup, jid);
-//                        tv_markup.setText(markup);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

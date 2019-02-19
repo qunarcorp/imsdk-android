@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.ImageClipActivity;
-import com.qunar.im.ui.activity.PictureSelectorActivity;
 
 import java.util.Map;
 

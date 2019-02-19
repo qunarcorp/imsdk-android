@@ -15,7 +15,9 @@ import com.qunar.im.ui.activity.DepartmentActivity;
 import com.qunar.im.ui.activity.RobotListActivity;
 
 
-
+/**
+ * Created by saber on 15-12-18.
+ */
 public class ContactHeaderView extends LinearLayout {
     RelativeLayout layout_noread_msg,layout_org,layout_friend,layout_chatroom,layout_robot;
 

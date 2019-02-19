@@ -7,6 +7,7 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.fragment.GalleryFragment;
 import com.qunar.im.ui.fragment.ImageBroswingFragment;
+import com.qunar.im.ui.fragment.WorkWorldBrowersingFragment;
 import com.qunar.im.ui.util.StatusBarUtil;
 
 /**
@@ -24,9 +25,23 @@ public class ImageBrowersingActivity extends IMBaseActivity {
         if (bundle.containsKey(Constants.BundleKey.CONVERSATION_ID))
         {
             initViewPagerBrowsing();
-        } else {
+        }else if(bundle.containsKey(Constants.BundleKey.WORK_WORLD_BROWERSING)){
+            initViewWorkWorldBrowsing();
+        }else {
             initViews();
         }
+    }
+
+    private void initViewWorkWorldBrowsing(){
+        WorkWorldBrowersingFragment galleryFragment = new WorkWorldBrowersingFragment();
+
+        galleryFragment.setArguments(getIntent().getExtras());
+
+        getSupportFragmentManager().beginTransaction()
+
+                .replace(R.id.layout_blanck_content, galleryFragment)
+
+                .commit();
     }
 
     private void initViewPagerBrowsing() {

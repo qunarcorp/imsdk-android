@@ -36,7 +36,7 @@ public class QOpenHeadLineSchemaImpl implements QChatSchemaService{
         private static final QOpenHeadLineSchemaImpl INSTANCE = new QOpenHeadLineSchemaImpl();
     }
 
-    public static final QOpenHeadLineSchemaImpl getInstance(){
+    public static QOpenHeadLineSchemaImpl getInstance(){
         return QOpenHeadLineSchemaImpl.LazyHolder.INSTANCE;
     }
 }

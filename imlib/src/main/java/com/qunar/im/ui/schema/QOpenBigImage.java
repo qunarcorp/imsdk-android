@@ -3,13 +3,10 @@ package com.qunar.im.ui.schema;
 import android.content.Intent;
 
 import com.qunar.im.base.util.Constants;
-import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.ImageBrowersingActivity;
-import com.qunar.im.ui.activity.PbChatActivity;
 
 import java.util.Map;
-import java.util.Random;
 
 public class QOpenBigImage implements QChatSchemaService {
     public final static QOpenBigImage instance = new QOpenBigImage();

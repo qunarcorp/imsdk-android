@@ -59,4 +59,9 @@ public class OrganizationFragment extends BaseFragment implements IOrganizationV
         super.onDestroy();
         ConnectionUtil.getInstance().removeEvent(this,QtalkEvent.UPDATE_ORGANIZATION);
     }
+
+    public void refresh(){
+        organizationTreeUtils.refresh();
+    }
+
 }

@@ -34,7 +34,6 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.SystemClock;
 
-import com.orhanobut.logger.Logger;
 import com.qunar.im.base.util.MemoryCache;
 
 public class FrameSequenceDrawable extends Drawable implements Animatable, Runnable, MemoryCache.Cacheable {

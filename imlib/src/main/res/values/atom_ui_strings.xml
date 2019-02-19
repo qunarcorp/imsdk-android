@@ -813,4 +813,5 @@
 
     <string name="atom_ui_quickreply_empty">Please set up a quick reply on the computer</string>
     <string name="atom_ui_look_forward">No support, please look forward to it!</string>
+    <string name="atom_ui_release_circle">Release Circle</string>
 </resources>

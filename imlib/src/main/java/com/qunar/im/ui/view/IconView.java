@@ -7,6 +7,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+/**
+ * Created by boyuan on 16/5/20.
+ */
 public class IconView extends TextView {
     public IconView(Context context) {
         this(context,null);

@@ -22,8 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILoginPresenter;
@@ -36,10 +34,12 @@ import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ParseErrorEvent;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.utils.ConnectionUtil;
 
 
 /**
@@ -164,9 +164,6 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         CommonConfig.loginViewHasShown = true;
-        //默认false
-        CurrentPreference.getInstance().setIsIt(false);
-        CurrentPreference.getInstance().savePreference();
         super.onResume();
         setActionBarTitle(R.string.atom_ui_title_login);
     }
@@ -209,7 +206,7 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         qtuer_remember_me_cbx.setEnabled(false);
 
         if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isRememberMe()) {
-            final String userName = CurrentPreference.getInstance().getUserId();
+            final String userName = CurrentPreference.getInstance().getUserid();
             if (userName != null) {
                 qtuser_username_et.setText(userName);
             }

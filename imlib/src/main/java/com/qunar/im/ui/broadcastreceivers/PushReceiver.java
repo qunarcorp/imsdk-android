@@ -17,8 +17,6 @@ import android.text.TextUtils;
 import android.util.SparseIntArray;
 
 import com.orhanobut.logger.Logger;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ISystemPresenter;
@@ -33,10 +31,12 @@ import com.qunar.im.base.util.ProfileUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.core.manager.IMLogicManager;
+import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.entity.OpsPushMessage;
+import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public class PushReceiver extends BroadcastReceiver {
         notificationManager =
                 (NotificationManager) CommonConfig.globalContext.getApplicationContext().
                         getSystemService(Context.NOTIFICATION_SERVICE);
-        if (TextUtils.isEmpty(CurrentPreference.getInstance().getUserId())) {
+        if (TextUtils.isEmpty(CurrentPreference.getInstance().getUserid())) {
             ISystemPresenter presenter = new SystemPresenter();
             //加载了一些配置
 //            presenter.loadPreference(context,false);

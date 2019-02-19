@@ -55,7 +55,7 @@ import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.broadcastreceivers.ShareReceiver;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.util.VacationAdUtil;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.dialog.BottomDialog;
@@ -334,6 +334,16 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
                         }
                     }
                 }
+                if(scheme != null && !scheme.startsWith("http")){//其余scheme处理
+                    try{
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(data);
+                        startActivity(intent);
+                        return true;
+                    }catch (Exception e){
+                        return false;
+                    }
+                }
                 return false;
             }
 
@@ -538,17 +548,7 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
 
     public void synCookie() {
 
-//         //* wiki ceshi start **
-//
-//        String wikiUrl = QtalkNavicationService.getInstance().getWikiurl();
-//        if(!TextUtils.isEmpty(wikiUrl)){
-//            Uri uri = Uri.parse(wikiUrl);
-//            DOMAIN = uri.getHost();
-//        }
-//        //* wiki ceshi end ***
-
         //下面的变量都是暂时处理 日后逻辑清晰重新构成
-        String domain = QtalkNavicationService.getInstance().getXmppdomain();
         Boolean isHistory = mUrl.contains("main_controller");
         CookieSyncManager.createInstance(this);
         CookieManager cookieManager = CookieManager.getInstance();
@@ -609,6 +609,7 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
             cookieManager.setCookie(DOMAIN, "_k=null; domain=" + DOMAIN);
             cookieManager.setCookie(DOMAIN, "q_d=null; domain=" + DOMAIN);
         }
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.flush();
         } else {

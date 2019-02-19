@@ -1,12 +1,9 @@
 package com.qunar.im.ui.schema;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
-import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.activity.AccountSwitchActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.TabMainActivity;
 
 import java.util.Map;
 
@@ -25,7 +22,7 @@ public class QAccountSwitchSchemaImpl implements QChatSchemaService{
         private static final QAccountSwitchSchemaImpl INSTANCE = new QAccountSwitchSchemaImpl();
     }
 
-    public static final QAccountSwitchSchemaImpl getInstance(){
+    public static QAccountSwitchSchemaImpl getInstance(){
         return QAccountSwitchSchemaImpl.LazyHolder.INSTANCE;
     }
 }

@@ -21,7 +21,7 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.EditPictureActivity;
 import com.qunar.im.ui.activity.ImageClipActivity;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.bean.ImageItem;
+import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.util.NavigationBarChangeListener;
 import com.qunar.im.ui.imagepicker.util.Utils;
 
@@ -31,6 +31,8 @@ import com.qunar.im.ui.imagepicker.util.Utils;
 public class ImagePreviewActivity extends ImagePreviewBaseActivity implements ImagePicker.OnImageSelectedListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, IMNotificaitonCenter.NotificationCenterDelegate {
 
     public static final String ISORIGIN = "isOrigin";
+    public static final String ISDELETE = "isDelete";
+    public static final String ISEDIT ="isEdit";
 
     private boolean isOrigin;                      //是否选中原图
     private CheckBox mCbCheck;                //是否选中当前图片的CheckBox
@@ -39,17 +41,25 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     private View bottomBar;
     private View marginView;
     private TextView editView;
+    private boolean isDelete;
+    private boolean isEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         isOrigin = getIntent().getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
+        //增加判断是否删除情况
+        isDelete = getIntent().getBooleanExtra(ImagePreviewActivity.ISDELETE,false);
+
+        isEdit = getIntent().getBooleanExtra(ImagePreviewActivity.ISEDIT,false);
         imagePicker.addOnImageSelectedListener(this);
         mBtnOk = (Button) findViewById(R.id.btn_ok);
         mBtnOk.setVisibility(View.VISIBLE);
         mBtnOk.setOnClickListener(this);
-
+        if(isDelete){
+            mBtnOk.setText(getString(R.string.atom_ui_common_delete));
+        }
         bottomBar = findViewById(R.id.bottom_bar);
         bottomBar.setVisibility(View.VISIBLE);
 
@@ -61,10 +71,15 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
         mCbOrigin.setOnCheckedChangeListener(this);
         mCbOrigin.setChecked(isOrigin);
 
+
         if(mImageItems.get(mCurrentPosition).mimeType.equals("image/gif")){
             editView.setVisibility(View.GONE);
         }else{
             editView.setVisibility(View.VISIBLE);
+        }
+
+        if(!isEdit){
+            editView.setVisibility(View.GONE);
         }
         //初始化当前页面的状态
         onImageSelected(0, null, false);
@@ -82,6 +97,9 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
                     editView.setVisibility(View.GONE);
                 }else{
                     editView.setVisibility(View.VISIBLE);
+                }
+                if(!isEdit){
+                    editView.setVisibility(View.GONE);
                 }
                 boolean isSelected = imagePicker.isSelect(item);
                 mCbCheck.setChecked(isSelected);
@@ -158,11 +176,20 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
      */
     @Override
     public void onImageSelected(int position, ImageItem item, boolean isAdd) {
-        if (imagePicker.getSelectImageCount() > 0) {
-            mBtnOk.setText(getString(R.string.atom_ui_ip_select_complete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
-        } else {
-            mBtnOk.setText(getString(R.string.atom_ui_ip_complete));
+        if(isDelete){
+            if (imagePicker.getSelectImageCount() > 0) {
+                mBtnOk.setText(getString(R.string.atom_ui_ip_select_delete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
+            } else {
+                mBtnOk.setText(getString(R.string.atom_ui_common_delete));
+            }
+        }else{
+            if (imagePicker.getSelectImageCount() > 0) {
+                mBtnOk.setText(getString(R.string.atom_ui_ip_select_complete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
+            } else {
+                mBtnOk.setText(getString(R.string.atom_ui_ip_complete));
+            }
         }
+
 
         if (mCbOrigin.isChecked()) {
             long size = 0;

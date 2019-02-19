@@ -38,6 +38,19 @@ public class Utils {
         return (screenWidth - columnSpace * (cols - 1)) / cols;
     }
 
+    public static int getImageItemWidthForWorld(Activity activity,int columns){
+        int screenWidth = activity.getResources().getDisplayMetrics().widthPixels;
+        int densityDpi = activity.getResources().getDisplayMetrics().densityDpi;
+        int density = (int) activity.getResources().getDisplayMetrics().density;
+       int space = screenWidth-(81*density);
+       if(columns==1){
+           return space/2 -10;
+       }
+       return (space/columns)-10;
+//        int cols = screenWidth / densityDpi;
+//        cols = cols < 3 ? 3 : cols;
+    }
+
     /**
      * 判断SDCard是否可用
      */

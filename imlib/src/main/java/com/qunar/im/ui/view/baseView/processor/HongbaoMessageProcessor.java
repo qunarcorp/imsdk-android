@@ -13,6 +13,7 @@ import com.qunar.im.base.presenter.messageHandler.ConversitionType;
 import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
@@ -44,6 +45,8 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                         .append("&company=qunar&")
                         .append("user_id=")
                         .append(user_id)
+                        .append("&q_d=")
+                        .append(QtalkNavicationService.getInstance().getXmppdomain())
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             } else {
                 sb.append("&username=").append(username).append("&sign=")
@@ -51,6 +54,8 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                         .append("&company=qunar&")
                         .append("group_id=")
                         .append(QtalkStringUtils.parseBareJid(item.getMessage().getConversationID()))
+                        .append("&q_d=")
+                        .append(QtalkNavicationService.getInstance().getXmppdomain())
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             }
             HongbaoView view = ViewPool.getView(HongbaoView.class,item.getContext());

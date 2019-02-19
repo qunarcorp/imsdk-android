@@ -3,6 +3,8 @@ package com.qunar.im.ui.imagepicker.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.qunar.im.base.module.ImageItem;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

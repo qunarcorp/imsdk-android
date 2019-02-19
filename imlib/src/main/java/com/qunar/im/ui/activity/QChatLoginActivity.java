@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILoginPresenter;
@@ -34,6 +33,7 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.CountryUtil;
 import com.qunar.im.ui.util.ParseErrorEvent;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.utils.ConnectionUtil;
 
 import de.greenrobot.event.EventBus;
 

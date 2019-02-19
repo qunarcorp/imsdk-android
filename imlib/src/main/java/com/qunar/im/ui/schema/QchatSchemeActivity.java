@@ -10,11 +10,8 @@ import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.activity.IMBaseActivity;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 度假业务的scheme总入口

@@ -163,8 +163,6 @@ public class PictureSelectorActivity extends IMBaseActivity implements ListImage
         image_count.setText(totalCount + (String) getText(R.string.atom_ui_common_piece));
     }
 
-    ;
-
     /**
      * 初始化展示文件夹的popupWindw
      */

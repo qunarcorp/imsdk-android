@@ -39,9 +39,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme"/>
         <activity
-            android:name="com.qunar.im.ui.activity.BuddyRequestActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.qunar.im.ui.activity.CalculateCacheActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -179,10 +176,6 @@
             android:theme="@style/ImagePickerThemeFullScreen" />
 
         <activity
-            android:name="com.qunar.im.ui.activity.AnnounceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme" />
-        <activity
             android:name="com.qunar.im.ui.view.camera.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
@@ -264,10 +257,6 @@
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
             android:theme="@style/AtomSplashTheme" />
         <activity
-            android:name="com.qunar.im.ui.activity.MyFavourityMessageActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity
             android:name="com.qunar.im.ui.activity.AnswerRequestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
@@ -327,10 +316,6 @@
             android:name="com.qunar.im.ui.activity.FontSizeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name="com.qunar.im.ui.activity.MyFavourityMessageInfoActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
         <activity android:name="com.qunar.im.ui.activity.MyFilesActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -389,6 +374,22 @@
         <activity android:name="com.qunar.im.ui.activity.CodeActivty"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.ReleaseCircleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.WorkWorldActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.WorkWorldDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity android:name=".activity.IdentitySelectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
+            />
         <activity android:name="com.qunar.im.ui.activity.BackgroundTipActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"

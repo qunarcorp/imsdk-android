@@ -29,7 +29,7 @@ import java.util.List;
  * Created by zhaokai on 15-8-11.
  */
 public class ChatViewAdapter extends BaseAdapter implements IMNotificaitonCenter.NotificationCenterDelegate {
-    private final String TAG = "ChatViewAdapter";
+    private static final String TAG = "ChatViewAdapter";
 
     protected WeakReference<Context> context;
     protected LeftImageClickHandler leftImageClickHandler;

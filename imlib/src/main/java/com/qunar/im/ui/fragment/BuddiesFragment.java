@@ -11,11 +11,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.IBuddyPresenter;
 import com.qunar.im.base.presenter.IFriendsManagePresenter;
-import com.qunar.im.base.presenter.factory.FriendsManagerFactory;
 import com.qunar.im.base.presenter.impl.BuddyPresenter;
 import com.qunar.im.base.presenter.views.IFriendsManageView;
 import com.qunar.im.base.util.EventBusEvent;
@@ -119,13 +116,6 @@ public class BuddiesFragment extends BaseFragment implements IFriendsManageView 
         });
     }
 
-
-    public boolean lastUpdateMoreThanOneDay() {
-        long currentTime = System.currentTimeMillis() / 1000;
-        long lastUpdateTime = CurrentPreference.getInstance().getLatestUpdateDeptTime();
-        return lastUpdateTime == 0 || (currentTime - lastUpdateTime) > 60 * 60 * 24;
-    }
-
     @Override
     public void setFrineds(final Map<Integer, List<Node>> contacts) {
 
@@ -195,30 +185,6 @@ public class BuddiesFragment extends BaseFragment implements IFriendsManageView 
     }
 
     class HandleDeptEvent {
-        boolean loginHandleComplete = false;
-        public void onEventMainThread(EventBusEvent.LoginComplete loginComplete) {
-            if (loginComplete.loginStatus) {
-                if(loginHandleComplete) return;
-                BackgroundExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((IBuddyPresenter) buddyPresenter).registerRoster();
-                        buddyPresenter.forceUpdateContacts();
-                        IFriendsManagePresenter deptPresenter =
-                                FriendsManagerFactory.getFriendManagerPresenter();
-                        if (CommonConfig.isQtalk||com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
-                            if (lastUpdateMoreThanOneDay()) {
-                                deptPresenter.forceUpdateContacts();
-                            } else {
-                                deptPresenter.updateContacts();
-                            }
-                        }
-                    }
-                });
-                initHeader();
-            }
-            loginHandleComplete = loginComplete.loginStatus;
-        }
 
         public void onEventMainThread(EventBusEvent.ShowGroupEvent showGroupEvent) {
             if(!CommonConfig.isQtalk)

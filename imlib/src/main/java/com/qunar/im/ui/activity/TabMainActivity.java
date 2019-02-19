@@ -33,6 +33,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
+import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILoginPresenter;
 import com.qunar.im.base.presenter.IMainPresenter;
@@ -53,6 +54,9 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.log.LogConstans;
+import com.qunar.im.log.LogService;
+import com.qunar.im.log.QLog;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.Event.ConnectionErrorEvent;
@@ -88,6 +92,7 @@ import com.qunar.im.utils.AppFrontBackHelper;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.rn_service.activity.QTalkSearchActivity;
 import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 import com.qunar.rn_service.fragment.RNCalendarFragment;
 import com.qunar.rn_service.fragment.RNContactsFragment;
@@ -122,8 +127,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
     //tab标签页
     private CommonTabLayout mCommonTabLayou;
-    //??
-    private View mDecorView;
     //用于fragment显示的viewpager
     private ViewPager mViewPager;
     //adaptr
@@ -152,6 +155,8 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
 
     private ReactInstanceManager mReactInstanceManager;
+
+    private boolean noticeShow,OPSShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -462,10 +467,10 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 //        TextView view = (TextView) tab.getTabAt(0).findViewById(R.id.textView_new_msg);
     }
 
-    public void setTabViewOPSUnRead(boolean isShow) {
+    public void setTabViewFindRed(boolean ops, boolean notice) {
         if ("ejabhost1".equals(QtalkNavicationService.getInstance().getXmppdomain())
                 || "ejabhost2".equals(QtalkNavicationService.getInstance().getXmppdomain())) {
-            if (isShow) {
+            if (ops||notice) {
                 if(CommonConfig.isQtalk){
                     mCommonTabLayou.showMsg(3, 0);
                 }else{
@@ -608,7 +613,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                             converType = ConversitionType.MSG_TYPE_CONSULT;
                         }
 //                    }
-                    intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, converType);
+                    intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, converType + "");
 
                     boolean isFromChatRoom = jid.contains("@conference");
                     intent.setClass(this, PbChatActivity.class);
@@ -749,7 +754,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             }
 
         }
-        mDecorView = getWindow().getDecorView();
+        View mDecorView = getWindow().getDecorView();
         mViewPager = ViewFindUtils.find(mDecorView, R.id.tab_fragment_viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
@@ -766,15 +771,11 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             public void onTabSelect(final int position) {
 //                mViewPager.setCurrentItem(position);
                 mViewPager.setCurrentItem(position, false);
-
+                saveTabClickLog(position);
             }
 
             @Override
             public void onTabReselect(int position) {
-//                if (position == 0) {
-//                    mTabLayout_2.showMsg(0, mRandom.nextInt(100) + 1);
-////                    UnreadMsgUtils.show(mTabLayout_2.getMsgView(0), mRandom.nextInt(100) + 1);
-//                }
             }
         });
 
@@ -821,20 +822,13 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
     }
 
     private void startSearchActivity(){
-        Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
-        startActivity(intent);
-//        if (CommonConfig.isQtalk) {
-//            try{
-//                Class clazz = Class.forName("com.qunar.im.camelhelp.activity.QTalkSearchActivity");
-//                Intent i = new Intent(TabMainActivity.this, clazz);
-//                startActivity(i);
-//            }catch (ClassNotFoundException e){
-//
-//            }
-//        } else {
-//            Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
-//            startActivity(intent);
-//        }
+        if (CommonConfig.isQtalk) {
+            Intent i = new Intent(TabMainActivity.this, QTalkSearchActivity.class);
+            startActivity(i);
+        } else {
+            Intent intent = new Intent(TabMainActivity.this, SearchUserActivity.class);
+            startActivity(intent);
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -868,6 +862,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     @Override
                     public void onClick(View v) {
                         startSearchActivity();
+                        saveHomeActLog("首页-搜索");
                     }
                 });
                 break;
@@ -883,19 +878,11 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                                 @Override
                                 public void onTimeSelect(Date date, View v) {
                                     String time = new SimpleDateFormat("yyyy-MM-dd").format(date);
-//                                    String dateString = String.valueOf(date.getTime());
                                     IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.SELECT_DATE,time);
-// Toast.makeText(MainActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
                                 }
                             }).build();
 
                             tpv.show();
-//                            Intent intent = new Intent(TabMainActivity.this, QtalkServiceRNActivity.class);
-//                            intent.putExtra("module", QtalkServiceRNActivity.CONTACTS);
-//                            intent.putExtra("Screen", "Search");
-//                            intent.putExtra(Constants.BundleKey.DOMAIN_LIST_URL,QtalkNavicationService.getInstance().getDomainSearchUrl());
-//                            intent.putExtra(Constants.BundleKey.FILE_URL,QtalkNavicationService.getInstance().getInnerFiltHttpHost());
-//                            startActivity(intent);
                         }
                     });
                 }else{
@@ -905,14 +892,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     setActionBarRightIconClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            TimePickerView tpv = new TimePickerBuilder(TabMainActivity.this, new OnTimeSelectListener() {
-//                                @Override
-//                                public void onTimeSelect(Date date, View v) {
-//// Toast.makeText(MainActivity.this, getTime(date), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }).build();
-//
-//                            tpv.show();
                             Intent intent = new Intent(TabMainActivity.this, QtalkServiceRNActivity.class);
                             intent.putExtra("module", QtalkServiceRNActivity.CONTACTS);
                             intent.putExtra("Screen", "Search");
@@ -1285,7 +1264,19 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                setTabViewOPSUnRead(isShow);
+                OPSShow = isShow;
+                setTabViewFindRed(OPSShow, noticeShow);
+            }
+        });
+    }
+
+    @Override
+    public void refreshNoticeRed(final boolean isShow) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                noticeShow = isShow;
+                setTabViewFindRed(OPSShow, noticeShow);
             }
         });
     }
@@ -1315,8 +1306,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                     true);
             startActivity(shareIntent);
         } else if (id == R.id.fav_item) {
-            Intent intent = new Intent(TabMainActivity.this, MyFavourityMessageActivity.class);
-            startActivity(intent);
+
         } else if (id == R.id.action_wiki) {
             String wikiUrl = QtalkNavicationService.getInstance().getWikiurl();
             if(!TextUtils.isEmpty(wikiUrl)){
@@ -1331,10 +1321,10 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             NativeApi.openCreateGroup();
         }else if(id == R.id.action_ever_note){
             gotoNote();
-        }else if(id == R.id.action_read){
+        }else if(id == R.id.action_read) {
             //一键已读同时清除at
-            Map<String,String> atMap = connectionUtil.getAtMessageMap();
-            if(atMap != null){
+            Map<String, String> atMap = connectionUtil.getAtMessageMap();
+            if (atMap != null) {
                 atMap.clear();
             }
             DispatchHelper.Async("OneKeyRead", new Runnable() {
@@ -1346,7 +1336,16 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                 }
             });
         }
+//        }else if (id ==R.id.action_ever_release){
+//            startReleaseCircle();
+//        }
+        saveHomeActLog(item.getTitle().toString());
         return true;
+    }
+
+    private void startReleaseCircle(){
+        Intent intent = new Intent(TabMainActivity.this,WorkWorldActivity.class);
+        startActivity(intent);
     }
 
 
@@ -1450,9 +1449,11 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                         }
                     } else {// if (type.equalsIgnoreCase("text/plain"))
                         Uri turi = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                        String filepath = FileUtils.getPath(this, turi);
-                        if(!TextUtils.isEmpty(filepath)) {
-                            filePaths.add(filepath);
+                        if(turi != null) {
+                            String filepath = FileUtils.getPath(this, turi);
+                            if(!TextUtils.isEmpty(filepath)) {
+                                filePaths.add(filepath);
+                            }
                         }
                     }
                 }
@@ -1564,7 +1565,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             @Override
             public void onFront() {
                 //应用切到前台处理
-                Logger.i("应用切到前台");
                 CurrentPreference.getInstance().setBack(false);
 
 
@@ -1599,7 +1599,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
             @Override
             public void onBack() {
                 //应用切到后台处理
-                Logger.i("应用切到后台");
                 CurrentPreference.getInstance().setBack(true);
             }
         });
@@ -1640,6 +1639,19 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
     @Override
     public void invokeDefaultOnBackPressed() {
         onBackPressed();
+    }
+
+    private void saveTabClickLog(int position){
+        if(mTabEntities == null || mTabEntities.size() <= position){
+            return;
+        }
+        String desc = mTabEntities.get(position).getTabTitle();
+        saveHomeActLog(desc);
+    }
+
+    private void saveHomeActLog(String desc){
+        LogInfo logInfo = QLog.build(LogConstans.LogType.ACT,LogConstans.LogSubType.CLICK).describtion(desc);
+        LogService.getInstance().saveLog(logInfo);
     }
 
 }

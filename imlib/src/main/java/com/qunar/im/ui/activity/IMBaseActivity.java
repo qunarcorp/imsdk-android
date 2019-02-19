@@ -1,5 +1,6 @@
 package com.qunar.im.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
@@ -90,10 +92,6 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
 
     }
 
-    public void PBinit() {
-//        connectionUtil = ConnectionUtil.getInstance(getApplicationContext());
-//        connectionUtil.setNavigationUrl("https://qt.qunar.com/package/static/qtalk/nav");
-    }
 
 //    public void setActionBar(QtActionBar bar) {
 //        myActionBar = bar;
@@ -245,6 +243,17 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         }
     }
 
+    public void setActionBarRightIconSize(int size){
+        if (mNewActionBar == null) {
+            return;
+        }
+        mNewActionBar.getRightLayout().setVisibility(View.VISIBLE);
+        if (size!=0) {
+            mNewActionBar.getRightIcon().setVisibility(View.VISIBLE);
+            mNewActionBar.getRightIcon().setTextSize(size);
+        }
+    }
+
 
     public void setActionBarRightIcon(@StringRes int rightIcon) {
         if (mNewActionBar == null) {
@@ -258,6 +267,10 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
             mNewActionBar.getRightIcon().setVisibility(View.GONE);
 
         }
+    }
+
+    public void setActionBarRightIconColor( int color){
+        mNewActionBar.getRightIcon().setTextColor(color);
     }
 
     public void setActionBarLeftIcon(@StringRes int leftIcon) {
@@ -512,8 +525,10 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
             case QtalkEvent.GLOBALNOTICE:
                 if(!isFront) return;
                 if(args!=null && args.length>0){
-                    NoticeBean noticeBean = (NoticeBean) args[0];
-                    showNoticePopupWindow(noticeBean);
+                    if(args[0] instanceof  NoticeBean){
+                        NoticeBean noticeBean = (NoticeBean) args[0];
+                        showNoticePopupWindow(noticeBean);
+                    }
                 }
                 break;
             case QtalkEvent.SHAKE_WINDOW:

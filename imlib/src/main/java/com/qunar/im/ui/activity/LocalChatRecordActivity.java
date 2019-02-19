@@ -7,8 +7,8 @@ import android.widget.ListView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.common.CurrentPreference;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.presenter.ILocalChatRecordPresenter;
@@ -163,7 +163,7 @@ public class LocalChatRecordActivity extends IMBaseActivity implements ILocalCha
 
     @Override
     public String getUserId() {
-        return CurrentPreference.getInstance().getUserId();
+        return CurrentPreference.getInstance().getUserid();
     }
 
     @Override

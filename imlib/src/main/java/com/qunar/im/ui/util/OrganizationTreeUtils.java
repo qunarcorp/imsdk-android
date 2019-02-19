@@ -1,5 +1,6 @@
 package com.qunar.im.ui.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
@@ -33,12 +34,10 @@ public class OrganizationTreeUtils {
     private TreeNode root;
     private AndroidTreeView tView;
     private IOrganizationView iOrganizationView;
+    private String fn = QtalkNavicationService.getInstance().getXmppdomain() + "_" + FILE_NAME;
     public OrganizationTreeUtils(Context context){
         this.context = context;
-        root = TreeNode.root();
-        tView = new AndroidTreeView(context, root);
-        tView.setDefaultAnimation(true);
-        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom, true);
+        init();
     }
 
     public void getView(IOrganizationView iOrganizationView){
@@ -46,8 +45,14 @@ public class OrganizationTreeUtils {
         getOrganizationData();
     }
 
+    private void init(){
+        root = TreeNode.root();
+        tView = new AndroidTreeView(context, root);
+        tView.setDefaultAnimation(true);
+        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom, true);
+    }
+
     private void getOrganizationData(){
-        final String fn = QtalkNavicationService.getInstance().getXmppdomain() + "_" + FILE_NAME;
         BackgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -58,19 +63,23 @@ public class OrganizationTreeUtils {
                     }
 
                 }catch (Exception e){
-                    requestData(fn);
+                    requestData();
                 }
             }
         });
 
     }
 
-    private void requestData(final String fn){
+    private void requestData(){
+        createProgressDialog();
         Protocol.getDepartment(new ProtocolCallback.UnitCallback<String>() {
             @Override
             public void onCompleted(String resultString) {
                 FileUtils.writeToFile(resultString,fn,context,true);
                 handleData(resultString);
+                if(dialog != null && dialog.isShowing()){
+                    dialog.dismiss();
+                }
             }
 
             @Override
@@ -78,6 +87,21 @@ public class OrganizationTreeUtils {
                 iOrganizationView.getView(null);
             }
         });
+    }
+
+    public void refresh(){
+        init();
+        requestData();
+    }
+
+    ProgressDialog dialog;
+    private void createProgressDialog(){
+        dialog = new ProgressDialog(context);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置水平进度条
+        dialog.setCancelable(false);// 设置是否可以通过点击Back键取消
+        dialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        dialog.setTitle("正在更新数据。。。");
+        dialog.show();
     }
 
 

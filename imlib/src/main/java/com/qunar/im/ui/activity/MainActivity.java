@@ -78,8 +78,8 @@ import com.qunar.im.ui.view.tabview.MainTabView;
 import com.qunar.im.ui.view.tabview.SmartTabLayout;
 import com.qunar.im.ui.view.tabview.SmartTabStrip;
 import com.qunar.im.ui.view.zxing.activity.CaptureActivity;
-import com.qunar.im.utils.QRUtil;
 import com.qunar.im.utils.QtalkStringUtils;
+import com.qunar.rn_service.activity.QTalkSearchActivity;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -633,14 +633,7 @@ public class MainActivity extends IMBaseActivity implements PermissionCallback, 
                 // TODO: 2017/9/11 RN代码 应该用这个
 
                 if (CommonConfig.isQtalk) {
-                    Intent i = null;
-                    try {
-                        i = new Intent(MainActivity.this, (Class<? extends Fragment>) Class.forName("com.qunar.im.camelhelp.activity.QTalkSearchActivity"));
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-//                    Intent i = new Intent("android.intent.action.VIEW",
-//                            Uri.parse(CommonConfig.schema+"://rnsearch"));
+                    Intent i = new Intent(MainActivity.this, QTalkSearchActivity.class);
                     startActivity(i);
                 } else {
                     Intent intent = new Intent(MainActivity.this, SearchUserActivity.class);
@@ -1162,19 +1155,6 @@ public class MainActivity extends IMBaseActivity implements PermissionCallback, 
             } else {
                 loginPresenter.autoLogin();
             }
-//
-            //此处逻辑有问题?!!!
-//            if (!CurrentPreference.getInstance().isLogin()) {
-////                mProgressDialog = new ProgressDialog(this);
-////                mProgressDialog.setTitle("验证");
-////                mProgressDialog.setMessage("尝试自动连接中...");
-////                mProgressDialog.setCanceledOnTouchOutside(false);
-////                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-////                mProgressDialog.show();
-//
-//            } else {
-//                EventBus.getDefault().post(new EventBusEvent.LoginComplete(false));
-//            }
         } else {
             startLoginView();
         }
@@ -1370,6 +1350,11 @@ public class MainActivity extends IMBaseActivity implements PermissionCallback, 
     }
 
     @Override
+    public void refreshNoticeRed(boolean isShow) {
+
+    }
+
+    @Override
     public void startOPS() {
 
     }
@@ -1393,8 +1378,7 @@ public class MainActivity extends IMBaseActivity implements PermissionCallback, 
                     true);
             startActivity(shareIntent);
         } else if (id == R.id.fav_item) {
-            Intent intent = new Intent(MainActivity.this, MyFavourityMessageActivity.class);
-            startActivity(intent);
+
         }
         return true;
     }

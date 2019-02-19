@@ -17,11 +17,12 @@ public class DrawAttribute
     public static enum Corner
     {
         LEFTTOP, RIGHTTOP, LEFTBOTTOM, RIGHTBOTTOM, ERROR
-    };
+    }
+
     public static enum DrawStatus
     {
         PEN_NORMAL,PEN_WATER, PEN_CRAYON, PEN_COLOR_BIG, PEN_ERASER,PEN_STAMP
-    };
+    }
 
     public final static int backgroundOnClickColor = 0xfff08d1e;
     public static int screenHeight;

@@ -128,7 +128,7 @@ public class UpdateManager {
 				Utils.showToast(mContext, "无法下载安装文件，请检查SD卡是否挂载");
 				break;
 			}
-    	};
+    	}
     };
     
 	public static UpdateManager getUpdateManager() {
