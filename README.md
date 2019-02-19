@@ -8,6 +8,10 @@
 
 客户端下载[下载](https://im.qunar.com/new/#/download)
 
+- Android
+
+[![Startalk on Android](https://s.qunarzz.com/qtalk_official_web/pages/download/android.png)](https://qt.qunar.com/downloads/qtalk_android.apk)
+
 客户端导航配置[配置导航](https://im.qunar.com/new/#/platform/access_guide/manage_nav?id=manage_nav_mb)
 
 私有云（Startalk SDK）
@@ -53,7 +57,7 @@ allprojects {
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:2.0.0' //或者直接引用imlib Library工程,compile project(':imlib')
+  compile 'com.qunar.im:sdk-im:3.0.0' //或者直接引用imlib Library工程,compile project(':imlib')
 }
 ```
 
@@ -66,7 +70,6 @@ flavorDimensions "qim"
     productFlavors {
         //QTalk
         qtalk {
-            applicationId "com.qunar.im"
             dimension "qim"
 
             manifestPlaceholders = [
@@ -79,7 +82,6 @@ flavorDimensions "qim"
         }
         // QChat
         qchat {
-            applicationId "sdk.im.qunar.com.qtalksdkdemo"
             dimension "qim"
 
             manifestPlaceholders = [
