@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#f3f3f5"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+
+    <LinearLayout
+        android:id="@+id/real_name"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_height="48dp">
+        <com.qunar.im.ui.view.IconView
+            android:layout_marginLeft="15dp"
+            android:id="@+id/identity_real"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:text="@string/atom_ui_hook"
+            android:textColor="#00CABE"
+            android:textSize="17sp"
+            android:visibility="visible" />
+        <TextView
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginLeft="12dp"
+            android:layout_width="wrap_content"
+            android:text="实名发布"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:background="#dddddd"
+        android:layout_width="match_parent" android:layout_height="0.5dp">
+
+    </View>
+
+    <LinearLayout
+        android:background="#ffffff"
+        android:id="@+id/anonymous_name"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="70dp">
+        <com.qunar.im.ui.view.IconView
+            android:layout_marginLeft="15dp"
+            android:id="@+id/identity_anonymous"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:text="@string/atom_ui_hook"
+            android:textColor="#00CABE"
+            android:textSize="17sp"
+            android:visibility="visible" />
+        <LinearLayout
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="15sp"
+                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:text="匿名发布"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/anonymous_real_name"
+                android:textColor="#999999"
+                android:textSize="13sp"
+                android:text="huaming:  "
+                android:layout_width="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
