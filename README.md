@@ -152,6 +152,25 @@ Compatibility
  * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
  * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
  
+常见错误
+--------
+在gradle.properties文件中添加 android.enableAapt2=false
+```error1
+error:style attribute '@android:attr/windowEnterAnimation' not found.
+Message{kind=ERROR, text=error: style attribute '@android:attr/windowEnterAnimation' not found.
+```
+在主工程的values styles.xml中添加如下style
+```style
+<style name="SplashTheme" parent="AppTheme">
+   <item name="android:windowIsTranslucent">true</item>
+</style>
+```
+
+```error2
+﻿error:No resource found that matches the given name (at 'theme' with value '@style/SplashTheme').
+```
+
+
 意见反馈
 =====
 -   qchat@qunar.com（Email）
