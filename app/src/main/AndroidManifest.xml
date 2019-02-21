@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sdk.im.qunar.com.qtalksdkdemo">
 
+    <!-- ————————————————————————  需要添加到自己主工程manifest文 start————————————————————-->
     <permission
         android:name="sdk.im.qunar.com.qtalksdkdemo.permission.MIXPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -175,7 +176,18 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.qunar.rn_service.activity.QTalkSearchActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="rnsearch"
+                    android:scheme="${SCHEME}" />
+            </intent-filter>
+        </activity>
 
+        <!-- —————————————————————————— 需要添加到自己主工程manifest文 end——————————————————————————————————————————————-->
 
 
         <activity android:name=".MainActivity">
