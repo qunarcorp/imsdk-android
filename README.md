@@ -128,8 +128,14 @@ flavorDimensions "qim"
   5.登出
   
   QIMSdk.getInstance().signOut()
-  ```   
+  ```
+ ```debug
+  5.打开debug模式
+
+  QIMSdk.getInstance().openDebug()
+  ```
   其他参考[api.md](doc/api.md)
+
   
 Scheme Support
 --------
