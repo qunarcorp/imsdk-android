@@ -130,7 +130,7 @@ flavorDimensions "qim"
   QIMSdk.getInstance().signOut()
   ```
  ```debug
-  5.打开debug模式
+  6.打开debug模式
 
   QIMSdk.getInstance().openDebug()
   ```
