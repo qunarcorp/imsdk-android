@@ -73,7 +73,7 @@ flavorDimensions "qim"
             dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//替换成自己项目的applicationId
                     serverDoMain  : true,
                     SCHEME : "qtalkaphone",
                     currentPlat  : "QTalk",
@@ -85,7 +85,7 @@ flavorDimensions "qim"
             dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//替换成自己项目的applicationId
                     serverDoMain  : false,
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",

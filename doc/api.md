@@ -113,3 +113,39 @@
        * @param loginStatesListener
   QIMSDK.getInstance().loginByQvt(String qvt,String plat,LoginStatesListener loginStatesListener);
   ```    
+ ```usercard
+  19.获取单人名片
+       * @param jid //userid@domain
+       * @param callBack
+       * @param enforce //true会走网络 false走本地缓存
+       * @param todb //查DB
+  QIMSDK.getInstance().getUserCard(String jid, IMLogicManager.NickCallBack callBack, boolean enforce, boolean todb)
+  ```      
+ ```groupcard
+  20.获取群名片
+       * @param jid //群id
+       * @param callBack
+       * @param enforce //true会走网络 false走本地缓存
+       * @param todb //查DB
+  QIMSDK.getInstance().getMucCard(String jid, IMLogicManager.NickCallBack callBack, boolean enforce, boolean todb)
+  ```    
+ ```setgroupcard
+  21.设置群名片
+       * @param datas
+       * @param callBack
+  QIMSDK.getInstance().setMucCard(List<SetMucVCardData> datas, ProtocolCallback.UnitCallback<SetMucVCardResult> callback)
+  ```
+ ```getContacts
+  22.获取好友列表
+       * @param datas
+       * @param callBack
+       * return List<Nick>
+  QIMSDK.getInstance().getContacts()
+  ```     
+ ```getContacts
+  23.获取群列表
+       * @param datas
+       * @param callBack
+       * return List<Nick>
+  QIMSDK.getInstance().getGroups()
+  ```     

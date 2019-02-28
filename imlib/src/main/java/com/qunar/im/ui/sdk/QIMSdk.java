@@ -12,6 +12,11 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.qunar.im.base.jsonbean.SetMucVCardResult;
+import com.qunar.im.base.module.Nick;
+import com.qunar.im.base.protocol.ProtocolCallback;
+import com.qunar.im.base.structs.SetMucVCardData;
+import com.qunar.im.base.util.HttpUtils;
 import com.qunar.im.log.LogDatabaseManager;
 import com.qunar.im.utils.CapabilityUtil;
 import com.qunar.im.utils.ConnectionUtil;
@@ -41,6 +46,7 @@ import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.imagepicker.loader.GlideImageLoader;
 import com.qunar.im.ui.imagepicker.view.CropImageView;
 import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.rn_service.fragment.RNContactsFragment;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
@@ -388,6 +394,31 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      */
     public void getMucCard(String jid, IMLogicManager.NickCallBack callBack,boolean enforce,boolean todb){
         ConnectionUtil.getInstance().getMucCard(jid,callBack,enforce,todb);
+    }
+
+    /**
+     * 设置群信息
+     * @param datas
+     * @param callback
+     */
+    public void setMucCard(List<SetMucVCardData> datas, ProtocolCallback.UnitCallback<SetMucVCardResult> callback){
+        HttpUtil.setMucVCard(datas,callback);
+    }
+
+    /**
+     * 获取好友列表数据
+     * @return
+     */
+    public List<Nick> getContacts(){
+        return ConnectionUtil.getInstance().SelectFriendListForRN();
+    }
+
+    /**
+     * 获取群列表数据
+     * @return
+     */
+    public List<Nick> getGroups(){
+        return ConnectionUtil.getInstance().SelectAllGroup();
     }
 
     /**
