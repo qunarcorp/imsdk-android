@@ -53,20 +53,25 @@ public class OrganizationTreeUtils {
     }
 
     private void getOrganizationData(){
-        BackgroundExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    byte[] data = FileUtils.readFile(context.getFilesDir() + File.separator + fn);
-                    if(data!=null){
-                        handleData(new String(data));
-                    }
+        int size = FileUtils.getFileSize(fn, FileUtils.FileSizeUnit.B);
+        if(size == 1){
+            requestData();
+        }else {
+            BackgroundExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        byte[] data = FileUtils.readFile(context.getFilesDir() + File.separator + fn);
+                        if(data!=null){
+                            handleData(new String(data));
+                        }
 
-                }catch (Exception e){
-                    requestData();
+                    }catch (Exception e){
+                        requestData();
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 
