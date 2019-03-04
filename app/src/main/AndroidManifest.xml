@@ -187,6 +187,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+
         <!-- —————————————————————————— 需要添加到自己主工程manifest文 end——————————————————————————————————————————————-->
 
 
