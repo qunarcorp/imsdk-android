@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.sdk.QIMSdk;
 
 /**
@@ -22,5 +23,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         QIMSdk.getInstance().init(this);
+        QIMSdk.getInstance().openDebug();
     }
 }
