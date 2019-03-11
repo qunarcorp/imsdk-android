@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="atom_ui_button_primary_color">#00CABE</color>
+    <color name="atom_ui_button_primary_color_pressed">#ABE9E5</color>
+</resources>

@@ -54,6 +54,7 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.log.LogConstans;
 import com.qunar.im.log.LogService;
 import com.qunar.im.log.QLog;
@@ -168,7 +169,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         final Map<String, String> markups = ConnectionUtil.getInstance().selectMarkupNames();
         Logger.i("initreload map:" + JsonUtils.getGson().toJson(markups));
         com.qunar.im.protobuf.common.CurrentPreference.getInstance().setMarkupNames(markups);
-        if(CommonConfig.isQtalk){
+        if(GlobalConfigManager.isQtalkPlat()){
             mTitles = getResources().getStringArray(R.array.atom_ui_tab_title_qtalk);
         }else {
             mTitles = getResources().getStringArray(R.array.atom_ui_tab_title);
@@ -183,40 +184,6 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         initData();
 
         mReactInstanceManager = QtalkServiceRNViewInstanceManager.getInstanceManager(this);
-//        if(Build.MANUFACTURER.equals("Xiaomi")) {
-//            Intent intent = new Intent();intent.setAction("miui.intent.action.OP_AUTO_START");
-//            intent.addCategory(Intent.CATEGORY_DEFAULT);startActivity(intent);
-//        }
-//        openJobService();
-//        showConfigNotice();
-
-//        nnon();
-//        showConfigNotice();
-    }
-
-    private void showConfigNotice(){
-        String image = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, "config");
-        if("success".equals(image)){
-            return;
-        }
-        CommonDialog.Builder configDialog = new CommonDialog.Builder(this);
-
-        Spanned strC = Html.fromHtml("    本次升级针对客户端（Windows/Linux/Mac/iOS/Android）的启动和数据迁移做了大量优化（不兼容旧版客户端），会影响到置顶、表情收藏、备注等功能，<strong><font color=#ff0000>" + "为了不影响您的使用，请尽早更新使用中的所有" + CommonConfig.currentPlat + "客户端！" + "</font></strong>");
-        configDialog.setTitle(getString(R.string.atom_ui_tip_dialog_prompt));
-        configDialog.setMessageHtml(strC);
-        configDialog.setPositiveButton(getString(R.string.atom_ui_common_confirm), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                ConnectionUtil.clearLastUserInfo();
-                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                                .putObject("config", "success")
-                                                .synchronize();
-                dialog.dismiss();
-            }
-        });
-        configDialog.setCancelable(false);
-        configDialog.create().show();
-
     }
 
     private void initData() {
@@ -690,22 +657,15 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         mFragments.add(conversationFragment);
 
         //判断是qtalk 添加日历页
-        if(CommonConfig.isQtalk){
+        if(GlobalConfigManager.isQtalkPlat()){
             mFragments.add(new RNCalendarFragment());
         }
-//        mFragments.add(new Fragment());
         //判断是启动rn页面还是原生页面
         if (QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNContactView) {
             mFragments.add(new RNContactsFragment());
-//            mFragments.add(new TestRNFragment());
-//            mFragments.add(new BuddiesFragment());
         } else {
             mFragments.add(new BuddiesFragment());
         }
-
-
-
-//        mFragments.add(new DiscoverFragment());
 
         if ("ejabhost1".equals(QtalkNavicationService.getInstance().getXmppdomain())
                 || "ejabhost2".equals(QtalkNavicationService.getInstance().getXmppdomain())) {
@@ -867,7 +827,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                 });
                 break;
             case 1:
-                if(CommonConfig.isQtalk){
+                if(GlobalConfigManager.isQtalkPlat()){
                     setActionBarRightSpecial(0);
                     setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
                     setActionBarRightIcon(R.string.atom_ui_new_select_calendar);
@@ -903,7 +863,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
                 break;
             case 2:
-                if(CommonConfig.isQtalk){
+                if(GlobalConfigManager.isQtalkPlat()){
                     setActionBarRightSpecial(0);
                     setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
                     setActionBarRightIcon(R.string.atom_ui_new_addfriend);
@@ -931,7 +891,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
                 break;
             case 3:
-                if(CommonConfig.isQtalk){
+                if(GlobalConfigManager.isQtalkPlat()){
                     setActionBarRightSpecial(0);
                     setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
                     setActionBarRightIcon(R.string.atom_ui_new_qr);
@@ -1078,7 +1038,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         }
         if (!CommonConfig.loginViewHasShown) {
             if (CommonConfig.isQtalk) {
-                if (LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())) {
+                if (LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType()) || GlobalConfigManager.isStartalkPlat()) {
                     startActivity(new Intent(this, QTalkUserLoginActivity.class));
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
@@ -1226,19 +1186,15 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
 
     @Override
     public void refresh() {
-//        initViewPager();
-//        initView();
         if (CurrentPreference.getInstance().isSwitchAccount()) {
 
             //切换过账号后,将值设置为默认情况 false
             CurrentPreference.getInstance().setSwitchAccount(false);
-//            ((RNBaseFragment)(mFragments.get(2))).unbundling();
-            if(CommonConfig.isQtalk){
+            if(GlobalConfigManager.isQtalkPlat()){
                 mFragments.remove(3);
                 if ("ejabhost1".equals(QtalkNavicationService.getInstance().getXmppdomain())
                         || "ejabhost2".equals(QtalkNavicationService.getInstance().getXmppdomain())) {
                     mFragments.add(3, getDiscoverFragment());
-//            mFragments.add(new RNFoundFragment());
                 } else {
                     mFragments.add(3, new RNFoundFragment());
                 }
@@ -1247,14 +1203,10 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                 if ("ejabhost1".equals(QtalkNavicationService.getInstance().getXmppdomain())
                         || "ejabhost2".equals(QtalkNavicationService.getInstance().getXmppdomain())) {
                     mFragments.add(2, getDiscoverFragment());
-//            mFragments.add(new RNFoundFragment());
                 } else {
                     mFragments.add(2, new RNFoundFragment());
                 }
             }
-
-//            mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-//            mViewPager.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
     }

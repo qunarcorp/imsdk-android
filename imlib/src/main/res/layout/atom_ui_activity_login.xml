@@ -25,12 +25,12 @@
 
 
     <ImageView
+        android:id="@+id/atom_ui_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/atom_ui_qtalk_icon_new"/>
+        android:layout_marginBottom="15dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"

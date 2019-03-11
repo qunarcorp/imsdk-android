@@ -416,6 +416,13 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
         Glide.get(CommonConfig.globalContext).clearMemory();
     }
 
+    /**
+     * 打开debug模式
+     */
+    public void openDebug(){
+        CommonConfig.isDebug = true;
+    }
+
     @Override
     public void didReceivedNotification(String key, Object... args) {
         if (key.equals(QtalkEvent.LOGIN_EVENT)) {

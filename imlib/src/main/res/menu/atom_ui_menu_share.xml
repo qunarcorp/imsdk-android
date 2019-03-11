@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:id="@+id/menu_web_share"
-    android:title="@string/atom_ui_share_qtalk"
-    android:icon="@drawable/atom_ui_qtalk_icon_new" />
+    android:title="@string/app_name"
+    android:icon="@drawable/atom_ui_chat_share" />
     <!--<item
         android:id="@+id/menu_weixin_share"
         android:title="QTalk"

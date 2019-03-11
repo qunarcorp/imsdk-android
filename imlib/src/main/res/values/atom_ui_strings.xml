@@ -20,6 +20,7 @@
     <string name="atom_ui_group_max_members">The current population limit is 600, please confirm the number of re-operation</string>
     <string name="atom_ui_group_create">Create group</string>
     <string name="atom_ui_group_invite_member">Invite group member</string>
+    <string name="atom_ui_invite">Invite</string>
     <string name="atom_ui_group_join_menu">Join group</string>
     <string name="atom_ui_group_quit_menu">Quit group</string>
     <string name="atom_ui_group_bulk_quit">Bulk quit group</string>
@@ -296,6 +297,8 @@
     <string name="atom_ui_common_roaming_tips">You have not roam there are local collection of expression, may be lost in the upgrade/install.Immediately roaming?</string>
     <string name="atom_ui_common_done_roaming">Roaming</string>
     <string name="atom_ui_login">Login</string>
+    <string name="atom_ui_regiest">Regiest</string>
+    <string name="atom_ui_company_create">Start Company</string>
     <string name="atom_ui_login_faild">Login Faild.</string>
     <string name="atom_ui_login_get_code">Get Code</string>
     <string name="atom_ui_login_code">Verification code</string>
@@ -355,6 +358,7 @@
     <string name="atom_ui_font_size_big">A</string>
     <string name="atom_ui_account">Account</string>
     <string name="atom_ui_password">Password</string>
+    <string name="atom_ui_company">Company</string>
     <string name="atom_ui_explore_title_passwords">Password Box</string>
     <string name="atom_ui_password_tab_textPlaceholder">Password name</string>
     <string name="atom_ui_password_tab_show">Reveal Password</string>
@@ -404,7 +408,7 @@
     <string name="atom_ui_todolist_title_update">Update</string>
     <string name="atom_ui_todolist_title_create">Create</string>
     <string name="atom_ui_pwdbox_copy">Copy Password</string>
-    <string name="atom_ui_tip_pwdbox_input_pwd">Input password please</string>
+    <string name="atom_ui_tip_pwdbox_input_pwd">Input password</string>
     <string name="atom_ui_pwdbox_input_name_hint">Passwrod Box Name</string>
     <string name="atom_ui_btn_note_new">Create</string>
     <string name="atom_ui_tip_download_failed">Download failed</string>
@@ -654,6 +658,7 @@
     <string name="atom_ui_btn_auto_login">Auto-Login</string>
     <string name="atom_ui_btn_remember_me">Remember Me</string>
     <string name="atom_ui_login_account_hint">E.g:xiaoming.huang</string>
+    <string name="atom_ui_login_compnay_hint">Input company</string>
     <string name="atom_ui_login_input_smscode">input sms code</string>
     <string name="atom_ui_tip_network_error">Network error</string>
     <string name="atom_ui_btn_resend_code">Resend</string>
@@ -814,4 +819,14 @@
     <string name="atom_ui_quickreply_empty">Please set up a quick reply on the computer</string>
     <string name="atom_ui_look_forward">No support, please look forward to it!</string>
     <string name="atom_ui_release_circle">Release Circle</string>
+
+    <string name="atom_ui_forget_pwd">Forget password</string>
+    <string name="atom_ui_next_step">Next Step</string>
+    <string name="atom_ui_mobile_hint">phone number</string>
+    <string name="atom_ui_pic_code_hint">verification code</string>
+    <string name="atom_ui_sms_code_hint">SMS verification code</string>
+    <string name="atom_ui_get_verify_code">Verification code</string>
+
+    <string name="atom_ui_privacy_policy">Agree《Terms and Policies》</string>
+    <string name="atom_ui_input_user_mobile">Input account</string>
 </resources>

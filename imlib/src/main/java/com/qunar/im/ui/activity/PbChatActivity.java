@@ -3934,6 +3934,8 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         if (isFinishing()) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.atom_ui_dialog_encrypt_choose, (ViewGroup) this.getWindow().getDecorView(), false);
+        ImageView atom_ui_app_icon = (ImageView) findViewById(R.id.atom_ui_app_icon);
+        atom_ui_app_icon.setImageResource(getApplicationInfo().icon);
         Button cancel_btn = (Button) view.findViewById(R.id.cancel_btn);
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
