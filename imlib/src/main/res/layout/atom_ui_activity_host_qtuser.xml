@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <EditText
+        android:id="@+id/keywordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:hint="@string/atom_ui_login_compnay_hint"
+        android:maxLength="50"
+        android:background="@color/translate"
+        android:singleLine="true"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#00CABE"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        />
+
+    <ListView
+        android:id="@+id/hostListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </ListView>
+
+</LinearLayout>

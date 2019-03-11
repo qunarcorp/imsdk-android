@@ -57,7 +57,7 @@ allprojects {
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:3.0.1' //或者直接引用imlib Library工程,compile project(':imlib')
+  compile 'com.qunar.im:sdk-im:3.0.2' //或者直接引用imlib Library工程,compile project(':imlib')
 }
 ```
 

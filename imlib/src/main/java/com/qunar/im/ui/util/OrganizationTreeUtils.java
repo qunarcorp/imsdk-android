@@ -1,16 +1,11 @@
 package com.qunar.im.ui.util;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.widget.Toast;
 
-import com.google.gson.reflect.TypeToken;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.jsonbean.GetDepartmentResult;
 import com.qunar.im.base.presenter.views.IOrganizationView;
-import com.qunar.im.base.protocol.Protocol;
-import com.qunar.im.base.protocol.ProtocolCallback;
-import com.qunar.im.base.util.FileUtils;
-import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
@@ -19,8 +14,8 @@ import com.qunar.im.ui.view.treeView.holder.SDHolder;
 import com.qunar.im.ui.view.treeView.holder.ULHolder;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 import com.qunar.im.ui.view.treeView.view.AndroidTreeView;
+import com.qunar.im.utils.ConnectionUtil;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -53,76 +48,71 @@ public class OrganizationTreeUtils {
     }
 
     private void getOrganizationData(){
-        int size = FileUtils.getFileSize(fn, FileUtils.FileSizeUnit.B);
-        if(size == 1){
-            requestData();
-        }else {
-            BackgroundExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        byte[] data = FileUtils.readFile(context.getFilesDir() + File.separator + fn);
-                        if(data!=null){
-                            handleData(new String(data));
-                        }
-
-                    }catch (Exception e){
-                        requestData();
-                    }
-                }
-            });
-        }
-
-    }
-
-    private void requestData(){
-        createProgressDialog();
-        Protocol.getDepartment(new ProtocolCallback.UnitCallback<String>() {
+//        createProgressDialog();
+        BackgroundExecutor.execute(new Runnable() {
             @Override
-            public void onCompleted(String resultString) {
-                FileUtils.writeToFile(resultString,fn,context,true);
-                handleData(resultString);
-                if(dialog != null && dialog.isShowing()){
-                    dialog.dismiss();
+            public void run() {
+                try{
+                    handleData(GetDepartmentResult.Structured(ConnectionUtil.getInstance().getAllOrgaUsers()));
+                }catch (Exception e){
+//                    requestData();
                 }
-            }
-
-            @Override
-            public void onFailure(String errMsg) {
-                iOrganizationView.getView(null);
             }
         });
+
     }
+
+//    private void requestData(){
+//        createProgressDialog();
+//        Protocol.getDepartment(new ProtocolCallback.UnitCallback<String>() {
+//            @Override
+//            public void onCompleted(String resultString) {
+//                FileUtils.writeToFile(resultString,fn,context,true);
+//                handleData(resultString);
+//                if(dialog != null && dialog.isShowing()){
+//                    dialog.dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String errMsg) {
+//                iOrganizationView.getView(null);
+//            }
+//        });
+//    }
 
     public void refresh(){
         init();
-        requestData();
+//        requestData();
     }
 
-    ProgressDialog dialog;
-    private void createProgressDialog(){
-        dialog = new ProgressDialog(context);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置水平进度条
-        dialog.setCancelable(false);// 设置是否可以通过点击Back键取消
-        dialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
-        dialog.setTitle("正在更新数据。。。");
-        dialog.show();
-    }
+//    ProgressDialog dialog;
+//    private void createProgressDialog(){
+//        dialog = new ProgressDialog(context);
+//        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置水平进度条
+//        dialog.setCancelable(true);// 设置是否可以通过点击Back键取消
+//        dialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+//        dialog.setTitle("正在更新数据。。。");
+//        dialog.show();
+//    }
 
 
-    private void handleData(final String resultString){
+    private void handleData(final List<GetDepartmentResult> results){
         CommonConfig.mainhandler.post(new Runnable() {
             @Override
             public void run() {
-                final List<GetDepartmentResult> results = JsonUtils.getGson().fromJson(resultString, new TypeToken<List<GetDepartmentResult>>() {}.getType());
-                createView(results,root);
-                if(iOrganizationView != null)
-                    iOrganizationView.getView(tView.getView());
+                try{
+                    createView(results,root);
+                    if(iOrganizationView != null)
+                        iOrganizationView.getView(tView.getView());
+                }catch (Exception e){
+                    Toast.makeText(context,"json parse exception!",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void createView(List<GetDepartmentResult> results,TreeNode rootNode){
+    private void createView(List<GetDepartmentResult> results, TreeNode rootNode){
         if(results==null) return;
         for(GetDepartmentResult departmentResult : results){
             TreeNode treeNode = new TreeNode(new IconTreeItemHolder.IconTreeItem(R.string.atom_ui_new_arrow_right,departmentResult.D)).setViewHolder(new SDHolder(context));

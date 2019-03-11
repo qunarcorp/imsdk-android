@@ -54,6 +54,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:theme="@style/AtomSplashTheme"/>
+        <activity
+            android:name="com.qunar.im.ui.activity.QtalkUserHostActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:theme="@style/AtomSplashTheme"/>
 
         <activity
             android:name="com.qunar.im.ui.activity.RobotChatActivity"
@@ -395,7 +400,19 @@
             android:launchMode="singleTop"
             android:theme="@style/AtomSplashTheme"
             />
-        <activity android:name=".activity.SearchChatPicVideoActivity"
+        <activity android:name="com.qunar.im.ui.activity.SearchChatPicVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
+            />
+        <activity android:name="com.qunar.im.ui.activity.FindPwdStep1Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
+            />
+        <activity android:name="com.qunar.im.ui.activity.FindPwdStep2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
+            />
+        <activity android:name="com.qunar.im.ui.activity.FindPwdStep3Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme"
             />

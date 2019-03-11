@@ -4,16 +4,29 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.ImageSpan;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +38,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.AnonymousData;
 import com.qunar.im.base.module.ImageItemWorkWorldItem;
 import com.qunar.im.base.module.MultiItemEntity;
@@ -41,10 +55,18 @@ import com.qunar.im.base.presenter.impl.WorkWorldDetailsManagerPresenter;
 import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.base.presenter.views.WorkWorldDetailsView;
 import com.qunar.im.base.protocol.ProtocolCallback;
+import com.qunar.im.base.structs.MessageType;
+import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
+import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.base.util.MemoryCache;
 import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.base.util.graphics.ImageUtils;
+import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;
@@ -55,7 +77,12 @@ import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.view.GridSpacingItemDecoration;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.ui.view.baseView.AnimatedGifDrawable;
+import com.qunar.im.ui.view.baseView.AnimatedImageSpan;
+import com.qunar.im.ui.view.baseView.processor.TextMessageProcessor;
+import com.qunar.im.ui.view.emojiconTextView.EmojiconTextView;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
+import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
@@ -65,12 +92,17 @@ import com.qunar.rn_service.protocal.NativeApi;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
@@ -112,13 +144,16 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 
     private GridSpacingItemDecoration gridSpacingItemDecoration;
 
+    private int iconSize;
+    private int defaultSize;
+
     private View headView;
     //头部view
     private SimpleDraweeView user_header;//帖子头像
     private TextView user_name;//帖子姓名
     private TextView user_architecture;//帖子部门
     private IconView right_special;//帖子功能按钮
-    private TextView text_content;//帖子内容
+    private EmojiconTextView text_content;//帖子内容
     private RecyclerView img_rc;//九宫格
     private TextView time;//时间
     private LinearLayout like_layout;//点赞按钮
@@ -144,6 +179,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
     private BottomSheetDialog bottomSheetDialog;
     private boolean check;
 
+    private boolean allIsOk;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atom_ui_work_world_details_activity);
@@ -159,6 +195,10 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         } else {
             //此处应该请求借口开始操作
         }
+
+        defaultSize = com.qunar.im.base.util.Utils.dipToPixels(QunarIMApp.getContext(), 96);
+        iconSize = com.qunar.im.base.util.Utils.dpToPx(QunarIMApp.getContext(), 32);
+
         softKeyboardStateHelper = new SoftKeyboardStateHelper(findViewById(R.id.work_world_activity_main_layout));
         softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
             @Override
@@ -457,7 +497,10 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         workWorldDetailsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                loadMore();
+                if(allIsOk){
+                    loadMore();
+                }
+
             }
         });
     }
@@ -525,11 +568,16 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 return;
             }
 
-            img_rc.setVisibility(View.VISIBLE);
+//            img_rc.setVisibility(View.VISIBLE);
             text_content.setVisibility(View.VISIBLE);
             contentData = contentData1;
-            if (!TextUtils.isEmpty(contentData.getContent())) {
-                text_content.setText(contentData.getContent());
+            String str = contentData.getExContent();
+            if (TextUtils.isEmpty(str)) {
+                str = contentData.getContent();
+            }
+            if (!TextUtils.isEmpty(str)) {
+//                text_content.setText(contentData.getContent());
+                setContent(contentData);
                 text_content.setVisibility(View.VISIBLE);
             } else {
                 text_content.setVisibility(View.GONE);
@@ -586,6 +634,8 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 time.setText("未知");
             }
 
+
+            showFunction( contentData);
             //设置图片展示
             if (contentData.getImgList().size() > 0) {
                 img_rc.setVisibility(View.VISIBLE);
@@ -664,6 +714,288 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         } catch (Exception e) {
             Logger.i("详情页出错:" + e.getMessage());
         }
+    }
+
+    private void showFunction( final ReleaseContentData contentData) {
+
+        //初始情况全部控件不展示
+      img_rc.setVisibility(View.GONE);
+
+        try {
+            switch (contentData.getType()){
+
+                case MessageType.image:
+                default:
+                    //设置图片展示
+                    if (contentData.getImgList().size() > 0) {
+                        img_rc.setVisibility(View.VISIBLE);
+//            List<MultiItemEntity> list = contentData.getImgList();
+                        RecyclerView mRecyclerView = img_rc;
+                        int i = contentData.getImgList().size();
+                        int column = 0;
+                        int size = 0;
+//            mRecyclerView.removeItemDecoration(gridSpacingItemDecoration);
+                        if (i == 1) {
+                            column = 1;
+                            gridSpacingItemDecoration = g1;
+                        } else if (i < 5) {
+                            column = 2;
+                            gridSpacingItemDecoration = g2;
+                        } else {
+                            column = 3;
+                            gridSpacingItemDecoration = g3;
+                        }
+                        size = Utils.getImageItemWidthForWorld(this, column);
+                        for (int j = contentData.getImgList().size() - 1; j >= 0; j--) {
+                            if (contentData.getImgList().get(j) == null) {
+                                contentData.getImgList().remove(i);
+                            }
+                        }
+
+
+                        ReleaseCircleGridAdapter itemAdapter = new ReleaseCircleGridAdapter(contentData.getImgList(), this, column);
+                        GridLayoutManager manager = new GridLayoutManager(this, column);
+                        final int finalSize = size;
+                        itemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                                Intent intent = new Intent(WorkWorldDetailsActivity.this, ImageBrowersingActivity.class);
+                                int location[] = new int[2];
+                                view.getLocationOnScreen(location);
+                                intent.putExtra("left", location[0]);
+                                intent.putExtra("top", location[1]);
+                                intent.putExtra("height", finalSize);
+                                intent.putExtra("width", finalSize);
+
+                                String url = contentData.getImgList().get(position).getData();
+                                if (!(url.startsWith("http") || url.startsWith("https"))) {
+                                    url = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/" + url;
+                                }
+                                intent.putExtra(Constants.BundleKey.IMAGE_URL, url);
+                                intent.putExtra(Constants.BundleKey.IMAGE_ON_LOADING, url);
+                                intent.putExtra(Constants.BundleKey.WORK_WORLD_BROWERSING, (Serializable) parseList(contentData.getImgList()));
+                                WorkWorldDetailsActivity.this.startActivity(intent);
+                                WorkWorldDetailsActivity.this.overridePendingTransition(0, 0);
+                            }
+                        });
+
+//            mRecyclerView.removeItemDecoration();
+//            mRecyclerView.invalidateItemDecorations();
+//            mRecyclerView.addItemDecoration(gridSpacingItemDecoration);
+                        mRecyclerView.setLayoutManager(manager);
+                        mRecyclerView.setAdapter(itemAdapter);
+                    } else {
+                       img_rc.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+
+
+
+        }catch (Exception e){
+            Logger.i("朋友圈功能展示出错:"+e.getMessage());
+        }
+    }
+
+
+    private void setContent( ReleaseContentData contentData) {
+
+        String exstr = contentData.getExContent();
+
+
+        EmojiconTextView textView = text_content;
+        if (TextUtils.isEmpty(exstr)) {
+//            str = contentData.getContent();
+            textView.setText(contentData.getContent());
+            return;
+        }
+        boolean newTextView = true;
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        List<Map<String, String>> list = ChatTextHelper.getObjList(exstr);
+        for (Map<String, String> map : list) {
+            switch (map.get("type")) {
+                case "emoticon":
+                    if (newTextView) {
+                        newTextView = false;
+                        textView.setTag(R.string.atom_ui_title_add_emotion, null);
+                    }
+                    String value = map.get("value");
+
+                    if (TextUtils.isEmpty(value)) {
+                        break;
+                    }
+                    String ext = map.get("extra");
+                    String pkgId = "";
+                    if (ext != null && ext.contains("width")) {
+                        String[] str = ext.trim().split("\\s+");
+                        if (str.length > 1) {
+                            //处理width = 240.000000　问题
+                            pkgId = str[0].substring(str[0].indexOf("width") + 6);
+                        }
+                    }
+                    String shortcut = value.substring(1, value.length() - 1);
+                    EmoticonEntity emotionEntry = EmotionUtils.getEmoticionByShortCut(shortcut, pkgId, true);
+                    if (emotionEntry != null) {
+                        String path = emotionEntry.fileOrg;
+                        if (!TextUtils.isEmpty(path)) {
+                            Parcelable cached = MemoryCache.getMemoryCache(path);
+                            if (cached == null) {
+                                InputStream is = null;
+                                int imgSize = emotionEntry.showAll ? iconSize : defaultSize;
+                                try {
+                                    if (path.startsWith("emoticons") || path.startsWith("Big_Emoticons")) {
+                                        is = getAssets().open(path);
+                                    } else {
+                                        is = new FileInputStream(path);
+                                    }
+                                    ImageUtils.ImageType type = ImageUtils.adjustImageType(
+                                            FileUtils.toByteArray(new File(path), 4));
+                                    if (emotionEntry.fileFiexd.endsWith(".gif")) {
+                                        type = ImageUtils.ImageType.GIF;
+                                    }
+
+                                    if (type == ImageUtils.ImageType.GIF) {
+                                        cached = new AnimatedGifDrawable(is, imgSize);
+                                    } else {
+                                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+                                        Matrix matrix = new Matrix();
+                                        matrix.postScale(imgSize / bitmap.getWidth(),
+                                                imgSize / bitmap.getHeight());
+                                        cached = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                                                bitmap.getHeight(), matrix, true);
+                                        if (cached != bitmap) {
+                                            bitmap.recycle();
+                                        }
+                                    }
+                                    MemoryCache.addObjToMemoryCache(path, cached);
+                                } catch (IOException e) {
+//                                    LogUtil.e(TAG, "ERROR", e);
+                                    Logger.i("error:"+e.getMessage());
+                                } finally {
+                                    if (is != null) {
+                                        try {
+                                            is.close();
+                                        } catch (IOException e) {
+//                                            LogUtil.e(TAG, "ERROR", e);
+                                            Logger.i("error:"+e.getMessage());
+                                        }
+                                    }
+                                }
+                            }
+                            if (cached != null) {
+                                DynamicDrawableSpan span;
+                                if (cached instanceof AnimatedGifDrawable) {
+                                    WeakReference<TextView> weakReference = new WeakReference<TextView>(textView);
+                                    span = new AnimatedImageSpan((Drawable) cached, weakReference);
+                                    if (textView.getTag(R.string.atom_ui_title_add_emotion) == null) {
+                                        ((AnimatedImageSpan) span).setListener(new TextMessageProcessor.GifListener(weakReference));
+                                        textView.setTag(R.string.atom_ui_title_add_emotion, 1);
+                                    }
+                                } else {
+                                    span = new ImageSpan(WorkWorldDetailsActivity.this, (Bitmap) cached);
+                                }
+                                SpannableString spannableString = new SpannableString(shortcut);
+                                spannableString.setSpan(span, 0, spannableString.length(),
+                                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                sb.append(spannableString);
+                            }
+                        } else if (path != null) {
+                            //牛驼表情和其他非默认表情
+                            //每当新创建ImageView的时候都要将当前的TextView放入parent
+                            if (textView != null && sb.length() > 0) {
+                                newTextView = true;
+                                textView.setText(sb);
+//                                parent.addView(textView);
+                                textView = null;
+//                                sb.clear();
+                            }
+//                            if (path.startsWith("Big_Emoticons/")) {//内置大图逻辑
+//                                String p = "file:///android_asset/" + path;
+//                                LoadingImgView bigEmoticons = getLoadingImgView(context, 256, 256, p, p, message.getDirection());
+//                                bigEmoticons.finish();
+//                                parent.addView(bigEmoticons);
+//                            } else {
+//                                SimpleDraweeView emojiView = getSimpleDraweeView(new File(path), context);
+//                                //牛驼表情的特殊处理,240 * 240px
+//                                emojiView.setLayoutParams(new LinearLayout.LayoutParams(256, 256));
+//                                emojiView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//                                parent.addView(emojiView);
+//                            }
+                        } else {
+                            sb.append(value);
+                        }
+                    } else {
+//                        SimpleDraweeView emojiView;
+//                        if (TextUtils.isEmpty(pkgId)) {
+//                            emojiView = getSimpleDraweeView(context,
+//                                    QtalkStringUtils.addFilePathDomain("/file/v2/emo/d/oe/"
+//                                            + shortcut
+//                                            + "/org"), null, 128, 128, -1);
+//                        } else {
+//                            emojiView = getSimpleDraweeView(context,
+//                                    QtalkStringUtils.addFilePathDomain("/file/v2/emo/d/e/"
+//                                            + pkgId
+//                                            + "/"
+//                                            + shortcut + "/org"), null, 128, 128, -1);
+//                        }
+//                        emojiView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//                        parent.addView(emojiView);
+                    }
+                    break;
+                case "url":
+                    if (newTextView) {
+                        newTextView = false;
+                    }
+                    String url = map.get("value");
+                    URLSpan span = new URLSpan(url) {
+                        @Override
+                        public void onClick(View widget) {
+
+                            View v = (View) widget.getParent();
+                            if (v.getTag(R.string.atom_ui_voice_hold_to_talk) != null) {
+                                v.setTag(R.string.atom_ui_voice_hold_to_talk, null);
+                                return;
+                            }
+                            if (widget instanceof EmojiconTextView) {
+                                String url = getURL();
+                                Intent intent = new Intent(WorkWorldDetailsActivity.this, QunarWebActvity.class);
+                                intent.setData(Uri.parse(url));
+                                WorkWorldDetailsActivity.this.startActivity(intent);
+                            }
+                        }
+                    };
+                    SpannableString spannableString = new SpannableString(url);
+                    spannableString.setSpan(span, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sb.append(spannableString);
+                    break;
+                case "text":
+                    String v = map.get("value");
+                    if (TextUtils.isEmpty(v.trim())) {
+                        break;
+                    }
+                    if (newTextView) {
+                        newTextView = false;
+//                        textView = ViewPool.getView(EmojiconTextView.class, context);
+                    }
+                    if (v.length() > 1024) {
+                        sb.append(v);
+                    } else {
+                        SpannableString textSpannable = new SpannableString(v);
+                        Linkify.addLinks(textSpannable, Linkify.WEB_URLS |
+                                Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS);
+                        sb.append(textSpannable);
+//                        textView.setMovementMethod(LinkMovementClickMethod.getInstance());//长按事件与Spannable点击冲突
+                    }
+                    break;
+            }
+
+
+        }
+        textView.setText(sb);
+//
+//
+//
+//        ((TextView) helper.getView(R.id.text_content)).setText(contentData.getContent());
     }
 
 
@@ -1015,6 +1347,9 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                         commentDetails.setCount(Integer.parseInt(workWorldItem.getCommentsNum()));
                     }
                     ((List<MultiItemEntity>) list).add(0, commentDetails);
+                    if(!allIsOk){
+                        allIsOk = true;
+                    }
                     try {
                         allData = deepcopy(list);
                     } catch (IOException e) {

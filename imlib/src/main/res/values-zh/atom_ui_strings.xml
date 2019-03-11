@@ -20,6 +20,7 @@
     <string name="atom_ui_group_max_members">当前群人口上限为600人，请确认人数后重新操作</string>
     <string name="atom_ui_group_create">创建群</string>
     <string name="atom_ui_group_invite_member">邀请成员</string>
+    <string name="atom_ui_invite">邀请</string>
     <string name="atom_ui_group_join_menu">加入群</string>
     <string name="atom_ui_group_quit_menu">退出群组</string>
     <string name="atom_ui_group_bulk_quit">批量退群</string>
@@ -356,6 +357,7 @@
     <string name="atom_ui_font_size_big">大</string>
     <string name="atom_ui_account">账号</string>
     <string name="atom_ui_password">密码</string>
+    <string name="atom_ui_company">公司</string>
     <string name="atom_ui_explore_title_passwords">密码箱</string>
     <string name="atom_ui_password_tab_textPlaceholder">密码名称</string>
     <string name="atom_ui_password_tab_show">显示密码</string>
@@ -654,6 +656,7 @@
     <string name="atom_ui_btn_auto_login">自动登录</string>
     <string name="atom_ui_btn_remember_me">记住用户名</string>
     <string name="atom_ui_login_account_hint">例如:xiaoming.huang</string>
+    <string name="atom_ui_login_compnay_hint">请输入公司名</string>
     <string name="atom_ui_login_input_smscode">请输入短信验证码</string>
     <string name="atom_ui_tip_network_error">网络错误</string>
     <string name="atom_ui_btn_resend_code">重发验证码</string>
@@ -697,6 +700,8 @@
     <string name="atom_ui_tip_loading">加载中</string>
     <string name="atom_ui_btn_exit">退出登录</string>
     <string name="atom_ui_btn_login">登录</string>
+    <string name="atom_ui_regiest">注册</string>
+    <string name="atom_ui_company_create">创建公司</string>
     <string name="atom_ui_setting_title">设置</string>
     <string name="atom_ui_punch_card">打卡</string>
     <string name="atom_ui_qtalk_token">Qtalk Token</string>
@@ -818,4 +823,15 @@
     <string name="atom_ui_look_forward">暂不支持，敬请期待!</string>
     <string name="atom_ui_copy_message_content">消息内容</string>
     <string name="atom_ui_release_circle">发布工作圈</string>
+
+    <string name="atom_ui_forget_pwd">忘记密码</string>
+    <string name="atom_ui_next_step">下一步</string>
+    <string name="atom_ui_mobile_hint">请输入手机号</string>
+    <string name="atom_ui_pic_code_hint">请输入图形验证码</string>
+    <string name="atom_ui_sms_code_hint">请输入短信验证码</string>
+    <string name="atom_ui_get_verify_code">获取验证码</string>
+
+    <string name="atom_ui_privacy_policy">同意《条款和政策》</string>
+    <string name="atom_ui_input_user_mobile">请输入用户名/手机号</string>
+
 </resources>

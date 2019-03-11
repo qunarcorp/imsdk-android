@@ -2,9 +2,11 @@ package com.qunar.im.ui.activity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.fragment.BaseFragment;
 import com.qunar.im.ui.fragment.DeptFragment;
@@ -38,13 +40,13 @@ public class DepartmentActivity extends SwipeBackActivity {
         final BaseFragment fragment;
         if(isNewDept){
             fragment = new OrganizationFragment();
-            setActionBarRightText(R.string.atom_ui_common_refresh);
-            setActionBarRightTextClick(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((OrganizationFragment)fragment).refresh();
-                }
-            });
+//            setActionBarRightText(R.string.atom_ui_common_refresh);
+//            setActionBarRightTextClick(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    ((OrganizationFragment)fragment).refresh();
+//                }
+//            });
         }
         else fragment = new DeptFragment();
         // Transition for fragment1

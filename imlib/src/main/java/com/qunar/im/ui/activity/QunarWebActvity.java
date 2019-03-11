@@ -14,6 +14,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -148,10 +149,17 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         mWebView.setWebChromeClient(new WebChromeClient() {
 
             @Override
-            public void onPermissionRequest(PermissionRequest request) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    request.deny();
-                }
+            public void onPermissionRequest(final PermissionRequest request) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    request.deny();
+//                }
+                runOnUiThread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void run() {
+                        request.grant(request.getResources());
+                    }
+                });
             }
 
             //            添加弹窗 alert功能
@@ -271,7 +279,7 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
                 if (TextUtils.isEmpty(url)) return false;
                 Uri data = Uri.parse(url);
                 //代收管理网页关闭
-                if ("qim://close".equals(url)) {
+                if ("qim://close".equals(url) || "qim://publicNav/resetpwdSuccessed".equals(url)) {
                     finish();
                     return true;
                 }
@@ -585,19 +593,12 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         if (mUrl.contains("/package/plts/dashboard")) {
             cookieManager.setCookie(DOMAIN, "q_u=" + CurrentPreference.getInstance().getUserid() + "; domain=" + DOMAIN);
             cookieManager.setCookie(DOMAIN, "q_nm=" + CurrentPreference.getInstance().getUserid() + "; domain=" + DOMAIN);
-            cookieManager.setCookie(DOMAIN, "q_ckey=" + Protocol.getCKEY() + "; domain=" + DOMAIN);
             cookieManager.setCookie(DOMAIN, "q_d=" + QtalkNavicationService.getInstance().getXmppdomain() + "; domain=" + DOMAIN);
-        }else if(mUrl.contains("/main_controller.php")){
-            cookieManager.setCookie(DOMAIN, "q_ckey=" + Protocol.getCKEY() + "; domain=" + DOMAIN);
-        }else if (mUrl.contains("mainSite/")) {
-            cookieManager.setCookie(DOMAIN, "q_ckey=" + Protocol.getCKEY() +"; domain=." + DOMAIN );
         }
 
 
-        //qtalk wiki
-        if(!TextUtils.isEmpty(QtalkNavicationService.getInstance().getWikiurl())){
-            cookieManager.setCookie(DOMAIN, "q_ckey=" + Protocol.getCKEY() + "; domain=" + DOMAIN);
-        }
+        //默认种qckey
+        cookieManager.setCookie(DOMAIN, "q_ckey=" + Protocol.getCKEY() + "; domain=" + DOMAIN);
 
         if (QtalkSDK.getInstance().isLoginStatus()) {
 //                mUrl = mUrl + "?user=" + CurrentPreference.getInstance().getUserId() + "&key=" + CommonConfig.verifyKey;

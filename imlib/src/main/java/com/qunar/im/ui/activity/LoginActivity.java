@@ -73,6 +73,7 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
     TextView tv_reset_account;
     ImageView img_show_pwd;
     ImageButton iv_nav_config;
+    ImageView atom_ui_icon;
 
     ProgressDialog progressDialog;
     LinearLayout login_layout;
@@ -286,6 +287,9 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         }
         tv_version.setText(getText(R.string.atom_ui_title_current_version)+":" + QunarIMApp.getQunarIMApp().getVersionName() +
                 " (" + QunarIMApp.getQunarIMApp().getVersion() + ")");
+
+        atom_ui_icon = (ImageView) findViewById(R.id.atom_ui_icon);
+        atom_ui_icon.setImageResource(CommonConfig.globalContext.getApplicationInfo().icon);
     }
 
 

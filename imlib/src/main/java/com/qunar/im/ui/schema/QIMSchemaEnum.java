@@ -6,8 +6,9 @@ public enum QIMSchemaEnum {
      * qtalkaphone://rnsearch //搜索
      * qtalkaphone://router/openHome?tab=0 //消息
      * qtalkaphone://router/openHome?tab=1 //通讯录
-     * qtalkaphone://router/openHome?tab=2 //发现
-     * qtalkaphone://router/openHome?tab=3 //我的
+     * qtalkaphone://router/openHome?tab=2 //日历
+     * qtalkaphone://router/openHome?tab=3 //发现
+     * qtalkaphone://router/openHome?tab=4 //我的
      *
      */
     openHome(QOpenHomeTabImpl.getInstance(),"/openHome");//打开home页某个tab
