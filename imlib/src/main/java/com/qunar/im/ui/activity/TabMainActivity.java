@@ -827,87 +827,18 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
                 });
                 break;
             case 1:
-                if(GlobalConfigManager.isQtalkPlat()){
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(R.string.atom_ui_new_select_calendar);
-                    setActionBarRightIconClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            TimePickerView tpv = new TimePickerBuilder(TabMainActivity.this, new OnTimeSelectListener() {
-                                @Override
-                                public void onTimeSelect(Date date, View v) {
-                                    String time = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.SELECT_DATE,time);
-                                }
-                            }).build();
-
-                            tpv.show();
-                        }
-                    });
-                }else{
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(R.string.atom_ui_new_addfriend);
-                    setActionBarRightIconClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(TabMainActivity.this, QtalkServiceRNActivity.class);
-                            intent.putExtra("module", QtalkServiceRNActivity.CONTACTS);
-                            intent.putExtra("Screen", "Search");
-                            intent.putExtra(Constants.BundleKey.DOMAIN_LIST_URL,QtalkNavicationService.getInstance().getDomainSearchUrl());
-                            startActivity(intent);
-                        }
-                    });
-                }
-
+                setActionBarRightSpecial(0);
+                setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
+                setActionBarRightIcon(R.string.atom_ui_new_qr);
+                setActionBarRightIconClick(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PermissionDispatcher.requestPermissionWithCheck(TabMainActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA}, TabMainActivity.this, SCAN_REQUEST);
+                    }
+                });
                 break;
             case 2:
-                if(GlobalConfigManager.isQtalkPlat()){
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(R.string.atom_ui_new_addfriend);
-                    setActionBarRightIconClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(TabMainActivity.this, QtalkServiceRNActivity.class);
-                            intent.putExtra("module", QtalkServiceRNActivity.CONTACTS);
-                            intent.putExtra("Screen", "Search");
-                            intent.putExtra(Constants.BundleKey.DOMAIN_LIST_URL,QtalkNavicationService.getInstance().getDomainSearchUrl());
-                            startActivity(intent);
-                        }
-                    });
-                }else{
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(R.string.atom_ui_new_qr);
-                    setActionBarRightIconClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            PermissionDispatcher.requestPermissionWithCheck(TabMainActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA}, TabMainActivity.this, SCAN_REQUEST);
-                        }
-                    });
-                }
-
-                break;
             case 3:
-                if(GlobalConfigManager.isQtalkPlat()){
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(R.string.atom_ui_new_qr);
-                    setActionBarRightIconClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            PermissionDispatcher.requestPermissionWithCheck(TabMainActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA}, TabMainActivity.this, SCAN_REQUEST);
-                        }
-                    });
-                }else{
-                    setActionBarRightSpecial(0);
-                    setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
-                    setActionBarRightIcon(0);
-                }
-
-                break;
             case 4:
                 setActionBarRightSpecial(0);
                 setActionBarSingleTitle(mTitles[mViewPager.getCurrentItem()]);
