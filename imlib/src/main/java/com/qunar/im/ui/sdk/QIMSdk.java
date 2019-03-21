@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.qunar.im.base.jsonbean.SetMucVCardResult;
+import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.SetMucVCardData;
@@ -419,6 +420,26 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      */
     public List<Nick> getGroups(){
         return ConnectionUtil.getInstance().SelectAllGroup();
+    }
+
+    /**
+     * 搜索本地组织架构人员
+     * @param ser
+     * @param limit
+     * @return
+     */
+    public List<Nick> searchLocalUser(String ser, int limit){
+        return ConnectionUtil.getInstance().SelectContactsByLike(ser,limit);
+    }
+
+    /**
+     * 搜索群组
+     * @param ser
+     * @param limit
+     * @return
+     */
+    public List<IMGroup> searchLocalMuc(String ser, int limit){
+        return ConnectionUtil.getInstance().SelectIMGroupByLike(ser,limit);
     }
 
     /**
