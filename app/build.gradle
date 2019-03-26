@@ -39,6 +39,7 @@ android {
             manifestPlaceholders = [
                     PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
                     serverDoMain  : true,
+                    baiduMap :"xxxxx",//百度地图key 用于发送位置消息
                     SCHEME : "qtalkaphone",
                     currentPlat  : "QTalk",
                     MAIN_SCHEMA : "start_qtalk_activity"

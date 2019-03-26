@@ -443,22 +443,6 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
     }
 
     /**
-     * 设置小米push key
-     * @param pushKey
-     */
-    public void setMiPushKey(String pushKey){
-        config.miPushKey = pushKey;
-    }
-
-    /**
-     * 设置百度地图key
-     * @param mapKey
-     */
-    public void setBaiduMapKey(String mapKey){
-        config.baiduMapKey = mapKey;
-    }
-
-    /**
      * 清除缓存
      */
     public void clearMemoryCache() {
@@ -503,8 +487,6 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      */
     class Config {
         public String navigationUrl;//导航url
-        public String miPushKey;//小米push key
-        public String baiduMapKey;//百度地图 key
     }
 
     public interface LoginStatesListener {
