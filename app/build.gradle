@@ -16,6 +16,10 @@ android {
             abiFilters 'armeabi'//sdk 涉及的so文件只有armeabi一种类型（建议只过滤该类型，否则会导致sdk某些功能无法使用）
         }
 
+        packagingOptions {
+            exclude "lib/arm64-v8a/librealm-jni.so"//fix could find DSO to load: libreactnativejni.so error
+        }
+
     }
     buildTypes {
         release {
