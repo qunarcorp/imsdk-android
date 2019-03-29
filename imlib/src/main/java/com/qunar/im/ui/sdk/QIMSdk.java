@@ -230,9 +230,8 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      * @return
      */
     public boolean isConnected() {
-        return ConnectionUtil.getInstance().isLoginStatus();
+        return ConnectionUtil.getInstance().isLoginStatus() && ConnectionUtil.getInstance().isConnected();
     }
-
 
     public boolean isCanAutoLogin(){
         return ConnectionUtil.getInstance().isCanAutoLogin();
