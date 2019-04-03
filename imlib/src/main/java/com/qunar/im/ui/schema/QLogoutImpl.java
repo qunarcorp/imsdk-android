@@ -2,8 +2,8 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.impl.LoginPresenter;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.impl.LoginPresenter;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.TabMainActivity;
 import com.qunar.im.ui.services.PushServiceUtils;

@@ -18,11 +18,6 @@ package com.qunar.im.ui.view.kpswitch.util;
 import android.content.Context;
 import android.util.Log;
 
-/**
- * Created by Jacksgong on 3/26/16.
- * <p/>
- * In order to avoid the layout of the Status bar.
- */
 public class StatusBarHeightUtil {
 
     private static boolean INIT = false;

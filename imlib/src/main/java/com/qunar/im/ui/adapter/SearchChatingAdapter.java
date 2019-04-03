@@ -4,11 +4,11 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.ui.R;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.util.ChatTextHelper;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.im.ui.view.emojiconTextView.EmojiconTextView;
 

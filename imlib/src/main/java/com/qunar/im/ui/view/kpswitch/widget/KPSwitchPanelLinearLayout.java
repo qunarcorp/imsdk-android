@@ -27,18 +27,6 @@ import com.qunar.im.ui.view.kpswitch.IPanelHeightTarget;
 import com.qunar.im.ui.view.kpswitch.handler.KPSwitchPanelLayoutHandler;
 
 
-/**
- * Created by Jacksgong on 9/1/15.
- * <p/>
- * The panel container linear layout.
- * Resolve the layout-conflict from switching the keyboard and the Panel.
- * <p/>
- * For full-screen theme window, please use {@link KPSwitchFSPanelLinearLayout} instead.
- *
- * @see KPSwitchPanelFrameLayout
- * @see KPSwitchPanelRelativeLayout
- * @see KPSwitchPanelLayoutHandler
- */
 public class KPSwitchPanelLinearLayout extends LinearLayout implements IPanelHeightTarget,
         IPanelConflictLayout {
 

@@ -10,9 +10,9 @@ import android.widget.Toast;
 
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.IChatroomInfoPresenter;
-import com.qunar.im.base.presenter.impl.ChatroomInfoPresenter;
-import com.qunar.im.base.presenter.views.IChatRoomInfoView;
+import com.qunar.im.ui.presenter.IChatroomInfoPresenter;
+import com.qunar.im.ui.presenter.impl.ChatroomInfoPresenter;
+import com.qunar.im.ui.presenter.views.IChatRoomInfoView;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.QtNewActionBar;

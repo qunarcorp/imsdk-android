@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.views.IChatView;
+import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.protobuf.Event.QtalkEvent;

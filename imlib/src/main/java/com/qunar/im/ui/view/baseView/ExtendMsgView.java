@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.util.DESUtils;
 import com.qunar.im.base.util.DataUtils;

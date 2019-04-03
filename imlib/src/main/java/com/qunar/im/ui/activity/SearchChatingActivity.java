@@ -11,10 +11,10 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.SearchChatingAdapter;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.ISearchChatingPresenter;
-import com.qunar.im.base.presenter.impl.SearchChatingPresenter;
-import com.qunar.im.base.presenter.views.ISearchChatingView;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.presenter.ISearchChatingPresenter;
+import com.qunar.im.ui.presenter.impl.SearchChatingPresenter;
+import com.qunar.im.ui.presenter.views.ISearchChatingView;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.ui.view.MySearchView;
 import com.qunar.im.ui.view.QtSearchActionBar;
 

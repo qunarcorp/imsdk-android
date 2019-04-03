@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.ui.R;
 import com.qunar.im.base.module.BuddyRequest;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 
 /**
  * Created by zhaokai on 15-12-9.

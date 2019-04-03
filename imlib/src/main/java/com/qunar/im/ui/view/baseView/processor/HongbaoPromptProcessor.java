@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 import com.qunar.im.base.jsonbean.HongbaoBroadcast;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;

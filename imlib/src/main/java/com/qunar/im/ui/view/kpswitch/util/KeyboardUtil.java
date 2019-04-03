@@ -34,17 +34,6 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.kpswitch.IPanelHeightTarget;
 
 
-/**
- * Created by Jacksgong on 15/7/6.
- * <p/>
- * For save the keyboard height, and provide the valid-panel-height
- * {@link #getValidPanelHeight(Context)}.
- * <p/>
- * Adapt the panel height with the keyboard height just relate
- * {@link #attach(Activity, IPanelHeightTarget)}.
- *
- * @see KeyBoardSharedPreferences
- */
 public class KeyboardUtil {
 
     public static void showKeyboard(final View view) {

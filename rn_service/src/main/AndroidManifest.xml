@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.qunar.rn_service">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <application>
+
+        <!--<activity android:name="com.qunar.im.camelhelp.HyMainActivity"-->
+            <!--android:screenOrientation="portrait">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<data-->
+                    <!--android:host="camelhelp"-->
+                    <!--android:scheme="${SCHEME}" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <!--<activity android:name="com.qunar.im.camelhelp.OpsStoreActivity"-->
+            <!--android:screenOrientation="portrait">-->
+        <!--</activity>-->
+        <!--<activity android:name="com.qunar.im.camelhelp.activity.QTalkSearchActivity"-->
+            <!--android:screenOrientation="portrait">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<data-->
+                    <!--android:host="rnsearch"-->
+                    <!--android:scheme="${SCHEME}" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
+    </application>
+
+</manifest>

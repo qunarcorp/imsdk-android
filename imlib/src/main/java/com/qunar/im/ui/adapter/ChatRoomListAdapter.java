@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.ui.R;

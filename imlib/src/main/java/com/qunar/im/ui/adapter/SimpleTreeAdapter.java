@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.qunar.im.ui.R;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.view.multilLevelTreeView.Node;
 import com.qunar.im.ui.view.multilLevelTreeView.TreeListViewAdapter;
 

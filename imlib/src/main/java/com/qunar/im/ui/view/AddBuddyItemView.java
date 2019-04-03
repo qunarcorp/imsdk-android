@@ -14,7 +14,7 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.AddAuthMessageActivity;
 import com.qunar.im.ui.activity.PersonalInfoActivity;
 import com.qunar.im.base.jsonbean.SearchUserResult;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 
 /**
  * Created by saber on 16-2-3.

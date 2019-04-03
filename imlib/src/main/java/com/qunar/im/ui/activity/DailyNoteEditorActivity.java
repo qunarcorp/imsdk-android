@@ -1,5 +1,6 @@
 package com.qunar.im.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,9 +27,9 @@ import com.qunar.im.base.common.CommonUploader;
 import com.qunar.im.base.common.DailyMindConstants;
 import com.qunar.im.base.jsonbean.DailyMindSub;
 import com.qunar.im.base.jsonbean.UploadImageResult;
-import com.qunar.im.base.presenter.IDailyMindPresenter;
-import com.qunar.im.base.presenter.impl.DailyMindPresenter;
-import com.qunar.im.base.presenter.views.IDailyMindSubView;
+import com.qunar.im.ui.presenter.IDailyMindPresenter;
+import com.qunar.im.ui.presenter.impl.DailyMindPresenter;
+import com.qunar.im.ui.presenter.views.IDailyMindSubView;
 import com.qunar.im.base.protocol.ProgressRequestListener;
 import com.qunar.im.base.transit.IUploadRequestComplete;
 import com.qunar.im.base.transit.UploadImageRequest;
@@ -299,7 +300,6 @@ public class DailyNoteEditorActivity extends SwipeBackActivity implements View.O
                 }
             }
         });
-
         builder.setView(view);
         mDialog = builder.show();
         mDialog.setCanceledOnTouchOutside(true);

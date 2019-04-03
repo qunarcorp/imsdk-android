@@ -24,11 +24,11 @@ import android.widget.TextView;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.IServiceStatePresenter;
-import com.qunar.im.base.presenter.impl.LoginPresenter;
-import com.qunar.im.base.presenter.impl.ServiceStatePresenter;
-import com.qunar.im.base.presenter.views.IServiceStateView;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.IServiceStatePresenter;
+import com.qunar.im.ui.presenter.impl.LoginPresenter;
+import com.qunar.im.ui.presenter.impl.ServiceStatePresenter;
+import com.qunar.im.ui.presenter.views.IServiceStateView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;

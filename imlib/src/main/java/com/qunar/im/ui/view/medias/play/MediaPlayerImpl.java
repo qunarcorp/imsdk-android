@@ -10,8 +10,8 @@ import android.text.TextUtils;
 
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.IHandleVoiceMsgPresenter;
-import com.qunar.im.base.presenter.impl.HandleVoiceMsgPresenter;
+import com.qunar.im.ui.presenter.IHandleVoiceMsgPresenter;
+import com.qunar.im.ui.presenter.impl.HandleVoiceMsgPresenter;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.structs.TransitSoundJSON;
 import com.qunar.im.base.util.ChatTextHelper;

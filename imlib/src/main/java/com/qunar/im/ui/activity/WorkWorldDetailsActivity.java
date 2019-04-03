@@ -16,6 +16,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -50,10 +51,11 @@ import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldDetailsLabelData;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNewCommentBean;
-import com.qunar.im.base.presenter.WorkWorldDetailsPresenter;
-import com.qunar.im.base.presenter.impl.WorkWorldDetailsManagerPresenter;
-import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
-import com.qunar.im.base.presenter.views.WorkWorldDetailsView;
+import com.qunar.im.base.module.WorkWorldOutCommentBean;
+import com.qunar.im.ui.presenter.WorkWorldDetailsPresenter;
+import com.qunar.im.ui.presenter.impl.WorkWorldDetailsManagerPresenter;
+import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
+import com.qunar.im.ui.presenter.views.WorkWorldDetailsView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.ChatTextHelper;
@@ -62,9 +64,8 @@ import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.EmotionUtils;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.MemoryCache;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.core.manager.IMLogicManager;
@@ -82,7 +83,6 @@ import com.qunar.im.ui.view.baseView.AnimatedImageSpan;
 import com.qunar.im.ui.view.baseView.processor.TextMessageProcessor;
 import com.qunar.im.ui.view.emojiconTextView.EmojiconTextView;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
-import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
@@ -105,8 +105,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
-import static com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter.REAL_NAME;
+import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
+import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.REAL_NAME;
 import static com.qunar.im.ui.activity.IdentitySelectActivity.ANONYMOUS_DATA;
 import static com.qunar.im.ui.activity.IdentitySelectActivity.now_identity_type;
 import static com.qunar.im.ui.activity.ReleaseCircleActivity.EXTRA_IDENTITY;
@@ -116,8 +116,8 @@ import static com.qunar.im.ui.activity.ReleaseCircleActivity.UUID_STR;
 public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkWorldDetailsView {
 
     public static String WORK_WORLD_DETAILS_ITEM = "WORK_WORLD_DETAILS_ITEM";
-    public static String WORK_WORLD_DETAILS_COMMENT= "WORK_WORLD_DETAILS_COMMENT";
-    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
+    public static String WORK_WORLD_DETAILS_COMMENT = "WORK_WORLD_DETAILS_COMMENT";
+    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
 
     private WorkWorldItem workWorldItem;
 
@@ -143,6 +143,8 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
     private GridSpacingItemDecoration g1;
 
     private GridSpacingItemDecoration gridSpacingItemDecoration;
+
+    private LinearLayoutManager linearLayoutManager;
 
     private int iconSize;
     private int defaultSize;
@@ -180,13 +182,14 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
     private boolean check;
 
     private boolean allIsOk;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atom_ui_work_world_details_activity);
         bindView();
 
-        if(getIntent().hasExtra(WORK_WORLD_DETAILS_COMMENT)){
-            showInput = getIntent().getBooleanExtra(WORK_WORLD_DETAILS_COMMENT,false);
+        if (getIntent().hasExtra(WORK_WORLD_DETAILS_COMMENT)) {
+            showInput = getIntent().getBooleanExtra(WORK_WORLD_DETAILS_COMMENT, false);
         }
 
         if (getIntent().hasExtra(WORK_WORLD_DETAILS_ITEM)) {
@@ -219,6 +222,8 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         bindSelfData();
         initAdapter();
         workWorldDetailsPresenter.loadingHistory();
+        qtNewActionBar.setFocusableInTouchMode(true);
+        qtNewActionBar.requestFocus();
 
     }
 
@@ -332,6 +337,9 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 Intent intent = new Intent(WorkWorldDetailsActivity.this, IdentitySelectActivity.class);
                 intent.putExtra(UUID_STR, workWorldItem.getUuid());
                 intent.putExtra(now_identity_type, identityType);
+                if (identityType == ANONYMOUS_NAME) {
+                    intent.putExtra(ANONYMOUS_DATA, mAnonymousData);
+                }
                 startActivityForResult(intent, REQUEST_CODE_IDENTITY);
 //                Intent intent = new Intent(Work.this, IdentitySelectActivity.class);
 //                startActivityForResult(intent, REQUEST_CODE_IDENTITY);
@@ -423,9 +431,12 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
     private void initAdapter() {
         workWorldDetailsAdapter = new WorkWorldDetailsAdapter(new ArrayList<MultiItemEntity>(), this);
 
-        comment_rc.setAdapter(workWorldDetailsAdapter);
-        comment_rc.setLayoutManager(new LinearLayoutManager(this));
+        workWorldDetailsAdapter.bindToRecyclerView(comment_rc);
+//        comment_rc.setAdapter(workWorldDetailsAdapter);
+        linearLayoutManager = new LinearLayoutManager(this);
+        comment_rc.setLayoutManager(linearLayoutManager);
         workWorldDetailsAdapter.addHeaderView(headView);
+        workWorldDetailsAdapter.setLinearLayoutManager(linearLayoutManager);
         workWorldDetailsAdapter.setPostOwnerAndHost(workWorldItem.getOwner(), workWorldItem.getOwnerHost());
         workWorldDetailsAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -497,7 +508,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         workWorldDetailsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                if(allIsOk){
+                if (allIsOk) {
                     loadMore();
                 }
 
@@ -635,7 +646,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
             }
 
 
-            showFunction( contentData);
+            showFunction(contentData);
             //设置图片展示
             if (contentData.getImgList().size() > 0) {
                 img_rc.setVisibility(View.VISIBLE);
@@ -716,13 +727,13 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         }
     }
 
-    private void showFunction( final ReleaseContentData contentData) {
+    private void showFunction(final ReleaseContentData contentData) {
 
         //初始情况全部控件不展示
-      img_rc.setVisibility(View.GONE);
+        img_rc.setVisibility(View.GONE);
 
         try {
-            switch (contentData.getType()){
+            switch (contentData.getType()) {
 
                 case MessageType.image:
                 default:
@@ -785,20 +796,19 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                         mRecyclerView.setLayoutManager(manager);
                         mRecyclerView.setAdapter(itemAdapter);
                     } else {
-                       img_rc.setVisibility(View.GONE);
+                        img_rc.setVisibility(View.GONE);
                     }
                     break;
             }
 
 
-
-        }catch (Exception e){
-            Logger.i("朋友圈功能展示出错:"+e.getMessage());
+        } catch (Exception e) {
+            Logger.i("朋友圈功能展示出错:" + e.getMessage());
         }
     }
 
 
-    private void setContent( ReleaseContentData contentData) {
+    private void setContent(ReleaseContentData contentData) {
 
         String exstr = contentData.getExContent();
 
@@ -870,14 +880,14 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                                     MemoryCache.addObjToMemoryCache(path, cached);
                                 } catch (IOException e) {
 //                                    LogUtil.e(TAG, "ERROR", e);
-                                    Logger.i("error:"+e.getMessage());
+                                    Logger.i("error:" + e.getMessage());
                                 } finally {
                                     if (is != null) {
                                         try {
                                             is.close();
                                         } catch (IOException e) {
 //                                            LogUtil.e(TAG, "ERROR", e);
-                                            Logger.i("error:"+e.getMessage());
+                                            Logger.i("error:" + e.getMessage());
                                         }
                                     }
                                 }
@@ -1168,6 +1178,129 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         return mAnonymousData.getData().getAnonymous();
     }
 
+
+    public class TopSmoothScroller extends LinearSmoothScroller {
+        TopSmoothScroller(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected int getHorizontalSnapPreference() {
+            return SNAP_TO_START;//具体见源码注释
+        }
+
+        @Override
+        protected int getVerticalSnapPreference() {
+            return SNAP_TO_START;//具体见源码注释
+        }
+
+    }
+
+
+    @Override
+    public void updateNewCommentData(final List<? extends MultiItemEntity> list, boolean isScroll, boolean isShowInput) {
+//        workWorldDetailsAdapter.getData()
+//        for (int i = 0; i < workWorldDetailsAdapter.getData().size(); i++) {
+//
+//        }
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    WorkWorldNewCommentBean data = (WorkWorldNewCommentBean) list.get(0);
+                    for (int i = 0; i < workWorldDetailsAdapter.getData().size(); i++) {
+                        if (workWorldDetailsAdapter.getData().get(i) instanceof WorkWorldNewCommentBean) {
+
+                            if (((WorkWorldNewCommentBean) workWorldDetailsAdapter.getData().get(i)).getCommentUUID().equals(data.getCommentUUID())) {
+//                                comment_rc.scrollToPosition(i);
+                                LinearSmoothScroller smoothScroller = new TopSmoothScroller(WorkWorldDetailsActivity.this);
+                                smoothScroller.setTargetPosition(i + workWorldDetailsAdapter.getHeaderLayoutCount());
+                                linearLayoutManager.startSmoothScroll(smoothScroller);
+//                                comment_rc.smoothScrollToPosition(i +workWorldDetailsAdapter.getHeaderLayoutCount());
+
+//                                while (comment_rc.isComputingLayout()){
+//
+//                                }
+                                changeItem(data, i);
+//                                comment_rc.scrollTo(40,0);
+//                                final int finalI = i;
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        try {
+//                                            Thread.sleep(500);
+//
+//                                        }catch (Exception e){
+//                                            Logger.i("稍等一下移动view");
+//                                        }
+////
+//                                    }
+//                                }).start();
+
+//                                        new String();
+//                                        w
+                                break;
+//
+//                                workWorldDetailsAdapter.notifyItemChanged();
+                            }
+                        }
+
+                    }
+
+                    for (int i = 0; i < allData.size(); i++) {
+                        if (allData.get(i) instanceof WorkWorldNewCommentBean) {
+                            if (((WorkWorldNewCommentBean) allData.get(i)).getCommentUUID().equals(data.getCommentUUID())) {
+//                                if(allData.size()==2){
+//                                    allData.clear();
+//                                }else{
+                                allData.remove(i);
+                                allData.add(i, data);
+
+//                                }
+
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Logger.i("有可能出错" + e.getMessage());
+                }
+            }
+        });
+
+        hiddenInput();
+
+
+    }
+
+    private void changeItem(final WorkWorldNewCommentBean data, final int i) {
+        if (comment_rc.isComputingLayout()) {
+            comment_rc.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    changeItem(data, i);
+                }
+            }, 500);
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    workWorldDetailsAdapter.getData().set(i, data);
+//                                workWorldDetailsAdapter.getData().remove(i);
+//                                workWorldDetailsAdapter.getData().add(i,data);
+//                                workWorldDetailsAdapter.notifyItemChanged(i);
+//                                workWorldDetailsAdapter.remove(i);
+//                                workWorldDetailsAdapter.addData(i,data);
+//                                workWorldDetailsAdapter.addData();
+                    workWorldDetailsAdapter.updateCommentItem(data, i);
+                }
+            });
+
+        }
+    }
+
     @Override
     public void showNewData(List<? extends MultiItemEntity> list, boolean isScroll, boolean isShowInput) {
 //
@@ -1182,15 +1315,15 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 //        }
 //        comment_send_icon.setEnabled(true);
         if (list != null) {
-            if (list.size() > 0) {
+//            if (list.size() > 0) {
                 showNewDataHandle(list, isScroll);
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+//            } else {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                });
 
 
 //                if(showInput){
@@ -1202,7 +1335,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 //                    hiddenInput();
 //                }
                 hiddenInput();
-            }
+//            }
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -1232,7 +1365,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 
         if (list != null) {
 //            if (list.size() > 0) {
-                showHotNewDataHandle(list);
+            showHotNewDataHandle(list);
 //            } else {
 //                mSwipeRefreshLayout.setRefreshing(false);
 //            }
@@ -1270,8 +1403,14 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 
 
                     if (list != null && list.size() > 0) {
+                        checkHotRepeat(list, false);
                         workWorldDetailsAdapter.addData((List<MultiItemEntity>) list);
-                        workWorldDetailsAdapter.loadMoreComplete();
+                        if(list.size()>0){
+                            workWorldDetailsAdapter.loadMoreComplete();
+                        }else{
+                            workWorldDetailsAdapter.loadMoreEnd();
+                        }
+
                     } else {
                         workWorldDetailsAdapter.loadMoreEnd();
                     }
@@ -1279,6 +1418,32 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
             });
 
         }
+    }
+
+
+    private List<? extends MultiItemEntity> checkHotRepeat(List<? extends MultiItemEntity> list, boolean cleanTip){
+//        if(hotData==null||hotData.size()==0){
+//            return list;
+//        }else{
+//            for (int i = 0; i < hotData.size(); i++) {
+//                if(hotData.get(i) instanceof  WorkWorldNewCommentBean) {
+//                    for (int j = list.size() - 1; j >= 0; j--) {
+//                        if (list.get(j) instanceof WorkWorldNewCommentBean) {
+//                            if (((WorkWorldNewCommentBean) hotData.get(i)).getCommentUUID().equals(((WorkWorldNewCommentBean) list.get(j)).getCommentUUID())) {
+//                                list.remove(j);
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            if(cleanTip&&list.size()==1) {
+//                list.remove(0);
+//            }
+//                return list;
+//        }
+
+        return list;
     }
 
 
@@ -1295,27 +1460,29 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 @Override
                 public void run() {
 //                    datalist= list;
-                    if(list.size()>0) {
+                    if (list.size() > 0) {
 
 
                         WorkWorldDetailsLabelData commentDetails = new WorkWorldDetailsLabelData();
-                        commentDetails.setName("最热评论");
+                        commentDetails.setName("热评");
                         commentDetails.setCount(0);
                         ((List<MultiItemEntity>) list).add(0, commentDetails);
                     }
-                        try {
-                            hotData = deepcopy(list);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        ((List<MultiItemEntity>) list).addAll(allData);
+                    try {
+                        hotData = deepcopy(list);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
-                        workWorldDetailsAdapter.setNewData((List<MultiItemEntity>) list);
-
-                        comment_rc.scrollToPosition(0);
-                        mSwipeRefreshLayout.setRefreshing(false);
+                    ((List<MultiItemEntity>) list).addAll(checkHotRepeat(allData, true));
+                    //此处-1是为了确定元素下标
+                    workWorldDetailsAdapter.setDeleteLine(hotData.size()-1);
+                    workWorldDetailsAdapter.setNewData((List<MultiItemEntity>) list);
+                    workWorldDetailsAdapter.loadMoreComplete();
+                    comment_rc.scrollToPosition(0);
+                    mSwipeRefreshLayout.setRefreshing(false);
 
 
                     hiddenInput();
@@ -1339,15 +1506,18 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 public void run() {
 //                    datalist= list;
                     WorkWorldDetailsLabelData commentDetails = new WorkWorldDetailsLabelData();
-                    commentDetails.setName("全部评论");
+                    commentDetails.setName("评论");
                     commentDetails.setType(WorkWorldDetailsLabelData.all);
                     if (commentNum >= 0) {
                         commentDetails.setCount(commentNum);
                     } else {
                         commentDetails.setCount(Integer.parseInt(workWorldItem.getCommentsNum()));
                     }
-                    ((List<MultiItemEntity>) list).add(0, commentDetails);
-                    if(!allIsOk){
+                    if(list.size()>0){
+                        ((List<MultiItemEntity>) list).add(0, commentDetails);
+                    }
+
+                    if (!allIsOk) {
                         allIsOk = true;
                     }
                     try {
@@ -1357,8 +1527,10 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
+                    checkHotRepeat(list, true);
                     ((List<MultiItemEntity>) list).addAll(0, hotData);
                     workWorldDetailsAdapter.setNewData((List<MultiItemEntity>) list);
+                    workWorldDetailsAdapter.loadMoreComplete();
                     if (isScroll) {
                         switch (hotData.size()) {
                             case 2:
@@ -1452,32 +1624,63 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
+
+                    if (TextUtils.isEmpty(deleteWorkWorldItem.getData().getDeleteCommentData().getSuperParentCommentUUID())) {
 
 
-                for (int i = 0; i < workWorldDetailsAdapter.getData().size(); i++) {
-                    if (workWorldDetailsAdapter.getData().get(i) instanceof WorkWorldNewCommentBean) {
-                        if (((WorkWorldNewCommentBean) workWorldDetailsAdapter.getData().get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getCommentUUID())) {
-                            workWorldDetailsAdapter.remove(i);
+                        for (int i = 0; i < workWorldDetailsAdapter.getData().size(); i++) {
+                            if (workWorldDetailsAdapter.getData().get(i) instanceof WorkWorldNewCommentBean) {
+                                if (((WorkWorldNewCommentBean) workWorldDetailsAdapter.getData().get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getDeleteCommentData().getCommentUUID())) {
+                                    workWorldDetailsAdapter.deleteCommentItem(i,deleteWorkWorldItem.getData().getDeleteCommentData());
+//                                    workWorldDetailsAdapter.remove(i);
+                                }
+                            }
+
                         }
-                    }
-
-                }
-
-                for (int i = 0; i < allData.size(); i++) {
-                    if(allData.get(i) instanceof  WorkWorldNewCommentBean){
-                        if(((WorkWorldNewCommentBean) allData.get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getCommentUUID())){
-                            if(allData.size()==2){
-                                allData.clear();
-                            }else{
-                                allData.remove(i);
+                    } else {
+                        for (int i = 0; i < workWorldDetailsAdapter.getData().size(); i++) {
+                            if (workWorldDetailsAdapter.getData().get(i) instanceof WorkWorldNewCommentBean) {
+                                if (((WorkWorldNewCommentBean) workWorldDetailsAdapter.getData().get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getDeleteCommentData().getSuperParentCommentUUID())) {
+                                    workWorldDetailsAdapter.deleteCommentItem(i,deleteWorkWorldItem.getData().getDeleteCommentData());
+//                                    workWorldDetailsAdapter.remove(i);
+                                }
                             }
 
                         }
                     }
-                }
-                }catch (Exception e){
-                    Logger.i("有可能出错"+e.getMessage());
+
+//                    if (TextUtils.isEmpty(deleteWorkWorldItem.getData().getDeleteCommentData().getSuperParentCommentUUID())) {
+//                        for (int i = 0; i < allData.size(); i++) {
+//                            if (allData.get(i) instanceof WorkWorldNewCommentBean) {
+//                                if (((WorkWorldNewCommentBean) allData.get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getDeleteCommentData().getCommentUUID())) {
+//                                    if (allData.size() == 2) {
+//                                        allData.clear();
+//                                    } else {
+//                                        allData.remove(i);
+//                                    }
+//
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        for (int i = 0; i < allData.size(); i++) {
+//                            if (allData.get(i) instanceof WorkWorldNewCommentBean) {
+//                                if (((WorkWorldNewCommentBean) allData.get(i)).getCommentUUID().equals(deleteWorkWorldItem.getData().getDeleteCommentData().getSuperParentCommentUUID())) {
+//                                    if (allData.size() == 2) {
+//                                        allData.clear();
+//                                    } else {
+//                                        allData.remove(i);
+//                                    }
+//
+//                                }
+//                            }
+//                        }
+//                    }
+
+
+                } catch (Exception e) {
+                    Logger.i("有可能出错" + e.getMessage());
                 }
             }
         });
@@ -1506,10 +1709,9 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                 } else {
                     comment_like_num.setText("顶");
                 }
-                workWorldItem.setLikeNum(likeNum+"");
+                workWorldItem.setLikeNum(likeNum + "");
             }
         });
-
 
 
     }
@@ -1518,7 +1720,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
     public void updateCommentNum(final int num) {
         this.commentNum = num;
 
-        workWorldItem.setCommentsNum(commentNum+"");
+        workWorldItem.setCommentsNum(commentNum + "");
 
         runOnUiThread(new Runnable() {
             @Override
@@ -1529,15 +1731,15 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
                             if (((WorkWorldDetailsLabelData) workWorldDetailsAdapter.getData().get(i)).getType() == WorkWorldDetailsLabelData.all) {
                                 ((WorkWorldDetailsLabelData) workWorldDetailsAdapter.getData().get(i)).setCount(num);
                                 LinearLayoutManager l = (LinearLayoutManager) comment_rc.getLayoutManager();
-                                if(l.findFirstCompletelyVisibleItemPosition()<=(i+1)&&(i+1)<=l.findLastVisibleItemPosition()){
+                                if (l.findFirstCompletelyVisibleItemPosition() <= (i + 1) && (i + 1) <= l.findLastVisibleItemPosition()) {
                                     workWorldDetailsAdapter.notifyItemChanged(i + 1);
                                 }
 
                             }
                         }
                     }
-                }catch (Exception e){
-                    Logger.i("删除评论更新数量可能会出错"+e.getMessage());
+                } catch (Exception e) {
+                    Logger.i("删除评论更新数量可能会出错" + e.getMessage());
                 }
 
 
@@ -1549,23 +1751,29 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
 
     @Override
     public void updateLikeState(final int isLike) {
-     runOnUiThread(new Runnable() {
-         @Override
-         public void run() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-             if (isLike ==1) {
-                 comment_like_icon.setTextColor(getResources().getColor(R.color.atom_ui_new_like_select));
-                 comment_like_icon.setText(R.string.atom_ui_new_like_select);
+                if (isLike == 1) {
+                    comment_like_icon.setTextColor(getResources().getColor(R.color.atom_ui_new_like_select));
+                    comment_like_icon.setText(R.string.atom_ui_new_like_select);
 //            #00CABE
 
-             } else {
-                 comment_like_icon.setText(R.string.atom_ui_new_like);
-                 comment_like_icon.setTextColor(getResources().getColor(R.color.atom_ui_light_gray_99));
-             }
+                } else {
+                    comment_like_icon.setText(R.string.atom_ui_new_like);
+                    comment_like_icon.setTextColor(getResources().getColor(R.color.atom_ui_light_gray_99));
+                }
 
-             workWorldItem.setIsLike(isLike+"");
-         }
-     });
+                workWorldItem.setIsLike(isLike + "");
+            }
+        });
+
+    }
+
+    @Override
+    public void updateOutCommentList(List<? extends MultiItemEntity> list) {
+        workWorldItem.setAttachCommentList((List<WorkWorldOutCommentBean>) list);
 
     }
 
@@ -1605,7 +1813,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements WorkW
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(refresh){
+                if (refresh) {
                     comment_send_icon.setEnabled(refresh);
                 }
                 Toast.makeText(WorkWorldDetailsActivity.this, str, Toast.LENGTH_SHORT).show();

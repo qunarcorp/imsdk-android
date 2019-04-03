@@ -14,8 +14,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.qunar.im.base.presenter.IChangeBuddyPrivacySetting;
-import com.qunar.im.base.presenter.impl.BuddyPrivacySettingPresenter;
+import com.qunar.im.ui.presenter.IChangeBuddyPrivacySetting;
+import com.qunar.im.ui.presenter.impl.BuddyPrivacySettingPresenter;
 import com.qunar.im.ui.R;
 
 

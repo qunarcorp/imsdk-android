@@ -22,12 +22,12 @@ import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.ReleaseCircleImageItemDate;
 import com.qunar.im.base.module.ReleaseCircleNoChangeItemDate;
 import com.qunar.im.base.module.WorkWorldItem;
-import com.qunar.im.base.presenter.ReleaseCirclePresenter;
-import com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter;
-import com.qunar.im.base.presenter.views.ReleaseCircleView;
+import com.qunar.im.ui.presenter.ReleaseCirclePresenter;
+import com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter;
+import com.qunar.im.ui.presenter.views.ReleaseCircleView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.IMUserDefaults;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -46,13 +46,11 @@ import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static com.qunar.im.base.module.ReleaseCircleType.TYPE_UNCLICKABLE;
-import static com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
-import static com.qunar.im.base.presenter.impl.ReleaseCircleManagerPresenter.REAL_NAME;
+import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
+import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.REAL_NAME;
 import static com.qunar.im.ui.activity.IdentitySelectActivity.ANONYMOUS_DATA;
 import static com.qunar.im.ui.activity.IdentitySelectActivity.now_identity_type;
 
@@ -97,6 +95,7 @@ public class ReleaseCircleActivity extends SwipeBackActivity implements ReleaseC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atom_ui_activity_release_circle);
         bindView();
+
         bindData();
     }
 
@@ -319,6 +318,9 @@ public class ReleaseCircleActivity extends SwipeBackActivity implements ReleaseC
                 Intent intent = new Intent(ReleaseCircleActivity.this, IdentitySelectActivity.class);
                 intent.putExtra(UUID_STR, releaseCirclePresenter.getUUID());
                 intent.putExtra(now_identity_type, identityType);
+                if(identityType == ANONYMOUS_NAME){
+                    intent.putExtra(ANONYMOUS_DATA,mAnonymousData);
+                }
                 startActivityForResult(intent, REQUEST_CODE_IDENTITY);
             }
         });
@@ -463,7 +465,7 @@ public class ReleaseCircleActivity extends SwipeBackActivity implements ReleaseC
 
     @Override
     public String getContent() {
-        return release_text.getText().toString();
+        return release_text.getText().toString().trim();
     }
 
     @Override

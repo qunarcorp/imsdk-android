@@ -2,7 +2,7 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;

@@ -30,17 +30,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- * 来自网络copy
- *
- * 作者: 陈涛
- *
- * 日期: 2014年8月20日
- *
- * 描述: 该类主要负责设置相机的参数信息，获取最佳的预览界面
- *
- */
 public final class CameraConfigurationManager {
 
 	private static final String TAG = "CameraConfiguration";

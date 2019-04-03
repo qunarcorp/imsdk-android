@@ -14,14 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.adapter.BaseInfoAdapter;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.PublishPlatform;
-import com.qunar.im.base.presenter.impl.RobotListPresenter;
-import com.qunar.im.base.presenter.impl.SearchPublishPlatformPresenter;
-import com.qunar.im.base.presenter.views.ISearchPresenter;
+import com.qunar.im.ui.presenter.impl.RobotListPresenter;
+import com.qunar.im.ui.presenter.impl.SearchPublishPlatformPresenter;
+import com.qunar.im.ui.presenter.views.ISearchPresenter;
 import com.qunar.im.ui.R;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.im.base.util.Utils;

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.qunar.im.base.jsonbean.EncryptMsg;
 import com.qunar.im.base.jsonbean.ShareLocation;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;

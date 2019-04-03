@@ -19,9 +19,9 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.factory.LoginFactory;
-import com.qunar.im.base.presenter.views.ILoginView;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.factory.LoginFactory;
+import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.EventBusEvent;

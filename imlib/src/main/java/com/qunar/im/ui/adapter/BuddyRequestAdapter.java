@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.qunar.im.base.module.BuddyRequest;
-import com.qunar.im.base.presenter.views.IAnswerForResultView;
+import com.qunar.im.ui.presenter.views.IAnswerForResultView;
 import com.qunar.im.ui.view.baseView.BuddyRequestView;
 
 import java.util.ArrayList;

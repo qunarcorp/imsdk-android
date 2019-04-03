@@ -10,10 +10,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.module.UserConfigData;
 import com.qunar.im.base.util.EmotionUtils;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.ui.R;
 
 import java.io.File;

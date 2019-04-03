@@ -1,13 +1,10 @@
 package com.qunar.im.ui.schema;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.WorkWorldActivity;
-import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.Map;
 

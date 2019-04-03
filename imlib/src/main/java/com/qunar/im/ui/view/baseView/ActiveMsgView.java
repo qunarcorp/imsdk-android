@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.jsonbean.ActivityMessageEntity;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;

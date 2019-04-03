@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.qunar.im.base.jsonbean.HongbaoContent;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
@@ -41,7 +41,7 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                         QtalkStringUtils.parseLocalpart(item.getMessage().getToID()):
                         QtalkStringUtils.parseLocalpart(item.getMessage().getFromID());
                 sb.append("&username=").append(username).append("&sign=")
-                        .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
+                        .append(BinaryUtil.MD5(username + ""))
                         .append("&company=qunar&")
                         .append("user_id=")
                         .append(user_id)
@@ -50,7 +50,7 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             } else {
                 sb.append("&username=").append(username).append("&sign=")
-                        .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
+                        .append(BinaryUtil.MD5(username + ""))
                         .append("&company=qunar&")
                         .append("group_id=")
                         .append(QtalkStringUtils.parseBareJid(item.getMessage().getConversationID()))

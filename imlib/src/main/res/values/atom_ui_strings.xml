@@ -829,4 +829,6 @@
 
     <string name="atom_ui_privacy_policy">Agree《Terms and Policies》</string>
     <string name="atom_ui_input_user_mobile">Input account</string>
+    <string name="atom_ui_modify">Modify</string>
+    <string name="atom_ui_nav_qrcode_share">Share the QR code to your team members\n invite them to join</string>
 </resources>

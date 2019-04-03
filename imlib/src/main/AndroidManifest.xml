@@ -6,9 +6,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application>
-        <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="QA2f4zzfai5Ncbc7Pc3D8GIjWBFsTRqi" />-->
 
         <meta-data
             android:name="com.qunar.im.ui.util.glide.QtalkGlideModule"
@@ -53,7 +50,14 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustPan"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="startalk" android:host="start_nav_config" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.qunar.im.ui.activity.QtalkUserHostActivity"
             android:screenOrientation="portrait"
@@ -288,14 +292,17 @@
             android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.NavConfigActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/AtomSplashTheme"/>
 
         <activity
             android:name="com.qunar.im.ui.activity.NavConfigQRActivity"
-            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/AtomSplashTheme"/>
+
+        <activity android:name="com.qunar.im.ui.activity.NavConfigAddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/AtomSplashTheme"/>
@@ -391,6 +398,10 @@
         <activity android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
+        <activity android:name="com.qunar.im.ui.activity.QtalkOpenTravelCalendar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+
         <activity android:name=".activity.IdentitySelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme"
@@ -416,31 +427,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme"
             />
-        <!--<activity-->
-        <!--android:name="com.qunar.im.rtc.scheme.QchatSchemeActivity">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE"/>-->
-        <!--<data android:scheme="${SCHEME}" android:host="qcrtc" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
         <service
             android:name="com.qunar.im.ui.services.PullPatchService"
             android:exported="false" />
         <service
-            android:name="com.qunar.im.core.services.PullPasswordBoxService"
+            android:name=".services.PullPasswordBoxService"
             android:exported="false" />
         <service
             android:name="com.qunar.im.core.services.ClearLogService"
             android:exported="false" />
         <service android:name="com.qunar.im.core.services.FeedBackServcie"
             android:exported="false" />
-        <!--<service android:name="com.qunar.im.ui.services.JobHandlerService"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="true"-->
-        <!--android:process="push"-->
-        <!--android:permission="android.permission.BIND_JOB_SERVICE"/>-->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -449,10 +446,6 @@
         <receiver
             android:name="com.qunar.im.ui.broadcastreceivers.ConnectionStateReceiver"
             android:label="NetworkConnStatusChgd">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-            <!--<action android:name="android.intent.action.SCREEN_ON" />-->
-            <!--</intent-filter>-->
         </receiver>
         <receiver android:name="com.qunar.im.ui.broadcastreceivers.PushReceiver">
             <intent-filter>

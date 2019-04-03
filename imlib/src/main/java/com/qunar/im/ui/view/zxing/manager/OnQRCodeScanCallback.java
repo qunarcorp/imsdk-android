@@ -1,10 +1,5 @@
 package com.qunar.im.ui.view.zxing.manager;
 
-/**
- * 二维码扫描结果回调
- * Created by HDL on 2017/6/28.
- */
-
 public interface OnQRCodeScanCallback {
     /**
      * 扫描完成的时候会回调此方法，结果存在于result中

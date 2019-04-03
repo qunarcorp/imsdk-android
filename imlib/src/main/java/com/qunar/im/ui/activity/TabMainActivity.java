@@ -13,6 +13,8 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,8 +22,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,17 +31,19 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.facebook.react.modules.core.PermissionAwareActivity;
+import com.facebook.react.modules.core.PermissionListener;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.IMainPresenter;
-import com.qunar.im.base.presenter.factory.LoginFactory;
-import com.qunar.im.base.presenter.impl.MainPresenter;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
-import com.qunar.im.base.presenter.views.ILoginView;
-import com.qunar.im.base.presenter.views.IMainView;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.IMainPresenter;
+import com.qunar.im.ui.presenter.factory.LoginFactory;
+import com.qunar.im.ui.presenter.impl.MainPresenter;
+import com.qunar.im.base.common.ConversitionType;
+import com.qunar.im.ui.presenter.views.ILoginView;
+import com.qunar.im.ui.presenter.views.IMainView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.shortutbadger.ShortcutBadger;
 import com.qunar.im.base.util.Constants;
@@ -119,12 +121,14 @@ import static com.qunar.im.common.CommonConfig.globalContext;
  * 新版本ui 创建新MainActivity
  */
 
-public class TabMainActivity extends IMBaseActivity implements PermissionCallback, IMainView, PopupMenu.OnMenuItemClickListener,DefaultHardwareBackBtnHandler {
+public class TabMainActivity extends IMBaseActivity implements PermissionCallback, IMainView, PopupMenu.OnMenuItemClickListener,DefaultHardwareBackBtnHandler,PermissionAwareActivity {
 
 
     private static final int CHECK_UPDATE = PermissionDispatcher.getRequestCode();
     private static final int SCAN_REQUEST = PermissionDispatcher.getRequestCode();
     private static final int LOCATION_REQUIRE = PermissionDispatcher.getRequestCode();
+    private PermissionListener mPermissionListener;
+
 
     //tab标签页
     private CommonTabLayout mCommonTabLayou;
@@ -657,6 +661,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         mFragments.add(conversationFragment);
 
         //判断是qtalk 添加日历页
+        Logger.i("确定当前启动为什么版本"+GlobalConfigManager.isQtalkPlat());
         if(GlobalConfigManager.isQtalkPlat()){
             mFragments.add(new RNCalendarFragment());
         }
@@ -847,6 +852,20 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         }
     }
 
+    @Override
+    public void requestPermissions(String[] permissions, int requestCode, PermissionListener listener) {
+        mPermissionListener = listener;
+        ActivityCompat.requestPermissions(this, permissions, requestCode);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(mPermissionListener!=null){
+            mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }
 
     /**
      * 简单pagerview适配器

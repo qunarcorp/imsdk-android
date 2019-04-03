@@ -8,10 +8,9 @@ import android.widget.LinearLayout;
 
 import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.base.module.ReleaseCircleNoChangeItemDate;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.activity.ReleaseCircleActivity;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.util.Utils;

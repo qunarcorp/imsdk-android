@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
-import com.qunar.im.base.common.FacebookImageUtil;
-import com.qunar.im.base.presenter.IRobotInfoPresenter;
-import com.qunar.im.base.presenter.impl.RobotInfoPresenter;
-import com.qunar.im.base.presenter.views.IRobotInfoView;
+import com.qunar.im.ui.util.FacebookImageUtil;
+import com.qunar.im.ui.presenter.IRobotInfoPresenter;
+import com.qunar.im.ui.presenter.impl.RobotInfoPresenter;
+import com.qunar.im.ui.presenter.views.IRobotInfoView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.ui.R;

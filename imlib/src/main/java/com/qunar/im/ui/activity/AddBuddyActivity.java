@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.AddBuddyViewAdapter;
 import com.qunar.im.base.jsonbean.SearchUserResult;
-import com.qunar.im.base.presenter.IFindBuddyPresenter;
-import com.qunar.im.base.presenter.impl.FindBuddyPresenter;
-import com.qunar.im.base.presenter.views.IFindBuddyView;
+import com.qunar.im.ui.presenter.IFindBuddyPresenter;
+import com.qunar.im.ui.presenter.impl.FindBuddyPresenter;
+import com.qunar.im.ui.presenter.views.IFindBuddyView;
 import com.qunar.im.ui.view.QtNewActionBar;
 
 import java.util.List;

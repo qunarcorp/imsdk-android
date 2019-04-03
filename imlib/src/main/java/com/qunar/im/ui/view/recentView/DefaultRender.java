@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.qunar.im.base.module.RecentConversation;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.QtalkStringUtils;
 
 

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;

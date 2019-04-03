@@ -10,7 +10,7 @@ import com.qunar.im.ui.activity.ShareLocationActivity;
 import com.qunar.im.base.jsonbean.ShareLocationExtendInfo;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.ViewPool;
 

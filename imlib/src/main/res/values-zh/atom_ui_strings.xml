@@ -820,7 +820,7 @@
 
     <string name="atom_ui_tab_trip">日程</string>
 
-    <string name="atom_ui_look_forward">暂不支持，敬请期待!</string>
+    <string name="atom_ui_look_forward">暂不支持</string>
     <string name="atom_ui_copy_message_content">消息内容</string>
     <string name="atom_ui_release_circle">发布工作圈</string>
 
@@ -831,7 +831,9 @@
     <string name="atom_ui_sms_code_hint">请输入短信验证码</string>
     <string name="atom_ui_get_verify_code">获取验证码</string>
 
-    <string name="atom_ui_privacy_policy">同意《条款和政策》</string>
+    <string name="atom_ui_privacy_policy">同意《使用条款和隐私政策》</string>
     <string name="atom_ui_input_user_mobile">请输入用户名/手机号</string>
+    <string name="atom_ui_modify">修改</string>
+    <string name="atom_ui_nav_qrcode_share">将二维码分享给您的团队成员\n快来邀请他们加入吧</string>
 
 </resources>

@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.qunar.im.base.jsonbean.DailyMindSub;
-import com.qunar.im.base.presenter.IDailyMindPresenter;
+import com.qunar.im.ui.presenter.IDailyMindPresenter;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.DailyPasswordBoxSubActivity;
 import com.qunar.im.ui.activity.DailyPasswordBoxSubEditActivity;

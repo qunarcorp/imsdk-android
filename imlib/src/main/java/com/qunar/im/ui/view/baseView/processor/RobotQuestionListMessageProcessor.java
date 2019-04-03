@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.RbtSuggestionListJson;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.views.IChatView;
+import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.base.protocol.HttpRequestCallback;
 import com.qunar.im.base.protocol.HttpUrlConnectionHandler;
 import com.qunar.im.base.protocol.Protocol;
@@ -170,12 +170,6 @@ public class RobotQuestionListMessageProcessor extends DefaultMessageProcessor {
         bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
                 .setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
 
-
-//        ---------------------
-//                作者：HZWei7
-//        来源：CSDN
-//        原文：https://blog.csdn.net/hzw2017/article/details/80275098
-//        版权声明：本文为博主原创文章，转载请附上博文链接！
     }
 
     private void showPopWindow(Context context) {

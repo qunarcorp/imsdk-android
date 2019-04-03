@@ -9,9 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.qunar.im.base.module.MultiItemEntity;
-import com.qunar.im.base.presenter.impl.CollectionPresenter;
-import com.qunar.im.base.presenter.views.ICollectionPresenter;
-import com.qunar.im.base.presenter.views.ICollectionView;
+import com.qunar.im.ui.presenter.impl.CollectionPresenter;
+import com.qunar.im.ui.presenter.views.ICollectionPresenter;
+import com.qunar.im.ui.presenter.views.ICollectionView;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;

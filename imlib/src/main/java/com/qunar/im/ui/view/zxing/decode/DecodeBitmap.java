@@ -17,9 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 
-/**
- * Created by HDL on 2017/6/27.
- */
 
 public class DecodeBitmap {
     private static final String TAG = DecodeBitmap.class.getSimpleName();

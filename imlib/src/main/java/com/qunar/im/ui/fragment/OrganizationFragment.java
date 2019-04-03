@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.presenter.views.IOrganizationView;
+import com.qunar.im.ui.presenter.views.IOrganizationView;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.ui.R;

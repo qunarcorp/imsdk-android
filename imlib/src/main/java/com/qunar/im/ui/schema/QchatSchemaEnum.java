@@ -47,7 +47,11 @@ public enum QchatSchemaEnum {
     openGroupChatInfo(QOpenGroupChatInfoSchemaImpl.getInstance(),"/openGroupChatInfo"),
     openAccountSwitch(QAccountSwitchSchemaImpl.getInstance(),"/accountSwitch"),
     openDownLoad(QOpenFileDownLoadImpl.instance,"/openDownLoad"),
+    openScan(QOpenScanImpl.getInstance(),"/openScan"),
+    openNoteBook(QOpenNoteBook.getInstance(),"/openNoteBook"),
+    openTravelCalendar(QOpenTravelCalendarImpl.getInstance(),"/openTravelCalendar"),
     openHeadLine(QOpenHeadLineSchemaImpl.getInstance(),"/headLine");
+
 
 
 

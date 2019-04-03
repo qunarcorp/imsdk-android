@@ -10,7 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -19,26 +21,28 @@ import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
-import android.util.Base64;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.ImageItemWorkWorldItem;
+import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.ReleaseContentData;
 import com.qunar.im.base.module.SetLikeData;
 import com.qunar.im.base.module.SetLikeDataResponse;
 import com.qunar.im.base.module.WorkWorldItem;
-import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
+import com.qunar.im.base.module.WorkWorldOutCommentBean;
+import com.qunar.im.base.module.WorkWorldOutOpenDetails;
+import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.structs.MessageType;
+import com.qunar.im.base.structs.WorkWorldItemState;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
@@ -47,26 +51,20 @@ import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.MemoryCache;
-import com.qunar.im.base.util.MessageUtils;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.ImageBrowersingActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
-import com.qunar.im.ui.activity.WorkWorldDetailsActivity;
 import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.view.GridSpacingItemDecoration;
 import com.qunar.im.ui.view.IconView;
-import com.qunar.im.ui.view.LinkMovementClickMethod;
-import com.qunar.im.ui.view.LoadingImgView;
 import com.qunar.im.ui.view.baseView.AnimatedGifDrawable;
 import com.qunar.im.ui.view.baseView.AnimatedImageSpan;
-import com.qunar.im.ui.view.baseView.ViewPool;
 import com.qunar.im.ui.view.baseView.processor.TextMessageProcessor;
 import com.qunar.im.ui.view.emojiconTextView.EmojiconTextView;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
@@ -88,14 +86,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static android.app.Activity.DEFAULT_KEYS_DIALER;
-import static com.qunar.im.ui.activity.WorkWorldDetailsActivity.WORK_WORLD_DETAILS_COMMENT;
-import static com.qunar.im.ui.activity.WorkWorldDetailsActivity.WORK_WORLD_DETAILS_ITEM;
-
 public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHolder> {
 
     private String plusImg = "https://qt.qunar.com/file/v2/download/temp/new/f798efc14a64e9abb7a336e8de283e5e.png?name=f798efc14a64e9abb7a336e8de283e5e.png&amp;file=file/f798efc14a64e9abb7a336e8de283e5e.png&amp;FileName=file/f798efc14a64e9abb7a336e8de283e5e.png";
-    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
+    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
     private Activity mActivity;
 
     private final int MAX_LINE_COUNT = 4;//最大显示行数
@@ -225,7 +219,7 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
 
                     ((TextView) helper.getView(R.id.text_content)).setMaxLines(Integer.MAX_VALUE);//设置文本的最大行数，为整数的最大数值
 //                    if (!TextUtils.isEmpty(contentData.getContent())) {
-                    setContent(helper, contentData);
+                    setContent(helper, contentData, Integer.parseInt(item.getPostType()));
 
 //                    }
 
@@ -247,7 +241,7 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
                             break;
                     }
 //                    if (!TextUtils.isEmpty(contentData.getContent())) {
-                    setContent(helper, contentData);
+                    setContent(helper, contentData, Integer.parseInt(item.getPostType()));
 //                    }
 
                 }
@@ -329,8 +323,6 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
 
 
             showFunction(helper, contentData);
-
-
 
 
             helper.getView(R.id.comment_layout).setOnClickListener(openDetailsListener);
@@ -441,10 +433,76 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
             mActivity.registerForContextMenu(helper.getView(R.id.right_special));
 
 
+            showOutCommentList(helper, item);
+
+
+//            WorkWorldDetailsAdapter outAdapter = new WorkWorldDetailsAdapter(item.getAttachCommentList(), mActivity);
+//            outAdapter.setOnOpenDetailsListener(openDetailsListener);
+//            outAdapter.setWorkWorldItem(item);
+//            ((RecyclerView) helper.getView(R.id.out_comment_rc)).setLayoutManager(new LinearLayoutManager(mActivity));
+//            ((RecyclerView) helper.getView(R.id.out_comment_rc)).setAdapter(outAdapter);
+////            helper.getView(R.id.more_layout).setOnClickListener(openDetailsListener);
+//            helper.getView(R.id.more_layout).setTag(item);
+
+
         } catch (Exception e) {
             Logger.i("朋友圈列表页出错:" + e.getMessage());
         }
 
+    }
+
+    private void showOutCommentList(BaseViewHolder helper, WorkWorldItem item) {
+        //判断如何展示外部评论
+        if (item.getAttachCommentList() != null && item.getAttachCommentList().size() > 0) {
+            helper.getView(R.id.out_comment_rc).setVisibility(View.VISIBLE);
+
+
+        } else {
+            helper.getView(R.id.out_comment_rc).setVisibility(View.GONE);
+
+//                helper.getView(R.id.out_comment_rc).setVisibility(View.GONE);
+            if (!TextUtils.isEmpty(item.getAttachCommentListString())) {
+
+
+                List<WorkWorldOutCommentBean> outList = JsonUtils.getGson().fromJson(item.getAttachCommentListString(), new TypeToken<List<WorkWorldOutCommentBean>>() {
+                }.getType());
+                item.setAttachCommentList(outList);
+                if (item.getAttachCommentList() != null && item.getAttachCommentList().size() > 0) {
+                    helper.getView(R.id.out_comment_rc).setVisibility(View.VISIBLE);
+
+
+                } else {
+                    item.setAttachCommentList(new ArrayList<WorkWorldOutCommentBean>());
+                    helper.getView(R.id.out_comment_rc).setVisibility(View.GONE);
+                }
+            } else {
+                item.setAttachCommentList(new ArrayList<WorkWorldOutCommentBean>());
+                helper.getView(R.id.out_comment_rc).setVisibility(View.GONE);
+            }
+        }
+
+        List<MultiItemEntity> list = new ArrayList<>();
+        list.addAll(item.getAttachCommentList());
+        if (Integer.parseInt(item.getCommentsNum()) > 5) {
+//                helper.getView(R.id.more_layout).setVisibility(View.VISIBLE);
+//                ((TextView) helper.getView(R.id.more_text)).setText("查看全部" + item.getCommentsNum() + "条评论");
+//            if (!(item.getAttachCommentList().get(item.getAttachCommentList().size() - 1) instanceof WorkWorldOutOpenDetails)) {
+
+
+            WorkWorldOutOpenDetails workWorldOutOpenDetails = new WorkWorldOutOpenDetails();
+            ((WorkWorldOutOpenDetails) workWorldOutOpenDetails).setText("查看全部" + item.getCommentsNum() + "条评论");
+            list.add(workWorldOutOpenDetails);
+//                item.getAttachCommentList().add(workWorldOutOpenDetails);
+//                item.setAttachCommentList(list);
+//            }
+
+
+        }
+        WorkWorldDetailsAdapter outAdapter = new WorkWorldDetailsAdapter(list, mActivity);
+        outAdapter.setOnOpenDetailsListener(openDetailsListener);
+        outAdapter.setWorkWorldItem(item);
+        ((RecyclerView) helper.getView(R.id.out_comment_rc)).setLayoutManager(new LinearLayoutManager(mActivity));
+        ((RecyclerView) helper.getView(R.id.out_comment_rc)).setAdapter(outAdapter);
     }
 
     private void showFunction(BaseViewHolder helper, final ReleaseContentData contentData) {
@@ -453,7 +511,7 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
         helper.getView(R.id.img_rc).setVisibility(View.GONE);
 
         try {
-            switch (contentData.getType()){
+            switch (contentData.getType()) {
 
                 case MessageType.image:
                 default:
@@ -522,25 +580,43 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
             }
 
 
-
-        }catch (Exception e){
-            Logger.i("朋友圈功能展示出错:"+e.getMessage());
+        } catch (Exception e) {
+            Logger.i("朋友圈功能展示出错:" + e.getMessage());
         }
     }
 
-    private void setContent(BaseViewHolder helper, ReleaseContentData contentData) {
+    private void setContent(BaseViewHolder helper, ReleaseContentData contentData, int postType) {
 
         String exstr = contentData.getExContent();
 
 
         EmojiconTextView textView = ((EmojiconTextView) helper.getView(R.id.text_content));
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+
+        //判断如何展示标签
+        //置顶
+//        helper.getView(R.id.workworld_top).setVisibility(View.GONE);
+        if (MessageStatus.isExistStatus(postType, WorkWorldItemState.top)) {
+            sb.append(Html.fromHtml("<font color='#389CFE'>[置顶] </font>"));
+//            helper.getView(R.id.workworld_top).setVisibility(View.VISIBLE);
+        }
+
+        //热帖
+//        helper.getView(R.id.workworld_hot).setVisibility(View.GONE);
+        if (MessageStatus.isExistStatus(postType, WorkWorldItemState.hot)) {
+//            helper.getView(R.id.workworld_hot).setVisibility(View.VISIBLE);
+            sb.append(Html.fromHtml("<font color='#FF6916'>[热帖] </font>"));
+        }
+
+
         if (TextUtils.isEmpty(exstr)) {
 //            str = contentData.getContent();
-            textView.setText(contentData.getContent());
+            sb.append(contentData.getContent());
+            textView.setText(sb);
             return;
         }
         boolean newTextView = true;
-        SpannableStringBuilder sb = new SpannableStringBuilder();
+//        SpannableStringBuilder sb = new SpannableStringBuilder();
         List<Map<String, String>> list = ChatTextHelper.getObjList(exstr);
         for (Map<String, String> map : list) {
             switch (map.get("type")) {
@@ -795,6 +871,50 @@ public class WorkWorldAdapter extends BaseQuickAdapter<WorkWorldItem, BaseViewHo
 
         return preImageList;
     }
+
+//    public static String ToDBC(String input) {
+//        char[] c = input.toCharArray();
+//        for (int i = 0; i < c.length; i++) {
+//            if (c[i] == 12288) {
+//                c[i] = (char) 32;
+//                continue;
+//            }
+//            if (c[i] > 65280 && c[i] < 65375)
+//                c[i] = (char) (c[i] - 65248);
+//        }
+//        return new String(c);
+//    }
+//
+//    /**
+//     * @param input String类型
+//     * @return String  返回的String为全角（中文）类型
+//     * @Description 解决textview的问题---半角字符与全角字符混乱所致；这种情况一般就是汉字与数字、英文字母混用
+//     */
+//    public static String toSBC(String input) { //半角转全角：
+//        char[] c = input.toCharArray();
+//        for (int i = 0; i < c.length; i++) {
+//            if (c[i] == 32) {
+//                c[i] = (char) 12288;
+//                continue;
+//            }
+//            if (c[i] < 127) c[i] = (char) (c[i] + 65248);
+//        }
+//        return new String(c);
+//    }
+//
+//
+//    /**
+//     * @param str String类型
+//     * @return String
+//     * @Description 替换、过滤特殊字符
+//     */
+//    public static String StringFilter(String str) throws PatternSyntaxException {
+//        str = str.replaceAll(" ", "").replaceAll(" ", "").replaceAll("：", ":").replaceAll("：", "：").replaceAll("【", "[").replaceAll("】", "]").replaceAll("！", "!");//替换中文标号
+//        String regEx = "[『』]"; // 清除掉特殊字符
+//        Pattern p = Pattern.compile(regEx);
+//        Matcher m = p.matcher(str);
+//        return m.replaceAll("").trim();
+//    }
 
 
 //    @Override
