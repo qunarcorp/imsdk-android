@@ -38,7 +38,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.EncryptMsg;
 import com.qunar.im.base.module.AtData;

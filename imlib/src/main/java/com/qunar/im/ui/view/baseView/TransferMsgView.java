@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 
 /**
  * Created by saber on 16-3-23.

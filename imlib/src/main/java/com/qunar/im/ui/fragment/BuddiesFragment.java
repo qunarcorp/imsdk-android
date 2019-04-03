@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.IFriendsManagePresenter;
-import com.qunar.im.base.presenter.impl.BuddyPresenter;
-import com.qunar.im.base.presenter.views.IFriendsManageView;
+import com.qunar.im.ui.presenter.IFriendsManagePresenter;
+import com.qunar.im.ui.presenter.impl.BuddyPresenter;
+import com.qunar.im.ui.presenter.views.IFriendsManageView;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.view.multilLevelTreeView.Node;
 import com.qunar.im.common.CommonConfig;

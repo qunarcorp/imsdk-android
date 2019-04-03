@@ -12,7 +12,7 @@ import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.imagepipeline.request.ImageRequest;
-import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
+import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.ui.view.facebookimageview.zoomable.ZoomableDraweeView;
 
 import java.util.ArrayList;

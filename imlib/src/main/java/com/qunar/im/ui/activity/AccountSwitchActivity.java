@@ -21,10 +21,10 @@ import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.jsonbean.AccountPassword;
 import com.qunar.im.base.jsonbean.NavConfigResult;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.impl.LoginPresenter;
-import com.qunar.im.base.presenter.impl.QTalkPublicLoginPresenter;
-import com.qunar.im.base.presenter.views.ILoginView;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.impl.LoginPresenter;
+import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenter;
+import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.AccountSwitchUtils;
 import com.qunar.im.base.util.Constants;
@@ -153,9 +153,10 @@ public class AccountSwitchActivity extends SwipeBackActivity implements ILoginVi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //保存当前使用的URL
-                        DataUtils.getInstance(AccountSwitchActivity.this).putPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, url);
-                        NavConfigUtils.initNavConfig(AccountSwitchActivity.this, navConfigResult, navName);
+                        //保存导航信息
+                        NavConfigUtils.saveCurrentNavDomain(navName);
+                        NavConfigUtils.saveNavInfo(navName,url);
+                        QtalkNavicationService.getInstance().configNav(navConfigResult);
                         BackgroundExecutor.execute(new Runnable() {
                             @Override
                             public void run() {

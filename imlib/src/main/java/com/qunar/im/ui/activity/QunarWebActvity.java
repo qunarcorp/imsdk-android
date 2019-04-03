@@ -41,7 +41,7 @@ import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.other.QtalkSDK;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.jsonbean.QVTResponseResult;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;

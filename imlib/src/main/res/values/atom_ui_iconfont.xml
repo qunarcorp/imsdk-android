@@ -91,7 +91,9 @@
     <string name="atom_ui_new_video_small">&#xe0e9;</string>
     <string name="atom_ui_highlight_search">&#xf3b9;</string>
     <string name="atom_ui_hook">&#xe337;</string>
+    <string name="atom_ui_new_uncheck_circle">&#xf35d;</string>
     <string name="atom_ui_new_top_arrow_round">&#xe644;</string>
     <string name="atom_ui_new_right_work_world_back">&#xe42e;</string>
+    <string name="atom_ui_change">&#xf1b4;</string>
     <string name="atom_ui_company_exchange">&#xe31f;</string>
 </resources>

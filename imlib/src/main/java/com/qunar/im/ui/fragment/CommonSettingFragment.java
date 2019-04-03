@@ -10,9 +10,9 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 
 import com.qunar.im.base.common.QunarIMApp;
-import com.qunar.im.base.presenter.IProfilePresenter;
-import com.qunar.im.base.presenter.impl.ProfilePresenter;
-import com.qunar.im.base.presenter.views.IProfileView;
+import com.qunar.im.ui.presenter.IProfilePresenter;
+import com.qunar.im.ui.presenter.impl.ProfilePresenter;
+import com.qunar.im.ui.presenter.views.IProfileView;
 import com.qunar.im.base.util.MediaUtils;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;

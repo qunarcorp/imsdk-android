@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldItem;
-import com.qunar.im.base.presenter.impl.WorkWorldManagerPresenter;
-import com.qunar.im.base.presenter.WorkWorldPresenter;
-import com.qunar.im.base.presenter.views.WorkWorldView;
+import com.qunar.im.ui.presenter.impl.WorkWorldManagerPresenter;
+import com.qunar.im.ui.presenter.WorkWorldPresenter;
+import com.qunar.im.ui.presenter.views.WorkWorldView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.RecycleViewDivider;
@@ -225,6 +225,7 @@ public class WorkWorldActivity extends SwipeBackActivity implements WorkWorldVie
 
 
     private void bindData() {
+
 //        datalist = new ArrayList<>();
 
 //        mSwipeRefreshLayout.setRefreshing(true);//设置可开启

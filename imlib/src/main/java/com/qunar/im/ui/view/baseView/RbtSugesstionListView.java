@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.RbtSuggestionListJson;
-import com.qunar.im.base.presenter.views.IChatView;
+import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.base.protocol.HttpRequestCallback;
 import com.qunar.im.base.protocol.HttpUrlConnectionHandler;
 import com.qunar.im.base.protocol.Protocol;

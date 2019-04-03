@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.jsonbean.RichText;
 import com.qunar.im.base.util.Utils;
 

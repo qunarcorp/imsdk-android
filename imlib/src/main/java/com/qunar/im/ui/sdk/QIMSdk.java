@@ -12,24 +12,17 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
-import com.qunar.im.base.jsonbean.SetMucVCardResult;
-import com.qunar.im.base.module.IMGroup;
-import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.protocol.ProtocolCallback;
-import com.qunar.im.base.structs.SetMucVCardData;
-import com.qunar.im.base.util.HttpUtils;
 import com.qunar.im.log.LogDatabaseManager;
-import com.qunar.im.utils.CapabilityUtil;
+import com.qunar.im.ui.presenter.impl.QChatLoginPresenter;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.RecentConversation;
-import com.qunar.im.base.presenter.impl.QChatLoginPresenter;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.MemoryCache;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMLogicManager;
@@ -47,7 +40,6 @@ import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.imagepicker.loader.GlideImageLoader;
 import com.qunar.im.ui.imagepicker.view.CropImageView;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.rn_service.fragment.RNContactsFragment;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
@@ -233,6 +225,7 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
         return ConnectionUtil.getInstance().isLoginStatus() && ConnectionUtil.getInstance().isConnected();
     }
 
+
     public boolean isCanAutoLogin(){
         return ConnectionUtil.getInstance().isCanAutoLogin();
     }
@@ -397,48 +390,19 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
     }
 
     /**
-     * 设置群信息
-     * @param datas
-     * @param callback
+     * 设置小米push key
+     * @param pushKey
      */
-    public void setMucCard(List<SetMucVCardData> datas, ProtocolCallback.UnitCallback<SetMucVCardResult> callback){
-        HttpUtil.setMucVCard(datas,callback);
+    public void setMiPushKey(String pushKey){
+        config.miPushKey = pushKey;
     }
 
     /**
-     * 获取好友列表数据
-     * @return
+     * 设置百度地图key
+     * @param mapKey
      */
-    public List<Nick> getContacts(){
-        return ConnectionUtil.getInstance().SelectFriendListForRN();
-    }
-
-    /**
-     * 获取群列表数据
-     * @return
-     */
-    public List<Nick> getGroups(){
-        return ConnectionUtil.getInstance().SelectAllGroup();
-    }
-
-    /**
-     * 搜索本地组织架构人员
-     * @param ser
-     * @param limit
-     * @return
-     */
-    public List<Nick> searchLocalUser(String ser, int limit){
-        return ConnectionUtil.getInstance().SelectContactsByLike(ser,limit);
-    }
-
-    /**
-     * 搜索群组
-     * @param ser
-     * @param limit
-     * @return
-     */
-    public List<IMGroup> searchLocalMuc(String ser, int limit){
-        return ConnectionUtil.getInstance().SelectIMGroupByLike(ser,limit);
+    public void setBaiduMapKey(String mapKey){
+        config.baiduMapKey = mapKey;
     }
 
     /**
@@ -486,6 +450,8 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      */
     class Config {
         public String navigationUrl;//导航url
+        public String miPushKey;//小米push key
+        public String baiduMapKey;//百度地图 key
     }
 
     public interface LoginStatesListener {

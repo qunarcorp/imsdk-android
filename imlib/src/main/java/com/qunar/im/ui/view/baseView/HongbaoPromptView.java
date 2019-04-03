@@ -58,7 +58,7 @@ public class HongbaoPromptView extends LinearLayout {
         final StringBuilder sb = new StringBuilder(broadcast.Url);
         if (isFromGroup) {
             sb.append("&username=").append(username).append("&sign=")
-                    .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
+                    .append(BinaryUtil.MD5(username + ""))
                     .append("&company=qunar&")
                     .append("user_id=")
                     .append(fromJid)
@@ -67,7 +67,7 @@ public class HongbaoPromptView extends LinearLayout {
                     .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
         } else {
             sb.append("&username=").append(username).append("&sign=")
-                    .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
+                    .append(BinaryUtil.MD5(username + ""))
                     .append("&company=qunar&")
                     .append("group_id=")
                     .append(fromJid)

@@ -20,7 +20,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
-import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
+import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.base.util.MemoryCache;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.ui.R;

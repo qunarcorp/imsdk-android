@@ -19,16 +19,16 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.RecentConversation;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -61,8 +61,8 @@ public class RecentConvsAdapter extends BaseAdapter {
     IRecentRender defaultRender = new DefaultRender();
     List<String> dndList;//免打扰
     Context context;
-    private static String defaultMucImage = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/2227ff2e304cb44a1980e9c1a3d78164.png";
-    private static String defaultUserImage = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
+    private static String defaultMucImage = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/2227ff2e304cb44a1980e9c1a3d78164.png";
+    private static String defaultUserImage = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
     //是否从db层从新获取数据
     private boolean toDB;
     private boolean enforce;
@@ -190,7 +190,7 @@ public class RecentConvsAdapter extends BaseAdapter {
                 @Override
                 public void onNickCallBack(Nick nick) {
                     data.setNick(nick);
-                    showCard(nick,holder,data.getId());
+                    showCard(nick,holder,data.getId(),true);
                     if (data.isChan().indexOf("send") != -1) {
                         holder.mConsultImageView.setVisibility(View.GONE);
                     }
@@ -215,7 +215,7 @@ public class RecentConvsAdapter extends BaseAdapter {
                 @Override
                 public void onNickCallBack(Nick nick) {
                     data.setNick(nick);
-                    showCard(nick,holder,jid);
+                    showCard(nick,holder,jid,false);
                     if (data.isChan().indexOf("send") != -1) {
                         holder.mConsultImageView.setVisibility(View.GONE);
                     }
@@ -271,7 +271,7 @@ public class RecentConvsAdapter extends BaseAdapter {
             connectionUtil.getUserCard(jid, new IMLogicManager.NickCallBack() {
                 @Override
                 public void onNickCallBack(Nick nick) {
-                    showCard(nick,holder,jid);
+                    showCard(nick,holder,jid,false);
                     holder.mConsultImageView.setVisibility(View.GONE);
 
                 }
@@ -302,7 +302,7 @@ public class RecentConvsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void showCard(Nick nick, CommonHolderView holder, String jid){
+    private void showCard(Nick nick, CommonHolderView holder, String jid,boolean isGroup){
         if (nick != null) {
             if(TextUtils.isEmpty(nick.getMark())){
                 holder.mNameTextView.setText(nick.getName());
@@ -310,7 +310,7 @@ public class RecentConvsAdapter extends BaseAdapter {
                 holder.mNameTextView.setText(nick.getMark());
             }
 
-            ProfileUtils.displayGravatarByImageSrc((Activity) context, TextUtils.isEmpty(nick.getHeaderSrc()) ? defaultUserImage : nick.getHeaderSrc(), holder.mImageView,
+            ProfileUtils.displayGravatarByImageSrc((Activity) context, TextUtils.isEmpty(nick.getHeaderSrc()) ? (isGroup ? defaultMucImage : defaultUserImage) : nick.getHeaderSrc(), holder.mImageView,
                     context.getResources().getDimensionPixelSize(R.dimen.atom_ui_image_mid_size), context.getResources().getDimensionPixelSize(R.dimen.atom_ui_image_mid_size));
         } else {
             holder.mNameTextView.setText(jid);

@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="18dp"
+    android:paddingTop="15dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="45dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
 
@@ -68,23 +69,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            android:layout_marginLeft="66dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/workworld_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/atom_ui_rounded_line_00cabe"
+                android:paddingBottom="3dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="3dp"
+                android:text="置顶"
+                android:textColor="#00cabe"
+                android:textSize="11sp"
+                android:visibility="visible"
+
+                >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/workworld_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/atom_ui_rounded_line_f9a539"
+                android:paddingBottom="3dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="3dp"
+                android:text="热帖"
+                android:textColor="#f9a539"
+                android:textSize="11sp"
+                android:visibility="visible" />
+        </LinearLayout>
+
         <!--android:ellipsize="end"-->
         <com.qunar.im.ui.view.emojiconTextView.EmojiconTextView
             android:id="@+id/text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="66dp"
+            android:layout_marginTop="4dp"
             android:layout_marginRight="15dp"
 
-            android:textIsSelectable="true"
-            android:enabled="true"
-            android:focusable="true"
-            android:longClickable="true"
-            android:text="内容"
+
+
             android:lineSpacingExtra="3dp"
+
+            android:text="内容"
             android:textColor="#333333"
+            android:focusable="true"
+            android:enabled="true"
+            android:longClickable="true"
+            android:textIsSelectable="true"
             android:textSize="15sp" />
 
         <TextView
@@ -93,10 +142,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="66dp"
             android:layout_marginTop="3dp"
-            android:visibility="gone"
             android:text="全文"
             android:textColor="#BFBFBF"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
 
     </LinearLayout>
@@ -108,17 +157,16 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/img_rc"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="66dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginRight="15dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="28dp"
-        android:layout_marginBottom="18dp"
         android:layout_marginTop="18dp">
 
         <TextView
@@ -135,12 +183,12 @@
             android:id="@+id/like_layout"
             android:layout_width="70dp"
             android:layout_height="28dp"
-            android:gravity="center"
-            android:orientation="horizontal"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:background="@drawable/atom_uihalf_elliptical_bg">
+            android:background="@drawable/atom_uihalf_elliptical_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <com.qunar.im.ui.view.IconView
                 android:id="@+id/like_icon"
@@ -169,11 +217,11 @@
             android:id="@+id/comment_layout"
             android:layout_width="70dp"
             android:layout_height="28dp"
-            android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@id/like_layout"
-            android:background="@drawable/atom_uihalf_elliptical_bg">
+            android:background="@drawable/atom_uihalf_elliptical_bg"
+            android:gravity="center">
 
             <com.qunar.im.ui.view.IconView
                 android:id="@+id/comment_icon"
@@ -201,8 +249,52 @@
 
     </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/out_comment_rc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="66dp"
+        android:background="@drawable/atom_ui_work_world_out_details_layout_bg"
+        android:layout_marginTop="6dp"
+        android:paddingTop="12dp"
+        android:layout_marginRight="15dp"
+        android:visibility="gone">
 
+    </android.support.v7.widget.RecyclerView>
 
+    <!--<LinearLayout-->
+        <!--android:id="@+id/more_layout"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_marginBottom="12dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:paddingBottom="12dp"-->
+        <!--android:background="#f3f3f5"-->
+        <!--android:paddingLeft="12dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="66dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/more_text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="查看"-->
+            <!--android:textColor="#00cabe"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold">-->
+        <!--</TextView>-->
+
+        <!--<com.qunar.im.ui.view.IconView-->
+            <!--android:id="@+id/right_r"-->
+            <!--android:layout_marginTop="2dp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/atom_ui_new_right_back"-->
+            <!--android:textColor="#00cabe"-->
+            <!--android:textSize="14sp"-->
+            <!--android:visibility="visible" />-->
+    <!--</LinearLayout>-->
 
 
 </LinearLayout>

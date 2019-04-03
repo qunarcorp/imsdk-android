@@ -6,9 +6,6 @@ import android.widget.TextView;
 
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 
-/**
- * Created by Bogdan Melnychuk on 2/11/15.
- */
 public class SimpleViewHolder extends TreeNode.BaseNodeViewHolder<Object> {
 
     public SimpleViewHolder(Context context) {

@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.presenter.IAnswerBuddyPresenter;
-import com.qunar.im.base.presenter.IPersonalInfoPresenter;
-import com.qunar.im.base.presenter.impl.BuddyPresenter;
-import com.qunar.im.base.presenter.impl.QchatPersonalInfoPresenter;
-import com.qunar.im.base.presenter.views.IAnswerBuddyRequestView;
-import com.qunar.im.base.presenter.views.MyPersonalView;
+import com.qunar.im.ui.presenter.IAnswerBuddyPresenter;
+import com.qunar.im.ui.presenter.IPersonalInfoPresenter;
+import com.qunar.im.ui.presenter.impl.BuddyPresenter;
+import com.qunar.im.ui.presenter.impl.QchatPersonalInfoPresenter;
+import com.qunar.im.ui.presenter.views.IAnswerBuddyRequestView;
+import com.qunar.im.ui.presenter.views.MyPersonalView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.graphics.BitmapHelper;

@@ -27,10 +27,8 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.google.zxing.Result;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.common.FacebookImageUtil;
-import com.qunar.im.base.presenter.IBrowsingPresenter;
-import com.qunar.im.base.presenter.impl.BrowsingPresenter;
-import com.qunar.im.base.presenter.views.IBrowsingConversationImageView;
+import com.qunar.im.ui.util.FacebookImageUtil;
+import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
@@ -47,7 +45,6 @@ import com.qunar.im.ui.view.zxing.decode.DecodeBitmap;
 import com.qunar.im.utils.QRUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 

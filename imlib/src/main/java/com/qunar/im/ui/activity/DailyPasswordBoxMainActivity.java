@@ -7,9 +7,9 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.DailyMindConstants;
 import com.qunar.im.base.jsonbean.DailyMindMain;
-import com.qunar.im.base.presenter.IDailyMindPresenter;
-import com.qunar.im.base.presenter.impl.DailyMindPresenter;
-import com.qunar.im.base.presenter.views.IDailyMindMainView;
+import com.qunar.im.ui.presenter.IDailyMindPresenter;
+import com.qunar.im.ui.presenter.impl.DailyMindPresenter;
+import com.qunar.im.ui.presenter.views.IDailyMindMainView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.fragment.BaseFragment;
 import com.qunar.im.ui.fragment.DailyCreatePasswordBoxFragment;

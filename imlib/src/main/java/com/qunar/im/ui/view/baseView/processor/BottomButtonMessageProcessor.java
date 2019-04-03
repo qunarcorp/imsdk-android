@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import com.qunar.im.base.jsonbean.ButtonMessageJson;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.views.IChatView;
+import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.util.ChatTextHelper;

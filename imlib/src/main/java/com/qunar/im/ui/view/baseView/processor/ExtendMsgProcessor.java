@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.qunar.im.base.jsonbean.ActivityMessageEntity;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;

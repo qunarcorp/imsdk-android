@@ -3,11 +3,14 @@ package com.qunar.im.ui.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,7 +19,10 @@ import android.widget.TextView;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
+import com.qunar.im.utils.DeviceUtil;
 import com.qunar.im.utils.QRUtil;
 
 import java.io.File;
@@ -25,7 +31,7 @@ import java.io.File;
  * Created by hubo.hu on 2017/9/22.
  * 导航配置生成二维码
  */
-public class NavConfigQRActivity extends IMBaseActivity implements View.OnClickListener {
+public class NavConfigQRActivity extends SwipeBackActivity implements View.OnClickListener {
 
     private static final int SAVE_TO_GALLERY = 0x1;
     private static final int CANCEL = 0x2;
@@ -33,8 +39,10 @@ public class NavConfigQRActivity extends IMBaseActivity implements View.OnClickL
     TextView configname;
     ProgressBar qr_loading;
     LinearLayout root_container;
+    FrameLayout atom_qr_layout;
     String name;
     String url;
+    int width;
 
     private Bitmap bitmap;
 
@@ -48,12 +56,14 @@ public class NavConfigQRActivity extends IMBaseActivity implements View.OnClickL
     }
 
     private void bindViews() {
-
+        atom_qr_layout = (FrameLayout) findViewById(R.id.atom_qr_layout);
         root_container = (LinearLayout) findViewById(R.id.config_root_container);
         qr_show_img = (ImageView) findViewById(R.id.config_qr_show_img);
         configname = (TextView) findViewById(R.id.config_name);
         qr_loading = (ProgressBar) findViewById(R.id.config_qr_loading);
         root_container.setOnClickListener(this);
+        width = DeviceUtil.getWindowWidthPX(this) *2/3;
+        atom_qr_layout.setLayoutParams(new LinearLayout.LayoutParams(width,width));
     }
 
     private void injectExtras() {
@@ -86,8 +96,15 @@ public class NavConfigQRActivity extends IMBaseActivity implements View.OnClickL
                 ImageUtils.compressFile(bitmap, appDir);
                 if(appDir != null && appDir.exists()){
                     Intent imageIntent = new Intent(Intent.ACTION_SEND);
-                    imageIntent.setType("image/jpeg");
-                    imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(appDir.getAbsolutePath()));
+                    imageIntent.setType("image/*");
+                    Uri uri;
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        imageIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        uri = FileProvider.getUriForFile(NavConfigQRActivity.this, ProviderUtil.getFileProviderName(NavConfigQRActivity.this), appDir);//android 7.0以上
+                    }else {
+                        uri = Uri.fromFile(appDir);
+                    }
+                    imageIntent.putExtra(Intent.EXTRA_STREAM, uri);
                     startActivity(Intent.createChooser(imageIntent, "分享"));
                 }
             }
@@ -119,7 +136,7 @@ public class NavConfigQRActivity extends IMBaseActivity implements View.OnClickL
             @Override
             public void run() {
                 //名称和url拼成二维码  ~解析分割用
-                bitmap = QRUtil.generateQRImage(url);//name + "~" + 暂时去掉二维码中的name
+                bitmap = QRUtil.generateQRImage(url,width,width);//name + "~" + 暂时去掉二维码中的name
                 getHandler().post(new Runnable() {
                     @Override
                     public void run() {

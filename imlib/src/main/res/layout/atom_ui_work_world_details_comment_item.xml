@@ -8,18 +8,20 @@
 
     <RelativeLayout
         android:background="#ffffff"
+
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp">
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
 
             android:id="@+id/user_header"
             android:layout_width="36dp"
+
             android:layout_height="36dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="14dp"
             fresco:atom_imagecache_actualImageScaleType="centerCrop"
             fresco:atom_imagecache_roundAsCircle="true"
             fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
@@ -92,17 +94,34 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_marginLeft="57dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="18dp"
         android:layout_marginRight="24dp"
         android:layout_height="wrap_content">
-        <TextView
+        <com.qunar.im.ui.view.emojiconTextView.EmojiconTextView
             android:id="@+id/comment_item_text"
             android:textSize="15sp"
             android:text="这个是回复内容 说点什么吧"
+            android:focusable="true"
+            android:enabled="true"
+            android:longClickable="true"
+            android:textIsSelectable="true"
             android:textColor="#333333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/child_comment_rc"
+        android:layout_marginLeft="57dp"
+        android:layout_height="wrap_content">
 
+    </android.support.v7.widget.RecyclerView>
+    <View
+        android:id="@+id/deleteLine"
+        android:layout_marginLeft="57dp"
+        android:layout_marginRight="15dp"
+        android:background="#dddddd"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"></View>
 </LinearLayout>

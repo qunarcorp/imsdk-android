@@ -582,7 +582,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param size Need compatible data size
      */
-    private void compatibilityDataSizeChanged(int size) {
+    public void compatibilityDataSizeChanged(int size) {
         final int dataSize = mData == null ? 0 : mData.size();
         if (dataSize == size) {
             notifyDataSetChanged();

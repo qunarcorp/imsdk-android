@@ -34,6 +34,7 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.util.ProviderUtil;
@@ -142,14 +143,9 @@ public class UpdateManager {
     public UpdateManager()
     {
         APK_PACKAGE = CommonConfig.globalContext.getPackageName();
-        if(CommonConfig.isQtalk) {
-            APK_NAME = "Qtalk";
-            API_URL = QtalkNavicationService.getInstance().getSimpleapiurl() + "/get_version.php?clientname=qtalk_android&ver=";
-        }
-        else {
-            APK_NAME = "Qchat";
-            API_URL = QtalkNavicationService.getInstance().getSimpleapiurl() + "/get_version.php?clientname=qchat_android&ver=";
-        }
+        APK_NAME = GlobalConfigManager.getAppName();
+        API_URL = QtalkNavicationService.getInstance().getSimpleapiurl() + "/get_version.php?clientname="
+                + GlobalConfigManager.getAppName().toLowerCase()+ "_android&ver=";
     }
 
     /**

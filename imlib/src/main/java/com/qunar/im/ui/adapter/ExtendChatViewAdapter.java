@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
 import com.qunar.im.base.module.BaseIMMessage;

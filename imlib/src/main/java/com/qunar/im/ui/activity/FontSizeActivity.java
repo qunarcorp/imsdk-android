@@ -6,9 +6,9 @@ import android.util.TypedValue;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.qunar.im.base.presenter.IProfilePresenter;
-import com.qunar.im.base.presenter.impl.ProfilePresenter;
-import com.qunar.im.base.presenter.views.IChangeFontSizeView;
+import com.qunar.im.ui.presenter.IProfilePresenter;
+import com.qunar.im.ui.presenter.impl.ProfilePresenter;
+import com.qunar.im.ui.presenter.views.IChangeFontSizeView;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ResourceUtils;

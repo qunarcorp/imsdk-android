@@ -10,9 +10,6 @@ import android.widget.RelativeLayout;
 import com.qunar.im.ui.R;
 
 
-/**
- * Created by Bogdan Melnychuk on 2/10/15.
- */
 public class TreeNodeWrapperView extends LinearLayout {
     private LinearLayout nodeItemsContainer;
     private ViewGroup nodeContainer;

@@ -10,9 +10,6 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-/**
- * Created by HDL on 2017/6/27.
- */
 
 public class SelectAlbumUtils {
 

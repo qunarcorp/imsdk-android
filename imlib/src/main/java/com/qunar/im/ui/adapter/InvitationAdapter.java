@@ -31,7 +31,7 @@ public class InvitationAdapter extends BaseAdapter implements Filterable {
     SearchResultChangeListerner searchListner;
 
     //默认头像
-    private static String headerSrc = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
+    private static String headerSrc = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
     ProtrailHandle protrailHandle;
 
     public InvitationAdapter(Context context) {

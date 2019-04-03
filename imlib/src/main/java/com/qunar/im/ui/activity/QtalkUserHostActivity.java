@@ -10,13 +10,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.DomainResult;
 import com.qunar.im.base.protocol.LoginAPI;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
+import com.qunar.im.base.util.DataUtils;
+import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
+import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.entity.NavConfigInfo;
 import com.qunar.im.ui.sdk.QIMSdk;
+import com.qunar.im.ui.util.NavConfigUtils;
 import com.qunar.im.ui.view.QtNewActionBar;
 
 import java.util.ArrayList;
@@ -94,13 +101,14 @@ public class QtalkUserHostActivity extends IMBaseActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String navUrl = results.get(position).nav;
-                QIMSdk.getInstance().setNavigationUrl(navUrl);
 
                 String name = results.get(position).name;
                 int domainId = results.get(position).domainId;
+
                 Intent intent = new Intent();
                 intent.putExtra(Constants.BundleKey.RESULT_HOST_NAME,name);
                 intent.putExtra(Constants.BundleKey.RESULT_DOMAIN_ID,String.valueOf(domainId));
+                intent.putExtra(Constants.BundleKey.NAV_ADD_URL,navUrl);
                 setResult(HOST_RESPONSE_CODE,intent);
                 finish();
             }

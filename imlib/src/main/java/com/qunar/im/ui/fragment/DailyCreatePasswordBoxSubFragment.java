@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qunar.im.base.common.DailyMindConstants;
-import com.qunar.im.base.presenter.IDailyMindPresenter;
+import com.qunar.im.ui.presenter.IDailyMindPresenter;
 import com.qunar.im.base.util.AESTools;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.ui.R;

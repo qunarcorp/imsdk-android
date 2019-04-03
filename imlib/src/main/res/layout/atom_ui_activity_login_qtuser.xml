@@ -114,7 +114,8 @@
                     android:hint="@string/atom_ui_input_user_mobile"
                     android:maxLength="50"
                     android:background="@color/translate"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="14sp" />
 
                 <com.qunar.im.ui.view.IconView
                     android:layout_width="wrap_content"
@@ -165,7 +166,8 @@
                         android:inputType="textPassword"
                         android:hint="@string/atom_ui_tip_pwdbox_input_pwd"
                         android:maxLength="30"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="14sp"/>
                     <ImageView
                         android:id="@+id/qtuser_img_show_pwd"
                         android:layout_width="@dimen/atom_ui_icon_size"
@@ -311,8 +313,7 @@
         <ImageButton
             android:id="@+id/qtuser_iv_nav_config"
             android:layout_gravity="bottom|right"
-            android:layout_marginTop="@dimen/atom_ui_container_margin"
-            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:layout_margin="@dimen/atom_ui_container_margin"
             android:layout_width="wrap_content"
             android:background="@android:color/transparent"
             android:layout_height="wrap_content"

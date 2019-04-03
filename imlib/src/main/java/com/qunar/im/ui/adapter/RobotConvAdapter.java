@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.base.common.FacebookImageUtil;
+import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.module.RobotConversation;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.DateTimeUtils;

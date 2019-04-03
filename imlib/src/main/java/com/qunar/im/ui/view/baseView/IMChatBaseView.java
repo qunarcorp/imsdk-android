@@ -68,7 +68,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     //核心连接管理类
     protected ConnectionUtil connectionUtil;
     //默认头像路径
-    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getSimpleapiurl() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
+    private static String defaultHeadUrl = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
 
     protected int m8dp;
     protected int m48dp;

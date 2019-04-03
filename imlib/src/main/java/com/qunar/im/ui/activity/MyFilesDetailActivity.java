@@ -18,7 +18,7 @@ import com.qunar.im.base.common.CommonDownloader;
 import com.qunar.im.base.jsonbean.DownloadImageResult;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.protocol.ProgressResponseListener;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.structs.TransitFileJSON;

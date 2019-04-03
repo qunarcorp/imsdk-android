@@ -5,10 +5,10 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.jsonbean.GetDepartmentResult;
-import com.qunar.im.base.presenter.views.IOrganizationView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.presenter.views.IOrganizationView;
 import com.qunar.im.ui.view.treeView.holder.IconTreeItemHolder;
 import com.qunar.im.ui.view.treeView.holder.SDHolder;
 import com.qunar.im.ui.view.treeView.holder.ULHolder;

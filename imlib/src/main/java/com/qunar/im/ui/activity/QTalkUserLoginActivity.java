@@ -29,16 +29,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.DomainResult;
+import com.qunar.im.base.jsonbean.NavConfigResult;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.base.presenter.ILoginPresenter;
-import com.qunar.im.base.presenter.impl.QTalkPublicLoginPresenter;
-import com.qunar.im.base.presenter.views.ILoginView;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenter;
+import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.base.protocol.LoginAPI;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
+import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
@@ -50,10 +53,13 @@ import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.entity.NavConfigInfo;
 import com.qunar.im.ui.sdk.QIMSdk;
+import com.qunar.im.ui.util.NavConfigUtils;
 import com.qunar.im.ui.util.ParseErrorEvent;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 
 import org.w3c.dom.Text;
 
@@ -92,6 +98,10 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
     private int mClickTime = 0;
     private boolean canBack;
     private boolean isSwitchAccount;
+
+    private String navName;
+
+    private String navUrl;
 
     @Override
     protected void onSaveInstanceState(Bundle bundle)
@@ -134,6 +144,32 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         if(!TextUtils.isEmpty(CurrentPreference.getInstance().getQvt()))
         {
             CurrentPreference.getInstance().setQvt("");
+        }
+
+        dispatchScheme(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        dispatchScheme(intent);
+    }
+
+    /**
+     * 配置导航scheme处理
+     */
+    private void dispatchScheme(Intent intent){
+        if(intent != null){
+            Uri data = intent.getData();
+            if(data == null){
+                return;
+            }
+            String host = data.getHost();
+            if("start_nav_config".equals(host)){
+                Intent temp = new Intent(this,NavConfigActivity.class);
+                temp.setData(data);
+                startActivityForResult(temp, LOGIN_TYPE);
+            }
         }
     }
 
@@ -232,14 +268,8 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         }
 
         String company = DataUtils.getInstance(this).getPreferences(Constants.Preferences.COMPANY,"");
-        if(!TextUtils.isEmpty(company)){
-            atom_ui_nav_layouot.setVisibility(View.VISIBLE);
-            atom_ui_nav_name.setText(company);
-            qtuser_company_layout.setVisibility(View.GONE);
-            findViewById(R.id.atom_ui_last_line).setVisibility(View.GONE);
-        }else {
-            atom_ui_nav_layouot.setVisibility(View.GONE);
-        }
+        freshCompany(company);
+
         atom_ui_nav_layouot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -367,6 +397,7 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         qtuser_password_et.clearFocus();
         progressDialog.show();
         loginPresenter.login();
+
     }
 
 
@@ -547,19 +578,62 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
                     }
                 }
             }if(requestCode == LOGIN_TYPE){
+                if(bundle != null){
+                    String company = bundle.getStringExtra(Constants.BundleKey.NAV_ADD_NAME);
+                    freshCompany(company);
+                }
                 if(!LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
                     startActivity(new Intent(QTalkUserLoginActivity.this, LoginActivity.class));
                     finish();
                 }
+
             }
         } else if(resultCode == QtalkUserHostActivity.HOST_RESPONSE_CODE && bundle != null){
             String company = bundle.getStringExtra(Constants.BundleKey.RESULT_HOST_NAME);
-            qtuser_company_et.setText(company);
-            if(atom_ui_nav_layouot.getVisibility() == View.VISIBLE){
-                atom_ui_nav_name.setText(company);
-            }
-            DataUtils.getInstance(this).putPreferences(Constants.Preferences.COMPANY,company);
+            freshCompany(company);
+
+            navName = company;
+            navUrl = bundle.getStringExtra(Constants.BundleKey.NAV_ADD_URL);
+
+            getServerConfig(navName,navUrl);
         }
+    }
+
+    private void freshCompany(String company){
+        qtuser_company_et.setText(company);
+        atom_ui_nav_name.setText(company);
+        NavConfigUtils.saveCurrentNavDomain(company);
+        if(!TextUtils.isEmpty(company)){
+            atom_ui_nav_layouot.setVisibility(View.VISIBLE);
+            atom_ui_nav_name.setText(company);
+            qtuser_company_layout.setVisibility(View.GONE);
+            findViewById(R.id.atom_ui_last_line).setVisibility(View.GONE);
+        }else {
+            atom_ui_nav_layouot.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void getServerConfig(final String name,final String url) {
+        HttpUtil.getServerConfigAsync(url, new ProtocolCallback.UnitCallback<NavConfigResult>() {
+            @Override
+            public void onCompleted(final NavConfigResult navConfigResult) {
+                String configStr = JsonUtils.getGson().toJson(navConfigResult);
+                Logger.i("切换导航成功:" + configStr);
+                final String navName = TextUtils.isEmpty(name) ? navConfigResult.baseaddess.domain : name;
+                //保存导航信息
+                NavConfigUtils.saveNavInfo(navName,url);
+                //保存当前配置
+                NavConfigUtils.saveCurrentNavJSONInfo(navName,configStr);
+                //配置导航
+                QtalkNavicationService.getInstance().configNav(navConfigResult);
+            }
+
+            @Override
+            public void onFailure(String errMsg) {
+                toast(getString(R.string.atom_ui_tip_switch_navigation_failed));
+            }
+        });
     }
 
     protected void go2WebLogin()

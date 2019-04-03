@@ -64,23 +64,23 @@ import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.UserConfigData;
-import com.qunar.im.base.presenter.IAddEmojiconPresenter;
-import com.qunar.im.base.presenter.IChatingPresenter;
-import com.qunar.im.base.presenter.ICloudRecordPresenter;
-import com.qunar.im.base.presenter.IDailyMindPresenter;
-import com.qunar.im.base.presenter.IP2pRTC;
-import com.qunar.im.base.presenter.ISendLocationPresenter;
-import com.qunar.im.base.presenter.IShakeMessagePresenter;
-import com.qunar.im.base.presenter.IShowNickPresenter;
-import com.qunar.im.base.presenter.impl.ChatroomInfoPresenter;
-import com.qunar.im.base.presenter.impl.DailyMindPresenter;
-import com.qunar.im.base.presenter.impl.MultipleSessionPresenter;
-import com.qunar.im.base.presenter.impl.SendLocationPresenter;
-import com.qunar.im.base.presenter.impl.SingleSessionPresenter;
-import com.qunar.im.base.presenter.messageHandler.ConversitionType;
-import com.qunar.im.base.presenter.views.IChatRoomInfoView;
-import com.qunar.im.base.presenter.views.IChatView;
-import com.qunar.im.base.presenter.views.IShowNickView;
+import com.qunar.im.ui.presenter.IAddEmojiconPresenter;
+import com.qunar.im.ui.presenter.IChatingPresenter;
+import com.qunar.im.ui.presenter.ICloudRecordPresenter;
+import com.qunar.im.ui.presenter.IDailyMindPresenter;
+import com.qunar.im.ui.presenter.IP2pRTC;
+import com.qunar.im.ui.presenter.ISendLocationPresenter;
+import com.qunar.im.ui.presenter.IShakeMessagePresenter;
+import com.qunar.im.ui.presenter.IShowNickPresenter;
+import com.qunar.im.ui.presenter.impl.ChatroomInfoPresenter;
+import com.qunar.im.ui.presenter.impl.DailyMindPresenter;
+import com.qunar.im.ui.presenter.impl.MultipleSessionPresenter;
+import com.qunar.im.ui.presenter.impl.SendLocationPresenter;
+import com.qunar.im.ui.presenter.impl.SingleSessionPresenter;
+import com.qunar.im.base.common.ConversitionType;
+import com.qunar.im.ui.presenter.views.IChatRoomInfoView;
+import com.qunar.im.ui.presenter.views.IChatView;
+import com.qunar.im.ui.presenter.views.IShowNickView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.EncryptMessageType;
 import com.qunar.im.base.structs.FuncButtonDesc;
@@ -99,7 +99,7 @@ import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
@@ -107,6 +107,7 @@ import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.log.LogConstans;
 import com.qunar.im.log.LogService;
 import com.qunar.im.log.QLog;
@@ -503,7 +504,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     public void setReadState(){
         //通知服务器消息已读 临时解决 先异步处理
-        DispatchHelper.Async("sendAllRead", new Runnable() {
+        DispatchHelper.Async("sendAllRead",false, new Runnable() {
             @Override
             public void run() {
                 //home回来未读文件设置为已读
@@ -1644,7 +1645,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             }
         };
         funcMap.regisger(item);
-        if (CurrentPreference.getInstance().isMerchants() && !CommonConfig.isQtalk
+        if (CurrentPreference.getInstance().isMerchants() && GlobalConfigManager.isQchatPlat()
                 && String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER).equals(chatType)) {
             item = new FuncItem();
             item.id = FuncMap.QUICKREPLY;
@@ -1734,7 +1735,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 //        }
 
         //qchat会话转移功能 是客服单聊且chattype是5
-        if (!CommonConfig.isQtalk &&
+        if (GlobalConfigManager.isQchatPlat() &&
                 CurrentPreference.getInstance().isMerchants() &&
                 !isFromChatRoom &&
                 String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER).equals(chatType)) {
@@ -1751,35 +1752,40 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             };
             funcMap.regisger(item);
         }
-        //红包
-        item = new FuncItem();
-        item.id = FuncMap.HONGBAO;
-        item.icon = "res:///" + R.drawable.atom_ui_ic_lucky_money;
-        item.textId = getString(R.string.atom_ui_textbar_button_red_package);
-        item.hanlder = new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                giveLuckyMoney(false);
-                saveChatWindowActLog(FuncMap.HONGBAO);
-            }
-        };
-        funcMap.regisger(item);
-
-        //aa支付
-        if (!TextUtils.isEmpty(QtalkNavicationService.AA_PAY_URL) && CommonConfig.isQtalk) {
+        if(!GlobalConfigManager.isStartalkPlat()){
+            //红包
             item = new FuncItem();
-            item.id = FuncMap.AA;
-            item.icon = "res:///" + R.drawable.atom_ui_ic_aa_pay_black;
-            item.textId = getString(R.string.atom_ui_textbar_button_aa);
+            item.id = FuncMap.HONGBAO;
+            item.icon = "res:///" + R.drawable.atom_ui_ic_lucky_money;
+            item.textId = getString(R.string.atom_ui_textbar_button_red_package);
             item.hanlder = new FuncHanlder() {
                 @Override
                 public void handelClick() {
-                    giveLuckyMoney(true);
-                    saveChatWindowActLog(FuncMap.AA);
+                    giveLuckyMoney(false);
+                    saveChatWindowActLog(FuncMap.HONGBAO);
                 }
             };
             funcMap.regisger(item);
         }
+
+        if(!GlobalConfigManager.isStartalkPlat()){
+            //aa支付
+            if (!TextUtils.isEmpty(QtalkNavicationService.AA_PAY_URL) && CommonConfig.isQtalk) {
+                item = new FuncItem();
+                item.id = FuncMap.AA;
+                item.icon = "res:///" + R.drawable.atom_ui_ic_aa_pay_black;
+                item.textId = getString(R.string.atom_ui_textbar_button_aa);
+                item.hanlder = new FuncHanlder() {
+                    @Override
+                    public void handelClick() {
+                        giveLuckyMoney(true);
+                        saveChatWindowActLog(FuncMap.AA);
+                    }
+                };
+                funcMap.regisger(item);
+            }
+        }
+
         //窗口抖动
         if (!isFromChatRoom) {
             item = new FuncItem();
@@ -1811,7 +1817,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             funcMap.regisger(item);
         }
 
-        if (CommonConfig.isQtalk && !isFromChatRoom) {
+        if (GlobalConfigManager.isQtalkPlat() && !isFromChatRoom) {
             item = new FuncItem();
             item.id = FuncMap.ENCRYPT;
             item.icon = "res:///" + R.drawable.atom_ui_box_key;
@@ -1828,7 +1834,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             funcMap.regisger(item);
         }
 
-        if (CommonConfig.isQtalk && isFromChatRoom()) {
+        if (GlobalConfigManager.isQtalkPlat() && isFromChatRoom()) {
             item = new FuncItem();
             item.id = FuncMap.ACTIVITY;
             item.icon = "res:///" + R.drawable.atom_ui_send_activity;
@@ -2505,7 +2511,6 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                            chat_region.getRefreshableView().setSelection(pbChatViewAdapter.getCount() - unreadMsgCount.intValue() - 1);
                 chat_region.getRefreshableView().smoothScrollToPosition(pbChatViewAdapter.getCount() - unreadMsgCount.intValue() - 1);
                 clearUnread();
             }

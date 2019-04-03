@@ -16,7 +16,7 @@ import com.qunar.im.base.module.Nick;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.ui.R;
 import com.qunar.im.base.module.ChatRoomMember;
-import com.qunar.im.base.util.ProfileUtils;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.ArrayList;
