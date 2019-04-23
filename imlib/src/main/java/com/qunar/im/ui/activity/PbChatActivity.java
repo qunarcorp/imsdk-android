@@ -1546,12 +1546,11 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                     edit_msg.onKeyUp(keyCode, keyEventUp);
                 }
             });
-            faceView.initFaceGridView(EmotionUtils.getExtEmotionsMap(this, false), EmotionUtils.getDefaultEmotion(this), EmotionUtils.getDefaultEmotion1(this), getFavoriteMap(this));
+            faceView.initFaceGridView(EmotionUtils.getExtEmotionsMap(this, false), EmotionUtils.getDefaultEmotion(this), getFavoriteMap(this));
         }
 
         //加载表情
         EmotionUtils.getDefaultEmotion(this.getApplicationContext());
-        EmotionUtils.getDefaultEmotion1(this.getApplicationContext());
         EmotionUtils.getExtEmotionsMap(this.getApplicationContext(), false);
     }
 
@@ -2133,7 +2132,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         send_btn = (TextView) findViewById(R.id.send_btn);
 
         chating_view = (RelativeLayout) findViewById(R.id.chating_view);
-        chat_region = (com.handmark.pulltorefresh.library.PullToRefreshListView) findViewById(R.id.chat_region);
+        chat_region = (PullToRefreshListView) findViewById(R.id.chat_region);
         new_msg_prompt = (TextView) findViewById(R.id.new_msg_prompt);//更新消息条目数有关
         emotion_btn = (ImageView) findViewById(R.id.tv_emojicon);
         outter_msg_prompt = (LinearLayout) findViewById(R.id.outter_msg_prompt);
@@ -3181,7 +3180,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                         cursor = this
                                 .getContentResolver()
                                 .query(_uri,
-                                        new String[]{android.provider.MediaStore.Video.VideoColumns.DATA},
+                                        new String[]{MediaStore.Video.VideoColumns.DATA},
                                         null, null, null);
                         if (cursor != null) {
                             cursor.moveToFirst();

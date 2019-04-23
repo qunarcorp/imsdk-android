@@ -50,5 +50,9 @@ dependencies {
     compile 'com.qunar.im:sdk-common:3.0.3'
     compile 'com.qunar.im:sdk-push:3.0.3'
     compile project(':rn_service')//compile 'com.qunar.im:sdk-rn:3.0.3'
+//    compile ('com.qunar.im:sdk-rn:3.0.3')
+//            {
+//                exclude group:'com.facebook.react',module:'react-native'
+//            }
     compile 'com.qunar.im:sdk-rtc:3.0.3'
 }

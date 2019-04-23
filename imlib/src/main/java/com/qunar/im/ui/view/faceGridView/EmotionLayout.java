@@ -27,11 +27,11 @@ public class EmotionLayout extends LinearLayout {
     Context context;
     private FaceGridView faceGridView;
     private LinearLayout tabLayout;
-    private TextView defaultEmotionView,defaultEmotionView1, favoriteEmotion;
+    private TextView defaultEmotionView, favoriteEmotion;
     private ImageView deleteImageView;
-    private OnClickListener defaultEmotionTabOnClickListener,defaultEmotionTabOnClickListener1, otherTabOnclickListener;
+    private OnClickListener defaultEmotionTabOnClickListener, otherTabOnclickListener;
     private Map<String, EmoticionMap> map;
-    private EmoticionMap defaultMap,defaultMap1, favoriteMap;
+    private EmoticionMap defaultMap, favoriteMap;
     private View selectedTab;
     private HorizontalScrollView scrollView;
     private boolean isInit;
@@ -52,7 +52,7 @@ public class EmotionLayout extends LinearLayout {
 
     public void resetFavoriteEmotion(EmoticionMap favoriteMap) {
         this.favoriteMap = favoriteMap;
-        faceGridView.setEmojiconMaps(defaultMap,defaultMap1, favoriteMap, map);
+        faceGridView.setEmojiconMaps(defaultMap, favoriteMap, map);
         resetTab();
     }
 
@@ -83,7 +83,6 @@ public class EmotionLayout extends LinearLayout {
         this.faceGridView = findViewById(R.id.faceGridView);
         this.tabLayout = findViewById(R.id.tab_layout);
         this.defaultEmotionView = findViewById(R.id.default_emotion);
-        this.defaultEmotionView1 = findViewById(R.id.default_emotion1);
         this.deleteImageView = findViewById(R.id.delete_emotion);
         ImageView addEmotion = findViewById(R.id.add_emotion);
         favoriteEmotion = findViewById(R.id.favorite_emotion);
@@ -96,7 +95,6 @@ public class EmotionLayout extends LinearLayout {
             }
         });
         defaultEmotionTabOnClickListener = new DefaultTabOnClickListener();
-        defaultEmotionTabOnClickListener1 = new DefaultTabOnClickListener1();
         otherTabOnclickListener = new OtherTabOnClickListener();
         favoriteEmotion.setOnClickListener(new FavoriteTabOnClickListener());
         faceGridView.setPageChangedListener(new FaceGridView.OnPageChangedListener() {
@@ -121,9 +119,7 @@ public class EmotionLayout extends LinearLayout {
                 selectedTab.setBackgroundResource(R.color.atom_ui_light_gray);
                 if (map.packgeId.equals(EmotionUtils.getDefaultEmotion(context).packgeId)) {
                     selectedTab = defaultEmotionView;
-                }else if(map.packgeId.equals(EmotionUtils.getDefaultEmotion1(context).packgeId)){
-                    selectedTab = defaultEmotionView1;
-                } else if (map.packgeId.equals(EmotionUtils.FAVORITE_ID)) {
+                }else if (map.packgeId.equals(EmotionUtils.FAVORITE_ID)) {
                     selectedTab = favoriteEmotion;
                 } else {
                     View v = findViewWithTag(map.packgeId);
@@ -134,20 +130,18 @@ public class EmotionLayout extends LinearLayout {
                 selectedTab.setBackgroundResource(R.color.atom_ui_white);
             }
         });
-        selectedTab = defaultEmotionView1;
+        selectedTab = defaultEmotionView;
     }
 
-    public void initFaceGridView(Map<String, EmoticionMap> map, EmoticionMap defaultMap,EmoticionMap defaultMap1, EmoticionMap favoriteMap) {
+    public void initFaceGridView(Map<String, EmoticionMap> map, EmoticionMap defaultMap, EmoticionMap favoriteMap) {
         this.map = map;
         this.defaultMap = defaultMap;
-        this.defaultMap1 = defaultMap1;
         this.favoriteMap = favoriteMap;
         initTabLayout();
-        faceGridView.setEmojiconMaps(defaultMap,defaultMap1,favoriteMap, map);
-        faceGridView.setPage(defaultMap1);
+        faceGridView.setEmojiconMaps(defaultMap,favoriteMap, map);
+        faceGridView.setPage(defaultMap);
         defaultEmotionView.setOnClickListener(defaultEmotionTabOnClickListener);
-        defaultEmotionView1.setOnClickListener(defaultEmotionTabOnClickListener1);
-        selectedTab = defaultEmotionView1;
+        selectedTab = defaultEmotionView;
         isInit = true;
     }
 
@@ -186,7 +180,7 @@ public class EmotionLayout extends LinearLayout {
     }
 
     public void resetTabLayout() {
-        initFaceGridView(EmotionUtils.getExtEmotionsMap(context,true), EmotionUtils.getDefaultEmotion(context),EmotionUtils.getDefaultEmotion1(context), EmotionUtils.getFavoriteMap(context));
+        initFaceGridView(EmotionUtils.getExtEmotionsMap(context,true), EmotionUtils.getDefaultEmotion(context), EmotionUtils.getFavoriteMap(context));
 ////        map = EmotionUtils.getExtEmotionsMap(context,true);
 //        if (map.size() > tabLayout.getChildCount()) {
 //            Object[] keys = map.keySet().toArray();
@@ -237,8 +231,6 @@ public class EmotionLayout extends LinearLayout {
             faceGridView.setPage(favoriteMap);
         }else if(selectedTab == defaultEmotionView) {
             faceGridView.setPage(defaultMap);
-        }else if(selectedTab == defaultEmotionView1) {
-            faceGridView.setPage(defaultMap1);
         }
     }
 
@@ -278,20 +270,6 @@ public class EmotionLayout extends LinearLayout {
             selectedTab.setBackgroundResource(R.color.atom_ui_light_gray);
             defaultEmotionView.setBackgroundResource(R.color.atom_ui_white);
             faceGridView.setPage(defaultMap);
-            selectedTab = v;
-        }
-    }
-
-    final class DefaultTabOnClickListener1 implements OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            if (selectedTab == defaultEmotionView1) {
-                return;
-            }
-            selectedTab.setBackgroundResource(R.color.atom_ui_light_gray);
-            defaultEmotionView1.setBackgroundResource(R.color.atom_ui_white);
-            faceGridView.setPage(defaultMap1);
             selectedTab = v;
         }
     }
