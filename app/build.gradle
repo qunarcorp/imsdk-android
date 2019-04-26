@@ -36,8 +36,8 @@ android {
     flavorDimensions "qim"
     //分渠道
     productFlavors {
-        //QTalk
-        qtalk {
+        //startalk
+        startalk {
             dimension "qim"
 
             manifestPlaceholders = [
@@ -45,7 +45,7 @@ android {
                     serverDoMain  : true,
                     baiduMap :"xxxxx",//百度地图key 用于发送位置消息
                     SCHEME : "qtalkaphone",
-                    currentPlat  : "QTalk",
+                    currentPlat  : "Startalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
             ]
         }
@@ -56,6 +56,7 @@ android {
             manifestPlaceholders = [
                     PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
                     serverDoMain  : false,
+                    baiduMap :"xxxxx",//百度地图key 用于发送位置消息
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",
                     MAIN_SCHEMA : "start_qchat_activity",
