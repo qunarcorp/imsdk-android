@@ -38,7 +38,7 @@ public class QTalkSearchActivity extends AppCompatActivity implements DefaultHar
     private Bundle getExtendBundle() {
         Bundle bundle = new Bundle();
 
-        bundle.putString("server", QtalkNavicationService.getInstance().getSimpleapiurl());
+        bundle.putString("server", QtalkNavicationService.getInstance().getSearchurl());
 
         return bundle;
     }
