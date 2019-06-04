@@ -98,6 +98,33 @@
         <meta-data
             android:name="currentPlat"
             android:value="${currentPlat}" />
+        <!--                       push相关   start                           -->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=${HUAWEI_APPID}">
+        </meta-data>
+        <meta-data
+            android:name="OPPO_APP_ID"
+            android:value="appid=${OPPO_APP_ID}"/>
+        <meta-data
+            android:name="OPPO_APP_KEY"
+            android:value="appkey=${OPPO_APP_KEY}"/>
+        <meta-data
+            android:name="OPPO_APP_SECRET"
+            android:value="${OPPO_APP_SECRET}"/>
+        <meta-data
+            android:name="MIPUSH_APP_ID"
+            android:value="appid=${MIPUSH_APP_ID}"/>
+        <meta-data
+            android:name="MIPUSH_APP_KEY"
+            android:value="appkey=${MIPUSH_APP_KEY}"/>
+        <meta-data
+            android:name="MEIZU_APP_ID"
+            android:value="appid=${MEIZU_APP_ID}"/>
+        <meta-data
+            android:name="MEIZU_APP_KEY"
+            android:value="appkey=${MEIZU_APP_KEY}"/>
+        <!--                       push相关   end                           -->
 
         <activity
             android:name="com.qunar.im.ui.activity.TabMainActivity"

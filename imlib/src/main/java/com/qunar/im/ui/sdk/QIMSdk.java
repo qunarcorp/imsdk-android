@@ -166,6 +166,13 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
             CommonConfig.isQtalk = applicationInfo.metaData.getBoolean("serverDoMain");
             CommonConfig.schema = applicationInfo.metaData.getString("SCHEME");
             CommonConfig.currentPlat = applicationInfo.metaData.getString("currentPlat");
+            QTPushConfiguration.OPPO_APP_ID = applicationInfo.metaData.getString("OPPO_APP_ID");
+            QTPushConfiguration.OPPO_APP_KEY = applicationInfo.metaData.getString("OPPO_APP_KEY");
+            QTPushConfiguration.OPPO_APP_SECRET = applicationInfo.metaData.getString("OPPO_APP_SECRET");
+            QTPushConfiguration.MIPUSH_APP_ID = applicationInfo.metaData.getString("MIPUSH_APP_ID");
+            QTPushConfiguration.MIPUSH_APP_KEY = applicationInfo.metaData.getString("MIPUSH_APP_KEY");
+            QTPushConfiguration.MEIZU_APP_ID = applicationInfo.metaData.getString("MEIZU_APP_ID");
+            QTPushConfiguration.MEIZU_APP_KEY = applicationInfo.metaData.getString("MEIZU_APP_KEY");
         }
     }
 
