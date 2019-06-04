@@ -44,6 +44,14 @@ android {
                     PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
                     serverDoMain  : true,
                     baiduMap :"xxxxx",//百度地图key 用于发送位置消息
+                    HUAWEI_APPID : "123",//华为push
+                    OPPO_APP_ID : "123",//OPPOpush
+                    OPPO_APP_KEY : "123",
+                    OPPO_APP_SECRET : "123",
+                    MIPUSH_APP_ID : "123",//小米push
+                    MIPUSH_APP_KEY : "123",
+                    MEIZU_APP_ID : "123",//魅族push
+                    MEIZU_APP_KEY : "123",
                     SCHEME : "qtalkaphone",
                     currentPlat  : "Startalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
@@ -57,6 +65,14 @@ android {
                     PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",
                     serverDoMain  : false,
                     baiduMap :"xxxxx",//百度地图key 用于发送位置消息
+                    HUAWEI_APPID : "123",//华为push
+                    OPPO_APP_ID : "123",//OPPOpush
+                    OPPO_APP_KEY : "123",
+                    OPPO_APP_SECRET : "123",
+                    MIPUSH_APP_ID : "123",//小米push
+                    MIPUSH_APP_KEY : "123",
+                    MEIZU_APP_ID : "123",//魅族push
+                    MEIZU_APP_KEY : "123",
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",
                     MAIN_SCHEMA : "start_qchat_activity",
