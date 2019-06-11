@@ -156,8 +156,6 @@ public class BuddyPresenter implements IFriendsManagePresenter, IBuddyPresenter,
 
     @Override
     public void sendAddBuddyRequest() {
-        //<presence xmlns='jabber:x:verify_friend' to = 'jianxue.mei@l-tqserver2.cc.beta.cn6' type = 'verify_friend' method = 'manual_authentication_confirm' body = '123'/>
-        //<presence xmlns='jabber:x:verify_friend' to = 'ping.xue@l-tqserver2.cc.beta.cn6' type = 'verify_friend' answer = '2'/>
         int type = mBuddyView.getAuthType();
         if (type == 0) return;
 //        IMLogic.instance().requestFriends(QtalkStringUtils.userId2Jid(mBuddyView.getTargetId())
