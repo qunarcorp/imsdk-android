@@ -36,7 +36,8 @@
             android:layout_below="@id/nav_config_item_name"
             android:layout_marginTop="@dimen/dp_10"
             android:textSize="@dimen/atom_ui_text_size_micro"
-            android:lines="2"/>
+            android:lines="2"
+            tools:text="https://qt.qunar.com/package/static/qtalk/nav"/>
 
         <com.qunar.im.ui.view.IconView
             android:id="@+id/nav_config_item_detail"

@@ -8,6 +8,16 @@ import java.util.List;
 import static com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
 
 
+/**
+ * help you to achieve multi type easily
+ * <p>
+ * Created by tysheng
+ * Date: 2017/4/6 08:41.
+ * Email: tyshengsx@gmail.com
+ * <p>
+ * <p>
+ * more information: https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/968
+ */
 
 public abstract class MultiTypeDelegate<T> {
 

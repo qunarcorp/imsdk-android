@@ -5,7 +5,7 @@ import android.widget.ListView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.EmoticonAdapter;
 import com.qunar.im.base.jsonbean.EmotionEntry;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.ui.util.emoticon.EmotionDownloader;
 import com.qunar.im.ui.view.QtNewActionBar;
 

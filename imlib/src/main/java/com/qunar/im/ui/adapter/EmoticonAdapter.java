@@ -14,7 +14,7 @@ import com.qunar.im.base.jsonbean.DownloadImageResult;
 import com.qunar.im.base.jsonbean.EmotionEntry;
 import com.qunar.im.base.transit.DownloadRequest;
 import com.qunar.im.base.transit.IDownloadRequestComplete;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.ui.R;

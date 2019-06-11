@@ -12,7 +12,7 @@ import com.qunar.im.base.module.UserConfigData;
 import com.qunar.im.ui.presenter.IManageEmotionPresenter;
 import com.qunar.im.ui.presenter.impl.ManageEmotionPresenter;
 import com.qunar.im.ui.presenter.views.IManageEmotionView;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ManageEmojiconAdapter;
 import com.qunar.im.ui.imagepicker.ImagePicker;

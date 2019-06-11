@@ -9,6 +9,9 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.recyclerview.BaseItemDraggableAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
 
+/**
+ * Created by luoxw on 2016/6/20.
+ */
 public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
 //    private static final String TAG = ItemDragAndSwipeCallback.class.getSimpleName();

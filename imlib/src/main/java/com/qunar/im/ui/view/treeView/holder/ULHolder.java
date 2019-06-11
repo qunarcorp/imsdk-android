@@ -8,6 +8,10 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 import com.qunar.rn_service.protocal.NativeApi;
 
+/**
+ * Created by lihaibin.li on 2018/1/4.
+ */
+
 public class ULHolder extends SDHolder {
 
     Context context;

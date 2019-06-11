@@ -23,6 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+/**
+ * Created by Jacksgong on 3/28/16.
+ * <p/>
+ * For wrap some utils for view.
+ */
 public class ViewUtil {
 
     private static final String TAG = "ViewUtil";

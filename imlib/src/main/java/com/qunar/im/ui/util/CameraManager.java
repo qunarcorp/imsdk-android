@@ -23,7 +23,16 @@ import com.qunar.im.base.util.LogUtil;
 
 import java.io.IOException;
 
-
+/**
+ * 来自网络copy
+ *
+ * 作者: 陈涛
+ *
+ * 日期: 2014年8月20日
+ *
+ * 描述: 该类主要负责对相机的操作
+ *
+ */
 public final class CameraManager {
 
 	private static final String TAG = "CameraManager";

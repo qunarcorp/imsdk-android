@@ -28,6 +28,19 @@ import com.qunar.im.ui.view.kpswitch.handler.KPSwitchFSPanelLayoutHandler;
 import com.qunar.im.ui.view.kpswitch.util.ViewUtil;
 
 
+/**
+ * Created by Jacksgong on 3/27/16.
+ * <p/>
+ * The panel container linear layout for full-screen theme window, and this layout's height would
+ * be always equal to the height of the keyboard.
+ * <p/>
+ * For non-full-screen theme window, please use {@link KPSwitchPanelLinearLayout} instead.
+ *
+ * @see KeyboardUtil#attach(android.app.Activity, IPanelHeightTarget)
+ * @see #recordKeyboardStatus(Window)
+ * @see KPSwitchFSPanelFrameLayout
+ * @see KPSwitchFSPanelRelativeLayout
+ */
 public class KPSwitchFSPanelLinearLayout extends LinearLayout implements IPanelHeightTarget,
         IFSPanelConflictLayout {
 

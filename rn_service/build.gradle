@@ -26,9 +26,9 @@ android {
 }
 
 dependencies {
-    compile 'com.qunar.im:sdk-base:3.0.3'
-    compile 'com.qunar.im:sdk-common:3.0.3'
-    compile 'com.qunar.im:sdk-push:3.0.3'
+    compile 'com.qunar.im:sdk-base:3.0.4'
+    compile 'com.qunar.im:sdk-common:3.0.4'
+    compile 'com.qunar.im:sdk-push:3.0.4'
     compile "io.sigpipe:jbsdiff:1.0"
     compile('com.facebook.react:react-native:0.54.4') {
 

@@ -532,8 +532,9 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
                 }
                 break;
             case QtalkEvent.SHAKE_WINDOW:
-                if(!isFront) return;
-                this.shake();
+
+                if (!isFront) return;
+                shakeWindow();
         }
     }
 
@@ -618,7 +619,7 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         });
     }
 
-    protected void shake(){
+    protected void shakeWindow() {
         CustomAnimation customAnimation = new CustomAnimation();
         customAnimation.setDuration(2000);
         try{

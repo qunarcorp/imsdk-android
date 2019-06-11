@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Created by Bogdan Melnychuk on 2/10/15.
+ */
 public class TreeNode {
     public static final String NODES_ID_SEPARATOR = ":";
 

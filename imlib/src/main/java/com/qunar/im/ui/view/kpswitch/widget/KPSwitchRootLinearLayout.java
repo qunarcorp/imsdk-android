@@ -24,6 +24,20 @@ import android.widget.LinearLayout;
 
 import com.qunar.im.ui.view.kpswitch.handler.KPSwitchRootLayoutHandler;
 
+/**
+ * Created by Jacksgong on 9/1/15.
+ * <p/>
+ * To keep watch on the keyboard status before occur layout-conflict.
+ * <p/>
+ * This layout must be the root layout in your Activity. In other words, must be the
+ * child of content view.
+ * <p/>
+ * Resolve the layout-conflict from switching the keyboard and the Panel.
+ *
+ * @see KPSwitchRootRelativeLayout
+ * @see KPSwitchRootFrameLayout
+ * @see KPSwitchPanelLinearLayout
+ */
 public class KPSwitchRootLinearLayout extends LinearLayout {
 
     private KPSwitchRootLayoutHandler conflictHandler;

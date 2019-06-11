@@ -19,6 +19,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
+/**
+ * Created by Jacksgong on 9/1/15.
+ * <p/>
+ * For save the keyboard height.
+ */
 class KeyBoardSharedPreferences {
 
     private static final String FILE_NAME = "keyboard.common";
