@@ -92,7 +92,7 @@ import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.DataUtils;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.InternDatas;
@@ -2014,7 +2014,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         if (time - lastShakeTime >= 30000) {
             lastShakeTime = time;
             ((IShakeMessagePresenter) chatingPresenter).setShakeMessage();
-            super.shake();
+            shakeWindow();
         } else {
             Toast.makeText(this, R.string.atom_ui_tip_too_frequent, Toast.LENGTH_LONG).show();
         }
@@ -2132,7 +2132,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         send_btn = (TextView) findViewById(R.id.send_btn);
 
         chating_view = (RelativeLayout) findViewById(R.id.chating_view);
-        chat_region = (PullToRefreshListView) findViewById(R.id.chat_region);
+        chat_region = (com.handmark.pulltorefresh.library.PullToRefreshListView) findViewById(R.id.chat_region);
         new_msg_prompt = (TextView) findViewById(R.id.new_msg_prompt);//更新消息条目数有关
         emotion_btn = (ImageView) findViewById(R.id.tv_emojicon);
         outter_msg_prompt = (LinearLayout) findViewById(R.id.outter_msg_prompt);
@@ -3180,7 +3180,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                         cursor = this
                                 .getContentResolver()
                                 .query(_uri,
-                                        new String[]{MediaStore.Video.VideoColumns.DATA},
+                                        new String[]{android.provider.MediaStore.Video.VideoColumns.DATA},
                                         null, null, null);
                         if (cursor != null) {
                             cursor.moveToFirst();

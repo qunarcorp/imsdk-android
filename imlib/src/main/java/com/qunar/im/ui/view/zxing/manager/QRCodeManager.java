@@ -9,6 +9,10 @@ import com.qunar.im.ui.view.zxing.activity.CaptureActivity;
 import com.qunar.im.ui.view.zxing.encoding.EncodingUtils;
 
 
+/**
+ * 二维码管理器
+ * Created by HDL on 2017/6/28.
+ */
 
 public class QRCodeManager extends IQRCodeStrategy {
     /**

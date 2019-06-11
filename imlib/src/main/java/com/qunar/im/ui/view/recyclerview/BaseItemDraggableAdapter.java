@@ -16,6 +16,9 @@ import com.qunar.im.ui.view.recyclerview.listener.OnItemSwipeListener;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Created by luoxw on 2016/7/13.
+ */
 public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
 
     private static final int NO_TOGGLE_VIEW = 0;

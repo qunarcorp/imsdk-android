@@ -3,6 +3,10 @@ package com.qunar.im.ui.view.zxing.manager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+/**
+ * 二维码策略类
+ * Created by HDL on 2017/6/28.
+ */
 
 abstract class IQRCodeStrategy {
     /**

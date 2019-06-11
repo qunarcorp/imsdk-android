@@ -16,7 +16,7 @@ import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.FacebookImageUtil;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 

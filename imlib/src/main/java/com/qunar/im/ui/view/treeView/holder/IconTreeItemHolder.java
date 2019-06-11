@@ -10,6 +10,9 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
 
+/**
+ * Created by Bogdan Melnychuk on 2/12/15.
+ */
 public class IconTreeItemHolder extends TreeNode.BaseNodeViewHolder<IconTreeItemHolder.IconTreeItem> {
     private TextView tvValue;
     private IconView arrowView;

@@ -36,7 +36,7 @@ public class FaceGridView extends LinearLayout {
     private int smallVSpacing = Utils.dipToPixels(QunarIMApp.getContext(), 22);
     private int bigVSpacing = Utils.dipToPixels(QunarIMApp.getContext(), 22);
     private int viewPaperHeight = Utils.dipToPixels(QunarIMApp.getContext(), 151);
-    private OnEmoticionsClickListener defaultOnEmoticionsClickListener, othersOnEmoricionsClickListener, favoriteEmojiconOnClickListener;
+    private FaceGridView.OnEmoticionsClickListener defaultOnEmoticionsClickListener, othersOnEmoricionsClickListener, favoriteEmojiconOnClickListener;
     private EmoticionMap defaultMap, favoriteMap;
     private Map<String, EmoticionMap> otherMap;
     private OnPageChangedListener pageChangedListener;
@@ -67,15 +67,15 @@ public class FaceGridView extends LinearLayout {
         this.pageChangedListener = pageChangedListener;
     }
 
-    public void setDefaultOnEmoticionsClickListener(OnEmoticionsClickListener defaultOnEmoticionsClickListener) {
+    public void setDefaultOnEmoticionsClickListener(FaceGridView.OnEmoticionsClickListener defaultOnEmoticionsClickListener) {
         this.defaultOnEmoticionsClickListener = defaultOnEmoticionsClickListener;
     }
 
-    public void setOthersOnEmoricionsClickListener(OnEmoticionsClickListener othersOnEmoricionsClickListener) {
+    public void setOthersOnEmoricionsClickListener(FaceGridView.OnEmoticionsClickListener othersOnEmoricionsClickListener) {
         this.othersOnEmoricionsClickListener = othersOnEmoricionsClickListener;
     }
 
-    public void setFavoriteEmojiconOnClickListener(OnEmoticionsClickListener favoriteEmojiconOnClickListener) {
+    public void setFavoriteEmojiconOnClickListener(FaceGridView.OnEmoticionsClickListener favoriteEmojiconOnClickListener) {
         this.favoriteEmojiconOnClickListener = favoriteEmojiconOnClickListener;
     }
 
@@ -162,7 +162,7 @@ public class FaceGridView extends LinearLayout {
         for (EmoticionMap map : otherMap.values()) {
 //            EmoticionMap emoticionMap = otherMap.get(key);
             map.count=map.emoticonEntityMap.size();
-            OnEmoticionsClickListener listener;
+            FaceGridView.OnEmoticionsClickListener listener;
             if (map.showAll == 1) {
                 itemCountPerPage = 21;
                 columnsNumber = 7;

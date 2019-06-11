@@ -84,7 +84,7 @@ public class FindPwdStep2Activity extends IMBaseActivity {
     }
 
     private void showPicCode(){
-        String url = "" + System.currentTimeMillis();
+        String url = "https://qapi.qunar.com/api/captcha/getImage?appId=pubqtalk.registe&device=1&k=dYFgL3Xd&t=" + System.currentTimeMillis();
         Glide.with(this).load(url).into(atom_ui_pic_code_img);
     }
 

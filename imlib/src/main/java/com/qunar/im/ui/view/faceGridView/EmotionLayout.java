@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.AddEmotionActivity;

@@ -6,6 +6,9 @@ import android.support.annotation.LayoutRes;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
 
 
+/**
+ * Created by BlingBling on 2016/11/11.
+ */
 
 public abstract class LoadMoreView {
 

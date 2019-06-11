@@ -45,7 +45,7 @@ import com.qunar.im.base.transit.PbImageMessageQueue;
 import com.qunar.im.base.transit.UploadImageRequest;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.DataCenter;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.InternDatas;

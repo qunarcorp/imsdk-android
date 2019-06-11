@@ -61,7 +61,7 @@ import com.qunar.im.base.structs.MessageType;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
-import com.qunar.im.base.util.EmotionUtils;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.MemoryCache;

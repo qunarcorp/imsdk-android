@@ -172,4 +172,6 @@
         <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
     </style>
 
+    <style name="Widget.GifView" parent="@android:style/Widget" />
+
 </resources>

@@ -41,7 +41,7 @@ public class  AAShoukMessageProcessor extends DefaultMessageProcessor {
                         QtalkStringUtils.parseLocalpart(item.getMessage().getToID()):
                         QtalkStringUtils.parseLocalpart(item.getMessage().getFromID());
                 sb.append("&username=").append(username).append("&sign=")
-                        .append(BinaryUtil.MD5(username + ""))
+                        .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
                         .append("&company=qunar&")
                         .append("user_id=")
                         .append(user_id)
@@ -50,7 +50,7 @@ public class  AAShoukMessageProcessor extends DefaultMessageProcessor {
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             } else {
                 sb.append("&username=").append(username).append("&sign=")
-                        .append(BinaryUtil.MD5(username + ""))
+                        .append(BinaryUtil.MD5(username + "00d8c4642c688fd6bfa9a41b523bdb6b"))
                         .append("&company=qunar&")
                         .append("group_id=")
                         .append(QtalkStringUtils.parseBareJid(item.getMessage().getConversationID()))

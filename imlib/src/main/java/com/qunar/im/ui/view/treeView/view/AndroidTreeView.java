@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Created by Bogdan Melnychuk on 2/10/15.
+ */
 public class AndroidTreeView {
     private static final String NODES_PATH_SEPARATOR = ";";
 
