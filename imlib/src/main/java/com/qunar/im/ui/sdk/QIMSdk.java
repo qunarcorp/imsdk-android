@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.qunar.im.base.module.IMGroup;
+import com.qunar.im.base.module.Nick;
 import com.qunar.im.log.LogDatabaseManager;
 import com.qunar.im.ui.presenter.impl.QChatLoginPresenter;
 import com.qunar.im.utils.ConnectionUtil;
@@ -340,6 +342,24 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
      */
     public Fragment getContactsFragment(){
         return QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNContactView ? new RNContactsFragment() : new BuddiesFragment();
+    }
+
+    /**
+     * 搜索本地组织架构人员
+     * @param ser 关键字
+     * @param limit
+     */
+    public List<Nick> searchLocalUser(String ser, int limit){
+        return ConnectionUtil.getInstance().SelectContactsByLike(ser,limit);
+    }
+
+    /**
+     * 搜索本地群组
+     * @param ser 关键字
+     * @param limit
+     */
+    public List<IMGroup> searchLocalMuc(String ser, int limit){
+        return ConnectionUtil.getInstance().SelectIMGroupByLike(ser,limit);
     }
 
     /**
