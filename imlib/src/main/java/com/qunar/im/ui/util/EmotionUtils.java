@@ -122,6 +122,7 @@ public class EmotionUtils {
             return false;
         } else {
             if (defaultEmotion!=null&&defaultEmotion.packgeId.equals(pkgId)) return defaultEmotion.containKey(shortCut);
+            else if(defaultEmotion1 !=null && defaultEmotion1.packgeId.equals(pkgId)) return defaultEmotion1.containKey(shortCut);
             return checkExt && pkgId2Name.containsKey(pkgId) &&
                     extEmotions.containsKey(pkgId2Name.get(pkgId))
                     && extEmotions.get(pkgId2Name.get(pkgId)).containKey(shortCut);
