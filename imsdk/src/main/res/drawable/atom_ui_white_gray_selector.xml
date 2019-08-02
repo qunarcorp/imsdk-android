@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!--drawable-v21/btn_fab_default.xml-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/atom_ui_light_gray_DD" android:state_pressed="true"  />
+    <item android:drawable="@color/atom_ui_light_gray_DD" android:state_focused="true"  />
+    <item android:drawable="@color/atom_ui_white" />
+</selector>

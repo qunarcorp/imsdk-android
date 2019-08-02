@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="插入超链接"
+        android:textColor="@color/atom_ui_trans_dark_gray"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_link_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="超链接地址"
+        android:text="http://"
+        android:textColor="@color/atom_ui_trans_dark_gray"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_link_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="超链接标题"
+        android:textColor="@color/atom_ui_trans_dark_gray"
+        android:textSize="14sp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_toLeftOf="@+id/btn_ok"
+            android:gravity="center"
+            android:text="取消"
+            android:textSize="15sp" />
+
+
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#06c1ae"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+</LinearLayout>

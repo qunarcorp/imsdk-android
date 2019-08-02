@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/atom_ui_light_gray_ee" />
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/atom_ui_robot_item_selector"
+        android:gravity="center"
+       />
+
+</LinearLayout>

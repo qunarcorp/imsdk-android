@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical|start"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:paddingLeft="@dimen/atom_ui_item_padding"
+            android:paddingRight="@dimen/atom_ui_item_padding"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:paddingLeft="@dimen/atom_ui_item_padding"
+            android:paddingRight="@dimen/atom_ui_item_padding"
+            android:textColor="@color/atom_ui_light_gray_99"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="@dimen/atom_ui_text_size_micro" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/checked"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_pictures_selected"
+        android:layout_gravity="center_vertical|end"
+        android:visibility="visible"/>
+
+</LinearLayout>

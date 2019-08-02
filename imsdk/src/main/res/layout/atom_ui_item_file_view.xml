@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:cpb="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_15"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/file_content_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/file_name"
+                android:layout_width="match_parent"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/atom_ui_text_size_medium"
+                android:textColor="@color/atom_ui_light_gray_33" />
+
+            <TextView
+                android:id="@+id/file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/atom_ui_text_size_smaller"
+                android:textColor="@color/atom_ui_light_gray_99" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/file_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/atom_ui_conversation_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#ffeaeaea"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/atom_ui_file_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="#999999"/>
+
+    </LinearLayout>
+
+
+    <com.qunar.im.ui.view.baseView.CHorizontalProgressBar
+        android:id="@+id/file_progress"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        cpb:zpb_padding="0dp"
+        cpb:zpb_pb_color="@color/atom_ui_qchat_logo_color"
+        cpb:zpb_bg_color="@color/atom_ui_light_gray_cc" />
+</LinearLayout>

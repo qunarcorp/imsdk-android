@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco = "http://schemas.android.com/apk/res-auto"
+    android:id="@+id/config_root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/atom_ui_white">
+
+    <include android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@drawable/atom_ui_nav_config_button_bg"
+        android:padding="2dp"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/config_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:textSize="@dimen/atom_ui_text_size_medium"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:text="qtalk"/>
+
+        <FrameLayout
+            android:id="@+id/atom_qr_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/config_qr_show_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                fresco:atom_imagecache_actualImageScaleType="fitXY" />
+
+            <ProgressBar
+                android:id="@+id/config_qr_loading"
+                android:layout_width="@dimen/atom_ui_image_mid_size"
+                android:layout_height="@dimen/atom_ui_image_mid_size"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/config_promp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:text="@string/atom_ui_nav_qrcode_share"/>
+</LinearLayout>

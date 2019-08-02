@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/nav_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/nav_config_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/atom_ui_text_size_small"
+            tools:text="Qtalk导航"/>
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/nav_config_item_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/atom_ui_button_primary_color"
+            android:textSize="22sp"
+            android:text="@string/atom_ui_hook"/>
+
+
+        <TextView
+            android:id="@+id/nav_config_item_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nav_config_item_name"
+            android:layout_marginTop="@dimen/dp_10"
+            android:textSize="@dimen/atom_ui_text_size_micro"
+            android:lines="2"/>
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/nav_config_item_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nav_config_item_url"
+            android:layout_marginTop="@dimen/dp_15"
+            android:textColor="@color/atom_ui_light_gray_22"
+            android:textSize="30sp"
+            android:text="@string/atom_ui_new_qr_code"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/nav_config_item_url"
+            android:layout_marginTop="@dimen/dp_15"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/nav_config_item_modify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15"
+                android:textColor="#000000"
+                android:text="@string/atom_ui_modify"
+                android:textSize="@dimen/atom_ui_text_size_micro"
+                android:background="@drawable/atom_ui_nav_config_button_bg"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/nav_config_item_del"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:textColor="#000000"
+                android:text="@string/atom_ui_common_delete"
+                android:textSize="@dimen/atom_ui_text_size_micro"
+                android:background="@drawable/atom_ui_nav_config_button_bg"
+                />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

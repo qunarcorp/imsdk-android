@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingRight="@dimen/atom_ui_container_margin"
+    android:paddingLeft="@dimen/atom_ui_container_margin"
+    android:paddingTop="11dp"
+    android:paddingBottom="11dp"
+    android:background="@drawable/atom_ui_white_gray_selector"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="@dimen/atom_ui_image_mid_size"
+        android:layout_height="@dimen/atom_ui_image_mid_size"
+        android:scaleType="centerCrop"
+        android:paddingTop="4dip"
+        android:id="@+id/conversation_gravantar"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+        fresco:atom_imagecache_roundAsCircle="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="15dip"
+        android:minWidth="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/atom_ui_text_size_extra_micro"
+        android:gravity="center"
+        android:background="@drawable/atom_ui_unread_circle_bg"
+        android:id="@+id/textView_new_msg"
+        android:layout_marginLeft="38dip"
+        android:layout_marginStart="38dip"
+        android:layout_marginTop="0dip"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/conversation_gravantar"
+        android:layout_marginLeft="10dip"
+        android:layout_toEndOf="@id/conversation_gravantar"
+        android:layout_marginStart="10dip"
+        android:id="@+id/centerLayout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textSize="@dimen/atom_ui_text_size_large"
+                android:ellipsize="end"
+                android:textColor="@color/atom_ui_light_gray_33"
+                android:id="@android:id/text1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/atom_ui_text_size_smaller"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="@color/atom_ui_light_gray_cc"
+                android:id="@+id/textview_time"/>
+        </LinearLayout>
+
+        <com.qunar.im.ui.view.emojiconTextView.EmojiconTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:singleLine="true"
+            android:textSize="@dimen/atom_ui_text_size_small"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/atom_ui_light_gray_99"
+            android:ellipsize="marquee"
+            android:id="@android:id/text2"/>
+    </LinearLayout>
+
+</RelativeLayout>

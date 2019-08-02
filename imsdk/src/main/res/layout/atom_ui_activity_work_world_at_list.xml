@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#efeff3"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#e6e7e8"
+        android:layout_height="52dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/atom_ui_work_world_search_view_bg"
+            android:layout_height="match_parent">
+            <com.qunar.im.ui.view.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="12dp"
+                android:text="@string/atom_ui_new_search"
+                android:textColor="#FF9E9E9E"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/search_text"
+                android:background="@null"
+                android:singleLine="true"
+                android:inputType="text"
+                android:hint="输入完成后点击搜索"
+                android:textSize="13sp"
+                android:imeOptions="actionSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/work_world_isselect_rc"
+
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/work_world_atlist_rc"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

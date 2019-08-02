@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="15dip"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="@dimen/atom_ui_image_mid_size"
+        android:layout_height="@dimen/atom_ui_image_mid_size"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/conversation_gravatar"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+        fresco:atom_imagecache_roundAsCircle="true"
+    />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/conversation_gravatar"
+        android:layout_toEndOf="@id/conversation_gravatar"
+        android:layout_marginLeft="10dip"
+        android:layout_marginStart="10dip"
+        android:id="@+id/centerLayout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:ellipsize="end"
+            android:textColor="@android:color/black"
+            android:id="@android:id/text1"/>
+        <com.qunar.im.ui.view.emojiconTextView.EmojiconTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_marginTop="5dip"
+            android:textColor="@android:color/darker_gray"
+            android:ellipsize="marquee"
+            android:id="@android:id/text2"/>
+    </LinearLayout>
+</RelativeLayout>

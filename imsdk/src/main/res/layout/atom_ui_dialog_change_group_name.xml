@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/atom_ui_light_gray_33"
+        android:padding="@dimen/atom_ui_item_padding"
+        android:layout_margin="@dimen/atom_ui_text_margin"/>
+</LinearLayout>

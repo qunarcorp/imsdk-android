@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="atom_ui_videotag">100</integer>
+    <item name="atom_ui_open_file" type="id" />
+</resources>

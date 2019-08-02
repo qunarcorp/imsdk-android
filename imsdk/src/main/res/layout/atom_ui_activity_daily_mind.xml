@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+       />
+
+    <LinearLayout
+        android:id="@+id/daily_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/password_box"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_menu_item_height"
+            android:paddingLeft="@dimen/atom_ui_container_margin"
+            android:paddingRight="@dimen/atom_ui_container_margin"
+            android:drawableEnd="@drawable/atom_ui_ic_right_arrow"
+            android:drawableRight="@drawable/atom_ui_ic_right_arrow"
+            android:gravity="center_vertical|start"
+            android:text="@string/atom_ui_explore_title_passwords"
+            android:background="@drawable/atom_ui_white_gray_selector"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:background="@color/atom_ui_light_gray_ee" />
+
+        <TextView
+            android:id="@+id/to_do_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_menu_item_height"
+            android:paddingLeft="@dimen/atom_ui_container_margin"
+            android:paddingRight="@dimen/atom_ui_container_margin"
+            android:drawableEnd="@drawable/atom_ui_ic_right_arrow"
+            android:drawableRight="@drawable/atom_ui_ic_right_arrow"
+            android:gravity="center_vertical|start"
+            android:text="@string/atom_ui_title_todolist"
+            android:background="@drawable/atom_ui_white_gray_selector"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium"
+            android:visibility="gone"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:visibility="gone"
+            android:background="@color/atom_ui_light_gray_ee" />
+        <TextView
+            android:id="@+id/ever_note"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/atom_ui_menu_item_height"
+            android:paddingLeft="@dimen/atom_ui_container_margin"
+            android:paddingRight="@dimen/atom_ui_container_margin"
+            android:drawableEnd="@drawable/atom_ui_ic_right_arrow"
+            android:drawableRight="@drawable/atom_ui_ic_right_arrow"
+            android:gravity="center_vertical|start"
+            android:text="@string/atom_ui_title_ever_note"
+            android:background="@drawable/atom_ui_white_gray_selector"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </LinearLayout>
+</LinearLayout>

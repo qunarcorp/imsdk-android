@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <ImageView
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="108dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/atom_ui_file_sharing"
+        />
+
+    <TextView
+        android:id="@+id/atom_ui_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="你已在电脑登录QTalk"
+        android:textColor="#212121"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/atom_ui_file_sharing_tips2"
+        android:textColor="#616161"
+        android:textSize="16sp" />
+
+    <com.qunar.im.ui.view.IconView
+        android:id="@+id/sharing_file"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/aton_ui_radio_buttons_56"
+        android:gravity="center"
+        android:text="@string/aton_ui_new_my_folder"
+        android:textColor="#FF9E9E9E"
+        android:textSize="28sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/atom_ui_button_send_file_tip"
+        android:textColor="#616161"
+        android:textSize="12sp" />
+
+</LinearLayout>

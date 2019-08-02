@@ -68,8 +68,8 @@ dependencies {
 flavorDimensions "qim"
     //分渠道
     productFlavors {
-        //QTalk
-        qtalk {
+        //startalk
+        startalk {
             dimension "qim"
 
             manifestPlaceholders = [

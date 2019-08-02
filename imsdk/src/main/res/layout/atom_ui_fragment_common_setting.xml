@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/atom_ui_container_margin"
+    android:background="@color/atom_ui_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_common_sound_switch"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/chk_new_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_common_vibration_switch"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/shock_new_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_common_push_switch"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/chk_push_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_common_push_showcontent"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/show_push_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:id="@+id/offline_push_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_common_push_offline"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/offline_push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:visibility="gone"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_shake_event"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/shake_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:background="@color/atom_ui_dark_white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="开启横屏模式"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/cbx_landscape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/atom_ui_container_margin"
+            android:padding="@dimen/atom_ui_item_padding"
+            android:text="@string/atom_ui_setting_support_gif_avater"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+
+        <CheckBox
+            android:id="@+id/cbx_support_gif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:checked="true"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </RelativeLayout>
+</LinearLayout>

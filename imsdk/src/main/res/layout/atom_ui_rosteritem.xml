@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/atom_ui_gray_white_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/atom_ui_top_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/atom_ui_session_item_top"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/atom_ui_conversation_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="70dp"
+        android:background="#ffeaeaea" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:paddingRight="@dimen/atom_ui_container_margin"
+        android:paddingTop="8dp">
+
+        <RelativeLayout
+            android:id="@+id/img_header_layout"
+            android:layout_width="@dimen/atom_ui_conversation_header_height"
+            android:layout_height="@dimen/atom_ui_conversation_header_height"
+            android:layout_centerVertical="true">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/conversation_gravantar"
+                android:layout_width="@dimen/atom_ui_conversation_header_height"
+                android:layout_height="@dimen/atom_ui_conversation_header_height"
+                android:scaleType="centerCrop"
+                fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                fresco:atom_imagecache_roundAsCircle="true"
+                fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white" />
+            <!--android:paddingTop="4dip"-->
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/conversation_gravantar_top"
+                android:layout_width="@dimen/atom_ui_conversation_header_height"
+                android:layout_height="@dimen/atom_ui_conversation_header_height"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                fresco:atom_imagecache_roundAsCircle="true"
+                fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_dark_white" />
+
+            <ImageView
+                android:id="@+id/imageview_type"
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_15"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/atom_ui_consult"
+                android:visibility="gone" />
+            <!--android:paddingTop="4dip"-->
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/centerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginStart="10dip"
+            android:layout_toEndOf="@id/img_header_layout"
+            android:layout_toRightOf="@id/img_header_layout"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@android:id/text1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Qtalk 青春的群"
+                    android:textColor="@color/atom_ui_light_gray_22"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/textview_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:text="今天 下午4.44"
+                    android:textColor="@color/atom_ui_light_gray_cc"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                >
+
+                <LinearLayout
+                    android:id="@+id/right_remind_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView_new_msg"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/atom_ui_unread_circle_bg"
+                        android:gravity="center"
+                        android:minWidth="16dp"
+                        android:text="99+"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/white"
+                        android:textSize="8sp"
+                        android:visibility="visible" />
+
+                    <com.qunar.im.ui.view.IconView
+                        android:id="@+id/conversation_close_notifacation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_4"
+                        android:text="@string/atom_ui_new_close_notification"
+                        android:textColor="#DBDBDB"
+                        android:textSize="@dimen/atom_ui_text_size_small"
+                        android:visibility="gone" />
+
+                    <com.qunar.im.ui.view.IconView
+                        android:id="@+id/not_remind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/atom_ui_new_unread_circle"
+                        android:textColor="#EB524A"
+                        android:textSize="8sp"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_alignParentRight="true">-->
+
+
+                <!--</LinearLayout>-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/right_remind_layout"
+                    android:gravity="center_vertical">
+
+                    <com.qunar.im.ui.view.emojiconTextView.EmojiconTextView
+                        android:id="@android:id/text2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLength="40"
+                        android:singleLine="true"
+                        android:text="最新消息"
+                        android:textColor="#B2B2B2"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+                <!--<TextView-->
+                <!--android:id="@+id/textview_type"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="—热线"-->
+                <!--android:textColor="@color/atom_ui_red_67"-->
+                <!--android:textSize="@dimen/atom_ui_text_size_smaller"-->
+                <!--android:visibility="visible" />-->
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

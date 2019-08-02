@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/atom_ui_white_gray_selector"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/quickreply_item_tv"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_gravity="left"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="@dimen/atom_ui_text_size_small"
+        android:background="@drawable/atom_ui_white_gray_selector"
+        android:gravity="left"/>
+
+</LinearLayout>

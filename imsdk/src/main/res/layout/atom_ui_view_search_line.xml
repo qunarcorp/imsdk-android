@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:background="@drawable/atom_ui_left_round_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_height="wrap_content">
+
+            <com.qunar.im.ui.view.IconView
+                android:id="@+id/search_icon"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/atom_ui_new_home_search"
+                android:textColor="#0BCCC0" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:paddingRight="3dp"
+            android:text="搜索聊天记录"
+            android:textColor="#666666"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

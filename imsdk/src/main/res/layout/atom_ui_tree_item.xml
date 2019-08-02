@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/atom_ui_white"
+    android:minHeight="48dp" >
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/treenode_icon"
+        android:layout_width="32dip"
+        android:layout_height="32dip"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_white"
+        fresco:atom_imagecache_roundedCornerRadius="@dimen/atom_ui_radius_size"/>
+
+    <TextView
+        android:id="@+id/treenode_label"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/treenode_icon"
+        android:layout_toEndOf="@id/treenode_icon"
+        android:textColor="@color/atom_ui_light_gray_33"
+        android:textSize="@dimen/atom_ui_text_size_medium"/>
+
+</RelativeLayout>

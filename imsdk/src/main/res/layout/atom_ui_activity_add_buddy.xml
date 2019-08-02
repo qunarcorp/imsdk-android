@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+       />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_buddy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_medium"
+            android:background="@drawable/atom_ui_bottom_border_primary_color"
+            android:layout_weight="1"
+            android:hint="@string/atom_ui_tip_add_buddy_input_userid" />
+
+        <Button
+            android:id="@+id/btn_send_buddy"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/atom_ui_small_butoon_selector"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/atom_ui_container_margin"
+            android:layout_marginStart="@dimen/atom_ui_container_margin"
+            android:text="@string/atom_ui_btn_add_buddy_search"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="@dimen/atom_ui_text_size_medium" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/search_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"/>
+
+    <TextView
+        android:id="@+id/tv_error_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:textColor="@color/atom_ui_red_67"
+        android:textSize="@dimen/atom_ui_text_size_small"/>
+
+
+</LinearLayout>

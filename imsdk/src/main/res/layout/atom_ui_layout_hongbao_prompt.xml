@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/atom_ui_bg_chat_time"
+    android:gravity="center">
+    <ImageView
+        android:id="@+id/hongbao_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/atom_ui_ic_lucky_money_red"
+        android:contentDescription="luckymoney" />
+    <TextView
+        android:id="@+id/hongbao_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/atom_ui_white"
+        android:textSize="@dimen/atom_ui_text_size_micro"
+        android:gravity="center"/>
+</LinearLayout>

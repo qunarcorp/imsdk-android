@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qunar.im.ui.view.QtSearchActionBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/my_action_bar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_gravity="center_vertical"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/left_layout"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp">
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/left_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/atom_ui_new_back_unselect"
+                    android:textColor="#212121"
+                    android:textSize="20sp" />
+            </FrameLayout>
+
+            <com.qunar.im.ui.view.MySearchView
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5" />
+
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:layout_marginLeft="16dp"
+                android:paddingRight="13dp"
+                android:text="@string/atom_ui_cancel"
+                android:textColor="#FF5CC57F"
+                android:textSize="17sp"
+                android:visibility="gone"
+
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#383838" />
+    </RelativeLayout>
+</com.qunar.im.ui.view.QtSearchActionBar>

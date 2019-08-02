@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/drawer_layout">
+    <RelativeLayout
+        android:background="@color/atom_ui_light_gray_f2"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include android:id="@+id/my_action_bar"
+            layout="@layout/atom_ui_layout_action_bar">
+        </include>
+        <com.qunar.im.ui.view.tabview.SmartTabLayout
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/atom_ui_light_gray_f9"
+            android:layout_below="@id/my_action_bar"
+            app:stl_customTabTextLayoutId="@layout/atom_ui_tab_layout"
+            app:stl_customTabTextViewId="@+id/tab_name"
+            app:stl_distributeEvenly="true"
+            app:stl_dividerColor="@android:color/transparent"
+            app:stl_dividerThickness="0dp"
+            app:stl_overlineColor="@color/atom_ui_primary_color"
+            app:stl_overlineThickness="2dp"
+            app:stl_indicatorColor="@color/atom_ui_primary_color"
+            app:stl_indicatorCornerRadius="0.5dp"
+            app:stl_indicatorGravity="bottom"
+            app:stl_indicatorInterpolation="linear"
+            app:stl_indicatorThickness="2dp"
+            app:stl_indicatorWidth="56dp"
+            app:stl_underlineColor="@android:color/transparent"
+            app:stl_underlineThickness="0dp"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tab"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/left_drawer"
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</android.support.v4.widget.DrawerLayout>

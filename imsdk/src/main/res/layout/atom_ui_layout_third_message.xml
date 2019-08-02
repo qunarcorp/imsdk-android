@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_source"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:textSize="@dimen/atom_ui_text_size_smaller"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:text="北京"
+        android:textColor="@color/atom_ui_button_primary_color_pressed"/>
+
+
+    <TextView
+        android:id="@+id/tv_message_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/atom_ui_light_gray_33"
+        android:textSize="@dimen/atom_ui_text_size_small"
+        android:padding="8dp"
+        android:text="我想去看。。。。。。。。。。。。。" />
+
+    <TextView
+        android:id="@+id/tv_action"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/atom_ui_button_height"
+        android:gravity="center"
+        android:textSize="@dimen/atom_ui_text_size_medium"
+        android:textColor="@color/atom_ui_white"
+        android:background="@color/atom_ui_primary_color"
+        android:text="@string/atom_ui_response" />
+</LinearLayout>

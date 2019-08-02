@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@color/atom_ui_white">
+
+        <include
+            android:id="@+id/my_action_bar"
+            layout="@layout/atom_ui_layout_new_action_bar" />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/user_gravatar"
+            android:layout_width="@dimen/atom_ui_image_largin_size"
+            android:layout_height="@dimen/atom_ui_image_largin_size"
+            android:layout_above="@+id/sign"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundAsCircle="true"
+            fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_white"
+            fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+
+        <TextView
+            android:id="@+id/sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/atom_ui_gradient_linear_selector"
+            android:gravity="center_horizontal"
+            android:paddingBottom="14dp"
+            android:text="@string/atom_ui_tip_default_signature"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="@dimen/atom_ui_text_size_small" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/atom_ui_container_margin"
+        android:paddingRight="@dimen/atom_ui_container_margin">
+
+        <RadioButton
+            android:id="@+id/radio_allow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_message_agree_friend"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:textSize="@dimen/atom_ui_text_size_small" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_deny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/atom_ui_message_refuse_friend"
+                android:textColor="@color/atom_ui_light_gray_33"
+                android:textSize="@dimen/atom_ui_text_size_small" />
+
+            <EditText
+                android:id="@+id/edit_deny_reason"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/atom_ui_container_margin"
+                android:layout_marginStart="@dimen/atom_ui_container_margin"
+                android:layout_weight="1"
+                android:hint="@string/atom_ui_add_buddy_input_refuse_reason"
+                android:singleLine="true"
+                android:textColor="@color/atom_ui_light_gray_33"
+                android:textSize="@dimen/atom_ui_text_size_small"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/operation_btn"
+        android:layout_width="328dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_common_button_blue_selector"
+        android:gravity="center"
+        android:padding="@dimen/atom_ui_buttong_padding"
+        android:text="@string/atom_ui_common_send"
+        android:textColor="@color/atom_ui_white"
+        android:textSize="@dimen/atom_ui_text_size_large" />
+</LinearLayout>

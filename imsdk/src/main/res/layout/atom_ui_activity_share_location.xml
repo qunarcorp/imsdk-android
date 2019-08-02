@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/img_reset_location"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/atom_ui_ic_location_reset"
+            android:scaleType="center"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:layout_marginBottom="@dimen/atom_ui_container_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+        <LinearLayout
+            android:id="@+id/location_top_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true"
+            android:alpha="0.8"
+            android:background="@color/atom_ui_light_gray_cc"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/hint"
+            android:layout_below="@id/location_top_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:textSize="@dimen/atom_ui_text_size_medium"
+            android:gravity="center"
+            android:background="@color/atom_ui_light_gray_cc"
+            android:padding="@dimen/atom_ui_item_padding"
+            />
+    </RelativeLayout>
+</LinearLayout>

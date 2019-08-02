@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/atom_ui_light_gray_ee" />
+    <com.qunar.im.ui.view.faceGridView.FaceGridView
+        android:id="@+id/faceGridView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/atom_ui_light_gray_ee" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dip">
+
+        <ImageView
+            android:id="@+id/add_emotion"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/atom_ui_chat_send_selector"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:scaleType="center"
+            android:layout_marginRight="@dimen/atom_ui_image_margin"
+            android:layout_marginEnd="@dimen/atom_ui_image_margin"
+            android:layout_marginLeft="@dimen/atom_ui_image_margin"
+            android:layout_marginStart="@dimen/atom_ui_image_margin"
+            />
+        <ImageView
+            android:id="@+id/delete_emotion"
+            android:layout_width="32dip"
+            android:layout_height="48dip"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/atom_ui_image_margin"
+            android:layout_marginEnd="@dimen/atom_ui_image_margin"
+            android:scaleType="fitCenter"
+            android:src="@drawable/atom_ui_delete_emotion" />
+
+        <HorizontalScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/delete_emotion"
+            android:layout_toStartOf="@id/delete_emotion"
+            android:layout_toRightOf="@id/add_emotion"
+            android:layout_toEndOf="@id/add_emotion"
+            android:layout_centerVertical="true"
+            android:scrollbars="none">
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/favorite_emotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/atom_ui_favourite"
+                    android:drawableStart="@drawable/atom_ui_favourite"
+                    android:minWidth="32dp"
+                    android:textSize="@dimen/atom_ui_text_size_small"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:background="@color/atom_ui_light_gray"
+                    android:padding="@dimen/atom_ui_item_padding"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/default_emotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/atom_ui_emoji_smail"
+                    android:drawableStart="@drawable/atom_ui_emoji_smail"
+                    android:minWidth="32dp"
+                    android:textSize="@dimen/atom_ui_text_size_small"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:background="@color/atom_ui_light_gray"
+                    android:padding="@dimen/atom_ui_item_padding"
+                    android:gravity="center" />
+
+
+                <LinearLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+</LinearLayout>

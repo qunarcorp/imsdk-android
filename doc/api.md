@@ -147,3 +147,9 @@
        * return List<Nick>
   QIMSDK.getInstance().getGroups()
   ```     
+ ```switchSearch
+  24.获取群列表
+        * 切换搜索版本
+        * @param isOld true旧搜索 false新搜索
+  QIMSDK.getInstance().switchSearch(boolean isOld)
+  ```       

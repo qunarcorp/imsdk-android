@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="@dimen/atom_ui_container_margin">
+
+
+    <RadioGroup
+        android:id="@+id/rg_verfiy_choice"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton android:id="@+id/radio_allow_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/atom_ui_setting_privacy_allow_all"
+             />
+        <RadioButton android:id="@+id/radio_manual_verify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_setting_privacy_need_verify"
+            android:layout_marginTop="12dp"
+             />
+        <RadioButton android:id="@+id/radio_diny_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/atom_ui_setting_privacy_all_reject"
+            />
+        <RadioButton android:id="@+id/radio_question_verify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_setting_privacy_set_questions"
+            android:layout_marginTop="12dp"
+
+             />
+    </RadioGroup>
+    <LinearLayout
+        android:id="@+id/ll_question_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rg_verfiy_choice"
+        android:visibility="invisible">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="请输入你的问题"
+            android:textSize="@dimen/atom_ui_text_size_medium"/>
+        <EditText
+            android:id="@+id/et_verify_question"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/atom_ui_text_size_medium"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="请输入你的答案"
+            android:textSize="@dimen/atom_ui_text_size_medium"/>
+        <EditText
+            android:id="@+id/et_verify_answer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/atom_ui_text_size_medium"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_sure"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/atom_ui_common_button_blue_selector"
+        android:textColor="@color/atom_ui_white"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:text="确认"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/atom_bottom_more"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/atom_ui_input_height"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    tools:showIn="@layout/atom_ui_activity_chat">
+
+    <ImageView
+        android:id="@+id/txt_share_message"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:scaleType="center"
+        android:src="@drawable/atom_ui_chat_share" />
+
+    <ImageView
+        android:id="@+id/txt_collect_msg"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/atom_ui_chat_collection"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/txt_del_msgs"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/atom_ui_chat_delete" />
+
+    <ImageView
+        android:id="@+id/txt_email_msg"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/atom_ui_chat_email" />
+</LinearLayout>

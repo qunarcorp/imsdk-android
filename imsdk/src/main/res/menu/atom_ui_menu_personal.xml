@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_friend_ops"
+        android:title="@string/atom_ui_title_add_buddy"
+        android:icon="@drawable/atom_ui_add_friend"/>
+    <item
+        android:id="@+id/menu_del_friend"
+        android:title="@string/atom_ui_delete_friend"
+        android:icon="@drawable/atom_ui_del_friend"
+        android:visible="false"/>
+    <item
+        android:id="@+id/menu_blank_list"
+        android:title="@string/atom_ui_blank_list"
+        android:icon="@drawable/atom_ui_blank_list"
+        android:visible="false"/>
+</menu>

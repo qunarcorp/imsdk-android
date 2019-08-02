@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/atom_ui_red_67_trans_40" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false">
+        <shape>
+            <solid android:color="@color/atom_ui_red_67" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+
+</selector>

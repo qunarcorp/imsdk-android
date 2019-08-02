@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="tag_glide" />
+    <item name="BaseQuickAdapter_viewholder_support" type="id"/>
+    <item name="BaseQuickAdapter_swiping_support" type="id"/>
+    <item name="BaseQuickAdapter_dragging_support" type="id"/>
+    <item name="BaseQuickAdapter_databinding_support" type="id"/>
+
+    <!-- qrcode scan IDs -->
+    <item name="decode" type="id" />
+    <item name="decode_succeeded" type="id" />
+    <item name="quit" type="id" />
+    <item name="restart_preview" type="id" />
+    <item name="return_scan_result" type="id" />
+    <item name="decode_failed" type="id" />
+
+    <!-- tree view -->
+    <item name="node_header" type="id" />
+    <item name="node_items" type="id" />
+    <item name="tree_items" type="id" />
+
+    <item type="id" name="tag_glide_image_w" />
+    <item type="id" name="tag_glide_image_h" />
+
+    <item type="id" name="statusbarutil_fake_status_bar_view" />
+    <item type="id" name="statusbarutil_translucent_view" />
+
+    <item type="id" name="sh_progress_view"/>
+    <item type="id" name="sh_progress_text"/>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:id="@+id/order_card_item"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/atom_ui_item_padding">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/title_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="@dimen/atom_ui_item_padding"
+            android:layout_marginEnd="@dimen/atom_ui_item_padding"
+            android:background="@color/atom_ui_light_gray_f2"
+            app:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            app:atom_imagecache_actualImageScaleType="fitCenter"/>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="#47C1D0"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/atom_ui_light_gray_cc"
+        android:layout_marginLeft="@dimen/atom_ui_item_padding"
+        android:layout_marginRight="@dimen/atom_ui_item_padding">
+
+    </View>
+    <LinearLayout
+        android:id="@+id/ll_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="@dimen/atom_ui_item_padding">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/product_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="@dimen/atom_ui_container_margin"
+            android:layout_marginEnd="@dimen/atom_ui_container_margin"
+            android:background="@color/atom_ui_light_gray_f2"
+            app:atom_imagecache_actualImageScaleType="centerInside" />
+        <LinearLayout
+            android:id="@+id/product_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

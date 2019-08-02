@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_light_gray_f2"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar"
+       />
+
+    <ListView
+        android:id="@+id/gv_chatroom_members"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_action_bar"
+        android:animateLayoutChanges="true"
+        android:background="@color/atom_ui_white"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:gravity="center"
+        android:listSelector="@android:color/transparent" />
+
+    <ImageView
+        android:id="@+id/img_group_setting"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/atom_ui_container_margin"
+        android:visibility="gone"
+        />
+</RelativeLayout>
