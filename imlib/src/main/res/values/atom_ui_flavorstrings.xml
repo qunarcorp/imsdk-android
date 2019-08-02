@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="atom_ui_app_name">QTalk</string>
-    <string name="atom_ui_q_name">QTalk</string>
-    <string name="atom_ui_task_affinity">com.qunar.im:qtalk</string>
-    <string name="atom_ui_dept_root_name">Qunar Employee</string>
-</resources>
