@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/atom_ui_home_pop_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/atom_ui_home_pop_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:background="@drawable/atom_ui_gray_white_selector"
+        >
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_home_scan"
+            android:textColor="#00CABE"
+            android:textSize="28dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:text="@string/atom_ui_title_scaning"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/atom_ui_home_pop_unread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:background="@drawable/atom_ui_gray_white_selector"
+        >
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_home_unread"
+            android:textColor="#00CABE"
+            android:textSize="28dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:text="@string/atom_ui_contact_tab_not_read"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/atom_ui_home_pop_create_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:background="@drawable/atom_ui_gray_white_selector"
+        >
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_home_creaet_group"
+            android:textColor="#00CABE"
+            android:textSize="28dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:text="@string/atom_ui_create_group"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/atom_ui_home_pop_readed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:orientation="horizontal"
+        android:background="@drawable/atom_ui_gray_white_selector"
+        >
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_home_one_key_read"
+            android:textColor="#00CABE"
+            android:textSize="28dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/atom_ui_light_gray_33"
+            android:text="@string/atom_ui_explore_tab_onekeyread" />
+
+    </LinearLayout>
+
+</LinearLayout>

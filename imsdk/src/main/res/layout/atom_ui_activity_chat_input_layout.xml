@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/atom_bottom_frame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:visibility="visible"
+    tools:showIn="@layout/atom_ui_activity_chat">
+
+    <LinearLayout
+        android:id="@+id/edit_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:background="@color/atom_ui_white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/robot_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:background="@drawable/atom_ui_robot"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/atom_ui_light_gray_ee" />
+
+        <com.qunar.im.ui.view.HorizontalListView
+            android:id="@+id/robot_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/chat_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/atom_ui_white"
+            android:paddingBottom="@dimen/atom_ui_item_padding"
+            android:paddingTop="@dimen/atom_ui_item_padding"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/atom_ui_refence_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/atom_ui_refence_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_weight="1"/>
+                <ImageView
+                    android:id="@+id/atom_ui_refence_close"
+                    android:layout_width="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_15"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:src="@drawable/atom_ui_close"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/left_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/atom_ui_new_chat_input_keybord"
+                    android:textColor="#A5A5A5"
+                    android:textSize="28dp"
+                    android:visibility="gone" />
+
+                <com.qunar.im.ui.view.IconView
+                    android:id="@+id/voice_switch_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:text="@string/atom_ui_new_chat_input_voice"
+                    android:textColor="#A5A5A5"
+                    android:textSize="28dp"
+                    />
+
+                <TextView
+                    android:id="@+id/voice_prompt"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/atom_ui_white"
+                    android:gravity="center"
+                    android:text="按住说话"
+                    android:textColor="@color/atom_ui_light_gray_99"
+                    android:textSize="@dimen/atom_ui_text_size_larger" />
+
+                <LinearLayout
+                    android:id="@+id/input_container"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+                    <com.qunar.im.ui.view.emojiconEditView.EmojiconEditText
+                        android:id="@+id/edit_msg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/atom_ui_chat_input_edit_bg"
+                        android:gravity="start|center_vertical"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:padding="6dp"
+                        android:scrollHorizontally="false"
+                        android:textColor="@color/atom_ui_light_gray_33"
+                        android:textSize="@dimen/atom_ui_text_size_medium"
+                        android:layout_marginTop="@dimen/dp_4"/>
+                    <!--atom_ui_bottom_border_selector-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.qunar.im.ui.view.IconView
+                            android:id="@+id/tv_emojicon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="@string/atom_ui_new_chat_input_emoji"
+                            android:textColor="#A5A5A5"
+                            android:textSize="28dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
+
+                    <com.qunar.im.ui.view.IconView
+                        android:id="@+id/tv_options_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/atom_ui_new_chat_input_add"
+                        android:textColor="#A5A5A5"
+                        android:textSize="28dp"
+                        android:padding="5dp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/send_btn"
+                        android:layout_width="38dp"
+                        android:layout_height="26dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/atom_ui_small_butoon_selector"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:padding="3dp"
+                        android:text="@string/atom_ui_common_send"
+                        android:textColor="@color/atom_ui_white"
+                        android:textSize="@dimen/atom_ui_text_size_small"
+                        android:visibility="gone" />
+                </LinearLayout>
+                <!--atom_ui_chat_send_selector-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

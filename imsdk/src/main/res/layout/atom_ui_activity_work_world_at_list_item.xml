@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp">
+
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/at_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:text="@string/atom_ui_check_the_circle"
+            android:textColor="#999999"
+            android:layout_marginLeft="15dp"
+            android:textSize="25sp"
+            android:visibility="visible" />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+
+            android:id="@+id/user_header"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundAsCircle="true"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+            fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/user_header"
+            android:text="旺旺旺"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

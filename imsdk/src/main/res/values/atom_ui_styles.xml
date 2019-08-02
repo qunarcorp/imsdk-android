@@ -1,0 +1,186 @@
+<resources>
+    <style name="AtomAppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <!-- Base application theme. -->
+    <style name="AtomSplashTheme" parent="AtomAppTheme">
+        <!--<item name="android:windowBackground">@color/atom_ui_green_8e</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+    </style>
+
+    <style name="AtomNoTranslucent" parent="AtomAppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <style name="atom_ui_MyTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item> //标题字体
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="atom_ui_anim_popup_dir">
+        <item name="android:windowEnterAnimation">@anim/atom_ui_slide_in</item>
+        <item name="android:windowExitAnimation">@anim/atom_ui_slide_out</item>
+    </style>
+
+    <style name="atom_ui_my_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowBackground">@color/atom_ui_trans_dark_gray</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
+    </style>
+
+
+    <style name="atom_ui_DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/atom_ui_slide_up</item>
+        <item name="android:windowExitAnimation">@anim/atom_ui_slide_down</item>
+    </style>
+    <style name="atom_ui_MediaButtonCompat">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">71dip</item>
+        <item name="android:layout_height">52dip</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Previous">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_previous</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Next">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_next</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Play">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_play</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Ffwd">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_ff</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Rew">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_rew</item>
+    </style>
+
+    <style name="atom_ui_MediaButtonCompat.Pause">
+        <item name="android:src">@drawable/atom_ui_vvc_ic_media_pause</item>
+    </style>
+
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/atom_ui_shadow_left</item>
+        <item name="shadow_right">@drawable/atom_ui_shadow_right</item>
+        <item name="shadow_bottom">@drawable/atom_ui_shadow_bottom</item>
+    </style>
+    <style name="AppTheme1" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/atom_ui_file_sys_cost</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/translate</item>
+    </style>
+    <!--透明，有任务栏电量时间等-->
+    <style name="NoTitleTranslucentTheme" parent="AppTheme1">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/translate</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+
+    <!--<style name="horizontal_slide" parent="AtomAppTheme.Base">-->
+        <!--<item name="android:windowAnimationStyle">@style/AnimFade2</item>-->
+    <!--</style>-->
+    <!--<style name="AnimFade2" parent="@android:style/Animation.Activity">-->
+        <!--<item name="android:activityOpenEnterAnimation">@anim/atom_ui_slide_in_from_right</item>-->
+        <!--<item name="android:activityOpenExitAnimation">@anim/atom_ui_slide_out_to_left</item>-->
+        <!--<item name="android:activityCloseExitAnimation">@anim/atom_ui_slide_out_to_right</item>-->
+        <!--<item name="android:activityCloseEnterAnimation">@anim/atom_ui_slide_in_from_left</item>-->
+    <!--</style>-->
+    <!--<style name="AtomAppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:windowBackground">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--<style name="horizontal_slide" parent="horizontal_slide.base">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+
+    <!--</style>-->
+
+    <!--imagepicker-->
+    <style name="ImagePickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="ImagePickerThemeFullScreen" parent="ImagePickerTheme">
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
+
+    <!--SuperCheckbox的样式-->
+    <style name="SuperCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/atom_ui_selector_item_checked</item>
+    </style>
+
+    <style name="popupwindow_anim_style">
+        <!-- 指定显示的动画xml -->
+        <item name="android:windowEnterAnimation">@anim/atom_ui_show_from_bottom</item>
+        <!-- 指定消失的动画xml -->
+        <item name="android:windowExitAnimation">@anim/atom_ui_hide_to_bottom</item>
+    </style>
+
+    <style name="style_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/atom_ui_white</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:scrollHorizontally">true</item>
+        <!-- Dialog进入及退出动画 -->
+        <item name="android:windowAnimationStyle">@style/BottomToTopAnim</item>
+    </style>
+
+    <style name="BottomToTopAnim" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/atom_ui_slide_in</item>
+        <item name="@android:windowExitAnimation">@anim/atom_ui_slide_down</item>
+    </style>
+
+    <style name="Default_btn_style">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/atom_ui_common_button_blue_selector</item>
+        <item name="android:textColor">@color/atom_ui_white</item>
+        <item name="android:textSize">@dimen/atom_ui_text_size_smaller</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    <!-- 自定义ios-->
+    <style name="myiosstyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/atom_ui_ios_bg</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="TreeNodeStyleDivided">
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
+    </style>
+    <style name="TreeNodeStyleCustom">
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
+    </style>
+
+
+    <style name="Theme.ImagePreview" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="Widget.GifView" parent="@android:style/Widget" />
+</resources>

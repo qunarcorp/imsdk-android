@@ -57,7 +57,7 @@ allprojects {
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:3.0.4' //或者直接引用imlib Library工程,compile project(':imlib')
+  compile 'com.qunar.im:sdk-im:3.0.5' //或者直接引用imsdk Library工程,compile project(':imsdk')
 }
 ```
 
@@ -68,8 +68,8 @@ dependencies {
 flavorDimensions "qim"
     //分渠道
     productFlavors {
-        //QTalk
-        qtalk {
+        //startalk
+        startalk {
             dimension "qim"
 
             manifestPlaceholders = [

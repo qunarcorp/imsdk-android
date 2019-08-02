@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_web_share"
+        android:icon="@drawable/sharesession"
+        android:title="@string/atom_ui_sharecon" />
+    <item
+        android:id="@+id/menu_workworld_share"
+        android:icon="@drawable/sharemoment"
+        android:title="@string/atom_ui_sharemoment" />
+    <!--<item
+         android:id="@+id/menu_pengyouquan_share"
+         android:title="QTalk"
+         android:icon="@drawable/atom_ui_qtalk_icon" />
+     <item
+         android:id="@+id/menu_weibo_share"
+         android:title="QTalk"
+         android:icon="@drawable/atom_ui_qtalk_icon" />-->
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="@drawable/copylink"
+        android:title="@string/atom_ui_copy_link" />
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/refresh"
+        android:title="@string/atom_ui_common_refresh" />
+    <item
+        android:id="@+id/menu_transfer"
+        android:icon="@drawable/sysshare"
+        android:title="@string/atom_ui_transfer_link" />
+</menu>

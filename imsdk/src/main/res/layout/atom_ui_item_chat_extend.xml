@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qunar.im.ui.view.baseView.ExtendBaseView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:bubble="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/translate">
+    <TextView
+        android:id="@+id/textview_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:padding="@dimen/dp_4"
+        android:textSize="11sp"
+        android:background="@drawable/atom_ui_chat_time_bg"
+        android:textColor="@android:color/white"/>
+
+    <LinearLayout
+        android:id="@+id/rich_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        android:background="@drawable/atom_ui_conner_bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+    </LinearLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageview_left"
+        android:layout_width="@dimen/atom_ui_image_mid_size"
+        android:layout_height="@dimen/atom_ui_image_mid_size"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/textview_time"
+        android:layout_marginLeft="@dimen/atom_ui_container_margin"
+        android:layout_marginStart="@dimen/atom_ui_container_margin"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+        fresco:atom_imagecache_roundAsCircle="true"
+        fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+        fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+    <TextView
+        android:id="@+id/nickname_left"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageview_left"
+        android:layout_toRightOf="@id/imageview_left"
+        android:layout_toEndOf="@id/imageview_left"
+        android:layout_marginLeft="6dp"
+        android:textColor="#888888" />
+    <RelativeLayout
+        android:id="@+id/chatview_left_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nickname_left"
+        android:layout_toRightOf="@id/imageview_left"
+        android:layout_toEndOf="@id/imageview_left"
+        android:layout_marginRight="48dp"
+        android:layout_marginEnd="48dp">
+        <!--android:padding="4dp"-->
+        <com.qunar.im.ui.view.bubbleLayout.BubbleLayout
+            android:id="@+id/bubble_layout_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            bubble:bl_arrowDirection="left"
+            bubble:bl_arrowHeight="10dp"
+            bubble:bl_arrowPosition="8dp"
+            bubble:bl_arrowWidth="6dp"
+            bubble:bl_cornersRadius="@dimen/atom_ui_cornner_radius"
+            bubble:bl_strokeWidth="0.5dp"
+            bubble:bl_strokeColor="@color/atom_ui_chat_bubble_left_stoken_color"
+            bubble:bl_bubbleColor="@color/atom_ui_white">
+            <LinearLayout
+                android:id="@+id/chatview_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </com.qunar.im.ui.view.bubbleLayout.BubbleLayout>
+
+        <ImageView
+            android:id="@+id/send_failure_icon_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/bubble_layout_left"
+            android:layout_toRightOf="@id/bubble_layout_left"
+            android:layout_toEndOf="@id/bubble_layout_left"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/atom_ui_conversation_error"
+            android:visibility="gone" />
+        <TextView
+            android:layout_width="6dip"
+            android:layout_height="6dip"
+            android:layout_alignTop="@id/bubble_layout_left"
+            android:layout_toRightOf="@id/bubble_layout_left"
+            android:layout_toEndOf="@id/bubble_layout_left"
+            android:background="@drawable/atom_ui_unread_circle_bg"
+            android:id="@+id/txt_status"
+            android:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/message_progress_left"
+            style="?android:attr/progressBarStyleSmallTitle"
+            android:layout_width="@dimen/atom_ui_small_progress_size"
+            android:layout_height="@dimen/atom_ui_small_progress_size"
+            android:layout_alignBaseline="@id/bubble_layout_left"
+            android:layout_toRightOf="@id/bubble_layout_left"
+            android:layout_toEndOf="@id/bubble_layout_left"
+            android:visibility="gone" />
+    </RelativeLayout>
+    <CheckBox
+        android:id="@+id/chb_share_msg"
+        android:layout_below="@id/textview_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageview_right"
+        android:layout_width="@dimen/atom_ui_image_mid_size"
+        android:layout_height="@dimen/atom_ui_image_mid_size"
+        android:layout_below="@id/textview_time"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="@dimen/atom_ui_container_margin"
+        android:layout_marginEnd="@dimen/atom_ui_container_margin"
+        android:layout_marginTop="@dimen/atom_ui_container_margin"
+        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+        fresco:atom_imagecache_roundAsCircle="true"
+        fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+        fresco:atom_imagecache_roundingBorderWidth="1dp" />
+    <LinearLayout
+        android:id="@+id/chatview_right_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/imageview_right"
+        android:layout_toLeftOf="@id/imageview_right"
+        android:layout_alignTop="@id/imageview_right"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|right"
+        android:layout_marginLeft="62dp"
+        android:layout_marginStart="62dp">
+        <com.qunar.im.ui.view.IconView
+            android:id="@+id/send_states_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/atom_ui_new_message_unread"
+            android:textSize="20sp"
+            android:layout_marginRight="4dp"
+            android:layout_gravity="bottom"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/send_failure_icon_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/atom_ui_conversation_error"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/message_progress_right"
+            style="?android:attr/progressBarStyleSmallTitle"
+            android:layout_width="@dimen/atom_ui_small_progress_size"
+            android:layout_height="@dimen/atom_ui_small_progress_size"
+            android:visibility="gone" />
+        <!--android:padding="2dp"-->
+        <com.qunar.im.ui.view.bubbleLayout.BubbleLayout
+            android:id="@+id/bubble_layout_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            bubble:bl_arrowDirection="right"
+            bubble:bl_arrowHeight="10dp"
+            bubble:bl_arrowPosition="8dp"
+            bubble:bl_arrowWidth="6dp"
+            bubble:bl_cornersRadius="@dimen/atom_ui_cornner_radius"
+            bubble:bl_strokeWidth="0.5dp"
+            bubble:bl_strokeColor="@color/atom_ui_chat_bubble_right_stoken_color"
+            bubble:bl_bubbleColor="@color/atom_ui_white">
+            <LinearLayout
+                android:id="@+id/chatview_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </com.qunar.im.ui.view.bubbleLayout.BubbleLayout>
+
+    </LinearLayout>
+
+
+</com.qunar.im.ui.view.baseView.ExtendBaseView>

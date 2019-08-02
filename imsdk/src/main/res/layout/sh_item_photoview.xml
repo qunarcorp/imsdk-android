@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <com.qunar.im.ui.view.bigimageview.view.helper.FingerDragHelper
+      android:id="@+id/fingerDragHelper"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:orientation="vertical"
+      >
+
+    <com.qunar.im.ui.view.bigimageview.view.helper.SubsamplingScaleImageViewDragClose
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <com.qunar.im.ui.view.bigimageview.view.photoview.PhotoView
+        android:id="@+id/gif_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        />
+  </com.qunar.im.ui.view.bigimageview.view.helper.FingerDragHelper>
+
+  <ProgressBar
+      android:id="@+id/progress_view"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_gravity="center"
+      />
+</FrameLayout>

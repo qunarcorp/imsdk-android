@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 26
+//    buildToolsVersion '25.0.0'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        ndk{
+            abiFilters 'armeabi'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+}
+
+dependencies {
+    compile 'com.qunar.im:sdk-base:3.0.5'
+    compile project(':lib_common')//compile 'com.qunar.im:sdk-common:3.0.5'
+    compile 'com.qunar.im:sdk-push:3.0.5'
+    compile "io.sigpipe:jbsdiff:1.0"
+    compile('com.facebook.react:react-native:0.54.4') {
+
+        exclude group: 'com.facebook.fresco', module: 'imagepipeline-okhttp'
+
+        exclude group: 'com.facebook.fresco', module: 'fresco'
+
+        exclude group: 'com.facebook.fresco', module: 'fbcore'
+
+        exclude group: 'com.facebook.fresco', module: 'imagepipeline'
+
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp-ws'
+
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp-urlconnection'
+
+        exclude group: 'com.squareup.okio', module: 'okio'
+
+    }
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile 'de.greenrobot:eventbus:2.2.1'
+    //日期选择器
+    compile 'com.contrarywind:Android-PickerView:4.1.6'
+    compile 'org.apache.commons:commons-compress:1.5'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+}

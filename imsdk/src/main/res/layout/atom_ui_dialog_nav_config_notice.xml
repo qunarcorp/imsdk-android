@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_15">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_4"
+        android:gravity="center_horizontal"
+        android:text="请先扫码配置您的导航地址"
+        android:textColor="#333333"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/dp_15"/>
+
+    <TextView
+        android:id="@+id/atom_ui_manu_config"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:padding="@dimen/dp_4"
+        android:textColor="#888888"
+        android:text="@string/atom_ui_manually_nav_config"/>
+
+
+    <LinearLayout
+        android:id="@+id/atom_ui_nav_config_scan_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        android:paddingLeft="@dimen/dp_40"
+        android:paddingRight="@dimen/dp_40"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/atom_ui_primary_color_corner"
+        >
+
+        <com.qunar.im.ui.view.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_new_qr"
+            android:textColor="@color/atom_ui_white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atom_ui_scan_nav_config"
+            android:textSize="13sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/atom_ui_white"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/atom_ui_next_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_15"
+        android:padding="@dimen/dp_4"
+        android:textColor="#999999"
+        android:text="@string/atom_ui_cancel"/>
+
+
+</LinearLayout>

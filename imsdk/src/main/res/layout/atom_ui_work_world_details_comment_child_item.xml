@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+
+            android:id="@+id/user_header"
+            android:layout_width="23dp"
+
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundAsCircle="true"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+            fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/user_header"
+            android:text="旺旺旺"
+            android:textColor="#59918A"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/user_architecture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/user_name"
+            android:background="#f3f3f5"
+            android:paddingBottom="2dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp"
+            android:text="未知"
+            android:textColor="#999999"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:id="@+id/comment_item_like_layout"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_marginRight="8dp">
+
+            <com.qunar.im.ui.view.IconView
+
+                android:layout_gravity="center_vertical"
+                android:id="@+id/comment_item_like_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:text="@string/atom_ui_new_like"
+                android:textColor="#999999"
+                android:textSize="20sp"
+                android:visibility="visible" />
+            <TextView
+                android:id="@+id/comment_item_like_text"
+                android:text="99999"
+                android:textSize="11sp"
+                android:gravity="center_vertical"
+                android:textColor="#999999"
+                android:layout_marginLeft="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="24dp"
+        android:layout_height="wrap_content">
+        <com.qunar.im.ui.view.WorkWorldSpannableTextView
+            android:id="@+id/comment_item_text"
+            android:textSize="14sp"
+            android:text="这个是回复内容 说点什么吧"
+            android:focusable="true"
+            android:longClickable="true"
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fresco:emojiconTextOverideTouch="true"/>
+    </LinearLayout>
+
+
+</LinearLayout>

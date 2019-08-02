@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+    android:id="@+id/my_action_bar"
+    layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <com.qunar.im.ui.view.tableLayout.SlidingTabLayout
+        android:id="@+id/slidingtablayout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#ffffff"
+        tl:tl_divider_color="#dddddd"
+        tl:tl_divider_padding="19dp"
+        tl:tl_divider_width="1dp"
+        tl:tl_indicator_color="#00cabe"
+        tl:tl_indicator_height="3dp"
+        tl:tl_indicator_width_equal_title="true"
+        tl:tl_tab_padding="22dp"
+        tl:tl_tab_space_equal="true"
+        tl:tl_textSelectColor="#00cabe"
+        tl:tl_textsize="15sp"
+        tl:tl_textUnselectColor="#999999"
+        tl:tl_underline_color="#00000000"
+        tl:tl_underline_height="1dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#dddddd"
+        android:layout_height="0.5px"></View>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

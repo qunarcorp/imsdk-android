@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "sdk.im.qunar.com.qtalksdkdemo"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 206
         versionName "8.36"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -57,7 +57,7 @@ android {
                     MAIN_SCHEMA : "start_qtalk_activity"
             ]
         }
-        // QChat
+        // QChat 客服版本
         qchat {
             dimension "qim"
 
@@ -111,7 +111,7 @@ dependencies {
     compile ('com.android.support.constraint:constraint-layout:1.0.2'){
         exclude group: 'com.android.support', module: 'support-v4'
     }
-    compile project(':imlib')
-//    compile 'com.qunar.im:sdk-im:3.0.4'
     testCompile 'junit:junit:4.12'
+
+    compile 'com.qunar.im:sdk-im:3.0.5'//compile project(':imsdk')
 }

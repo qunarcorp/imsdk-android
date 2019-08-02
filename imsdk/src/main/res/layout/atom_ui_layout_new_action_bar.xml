@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qunar.im.ui.view.QtNewActionBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    app:contentInsetStart="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/atom_ui_white">
+        <!--android:textColor="#030303"-->
+        <LinearLayout
+            android:id="@+id/title_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:minWidth="200dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/atom_ui_MyTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="16"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Qtalk"
+                android:textColor="#333333"
+                android:textSize="17sp"
+                android:drawablePadding="@dimen/dp_4"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/mood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="11sp"
+                android:textColor="@color/atom_ui_light_gray_99"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:maxLength="20"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/left_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <!--android:textColor="#212121"-->
+            <com.qunar.im.ui.view.IconView
+                android:id="@+id/left_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/atom_ui_new_back_unselect"
+
+                android:textColor="#666566"
+                android:textSize="22sp" />
+
+            <!--android:textColor="#FF212121"-->
+            <TextView
+                android:id="@+id/left_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="测试"
+                android:textColor="#FF212121"
+                android:textSize="17sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/left_unread_text"
+                android:layout_width="match_parent"
+                android:minWidth="28dp"
+                android:maxWidth="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/atom_ui_chat_title_unread_bg"
+                android:gravity="center"
+                android:text="99+"
+                android:textColor="#ffA1A1A1"
+                android:textSize="15sp"
+                android:padding="1dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/right_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <!--android:textColor="#212121"-->
+            <TextView
+                android:id="@+id/right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="测试"
+                android:paddingRight="5dp"
+                android:textColor="#FF212121"
+                android:textSize="17sp"
+                android:visibility="gone" />
+            <com.qunar.im.ui.view.IconView
+                android:id="@+id/right_special"
+                android:layout_width="@dimen/atom_ui_actionbar_height"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/atom_ui_new_add"
+                android:visibility="gone"
+                android:textColor="#666666"
+                android:textSize="24sp" />
+            <com.qunar.im.ui.view.IconView
+                android:id="@+id/right_icon"
+                android:layout_width="@dimen/atom_ui_actionbar_height"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/atom_ui_new_add"
+                android:visibility="gone"
+                android:textColor="#666666"
+                android:textSize="24sp" />
+
+
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="#dddddd" />
+
+    </RelativeLayout>
+</com.qunar.im.ui.view.QtNewActionBar>

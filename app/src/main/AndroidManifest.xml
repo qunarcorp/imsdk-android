@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AppLinkUrlError,ProtectedPermissions"
     package="sdk.im.qunar.com.qtalksdkdemo">
 
     <!-- ————————————————————————  需要添加到自己主工程manifest文 start————————————————————-->

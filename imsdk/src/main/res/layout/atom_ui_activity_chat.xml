@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.qunar.im.ui.view.kpswitch.widget.KPSwitchRootLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/resizelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atom_ui_chat_gray_bg"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/my_action_bar"
+        layout="@layout/atom_ui_layout_new_action_bar" />
+
+    <include layout="@layout/atom_ui_activity_chat_msglist_layout" />
+
+    <LinearLayout
+        android:id="@+id/total_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/atom_ui_activity_chat_input_layout" />
+
+        <com.qunar.im.ui.view.kpswitch.widget.KPSwitchPanelLinearLayout
+            android:id="@+id/panel_root"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#fffefefe"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include layout="@layout/atom_ui_activity_chat_opration_panel" />
+
+            <include layout="@layout/atom_ui_activity_chat_voice_panel" />
+
+            <include layout="@layout/atom_ui_activity_chat_emotion_panel" />
+
+            <include layout="@layout/atom_ui_activity_chat_quickreply_panel" />
+
+        </com.qunar.im.ui.view.kpswitch.widget.KPSwitchPanelLinearLayout>
+
+        <include layout="@layout/atom_ui_activity_chat_more_layout" />
+    </LinearLayout>
+
+
+</com.qunar.im.ui.view.kpswitch.widget.KPSwitchRootLinearLayout>

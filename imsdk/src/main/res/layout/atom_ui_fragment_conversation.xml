@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/widget_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/translate"
+        android:background="@color/atom_ui_white"
+        android:drawSelectorOnTop="true" />
+
+
+    <!--<com.qunar.im.ui.view.recyclerview.RecyclerViewWithContextMenu-->
+        <!--android:id="@+id/list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:cacheColorHint="@android:color/transparent"-->
+        <!--android:background="@color/atom_ui_white"-->
+        <!--&gt;</com.qunar.im.ui.view.recyclerview.RecyclerViewWithContextMenu>-->
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/atom_ui_tip_empty_recent"
+        android:visibility="gone" />
+</FrameLayout>
