@@ -10,7 +10,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import java.util.List;
 

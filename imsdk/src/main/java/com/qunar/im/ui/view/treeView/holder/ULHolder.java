@@ -6,7 +6,7 @@ import android.view.View;
 import com.qunar.im.base.jsonbean.GetDepartmentResult;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.treeView.model.TreeNode;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 /**
  * Created by lihaibin.li on 2018/1/4.

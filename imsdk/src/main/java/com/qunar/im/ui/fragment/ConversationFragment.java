@@ -18,11 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.RecentConversation;
-import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.ui.activity.TabMainActivity;
 import com.qunar.im.ui.presenter.IChatingPanelPresenter;
@@ -49,7 +47,6 @@ import com.qunar.im.ui.activity.RobotChatActivity;
 import com.qunar.im.ui.activity.RobotExtendChatActivity;
 import com.qunar.im.ui.adapter.RecentConvsAdapter;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.rn_service.protocal.NativeApi;
 
 import java.util.List;
 import java.util.Map;

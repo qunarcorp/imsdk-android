@@ -159,7 +159,7 @@ import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.im.utils.QuickReplyUtils;
 import com.qunar.rn_service.activity.QtalkServiceRNActivity;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1219,7 +1219,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 //        setActionBarRightIconSpecialClick(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                com.qunar.rn_service.protocal.NativeApi.openLocalSearch(jid,realJid,chatType);
+//                com.qunar.im.base.protocol.NativeApi.openLocalSearch(jid,realJid,chatType);
 //            }
 //        });
     }

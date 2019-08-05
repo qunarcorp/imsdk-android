@@ -90,7 +90,7 @@ import com.qunar.im.utils.MD5;
 import com.qunar.im.utils.QRUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.rn_service.activity.QtalkServiceRNActivity;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.rn_service.rnmanage.QtalkServiceExternalRNViewInstanceManager;
 import com.qunar.rn_service.util.DateUtil;
 import com.qunar.rn_service.util.QTalkServicePatchDownloadHelper;
@@ -100,7 +100,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -159,6 +158,9 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
     public static final int REQUEST_GRANT_CALL = PermissionDispatcher.getRequestCode();
 
     public Activity mActivity;//activity 为华为push要用
+
+    //转发 分享 创建的群
+    public static Map<String, ReadableMap> createGroups = new HashMap<>();
 
     @Override
     public void responsePermission(int requestCode, boolean granted) {
@@ -1207,8 +1209,8 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             ConnectionUtil.getInstance().createGroup(roomId);
             if (params.hasKey(Constants.BundleKey.IS_FROM_SHARE) //转发或者是分享
                     || params.hasKey(Constants.BundleKey.IS_TRANS)
-                    && NativeApi.createGroups != null) {
-                NativeApi.createGroups.put(roomId, params);
+                    && createGroups != null) {
+                createGroups.put(roomId, params);
             }
 
             //提前将一会要加入群的成员数据准备好
@@ -3857,11 +3859,11 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
                 map.putBoolean("createMuc", true);
                 sendEvent("closeAddMembers", map);
                 String opg = (String) args[0];
-                if (NativeApi.createGroups != null && NativeApi.createGroups.containsKey(opg)) {
-                    ReadableMap params = NativeApi.createGroups.get(opg);
+                if (createGroups != null && createGroups.containsKey(opg)) {
+                    ReadableMap params = createGroups.get(opg);
                     if (params != null) {
                         openGroupChat(params, opg);
-                        NativeApi.createGroups.remove(opg);
+                        createGroups.remove(opg);
                     }
                 } else {
                     NativeApi.openGroupChat(opg, opg);
