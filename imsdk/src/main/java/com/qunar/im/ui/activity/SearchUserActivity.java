@@ -38,7 +38,7 @@ import com.qunar.im.ui.fragment.DeptFragment;
 import com.qunar.im.ui.view.MySearchView;
 import com.qunar.im.ui.view.QtSearchActionBar;
 import com.qunar.im.utils.QtalkStringUtils;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -228,11 +228,11 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
 //                    startActivity(intent);
 //                    finish();
                     if(isFromShare){
-                        com.qunar.rn_service.protocal.NativeApi.openCreateGroupForShare(shareMsgJson);
+                        NativeApi.openCreateGroupForShare(shareMsgJson);
                     }else if(isSelectTransUser){
-                        com.qunar.rn_service.protocal.NativeApi.openCreateGroupForTrans(transMsg);
+                        NativeApi.openCreateGroupForTrans(transMsg);
                     }else {
-                        com.qunar.rn_service.protocal.NativeApi.openCreateGroup();
+                        NativeApi.openCreateGroup();
                     }
                     finish();
                 }
@@ -247,11 +247,11 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
 //                    startActivity(intent);
 //                    finish();
                     if(isFromShare){
-                        com.qunar.rn_service.protocal.NativeApi.openMyGroupsForShare(shareMsgJson);
+                        NativeApi.openMyGroupsForShare(shareMsgJson);
                     }else if(isSelectTransUser){
-                        com.qunar.rn_service.protocal.NativeApi.openMyGroupsForTrans(transMsg);
+                        NativeApi.openMyGroupsForTrans(transMsg);
                     }else {
-                        com.qunar.rn_service.protocal.NativeApi.openMyGroups();
+                        NativeApi.openMyGroups();
                     }
                     finish();
                 }

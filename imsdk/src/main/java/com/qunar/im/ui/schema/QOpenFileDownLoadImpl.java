@@ -10,7 +10,7 @@ import com.qunar.im.base.structs.TransitFileJSON;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.ui.activity.DownloadFileActivity;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import java.util.Map;
 

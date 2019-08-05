@@ -21,7 +21,7 @@ import com.qunar.im.base.view.multilLevelTreeView.Node;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.SimpleTreeAdapter;
 import com.qunar.im.ui.view.multilLevelTreeView.TreeListViewAdapter;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import java.util.List;
 import java.util.Map;

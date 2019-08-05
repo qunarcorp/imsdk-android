@@ -102,7 +102,7 @@ import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 import com.qunar.rn_service.fragment.RNContactsFragment;
 import com.qunar.rn_service.fragment.RNFoundFragment;
 import com.qunar.rn_service.fragment.RNMineFragment;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.rn_service.rnmanage.QtalkServiceRNViewInstanceManager;
 
 import java.io.File;

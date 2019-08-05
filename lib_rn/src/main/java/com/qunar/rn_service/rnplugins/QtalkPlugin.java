@@ -44,7 +44,7 @@ import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 import com.qunar.im.utils.QtalkStringUtils;
-import com.qunar.rn_service.protocal.NativeApi;
+import com.qunar.im.base.protocol.NativeApi;
 
 import java.util.HashMap;
 import java.util.List;

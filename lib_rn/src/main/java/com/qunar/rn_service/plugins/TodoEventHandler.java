@@ -8,10 +8,10 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.protobuf.utils.XmlUtils;
-import com.qunar.rn_service.protocal.NativeApi;
 
 import org.json.JSONObject;
 
@@ -50,7 +50,7 @@ public class TodoEventHandler extends ReactContextBaseJavaModule {
                     break;
                 case 1:
                     // TODO 打开群组聊天
-                    com.qunar.rn_service.protocal.NativeApi.openGroupChat(key,key);
+                    NativeApi.openGroupChat(key,key);
                     break;
                 case 2:
                     // TODO 打开好友
@@ -74,7 +74,7 @@ public class TodoEventHandler extends ReactContextBaseJavaModule {
                     break;
                 case 7:
                     // TODO 打开单人聊天
-                    com.qunar.rn_service.protocal.NativeApi.openSingleChat(key,key);
+                    NativeApi.openSingleChat(key,key);
                     break;
                 case 8:
                     // TODO 打开机器人会话

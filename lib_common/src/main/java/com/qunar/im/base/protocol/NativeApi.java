@@ -1,24 +1,20 @@
-package com.qunar.rn_service.protocal;
+package com.qunar.im.base.protocol;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.facebook.react.bridge.ReadableMap;
 import com.qunar.im.base.jsonbean.RNSearchData;
-import com.qunar.im.base.module.PublishPlatform;
 import com.qunar.im.base.structs.TransitFileJSON;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
-import com.qunar.rn_service.jsonbean.SearchData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,9 +62,6 @@ public class NativeApi {
     public static final String KEY_FILE_NOMD5 ="file_noMd5";
 
     public static final String WorkWordJID = "WorkWordJID";
-
-    //转发 分享 创建的群
-    public static Map<String, ReadableMap> createGroups = new HashMap<>();
 
     public static void openUserCardVCByUserId(String userId) {
         Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(CommonConfig.schema + "://qunarchat/openUserCard?jid=" +
