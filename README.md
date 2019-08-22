@@ -89,7 +89,7 @@ flavorDimensions "qim"
                     MAIN_SCHEMA : "start_qtalk_activity"
             ]
         }
-        // QChat
+        // QChat 客服版本
         qchat {
             dimension "qim"
 
