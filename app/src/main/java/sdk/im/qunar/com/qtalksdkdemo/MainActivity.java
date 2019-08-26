@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.activity.TabMainActivity;
 import com.qunar.im.ui.sdk.QIMSdk;
 
@@ -29,8 +30,7 @@ public class MainActivity extends Activity {
         startPlatForm = (Button) findViewById(R.id.startPlatForm);
         logcat_text = (TextView) findViewById(R.id.logcat_text);
 
-//        startPlatForm.setText("启动" + CommonConfig.currentPlat);
-        startPlatForm.setText("启动qtalk");
+        startPlatForm.setText("启动" + CommonConfig.currentPlat);
     }
 
     /**
