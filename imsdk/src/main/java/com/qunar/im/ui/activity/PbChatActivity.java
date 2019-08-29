@@ -1658,7 +1658,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             funcMap.regisger(item);
         }
 
-        if (GlobalConfigManager.isQtalkPlat() && !isFromChatRoom) {
+        if (!GlobalConfigManager.isQchatPlat() && !isFromChatRoom) {
             item = new FuncItem();
             item.id = FuncMap.ENCRYPT;
             item.icon = "res:///" + R.drawable.atom_ui_box_key;
