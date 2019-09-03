@@ -6180,7 +6180,7 @@ public class IMDatabaseManager {
      */
     public List<MessageStateSendJsonBean> getMessageStateSendNotXmppIdJson(String xmppid, String state) {
         List<MessageStateSendJsonBean> list = new ArrayList<>();
-        String sql = "SELECT a.'From', GROUP_CONCAT(a.MsgId) as msgIdList  FROM IM_Message as a WHERE (0x01 & a.ReadedTag)<>0x01 and a.'From' <> ? GROUP By a.'From';";
+        String sql = "SELECT a.'From', GROUP_CONCAT(a.MsgId) as msgIdList  FROM IM_Message as a WHERE (" + MessageStatus.LOCAL_STATUS_PROCESSION + " & a.ReadedTag)<>" + MessageStatus.LOCAL_STATUS_PROCESSION + " and a.'From' <> ? GROUP By a.'From';";
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = null;
         try {
@@ -6212,7 +6212,7 @@ public class IMDatabaseManager {
     }
 
     public void updateMessageStateByJsonArray(JSONArray jsonArray) {
-        String sql = "update IM_Message set  ReadedTag = (ReadedTag |0x01) where MsgId = ?";
+        String sql = "update IM_Message set  ReadedTag = (ReadedTag |" + MessageStatus.LOCAL_STATUS_PROCESSION + ") where MsgId = ?";
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransactionNonExclusive();
         try {
