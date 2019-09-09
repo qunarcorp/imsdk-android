@@ -1,27 +1,35 @@
 Startalk, The Best open sourced instant messenger software in the world!
-* [Chinese Version(中文版)](https://github.com/qunarcorp/imsdk-android/blob/master/README_zh_CN.md)
+* [English Version](https://github.com/qunarcorp/imsdk-android/blob/master/README.md)
 
-Public Cloud(Startalk App)
+公有云（Startalk APP）
 =====
-Based on Startalk server and client-side, users can build their own domain,
-Sign up an account, create new domains, add users, download client app, and configure navigation for domain,
-After the 5 steps above, you own strong IM abilities.
+基于Startalk服务器及客户端，用户可建立属于自己的域,
 
-Download client app[Download](https://im.qunar.com/new/#/download)
+注册账号、新建域、添加域用户、下载客户端、配置域导航，
+
+仅需5步，您就可以拥有强大的im能力，
+
+客户端下载[下载](https://im.qunar.com/new/#/download)
 
 - Android
 
 [![Startalk on Android](https://s.qunarzz.com/qtalk_official_web/pages/download/android.png)](https://qt.qunar.com/downloads/qtalk_android.apk)
 
-Configure navigation for client app[Configure navigation](https://im.qunar.com/new/#/platform/access_guide/manage_nav?id=manage_nav_mb)
+客户端导航配置[配置导航](https://im.qunar.com/new/#/platform/access_guide/manage_nav?id=manage_nav_mb)
 
-Private Cloud(Startalk SDK)（Startalk SDK）
+私有云（Startalk SDK）
 =====
-Private Cloud is a way for decentralized deployment. Customers or enterprises would deploy the back end code on their own servers, embedding SDK into their own app. Every enterprise is an independent node; every node works independently, and the data would only be saved in the node.  
+Startalk私有云是一种去中心化的部署方式，
 
-Please see the guide of embedding Android SDK and the configuration below.
+用户或企业将Startalk后端代码完全部署在自己的服务器上，
 
-Configure Gradle
+选择SDK嵌入自己的APP中，
+
+每个公司都是一个单独的节点，每个节点独立运营，数据只保存在节点中，
+
+下面是Android sdk的嵌入方式以及配置。
+
+配置Gradle
 --------
 ```gradle
 buildscript {
@@ -52,53 +60,53 @@ allprojects {
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:3.0.5' //Or quote the imsdk Library directly,compile project(':imsdk')
+  compile 'com.qunar.im:sdk-im:3.0.5' //或者直接引用imsdk Library工程,compile project(':imsdk')
 }
 ```
 
-Deploy manifestPlaceholders (If your own app can be deployed by any channel, please deploymanifestPlaceholders in buildTypes, or you need to deploy manifestPlaceholders in every flavor)
+配置manifestPlaceholders(如果自己的app不分渠道，可直接在buildTypes里配置manifestPlaceholders，反之需在每个Flavor下配置manifestPlaceholders)
 --------
 
 ```manifestPlaceholders
 flavorDimensions "qim"
-    //Mutiple channels
+    //分渠道
     productFlavors {
         //startalk
         startalk {
             dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//Replace it with the application ID of your own project
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//替换成自己项目的applicationId
                     serverDoMain  : true,
-                    baiduMap :"xxxxx",//key of Baidu map (for sending location)
-                    HUAWEI_APPID : "123",//HUAWEI push
-                    OPPO_APP_ID : "123",//OPPO push
+                    baiduMap :"xxxxx",//百度地图key 用于发送位置消息
+                    HUAWEI_APPID : "123",//华为push
+                    OPPO_APP_ID : "123",//OPPOpush
                     OPPO_APP_KEY : "123",
                     OPPO_APP_SECRET : "123",
-                    MIPUSH_APP_ID : "123",//XIAOMI push
+                    MIPUSH_APP_ID : "123",//小米push
                     MIPUSH_APP_KEY : "123",
-                    MEIZU_APP_ID : "123",//MEIZU push
+                    MEIZU_APP_ID : "123",//魅族push
                     MEIZU_APP_KEY : "123",
                     SCHEME : "qtalkaphone",
                     currentPlat  : "QTalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
             ]
         }
-        // QChat
+        // QChat 客服版本
         qchat {
             dimension "qim"
 
             manifestPlaceholders = [
-                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//Replace it with the application ID of your own project
+                    PACKAGE_NAME : "sdk.im.qunar.com.qtalksdkdemo",//替换成自己项目的applicationId
                     serverDoMain  : false,
-                    baiduMap :"xxxxx",//key of Baidu map (for sending location)
-                    HUAWEI_APPID : "123",//HUAWEI push
-                    OPPO_APP_ID : "123",//OPPO push
+                    baiduMap :"xxxxx",//百度地图key 用于发送位置消息
+                    HUAWEI_APPID : "123",//华为push
+                    OPPO_APP_ID : "123",//OPPOpush
                     OPPO_APP_KEY : "123",
                     OPPO_APP_SECRET : "123",
-                    MIPUSH_APP_ID : "123",//xiaomi push
+                    MIPUSH_APP_ID : "123",//小米push
                     MIPUSH_APP_KEY : "123",
-                    MEIZU_APP_ID : "123",//meizu push
+                    MEIZU_APP_ID : "123",//魅族push
                     MEIZU_APP_KEY : "123",
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",
@@ -108,51 +116,51 @@ flavorDimensions "qim"
 
     }
 ```
-Configure Manifest of main project
+主工程Manifest配置
 --------
 
 ```
-Please see the AndroidManifest configuration in app
+参照app下的AndroidManifest配置
 ```
-How to Use (main ports)
+如何使用(主要接口)
 --------
-First, please initialize SDK. Then configure the navigation Url and log in。
+首先需要对sdk进行初始化操作，之后配置导航Url，然后进行登录。
  ```init
-  1.Initialize SDK
+  1.初始化SDK
   
   QIMSdk.getInstance().init(Application application)
   ```
  ```config
-  2.Configure navigation Ur
+  2.配置导航地址
   
   QIMSdk.getInstance().setNavigationUrl(String url)
   ```  
  ```login
-  3.Log in with username and password
+  3.用户名密码登录
   
   QIMSdk.getInstance().login(String uid,String password,LoginStatesListener loginStatesListener)
   ```   
  ```Autologin
-  4.Auto login (save usernames in the local cache to achieve auto login after token
+  4.自动登录(本地缓存用户之前登录的用户名、token后可自动登录)
   
   QIMSdk.getInstance().autoLogin(LoginStatesListener loginStatesListener)
   ```   
  ```logout
-  5.log out
+  5.登出
   
   QIMSdk.getInstance().signOut()
   ```
  ```debug
-  6.Turn on debug mode
+  6.打开debug模式
 
   QIMSdk.getInstance().openDebug()
   ```
-  other api[api.md](doc/api.md)
+  其他参考[api.md](doc/api.md)
 
   
 Scheme Support
 --------
-Please see scheme[scheme doc](https://github.com/qunarcorp/imsdk-android/wiki/Scheme-Support)
+参考文档[scheme文档](https://github.com/qunarcorp/imsdk-android/wiki/Scheme-Support)
 
 ProGuard
 --------
@@ -171,14 +179,14 @@ Compatibility
  * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
  * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
  
-Frequent error
+常见错误
 --------
-Add android.enableAapt2=false in “gradle.properties”
+在gradle.properties文件中添加 android.enableAapt2=false
 ```error1
 error:style attribute '@android:attr/windowEnterAnimation' not found.
 Message{kind=ERROR, text=error: style attribute '@android:attr/windowEnterAnimation' not found.
 ```
-Add style below in “values styles.xml” in the main project
+在主工程的values styles.xml中添加如下style
 ```style
 <style name="SplashTheme" parent="AppTheme">
    <item name="android:windowIsTranslucent">true</item>
@@ -190,6 +198,6 @@ Add style below in “values styles.xml” in the main project
 ```
 
 
-Feedback
+意见反馈
 =====
 -   qchat@qunar.com（Email）
