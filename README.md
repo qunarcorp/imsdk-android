@@ -15,7 +15,7 @@ Download client app[Download](https://im.qunar.com/new/#/download)
 
 Configure navigation for client app[Configure navigation](https://im.qunar.com/new/#/platform/access_guide/manage_nav?id=manage_nav_mb)
 
-Private Cloud(Startalk SDK)（Startalk SDK）
+Private Cloud(Startalk SDK)
 =====
 Private Cloud is a way for decentralized deployment. Customers or enterprises would deploy the back end code on their own servers, embedding SDK into their own app. Every enterprise is an independent node; every node works independently, and the data would only be saved in the node.  
 
