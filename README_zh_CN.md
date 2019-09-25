@@ -179,6 +179,10 @@ Compatibility
  * **Minimum Android SDK**: QTalk SDK requires a minimum API level of 16.
  * **Compile Android SDK**: QTalk SDK requires you to compile against API 26 or later.
  
+如何自定义消息气泡
+------------- 
+消息气泡[Bubble.md](doc/messageBubble.md)
+ 
 常见错误
 --------
 在gradle.properties文件中添加 android.enableAapt2=false
