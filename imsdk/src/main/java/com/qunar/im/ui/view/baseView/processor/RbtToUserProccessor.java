@@ -9,12 +9,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.qunar.im.base.jsonbean.RbtSuggestionListJson;
+import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.NoLineClickSpan;
+import com.qunar.im.utils.HttpUtil;
+
+import java.util.HashMap;
 
 /**
  * Created by xinbo.wang on 2016-12-06.
@@ -46,15 +50,46 @@ public class RbtToUserProccessor extends DefaultMessageProcessor {
                             continue;
                         }
 
-                        if ("interface".equalsIgnoreCase(hintitem.event.type)){
+                        if("postInterface".equalsIgnoreCase(hintitem.event.type)){
                             sb.append(hintitem.text);
                             String url = hintitem.event.url;
-                            int color = item.getContext().getResources().getColor(R.color.atom_ui_light_green2c);
+                            int color = item.getContext().getResources().getColor(R.color.atom_ui_00b3b3);
                             ClickableSpan urlSpan = new NoLineClickSpan(url,
                                     color ,
                                     new NoLineClickSpan.ProcessHyperLinkClick() {
                                         @Override
                                         public void process(String text) {
+                                            HttpUtil.robotSessionPost(url, hintitem.event.params, new ProtocolCallback.UnitCallback<Boolean>() {
+                                                @Override
+                                                public void onCompleted(Boolean aBoolean) {
+                                                    new String();
+                                                }
+
+                                                @Override
+                                                public void onFailure(String errMsg) {
+
+                                                }
+                                            });
+//                                            if (item.getContext() instanceof QImSessionInfoActivity){
+//                                                QImSessionInfoActivity activity = (QImSessionInfoActivity) item.getContext();
+//                                                activity.rbtToUser();
+//                                            }
+                                        }
+                                    });
+                            sb.setSpan(urlSpan, sb.length()-hintitem.text.length(), sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            continue;
+                        }
+
+                        if ("interface".equalsIgnoreCase(hintitem.event.type)){
+                            sb.append(hintitem.text);
+                            String url = hintitem.event.url;
+                            int color = item.getContext().getResources().getColor(R.color.atom_ui_00b3b3);
+                            ClickableSpan urlSpan = new NoLineClickSpan(url,
+                                    color ,
+                                    new NoLineClickSpan.ProcessHyperLinkClick() {
+                                        @Override
+                                        public void process(String text) {
+
 //                                            if (item.getContext() instanceof QImSessionInfoActivity){
 //                                                QImSessionInfoActivity activity = (QImSessionInfoActivity) item.getContext();
 //                                                activity.rbtToUser();

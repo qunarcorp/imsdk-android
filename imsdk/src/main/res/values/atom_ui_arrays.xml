@@ -20,6 +20,10 @@
         <item>@string/atom_ui_common_more</item>
     </string-array>
 
+    <string-array name="atom_ui_video_share">
+        <item>@string/atom_ui_common_more</item>
+    </string-array>
+
     <string-array name="atom_ui_image_menu_local">
         <item>@string/atom_ui_menu_save_image</item>
         <item>@string/atom_ui_menu_scan_qrcode</item>

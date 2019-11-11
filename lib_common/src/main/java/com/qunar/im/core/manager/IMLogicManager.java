@@ -1,6 +1,8 @@
 package com.qunar.im.core.manager;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
@@ -18,12 +20,15 @@ import com.qunar.im.base.jsonbean.NavConfigResult;
 import com.qunar.im.base.jsonbean.NoticeBean;
 import com.qunar.im.base.jsonbean.OpsUnreadResult;
 import com.qunar.im.base.jsonbean.VersionBean;
+import com.qunar.im.base.jsonbean.WebRtcJson;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.base.module.MedalUserStatusResponse;
 import com.qunar.im.base.module.NavigationNotice;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.RevokeInfo;
+import com.qunar.im.base.module.UserHaveMedalStatus;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNoticeItem;
 import com.qunar.im.base.structs.MessageStatus;
@@ -86,6 +91,8 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
 
     private LruCache<String, Nick> nickCache;
 
+    private LruCache<String,List<UserHaveMedalStatus>> userMedalCache;
+
     private static String defaultMucImage = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/2227ff2e304cb44a1980e9c1a3d78164.png";
     private static String defaultUserImage = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
 
@@ -120,6 +127,9 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
             }
             if (nickCache == null) {
                 nickCache = new LruCache<>(500);
+            }
+            if(userMedalCache==null){
+                userMedalCache = new LruCache<>(500);
             }
 //            userCache = new LruCache<>(100);
 //            nickCache = new LruCache<>(200);
@@ -327,6 +337,30 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public List<UserHaveMedalStatus> getUserMedalList(String xmppid) {
+        List<UserHaveMedalStatus> list = null;
+        list = userMedalCache.get(xmppid);
+        if(list == null){
+            list = IMDatabaseManager.getInstance().selectUserWearMedalStatusByUserid(QtalkStringUtils.parseId(xmppid),QtalkStringUtils.parseDomain(xmppid));
+            if(list!=null&&list.size()>0){
+                userMedalCache.put(xmppid,list);
+            }else{
+                list = null;
+            }
+        }
+        return list;
+    }
+
+    public void deleteMedalCache(MedalUserStatusResponse medalListResponse) {
+        if(userMedalCache==null){
+            return;
+        }
+        for (int i = 0; i < medalListResponse.getData().getUserMedals().size(); i++) {
+            userMedalCache.remove(medalListResponse.getData().getUserMedals().get(i).getUserId()
+                    +"@"+medalListResponse.getData().getUserMedals().get(i).getHost());
         }
     }
 
@@ -664,6 +698,44 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
         }
     }
 
+    //根据用户名获取UserInfo 只走本地
+    public void getUserInfoByUserId(XMPPJID targe,final NickCallBack nickCallBack) {
+        if (targe == null) {
+            Nick nick = new Nick();
+            nick.setXmppId("");
+            nick.setHeaderSrc(defaultUserImage);
+            nick.setDescInfo("无");
+            nick.setName("");
+            nick.setMark("");
+            nick.setMood("");
+            nickCallBack.onNickCallBack(nick);
+            return;
+        }
+        //获取目标id
+        String targeId = targe.fullname();
+//        Logger.i("targeId:" + targeId);
+        //根据目标id从数据库中获取缓存
+        if (TextUtils.isEmpty(targeId)) {
+            return;
+        }
+        Nick targeResult = nickCache.get(targeId);
+        //如果目标id缓存为空
+        if (targeResult == null || TextUtils.isEmpty(targeResult.getXmppId()) || TextUtils.isEmpty(targeResult.getDescInfo()) || TextUtils.isEmpty(targeResult.getName())) {
+            targeResult = JsonUtils.getGson().fromJson(IMDatabaseManager.getInstance().selectUserByJID(targeId).toString(), Nick.class);
+            if (targeResult != null && !TextUtils.isEmpty(targeResult.getXmppId()) && !TextUtils.isEmpty(targeResult.getHeaderSrc())) {
+                targeResult.setMark(ConnectionUtil.getInstance().getMarkupNameById(targeId));
+                nickCache.put(targeId, targeResult);
+                nickCallBack.onNickCallBack(targeResult);
+                return;
+            }else {
+                nickCallBack.onNickCallBack(targeResult);
+            }
+
+        } else {
+            nickCallBack.onNickCallBack(targeResult);
+        }
+    }
+
     public void updateUserInfoFromNet(final String targeId, final boolean enforce, final NickCallBack nickCallBack) {
         DispatchHelper.Async("getUserInfo", false, new Runnable() {
             @Override
@@ -845,7 +917,15 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                 //更新数据库当前这条消息发送失败的状态
                 IMDatabaseManager.getInstance().UpdateChatStateMessage(protoMessage, MessageStatus.LOCAL_STATUS_FAILED);
 
-                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, ProtoMessageOuterClass.XmppMessage.parseFrom(protoMessage.getMessage()).getMessageId());
+                try {
+//                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Connect_Interrupt, "");
+                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, ProtoMessageOuterClass.XmppMessage.parseFrom(protoMessage.getMessage()).getMessageId());
+//                    reConnection();
+                    //                    这种方式抛出消息id
+//                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(ProtoMessageOuterClass.XmppMessage.parseFrom(message.getMessage()).getMessageId(), message);
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
 
             }
         } else {
@@ -856,7 +936,15 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
             //更新数据库当前这条消息发送失败的状态
             IMDatabaseManager.getInstance().UpdateChatStateMessage(protoMessage, MessageStatus.LOCAL_STATUS_FAILED);
 
-            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, ProtoMessageOuterClass.XmppMessage.parseFrom(protoMessage.getMessage()).getMessageId());
+            try {
+//                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Connect_Interrupt, "");
+                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, ProtoMessageOuterClass.XmppMessage.parseFrom(protoMessage.getMessage()).getMessageId());
+//                reConnection();
+                //                    这种方式抛出消息id
+//                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(ProtoMessageOuterClass.XmppMessage.parseFrom(message.getMessage()).getMessageId(), message);
+            } catch (Exception ee) {
+                ee.printStackTrace();
+            }
         }
     }
 
@@ -958,6 +1046,10 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
         return null;
     }
 
+    /**
+     * 有其他类反射使用 慎重修改
+     * @return
+     */
     public String getRemoteLoginKey() {
 //        if (StringUtils.isEmpty(remoteLoginKey)) {
         if (_protocolType == IMProtocol.PROTOCOL_PROTOBUF) {
@@ -1049,36 +1141,12 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                     //抛出到界面上
                     IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Text_After_DB, newChatMessage);
 
-//                    if (newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE) {
-//                        Intent i = new Intent("android.intent.action.VIEW",
-//                                Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
-//                                        + CurrentPreference.getInstance().getPreferenceUserId()
-//                                        + "&toid=" + message.getFrom()
-//                                        + "&chattype" + ConversitionType.MSG_TYPE_CHAT
-//                                        + "&realjid" + message.getFrom()
-//                                        + "&isFromChatRoom" + false
-//                                        + "&offer=true&video=true&msgid=" + newChatMessage.getId()));
-//                        i.putExtra("messge", newChatMessage);
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        CommonConfig.globalContext.startActivity(i);
-//                    } else if (newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE) {
-//                        Intent i = new Intent("android.intent.action.VIEW",
-//                                Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
-//                                        + CurrentPreference.getInstance().getPreferenceUserId()
-//                                        + "&toid=" + message.getFrom()
-//                                        + "&chattype" + ConversitionType.MSG_TYPE_CHAT
-//                                        + "&realjid" + message.getFrom()
-//                                        + "&isFromChatRoom" + false
-//                                        + "&offer=true&video=false&msgid=" + newChatMessage.getId()));
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        CommonConfig.globalContext.startActivity(i);
+//                    if (newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE
+//                            || newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE) {//音视频通话
+//                        ConnectionUtil.getInstance().lanuchChatVideo(newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE,
+//                                message.getFrom(),
+//                                CurrentPreference.getInstance().getUserid());
 //                    }
-                    if (newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE
-                            || newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE) {//音视频通话
-                        ConnectionUtil.getInstance().lanuchVideo(newChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE,
-                                message.getFrom(),
-                                CurrentPreference.getInstance().getUserid());
-                    }
 
                     if (!newChatMessage.isCarbon()) {
                         JSONObject jb = new JSONObject();
@@ -1109,6 +1177,17 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                 //根据类型插入数据库 IM_SessionList表
                 IMDatabaseManager.getInstance().InsertIMSessionList(newGroupChatMessage, false);
                 IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Group_Chat_Message_Text_After_DB, newGroupChatMessage);
+
+//                if((newGroupChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_Group_VALUE ||
+//                        newGroupChatMessage.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_VideoMeeting_VALUE)){
+//                    final String roomId = QtalkStringUtils.parseIdAndDomain(message.getFrom());
+//                    ConnectionUtil.getInstance().getMucCard(roomId, new NickCallBack() {
+//                        @Override
+//                        public void onNickCallBack(Nick nick) {
+//                            ConnectionUtil.getInstance().lanuchGroupVideo(roomId,nick.getName());
+//                        }
+//                    },false,false);
+//                }
 //                IMDatabaseManager.getInstance().InsertSessionList(message);
                 break;
             //16  收到消息发送状态
@@ -1158,14 +1237,15 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
             //14 撤销消息
             case ProtoMessageOuterClass.SignalType.SignalTypeRevoke_VALUE:
                 RevokeInfo revokeInfo = PbParseUtil.parseRevokeMessage(message);
-                if (revokeInfo.getMessageType().equals("-1")) {
+                if (revokeInfo.getMessageType().equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))
+                || revokeInfo.getMessageType().equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE))) {
                     IMMessage imMessage = new IMMessage();
                     imMessage.setDirection(IMMessage.DIRECTION_MIDDLE);
                     imMessage.setId(revokeInfo.getMessageId());
                     imMessage.setMessageID(revokeInfo.getMessageId());
                     Nick nick = JsonUtils.getGson().fromJson(IMDatabaseManager.getInstance().selectUserByJID(revokeInfo.getFromId()).toString(), Nick.class);
                     imMessage.setBody(nick.getName() + "撤回了一条消息");
-                    IMDatabaseManager.getInstance().UpdateRevokeChatMessage(revokeInfo.getMessageId(), nick.getName() + "撤回了一条消息");
+                    IMDatabaseManager.getInstance().UpdateRevokeChatMessage(revokeInfo.getMessageId(), nick.getName() + "撤回了一条消息", Integer.valueOf(revokeInfo.getMessageType()));
                     IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Revoke, imMessage);
 //                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Revoke, revokeInfo);
                 }
@@ -1454,9 +1534,29 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                                     }
 
                                 } catch (Exception e) {
-                                    new String();
+
                                 }
                                 break;
+                            case ProtoMessageOuterClass.CategoryType.CategoryHotLineSync_VALUE:
+                                LoginComplateManager.get_virtual_user_role();
+                                break;
+
+                            case ProtoMessageOuterClass.CategoryType.CategoryMedalListSync_VALUE:
+                              int oldMedalVersion =   IMDatabaseManager.getInstance().selectMedalListVersion();
+                              int newMedalVersion = new JSONObject(presenceMessage.getBody().getValue()).getInt("medalVersion");
+                              if(oldMedalVersion<newMedalVersion){
+                                  LoginComplateManager.updateMedalList();
+                              }
+
+                                break;
+
+                            case ProtoMessageOuterClass.CategoryType.CategoryMedalUserStatusListSync_VALUE:
+
+                                    int oldMedalUserVersion = IMDatabaseManager.getInstance().selectUserMedalStatusVersion();
+                                int newMedalUserVersion = new JSONObject(presenceMessage.getBody().getValue()).getInt("userMedalVersion");
+                                if(oldMedalUserVersion<newMedalUserVersion){
+                                    LoginComplateManager.updateMedalList();
+                                }
                         }
                     }
                     if (presenceMessage.hasDefinedKey()) {
@@ -1510,8 +1610,11 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                             //收到群摧毁广播
                             case QtalkEvent.Destory_Muc:
                                 IMGroup dimGroup = PbParseUtil.parseDeleteMuc(message);
-                                JSONObject mucJson = IMDatabaseManager.getInstance().selectMucByGroupId(dimGroup.getGroupId());
-                                String mucName = mucJson.optString("Name");
+                                String mucName = dimGroup.getName();
+                                if(TextUtils.isEmpty(mucName)){
+                                    JSONObject mucJson = IMDatabaseManager.getInstance().selectMucByGroupId(dimGroup.getGroupId());
+                                    mucName = mucJson.optString("Name");
+                                }
                                 IMDatabaseManager.getInstance().DeleteGroupAndSessionListByGM(dimGroup);
                                 IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Remove_Session, dimGroup.getGroupId());
                                 IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Destory_Muc, dimGroup.getGroupId(), mucName);
@@ -1567,6 +1670,7 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                 IMMessage headlineMessage = PbParseUtil.parseReceiveChatMessage(message, MessageStatus.REMOTE_STATUS_CHAT_DELIVERED + "", MessageStatus.LOCAL_STATUS_SUCCESS + "");
                 headlineMessage.setConversationID(Constants.SYS.SYSTEM_MESSAGE);//防止生成多个会话，写死
                 headlineMessage.setFromID(Constants.SYS.SYSTEM_MESSAGE);
+                headlineMessage.setType(ConversitionType.MSG_TYPE_HEADLINE);
                 IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Text, headlineMessage);
                 IMDatabaseManager.getInstance().InsertChatMessage(headlineMessage, true);
                 //根据类型插入数据库 IM_SessionList表
@@ -1614,25 +1718,41 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                 //抛出通知
                 IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Collection_Message_Text, collectionMessage);
                 break;
-            case ProtoMessageOuterClass.SignalType.SignalTypeWebRtc_VALUE:
+            case ProtoMessageOuterClass.SignalType.SignalTypeWebRtc_VALUE://110
                 IMMessage webrtcMsg = PbParseUtil.parseReceiveChatMessage(message, "0", "0");
-//                if (webrtcMsg.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE) {
-//                    Intent i = new Intent("android.intent.action.VIEW",
-//                            Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid=" +
-//                                    QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId())
-//                                    + "&toid=" + QtalkStringUtils.parseBareJid(webrtcMsg.getFromID())
-//                                    + "&offer=true&video=false&msgid=" + webrtcMsg.getId()));
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    CommonConfig.globalContext.startActivity(i);
-//                } else if (webrtcMsg.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE) {
-//                    Intent i = new Intent("android.intent.action.VIEW",
-//                            Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid=" +
-//                                    QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId())
-//                                    + "&toid=" + webrtcMsg.getFromID()
-//                                    + "&offer=true&video=true&msgid=" + webrtcMsg.getId()));
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    CommonConfig.globalContext.startActivity(i);
-//                }
+
+                String ext = webrtcMsg.getExt();
+                if (!TextUtils.isEmpty(ext)) {
+                    WebRtcJson json = JsonUtils.getGson().fromJson(ext, WebRtcJson.class);
+                    if(json != null && "create".equals(json.type) && !webrtcMsg.isCarbon()) {
+                        if (webrtcMsg.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_VideoCall_VALUE) {
+                            Intent i = new Intent("android.intent.action.VIEW",
+                                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
+                                            + CurrentPreference.getInstance().getPreferenceUserId()
+                                            + "&toid=" + message.getFrom()
+                                            + "&chattype" + ConversitionType.MSG_TYPE_CHAT
+                                            + "&realjid" + message.getFrom()
+                                            + "&isFromChatRoom" + false
+                                            + "&offer=true&video=true&msgid=" + webrtcMsg.getId()));
+                            i.putExtra("messge", webrtcMsg);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            CommonConfig.globalContext.startActivity(i);
+                        } else if (webrtcMsg.getMsgType() == ProtoMessageOuterClass.MessageType.WebRTC_MsgType_AudioCall_VALUE) {
+                            Intent i = new Intent("android.intent.action.VIEW",
+                                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
+                                            + CurrentPreference.getInstance().getPreferenceUserId()
+                                            + "&toid=" + message.getFrom()
+                                            + "&chattype" + ConversitionType.MSG_TYPE_CHAT
+                                            + "&realjid" + message.getFrom()
+                                            + "&isFromChatRoom" + false
+                                            + "&offer=true&video=false&msgid=" + webrtcMsg.getId()));
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            CommonConfig.globalContext.startActivity(i);
+                        }
+                        return;
+                    }
+                }
+
                 EventBus.getDefault().post(new EventBusEvent.WebRtcMessage(webrtcMsg));
                 break;
             //黑名单

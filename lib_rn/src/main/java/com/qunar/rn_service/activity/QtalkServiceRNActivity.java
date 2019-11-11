@@ -32,13 +32,6 @@ public class QtalkServiceRNActivity extends Activity implements DefaultHardwareB
 
     public  ReactInstanceManager mReactInstanceManager;
     public  ReactInstanceManagerBuilder builder;
-    public static final String CLOCKIN = "ClockIn";
-    public static final String TOTP="TOTP";
-    public static final String GROUPCARD="GroupCard";
-    public static final String USERCARD="UserCard";
-    public static final String CONTACTS="Contacts";
-    public static final String MERCHANT="Merchant";
-    public static final String TRAVELCALENDAR="TravelCalendar";
 
 
     public  ReactRootView mReactRootView;

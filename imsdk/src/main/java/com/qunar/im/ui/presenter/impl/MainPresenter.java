@@ -12,6 +12,7 @@ import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 
 /**
@@ -64,6 +65,7 @@ public class MainPresenter implements IMainPresenter, IMNotificaitonCenter.Notif
         connectionUtil.addEvent(this, QtalkEvent.RESTART);
         connectionUtil.addEvent(this, QtalkEvent.Work_World_Remind);
         connectionUtil.addEvent(this, QtalkEvent.FEED_BACK);
+        connectionUtil.addEvent(this, QtalkEvent.START_LOGIN_VIEW);
     }
 
     @Override
@@ -182,6 +184,9 @@ public class MainPresenter implements IMainPresenter, IMNotificaitonCenter.Notif
                 }else if(args != null && args.length > 1){
                     mMainView.showFeedBackProgressView((String[])args[0],(boolean)args[1],false);
                 }
+                break;
+            case QtalkEvent.START_LOGIN_VIEW:
+                mMainView.startLoginView();
                 break;
         }
     }

@@ -20,8 +20,10 @@ import com.qunar.im.base.structs.PushSettinsStatus;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.IMUserDefaults;
+import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.MemoryCache;
+import com.qunar.im.base.util.PhoneInfoUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMCoreManager;
@@ -373,9 +375,33 @@ public class QtalkSDK {
 //        IMLogicManager.getInstance().setLoginStatus(b);
 //    }
 
-    public void publicLogin(final String userName, String password) {
+    public void newLogin(String userName, String password){
+        Logger.i("开始新登陆,账号:" + userName + ",密码:" + password);
+        try{
+            JSONObject nauth = new JSONObject();
+            JSONObject data = new JSONObject();
+            data.put("p",password);
+            data.put("u",userName);
+            data.put("mk",PhoneInfoUtils.getUniqueID());
+            nauth.put("nauth",data);
+            password = nauth.toString();
+            Logger.i("开始新类型登陆,加密前密码 password = " + password);
+            IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                    .putObject(Constants.Preferences.usertoken, password)
+                    .synchronize();
+            com.qunar.im.protobuf.common.CurrentPreference.getInstance().setToken(password);
+            //username放入sp
+            IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                    .putObject(Constants.Preferences.lastuserid, userName)
+                    .synchronize();
 
+            login(false);
+        }catch (Exception e){
 
+        }
+    }
+
+    public void publicLogin(String userName, String password) {
         Logger.i("开始公共域类型登陆,账号:" + userName + ",密码:" + password);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
@@ -384,7 +410,6 @@ public class QtalkSDK {
         password = "{\"d\":\"" + timeStr + "\", \"p\":\"" + password + "\", \"u\":\"" + userName + "\", \"a\":\"testapp\"}";
         Logger.i("开始公共域类型登陆,加密前密码 password = " + password);
         try {
-//            password = QChatRSA.QunarRSAEncrypt(password);
             password = QChatRSA.QTalkEncodePassword(password);
             Logger.i("开始公共域类型登陆,加密后密码 password = " + password);
         } catch (Exception e) {
@@ -407,60 +432,57 @@ public class QtalkSDK {
 
     //进行登录 登录时会获取token,和username存入sp中
     public void login(final String userName, final String password) {
-        if (!LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())) {
+        final boolean[] succeeded = {false};
+        final String[] errorMessage = new String[1];
 
-            final boolean[] succeeded = {false};
-            final String[] errorMessage = new String[1];
+        if(TestAccount.isTestAccount(userName)){
+            saveToken(succeeded,userName,TestAccount.getTestAccountToken(userName));
+        }else {
+            DispatchHelper.sync("takePassword", new Runnable() {
+                @Override
+                public void run() {
+                    String tokenReqeustUrl = QtalkNavicationService.getInstance().getTokenSmsUrl();
 
-            if(TestAccount.isTestAccount(userName)){
-                saveToken(succeeded,userName,TestAccount.getTestAccountToken(userName));
-            }else {
-                DispatchHelper.sync("takePassword", new Runnable() {
-                    @Override
-                    public void run() {
-                        String tokenReqeustUrl = QtalkNavicationService.getInstance().getTokenSmsUrl();
+                    JSONObject result =
+                            QtalkHttpService.buildFormRequest(tokenReqeustUrl)
+                                    .addParam("rtx_id", userName)
+                                    .addParam("verify_code", password)
+                                    .post();
 
-                        JSONObject result =
-                                QtalkHttpService.buildFormRequest(tokenReqeustUrl)
-                                        .addParam("rtx_id", userName)
-                                        .addParam("verify_code", password)
-                                        .post();
-
-                        if (result != null) {
-                            int statusId = -100;
+                    if (result != null) {
+                        int statusId = -100;
+                        try {
+                            statusId = result.getInt("status_id");
+                        } catch (JSONException e) {
+                            Logger.e(e, "json parse failed");
+                        }
+                        if (statusId == 0) {
+                            String token = null;
                             try {
-                                statusId = result.getInt("status_id");
+                                token = result.getJSONObject("data").getString("token");
+
                             } catch (JSONException e) {
                                 Logger.e(e, "json parse failed");
                             }
-                            if (statusId == 0) {
-                                String token = null;
-                                try {
-                                    token = result.getJSONObject("data").getString("token");
-
-                                } catch (JSONException e) {
-                                    Logger.e(e, "json parse failed");
-                                }
-                                if (StringUtils.isNotEmpty(token)) {
-                                    saveToken(succeeded,userName,token);
-                                }
-                            } else {
-                                try {
-                                    errorMessage[0] = result.getString("msg");
-                                } catch (JSONException e) {
-                                    Logger.e(e, "json parse failed");
-                                }
+                            if (StringUtils.isNotEmpty(token)) {
+                                saveToken(succeeded,userName,token);
+                            }
+                        } else {
+                            try {
+                                errorMessage[0] = result.getString("msg");
+                            } catch (JSONException e) {
+                                Logger.e(e, "json parse failed");
                             }
                         }
                     }
-                });
-            }
-            if (succeeded[0] == false) {
-                //默认错误类型设置为0
-                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.LOGIN_FAILED, 0);
-            } else {
-                login(false);
-            }
+                }
+            });
+        }
+        if (succeeded[0] == false) {
+            //默认错误类型设置为0
+            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.LOGIN_FAILED, 0);
+        } else {
+            login(false);
         }
     }
 

@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 26
+    compileSdkVersion project.compileSdkVersion as int
 //    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion project.minSdkVersion as int
+        targetSdkVersion project.targetSdkVersion as int
         versionCode 1
         versionName "1.0"
         ndk {
@@ -13,42 +13,60 @@ android {
         }
         vectorDrawables.useSupportLibrary = true
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFile 'proguard-rules.pro'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    android {
-        lintOptions {
-            abortOnError false
-        }
+    lintOptions {
+        abortOnError false
     }
 
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'io.pristine:libjingle:11139@aar'
-    compile 'com.android.support:design:26.1.0'
-    //baidu map
-    compile 'com.qunar.im:baidu.map:4.4.1'
-    //pull down listview
-    compile 'com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1'
-    compile 'com.squareup.okio:okio:1.0.1'
-    compile 'de.greenrobot:eventbus:2.2.1'
-    compile 'net.zetetic:android-database-sqlcipher:3.5.4'
-    compile 'com.github.hijesse:android-logger:2.0.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:appcompat-v7:27.1.0'
 
-    compile 'org.jsoup:jsoup:1.9.2'
-    //日期选择器
-    compile 'com.contrarywind:Android-PickerView:4.1.6'
+    //local
+    api project(':lib_common')
+    api project(':lib_rn')
+    api project(':lib_rtc')
+    api project(':push_service')
 
-    compile 'com.qunar.im:sdk-common:3.0.5'//compile project(':lib_common')
-    compile 'com.qunar.im:sdk-rn:3.0.5'//compile project(':lib_rn')
-    compile 'com.qunar.im:sdk-base:3.0.5'
-    compile 'com.qunar.im:sdk-push:3.0.5'
-    compile 'com.qunar.im:sdk-rtc:3.0.5'
+    //maven
+//    api 'com.startalk.im:sdk-base:3.0.6'
+//    api 'com.startalk.im:sdk-common:3.0.6'
+//    api 'com.startalk.im:sdk-push:3.0.6'
+//    api 'com.startalk.im:sdk-rn:3.0.6'
+//    api 'com.startalk.im:sdk-rtc:3.0.6'
+
+    //thirdpart
+    api 'com.startalk.im:map:4.4.1'
+    api ('com.loopeer.android.thirdparty.pulltorefresh:Android-PullToRefresh:2.1.1') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    api "com.nineoldandroids:library:2.4.0"
+    api 'com.google.zxing:core:3.2.0'
+    api 'io.pristine:libjingle:11139@aar'
+    api 'com.android.support:design:27.1.0'
+    api 'de.greenrobot:eventbus:2.2.1'
+    api 'net.zetetic:android-database-sqlcipher:3.5.4'
+    api 'com.github.bumptech.glide:glide:3.8.0'
+    api 'org.jsoup:jsoup:1.9.2'
+    api 'com.contrarywind:Android-PickerView:4.1.6'
+    api ('com.github.chrisbanes:PhotoView:2.1.4'){
+        exclude group: 'com.android.support'
+    }
+    api 'com.github.yalantis:ucrop:2.2.2'
+    api 'com.android.support.constraint:constraint-layout:1.1.3'
+    api 'com.danikula:videocache:2.7.0'
+    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    api 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
 }
+//apply from: 'release.gradle'

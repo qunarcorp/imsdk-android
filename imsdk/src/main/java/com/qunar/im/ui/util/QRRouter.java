@@ -21,7 +21,6 @@ import com.qunar.im.ui.activity.RobotInfoActivity;
 import com.qunar.im.ui.fragment.QRcodeLoginConfirmFragment;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 
 public class QRRouter {
 
@@ -37,7 +36,10 @@ public class QRRouter {
                 if(uri.getHost().equals("user"))
                 {
                     String id = uri.getQueryParameter("id");
-                    Intent intent = new Intent(CommonConfig.globalContext, QtalkServiceRNActivity.class);
+                    Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(context);
+                    if(intent == null){
+                        return;
+                    }
                     intent.putExtra("UserId", id);
                     intent.putExtra("module", "UserCard");
                     intent.putExtra("Version", "1.0.0");
@@ -50,8 +52,11 @@ public class QRRouter {
                     boolean check = ConnectionUtil.getInstance().checkGroupByJid(roomId);
                     if (check ) {//如果已经在群里
 
-                        Intent intent = new Intent(context, QtalkServiceRNActivity.class);
-                        intent.putExtra("module", QtalkServiceRNActivity.GROUPCARD);
+                        Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(context);
+                        if(intent == null){
+                            return;
+                        }
+                        intent.putExtra("module", Constants.RNKey.GROUPCARD);
                         intent.putExtra("groupId", roomId);
                         intent.putExtra("permissions", ConnectionUtil.getInstance().selectGroupMemberPermissionsByGroupIdAndMemberId(roomId, CurrentPreference.getInstance().getPreferenceUserId()));
                         context.startActivity(intent);

@@ -206,6 +206,13 @@ public class BubbleLayout extends FrameLayout {
         return this;
     }
 
+    public BubbleLayout setBubbleAndStrokeColor(int bubbleColor,int strokeColor){
+        mBubbleColor = bubbleColor;
+        mStrokeColor = strokeColor;
+        requestLayout();
+        return this;
+    }
+
     public void noBubbleStyle(){
 //        setPadding(0,0,0,0);
         setBubbleColor(ContextCompat.getColor(context,R.color.translate));

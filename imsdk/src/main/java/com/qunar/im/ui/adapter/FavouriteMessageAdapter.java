@@ -85,7 +85,7 @@ public class FavouriteMessageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.tv_save_time.setText(DateTimeUtils.getTime(Long.parseLong(fMsg.getTime()), true));
+        holder.tv_save_time.setText(DateTimeUtils.getTime(Long.parseLong(fMsg.getTime()), true, true));
 
         //1 FOR GROUP
         if ("1".equals(fMsg.getFromType())) {

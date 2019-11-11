@@ -145,26 +145,20 @@ public class NavConfigActivity extends SwipeBackActivity implements View.OnClick
         mConfigdapter = new ConfigAdapter();
         nav_config_list.setAdapter(mConfigdapter);
 
-        nav_config_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //更新配置列表
-                NavConfigUtils.saveNavInfo(mConfigInfoList.get(i));
-                Logger.i("切换导航:" + mConfigInfoList.get(i).getName() + "::" + mConfigInfoList.get(i).getUrl());
-                //更新导航
-                getServerConfig(mConfigInfoList.get(i),false);
+        nav_config_list.setOnItemClickListener((adapterView, view, i, l) -> {
+            //更新配置列表
+            NavConfigUtils.saveNavInfo(mConfigInfoList.get(i));
+            Logger.i("切换导航:" + mConfigInfoList.get(i).getName() + "::" + mConfigInfoList.get(i).getUrl());
+            //更新导航
+            getServerConfig(mConfigInfoList.get(i),false);
 
-            }
         });
-        nav_config_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(NavConfigActivity.this,QunarWebActvity.class);
-                intent.putExtra(QunarWebActvity.IS_HIDE_BAR, false);
-                intent.setData(Uri.parse(mConfigInfoList.get(position).getUrl()));
-                startActivity(intent);
-                return true;
-            }
+        nav_config_list.setOnItemLongClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(NavConfigActivity.this,QunarWebActvity.class);
+            intent.putExtra(QunarWebActvity.IS_HIDE_BAR, false);
+            intent.setData(Uri.parse(mConfigInfoList.get(position).getUrl()));
+            startActivity(intent);
+            return true;
         });
 
     }
@@ -197,20 +191,22 @@ public class NavConfigActivity extends SwipeBackActivity implements View.OnClick
                 NavConfigUtils.saveCurrentNavJSONInfo(navName,configStr);
                 //配置导航
                 QtalkNavicationService.getInstance().configNav(navConfigResult);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        navConfigInfo.setName(navName);
-                        if(isFreshUI)
-                            refreshNavList(navConfigInfo);
-                        toast(getString(R.string.atom_ui_tip_switch_navigation_success));
-                        NavConfigUtils.saveCurrentNavDomain(navName);
-                        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.CLEAR_BRIDGE_OPS);
-                        Intent intent = new Intent();
-                        intent.putExtra(Constants.BundleKey.NAV_ADD_NAME,navName);
-                        setResult(RESULT_OK,intent);
-                        finish();
+                runOnUiThread(() -> {
+                    navConfigInfo.setName(navName);
+                    if(isFreshUI)
+                        refreshNavList(navConfigInfo);
+                    toast(getString(R.string.atom_ui_tip_switch_navigation_success));
+                    NavConfigUtils.saveCurrentNavDomain(navName);
+                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.CLEAR_BRIDGE_OPS);
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.BundleKey.NAV_ADD_NAME,navName);
+                    setResult(RESULT_OK,intent);
+
+                    if(!navConfigInfo.isSelected()){//切换后 跳转登录页面
+                        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.START_LOGIN_VIEW);
                     }
+
+                    finish();
                 });
             }
 
@@ -291,6 +287,7 @@ public class NavConfigActivity extends SwipeBackActivity implements View.OnClick
                 holder.nav_config_item_check.setText(R.string.atom_ui_hook);
                 holder.name.setTextColor(Color.parseColor("#333333"));
                 holder.url.setTextColor(Color.parseColor("#333333"));
+                info.setSelected(true);
             }else{
                 holder.nav_layout.setBackgroundColor(Color.parseColor("#F3F3F3"));
                 holder.nav_config_item_check.setTextColor(Color.parseColor("#939393"));

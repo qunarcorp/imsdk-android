@@ -2,12 +2,12 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'
-
+        classpath 'com.google.gms:google-services:4.2.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -15,18 +15,22 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://dl.google.com/dl/android/maven2' }
         maven {
-            url "http://qim.qunar.com/package/mvn/repository/maven-qim/"
+            url "https://raw.githubusercontent.com/froyomu/im/master"
         }
         maven {
             url "http://developer.huawei.com/repo/"
         }
-        mavenCentral()
         jcenter {
             url "http://jcenter.bintray.com/"
         }
-        jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
         google()
+        jcenter()
+        mavenCentral()
     }
 }
 

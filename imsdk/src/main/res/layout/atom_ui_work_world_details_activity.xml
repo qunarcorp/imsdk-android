@@ -79,7 +79,7 @@
                     android:layout_marginLeft="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/atom_ui_edittext_comment"
-                    android:hint="快来说几句..."
+                    android:hint="快来说几句...(200字以内)"
                     android:maxLines="4"
                     android:minHeight="36dp"
                     android:paddingLeft="18dp"

@@ -3,6 +3,8 @@ package com.qunar.im.ui.presenter.impl;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.common.ConversitionType;
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.R;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
@@ -12,12 +14,9 @@ import com.qunar.im.base.jsonbean.TransferConsult;
 import com.qunar.im.base.jsonbean.TransferWebChat;
 import com.qunar.im.base.jsonbean.UserStatusResult;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.ui.presenter.ICloudRecordPresenter;
-import com.qunar.im.ui.presenter.IP2pRTC;
-import com.qunar.im.ui.presenter.IShakeMessagePresenter;
-import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.protocol.ProtocolCallback;
+import com.qunar.im.base.protocol.VCardAPI;
 import com.qunar.im.base.structs.EncryptMessageType;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.structs.MessageType;
@@ -30,11 +29,16 @@ import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.enums.LoginStatus;
+import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
+import com.qunar.im.ui.R;
+import com.qunar.im.ui.presenter.ICloudRecordPresenter;
+import com.qunar.im.ui.presenter.IShakeMessagePresenter;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import org.json.JSONArray;
@@ -50,7 +54,7 @@ import java.util.UUID;
  * Created by xinbo.wang on 2015/2/9.
  */
 //用于处理单人聊天会话逻辑
-public class SingleSessionPresenter extends ChatPresenter implements ICloudRecordPresenter, IShakeMessagePresenter, IP2pRTC {
+public class SingleSessionPresenter extends ChatPresenter implements ICloudRecordPresenter, IShakeMessagePresenter {
 
     private String cn;
 
@@ -187,7 +191,7 @@ public class SingleSessionPresenter extends ChatPresenter implements ICloudRecor
     }
 
     protected void updateUserStatus() {
-        Protocol.getUserStatus(QtalkStringUtils.parseBareJid(chatView.getToId()),
+        VCardAPI.getUserStatus(QtalkStringUtils.parseBareJid(chatView.getToId()),
                 new ProtocolCallback.UnitCallback<UserStatusResult>() {
                     @Override
                     public void onCompleted(UserStatusResult userStatusResult) {
@@ -451,28 +455,34 @@ public class SingleSessionPresenter extends ChatPresenter implements ICloudRecor
         chatView.setNewMsg2DialogueRegion(message);
     }
 
-    @Override
-    public void startVideoRtc() {
-        IMMessage message = generateIMMessage();
-        message.setBody("当前客户端不支持实时视频");
-        message.setMsgType(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE);
-        curMsgNum++;
-
-        connectionUtil.sendTextOrEmojiMessage(message);
-        chatView.setNewMsg2DialogueRegion(message);
-    }
-
-    @Override
-    public void startAudioRtc() {
-        IMMessage message = generateIMMessage();
-//        message.setType(ProtoMessageOuterClass.SignalType.SignalTypeChat_VALUE);
-        message.setBody("当前客户端不支持音频通话");
-        message.setMsgType(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE);
-
-        curMsgNum++;
-        connectionUtil.sendTextOrEmojiMessage(message);
-        chatView.setNewMsg2DialogueRegion(message);
-    }
+//    @Override
+//    public void startVideoRtc() {
+//        IMMessage message = generateIMMessage();
+//        WebRtcJson webRtcJson = new WebRtcJson();
+//        webRtcJson.type = "create";
+//        message.setBody("video command");
+//        message.setType(ProtoMessageOuterClass.SignalType.SignalTypeWebRtc_VALUE);
+//        message.setExt(JsonUtils.getGson().toJson(webRtcJson));
+//        message.setMsgType(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE);
+////        curMsgNum++;
+//
+//        connectionUtil.sendTextOrEmojiMessage(message);
+////        chatView.setNewMsg2DialogueRegion(message);
+//    }
+//
+//    @Override
+//    public void startAudioRtc() {
+//        IMMessage message = generateIMMessage();
+//        WebRtcJson webRtcJson = new WebRtcJson();
+//        webRtcJson.type = "create";
+//        message.setBody("audio command");
+//        message.setType(ProtoMessageOuterClass.SignalType.SignalTypeWebRtc_VALUE);
+//        message.setExt(JsonUtils.getGson().toJson(webRtcJson));
+//        message.setMsgType(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE);
+////        curMsgNum++;
+//        connectionUtil.sendTextOrEmojiMessage(message);
+////        chatView.setNewMsg2DialogueRegion(message);
+//    }
 
     @Override
     public void didReceivedNotification(String key, Object... args) {
@@ -669,11 +679,11 @@ public class SingleSessionPresenter extends ChatPresenter implements ICloudRecor
                 break;
             case QtalkEvent.NOTIFY_RTCMSG:
                 boolean isVideo = (boolean) args[0];
-                if(isVideo) {
-                    startVideoRtc();
-                } else {
-                    startAudioRtc();
-                }
+//                if(isVideo) {
+//                    startVideoRtc();
+//                } else {
+//                    startAudioRtc();
+//                }
                 break;
             case QtalkEvent.Chat_Message_Read_State:
                 showUnReadCount();
@@ -685,6 +695,32 @@ public class SingleSessionPresenter extends ChatPresenter implements ICloudRecor
 //                        chatView.popNotice(noticeBean);
 //                }
 //                break;
+            case QtalkEvent.SEND_MESSAGE_RENDER:
+                IMMessage sendMesg = ((IMMessage) args[0]);
+                if(sendMesg != null) {
+                    chatView.setNewMsg2DialogueRegion(sendMesg);
+                }
+                break;
+            case QtalkEvent.PAY_RED_ENVELOP_CHOICE:
+                String result = (String) args[0];
+                String rid = "";
+                if(args.length > 1){
+                    rid = (String) args[1];
+                }
+                chatView.payRedEnvelopChioce(result,rid);
+                break;
+            case QtalkEvent.PAY_AUTH:
+                String authInfo = (String) args[0];
+                chatView.payAuth(authInfo);
+                break;
+            case QtalkEvent.PAY_ORDER:
+                String orderInfo = (String) args[0];
+                chatView.payOrder(orderInfo);
+                break;
+            case QtalkEvent.PAY_FAIL:
+                String fail = (String) args[0];
+                chatView.showToast(Constants.Alipay.AUTH.equals(fail) ? "账户校验失败！" : "支付失败！");
+                break;
         }
     }
 

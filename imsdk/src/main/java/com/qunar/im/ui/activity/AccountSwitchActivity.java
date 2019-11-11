@@ -16,6 +16,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenterNew;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.jsonbean.AccountPassword;
@@ -68,6 +69,8 @@ public class AccountSwitchActivity extends SwipeBackActivity implements ILoginVi
 
         if (LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())) {
             loginPresenter = new QTalkPublicLoginPresenter();
+        } else if(LoginType.NewPasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
+            loginPresenter = new QTalkPublicLoginPresenterNew();
         } else {
             loginPresenter = new LoginPresenter();
         }
@@ -132,16 +135,14 @@ public class AccountSwitchActivity extends SwipeBackActivity implements ILoginVi
     }
 
     private void startLoginView() {
-        if (CommonConfig.isQtalk) {
-            if (LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())) {
-                Intent intent = new Intent(this, QTalkUserLoginActivity.class);
-                intent.putExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT, true);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.putExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT, true);
-                startActivity(intent);
-            }
+        if (!LoginType.SMSLogin.equals(QtalkNavicationService.getInstance().getLoginType())) {
+            Intent intent = new Intent(this, QTalkUserLoginActivity.class);
+            intent.putExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT, true);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT, true);
+            startActivity(intent);
         }
 
     }

@@ -3,6 +3,7 @@ package com.qunar.im.ui.view.baseView;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -62,9 +63,10 @@ public class RichActionView extends LinearLayout {
             TextView textView = new TextView(context);
             textView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            textView.setText("阅读全文");
-            textView.setGravity(Gravity.LEFT);
-            textView.setPadding(Utils.dipToPixels(context,16),0,
+            textView.setText("点击查看更多");
+            textView.setGravity(Gravity.RIGHT);
+            textView.setTextColor(ContextCompat.getColor(context,R.color.atom_ui_button_primary_color));
+            textView.setPadding(Utils.dipToPixels(context,16),Utils.dipToPixels(context,8),
                     Utils.dipToPixels(context,16), Utils.dipToPixels(context,8));
 
             container.addView(textView);

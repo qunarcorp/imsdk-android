@@ -231,9 +231,15 @@ public class PbConversationManagePresenter implements IConversationsManagePresen
             }
             boolean re = false;
             if (list != null && list.size() > 0) {
-                if (rc.getConversationType() == ConversitionType.MSG_TYPE_CHAT || rc.getConversationType() == ConversitionType.MSG_TYPE_COLLECTION
+                if (rc.getConversationType() == ConversitionType.MSG_TYPE_CHAT
+                        || rc.getConversationType() == ConversitionType.MSG_TYPE_COLLECTION
                         || rc.getConversationType() == ConversitionType.MSG_TYPE_HEADLINE) {
                     connectionUtil.sendSingleAllRead(rc.getId(), rc.getId(),MessageStatus.STATUS_SINGLE_READED + "");
+                    re = true;
+                    //群有readmark 非群的要手动抛一个已读的通知 只是更新总的未读数
+                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Show_Home_Unread_Count);
+                } else if(rc.getConversationType() == ConversitionType.MSG_TYPE_CONSULT || rc.getConversationType() == ConversitionType.MSG_TYPE_CONSULT_SERVER){
+                    connectionUtil.sendSingleAllRead(rc.getId(), rc.getRealUser(),MessageStatus.STATUS_SINGLE_READED + "");
                     re = true;
                     //群有readmark 非群的要手动抛一个已读的通知 只是更新总的未读数
                     IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Show_Home_Unread_Count);

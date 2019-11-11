@@ -14,14 +14,14 @@
 
 
     <ImageButton
-        android:id="@+id/iv_nav_config"
         android:layout_gravity="top|right"
         android:layout_marginTop="@dimen/atom_ui_container_margin"
         android:layout_marginRight="@dimen/atom_ui_container_margin"
         android:layout_width="wrap_content"
         android:background="@android:color/transparent"
         android:layout_height="wrap_content"
-        android:src="@drawable/atom_ui_icon_setting"/>
+        android:src="@drawable/atom_ui_icon_setting"
+        android:visibility="gone"/>
 
 
     <ImageView
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/dp_40"
         android:layout_marginBottom="15dp"/>
 
     <FrameLayout
@@ -40,6 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
             android:orientation="vertical">
             <!-- 账户 -->
             <LinearLayout
@@ -57,29 +58,38 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/atom_ui_black_212121"
                     android:textSize="16sp"
-                    android:text="@string/atom_ui_account" />
+                    android:text="@string/atom_ui_account"
+                    android:visibility="gone"/>
 
-                <EditText
-                    android:id="@+id/editText_username"
+                <com.qunar.im.ui.view.FloatLabeledEditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_weight="1"
-                    android:hint="@string/atom_ui_login_account_hint"
-                    android:maxLength="50"
-                    android:background="@color/translate"
-                    android:singleLine="true" />
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/editText_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:hint="@string/atom_ui_Login_name"
+                        android:maxLength="50"
+                        android:background="@color/translate"
+                        android:singleLine="true" />
+
+                </com.qunar.im.ui.view.FloatLabeledEditText>
 
                 <com.qunar.im.ui.view.IconView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/atom_ui_new_arrow_down"
+                    android:layout_gravity="bottom"
                     android:textColor="#9e9e9e"
-                    android:textSize="16sp"/>
+                    android:textSize="30sp"
+                    android:visibility="gone"/>
             </LinearLayout>
             <View
+                android:id="@+id/atom_ui_user_line"
                 android:layout_width="match_parent"
                 android:layout_height="2px"
                 android:layout_marginLeft="15dp"
@@ -101,33 +111,43 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/atom_ui_black_212121"
                     android:gravity="center_vertical"
-                    android:textSize="16sp"
-                    android:text="@string/atom_ui_login_code" />
+                    android:textSize="15sp"
+                    android:text="@string/atom_ui_login_code"
+                    android:visibility="gone"/>
 
-                <EditText
-                    android:id="@+id/verify_code"
+                <com.qunar.im.ui.view.FloatLabeledEditText
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/translate"
-                    android:inputType="numberDecimal"
-                    android:maxLength="6"
-                    android:singleLine="true" />
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/verify_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:background="@color/translate"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:hint="@string/atom_ui_login_code"
+                        android:singleLine="true" />
+
+                </com.qunar.im.ui.view.FloatLabeledEditText>
 
                 <TextView
                     android:id="@+id/verify_code_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="#616161"
-                    android:gravity="center"
-                    android:padding="8dip"
-                    android:text="@string/atom_ui_btn_resend_code" />
+                    android:textColor="@color/atom_ui_button_primary_color"
+                    android:gravity="bottom"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="3dp"
+                    android:text="@string/atom_ui_get_verify_code" />
             </LinearLayout>
 
             <View
+                android:id="@+id/atom_ui_code_line"
                 android:layout_width="match_parent"
                 android:layout_height="2px"
                 android:layout_marginLeft="15dp"
@@ -156,20 +176,28 @@
                         android:textColor="@color/atom_ui_black_212121"
                         android:textSize="16sp"
                         android:gravity="center_vertical"
-                        android:text="@string/atom_ui_common_password" />
+                        android:text="@string/atom_ui_common_password"
+                        android:visibility="gone"/>
 
-                    <EditText
-                        android:id="@+id/editText2"
+                    <com.qunar.im.ui.view.FloatLabeledEditText
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:layout_weight="1"
-                        android:background="@color/translate"
-                        android:inputType="textPassword"
-                        android:maxLength="30"
-                        android:singleLine="true" />
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/editText2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:background="@color/translate"
+                            android:inputType="textPassword"
+                            android:maxLength="30"
+                            android:hint="@string/atom_ui_common_password"
+                            android:singleLine="true" />
+
+                    </com.qunar.im.ui.view.FloatLabeledEditText>
+
 
                     <ImageView
                         android:id="@+id/img_show_pwd"
@@ -179,6 +207,7 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/atom_ui_password_line"
                     android:layout_width="match_parent"
                     android:layout_height="2px"
                     android:layout_marginLeft="15dp"
@@ -190,7 +219,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/atom_ui_container_margin"
                     android:layout_marginRight="@dimen/atom_ui_container_margin"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <CheckBox
                         android:id="@+id/remember_me_cbx"
@@ -210,25 +240,52 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <CheckBox
+                    android:id="@+id/atom_ui_eula_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"/>
+
+                <TextView
+                    android:id="@+id/atom_ui_eula_text"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/atom_ui_eula_checkbox"
+                    android:text="@string/atom_ui_privacy_policy"
+                    android:onClick="eulaView"/>
+
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/btnlogin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/atom_ui_button_height"
                 android:layout_marginLeft="@dimen/atom_ui_container_margin"
                 android:layout_marginRight="@dimen/atom_ui_container_margin"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/dp_15"
                 android:background="@drawable/atom_ui_common_button_green_selector"
                 android:textSize="@dimen/atom_ui_text_size_medium"
                 android:textColor="@color/atom_ui_white"
                 android:text="@string/atom_ui_btn_login" />
-            <TextView
-                android:id="@+id/tv_reset_account"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/atom_ui_input_height"
-                android:gravity="center_horizontal"
-                android:text="@string/atom_ui_btn_login_problem"
-                android:textSize="@dimen/atom_ui_text_size_small" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/iv_nav_config"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="@dimen/dp_40"
+            android:text="@string/atom_ui_nav_server_httpHost"
+            android:textColor="@color/atom_ui_button_primary_color"
+            />
 
         <TextView
             android:id="@+id/tv_version"
@@ -237,7 +294,8 @@
             android:layout_gravity="center_horizontal|bottom"
             android:layout_margin="@dimen/atom_ui_container_margin"
             android:background="@android:color/transparent"
-            android:textColor="@color/atom_ui_light_gray_99" />
+            android:textColor="@color/atom_ui_light_gray_99"
+            android:visibility="gone"/>
 
 
     </FrameLayout>

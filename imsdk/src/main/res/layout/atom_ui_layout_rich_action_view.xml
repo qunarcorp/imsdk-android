@@ -28,10 +28,6 @@
         android:layout_marginBottom="4dp"
         android:textSize="@dimen/atom_ui_text_size_micro"
         />
-    <View
-        android:layout_width="match_parent"
-        android:background="@color/atom_ui_light_gray_ee"
-        android:layout_height="1px" />
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/image_rich"
         android:layout_width="match_parent"
@@ -46,7 +42,8 @@
     <View
         android:layout_width="match_parent"
         android:background="@color/atom_ui_light_gray_ee"
-        android:layout_height="1px" />
+        android:layout_height="1px"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/introduce"
         android:layout_width="match_parent"
@@ -58,4 +55,8 @@
         android:gravity="start"
         android:textColor="@color/atom_ui_light_gray_99"
         android:textSize="@dimen/atom_ui_text_size_small" />
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/atom_ui_light_gray_ee"
+        android:layout_height="1px" />
 </LinearLayout>

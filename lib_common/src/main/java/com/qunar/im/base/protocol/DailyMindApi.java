@@ -46,7 +46,7 @@ public class DailyMindApi {
                         unitCallback.onCompleted(baseJsonResult);
                         return;
                     }
-                    Log.d(TAG, resultString);
+//                    Log.d(TAG, resultString);
                     if (DailyMindConstants.SAVE_TO_MAIN.equals(method) || DailyMindConstants.UPDATE_MAIN.equals(method)) {
                         GeneralJson stringJson = JsonUtils.getGson().fromJson(resultString, GeneralJson.class);
                         if (stringJson != null && stringJson.data != null) {
@@ -119,7 +119,7 @@ public class DailyMindApi {
                         unitCallback.onCompleted(baseJsonResult);
                         return;
                     }
-                    Log.d(TAG, resultString);
+//                    Log.d(TAG, resultString);
                     if (DailyMindConstants.SAVE_TO_SUB.equals(method) || DailyMindConstants.UPDATE_SUB.equals(method)) {//更新子密码
                         GeneralJson stringJson = JsonUtils.getGson().fromJson(resultString, GeneralJson.class);
                         if (stringJson != null && stringJson.data != null) {

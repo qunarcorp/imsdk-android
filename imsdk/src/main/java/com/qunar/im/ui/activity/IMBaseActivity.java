@@ -7,12 +7,15 @@ import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +117,7 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         }
     }
 
-//    public void setActionBar(QtActionBar bar) {
+    //    public void setActionBar(QtActionBar bar) {
 //        myActionBar = bar;
 //        setSupportActionBar(myActionBar);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -133,6 +136,28 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
 //            });
 //        }
 //    }
+    private int SearchWhat = 1;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+            if (msg.what == SearchWhat) {
+                if(onSearch!=null){
+                    onSearch.onSearch(mNewActionBar.getSearchBarSearchEdittext().getText().toString().trim());
+                }
+            }
+        }
+    };
+
+    public interface OnSearch {
+        void onSearch(String str);
+    }
+    private OnSearch onSearch;
+
+    public void setOnSearch(OnSearch onSearch){
+        this.onSearch = onSearch;
+    }
 
     /**
      * 设置actionbar
@@ -151,6 +176,68 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
                     onBackPressed();
                 }
             });
+            mNewActionBar.getSearchLayoutLeftLayout().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+    }
+
+    public void setShowSearchBack(boolean isShow){
+        if(isShow){
+            mNewActionBar.getSearchLayoutLeftLayout().setVisibility(View.VISIBLE);
+        }else{
+            mNewActionBar.getSearchLayoutLeftLayout().setVisibility(View.GONE);
+        }
+    }
+
+    public void setSearchCancleClickLin(View.OnClickListener onClickListener){
+        mNewActionBar.getSearchBarCancleLayout().setOnClickListener(onClickListener);
+    }
+
+    public void setShowSearchBar(boolean show) {
+        if (show) {
+            mNewActionBar.getSearchLayout().setVisibility(View.VISIBLE);
+            mNewActionBar.getTitleBarLayout().setVisibility(View.GONE);
+
+            mNewActionBar.getSearchBarCleanView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mNewActionBar.getSearchBarSearchEdittext().setText("");
+                    mNewActionBar.getSearchBarCleanView().setVisibility(View.GONE);
+                }
+            });
+            mNewActionBar.getSearchBarSearchEdittext().addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (TextUtils.isEmpty(s)) {
+                        mNewActionBar.getSearchBarCleanView().setVisibility(View.GONE);
+                    } else {
+                        mNewActionBar.getSearchBarCleanView().setVisibility(View.VISIBLE);
+                    }
+
+                    if (mHandler.hasMessages(SearchWhat)) {
+                        mHandler.removeMessages(SearchWhat);
+                    }
+                    mHandler.sendEmptyMessageDelayed(SearchWhat, 500);
+
+                }
+            });
+        } else {
+            mNewActionBar.getSearchLayout().setVisibility(View.GONE);
+            mNewActionBar.getTitleBarLayout().setVisibility(View.VISIBLE);
         }
     }
 
@@ -229,7 +316,7 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
             return;
         }
         mNewActionBar.getTextTitle().setVisibility(View.VISIBLE);
-        mNewActionBar.getTextTitle().setCompoundDrawablesWithIntrinsicBounds(0,0,imageResource,0);
+        mNewActionBar.getTextTitle().setCompoundDrawablesWithIntrinsicBounds(0, 0, imageResource, 0);
     }
 
     public void setActionBarTitle(@StringRes int str) {
@@ -297,6 +384,18 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         if (size != 0) {
             mNewActionBar.getRightIcon().setVisibility(View.VISIBLE);
             mNewActionBar.getRightIcon().setTextSize(size);
+        }
+    }
+
+
+    public void setActionBarRightSpecialIconSize(int size) {
+        if (mNewActionBar == null) {
+            return;
+        }
+        mNewActionBar.getRightLayout().setVisibility(View.VISIBLE);
+        if (size != 0) {
+            mNewActionBar.getRightIconSpecial().setVisibility(View.VISIBLE);
+            mNewActionBar.getRightIconSpecial().setTextSize(size);
         }
     }
 
@@ -464,7 +563,7 @@ public class IMBaseActivity extends AppCompatActivity implements IMNotificaitonC
         }
     }
 
-    public void setActionBarMood(String mood){
+    public void setActionBarMood(String mood) {
         if (mNewActionBar == null) {
             return;
         }

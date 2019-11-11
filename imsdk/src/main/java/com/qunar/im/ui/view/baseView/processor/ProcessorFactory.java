@@ -26,6 +26,7 @@ public class ProcessorFactory {
         ExtendMsgProcessor extendMsgProcessor = new ExtendMsgProcessor();
         RTCProcessor rtcProcessor = new RTCProcessor();
         RobOrderProcessor robOrderProcessor = new RobOrderProcessor();
+        GroupVideoProcessor groupVideoProcessor = new GroupVideoProcessor();
         RobotQuestionListMessageProcessor questionListMessageProcessor = new RobotQuestionListMessageProcessor();
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeCommonTrdInfo_VALUE,extendMsgProcessor); // 666 for pecial message
 //        processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeActivity_VALUE,extendMsgProcessor); // 666 for special message
@@ -59,18 +60,26 @@ public class ProcessorFactory {
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuVcard_VALUE,robOrderProcessor);
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE,robOrderProcessor);
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE,new RevokeMeesageProcessor());
+        processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE,new RevokeMeesageProcessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeCommonProductInfo_VALUE,new OrderCardProcessor());
         processorMap.put(MessageType.EXTEND_OPS_MSG,extendMsgProcessor);
         processorMap.put(MessageType.PREDICTION_MSG,extendMsgProcessor);
+        processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_VideoCall_VALUE,rtcProcessor);
+        processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_AudioCall_VALUE,rtcProcessor);
         processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE,rtcProcessor);
         processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE,rtcProcessor);
+        processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_Group_VALUE,groupVideoProcessor);
+        processorMap.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_VideoMeeting_VALUE,groupVideoProcessor);
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotQuestionList_VALUE,new RobotQuestionListMessageProcessor());
+        processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotQuestionListNew_VALUE,new RobotNewQuestionListMessageProcessor());
 //        processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotQuestionList_VALUE,new RbtSuggesstionProccessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotTurnToUser_VALUE,new RbtToUserProccessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeMeetingRemind_VALUE,new MeetingRemindProcessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeWorkWorldAtRemind_VALUE,new WorkWorldRemindProcessor());
+        processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeMedalRemind_VALUE,new MedalRemindProcessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeSourceCode_VALUE,new CodeMessageProcessor());
         processorMap.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotAnswer_VALUE,new BottomButtonMessageProcessor());
+
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeTopic_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeActionRichText_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeRichText_VALUE);
@@ -84,6 +93,7 @@ public class ProcessorFactory {
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuVcard_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE);
+        middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeCommonProductInfo_VALUE);
         middleType.add(ProtoMessageOuterClass.MessageType.MessageTypeAAInfo_VALUE);
         middleType.add(MessageType.MSG_HISTORY_SPLITER);

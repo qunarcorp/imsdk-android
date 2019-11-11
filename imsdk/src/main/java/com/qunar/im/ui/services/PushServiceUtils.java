@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.qunar.im.base.util.Constants;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.thirdpush.QTPushConfiguration;
 
 
@@ -16,13 +15,9 @@ public class PushServiceUtils {
 
 
     public static void startAMDService(final Context context) {
-        CommonConfig.mainhandler.post(new Runnable() {
-            @Override
-            public void run() {
-                QTPushConfiguration.registPush(context);
-//        startAMDServiceOld(context);
-            }
-        });
+        //        startAMDServiceOld(context);
+        QTPushConfiguration.registPush(context);
+
     }
 
     private static void startAMDServiceOld(Context context) {

@@ -2,4 +2,6 @@
 <resources>
     <integer name="atom_ui_videotag">100</integer>
     <item name="atom_ui_open_file" type="id" />
+    <item name="atom_ui_open_local_file" type="id"></item>
+    <integer name="photos_columns_easy_photos">3</integer>
 </resources>

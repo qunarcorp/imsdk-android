@@ -1,5 +1,6 @@
 package com.qunar.im.ui.presenter.views;
 
+import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.module.AnonymousData;
 import com.qunar.im.base.module.MultiItemEntity;
@@ -13,6 +14,8 @@ public interface ReleaseCircleView {
     void closeActivitvAndResult(ArrayList<WorkWorldItem> list);
 
     List<MultiItemEntity> getUpdateImageList();
+
+    Photo getUpdateVideo();
 
     String getContent();
 

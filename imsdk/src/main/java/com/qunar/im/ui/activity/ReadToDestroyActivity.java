@@ -138,7 +138,7 @@ public class ReadToDestroyActivity extends IMBaseActivity {
                 List<Map<String, String>> list = ChatTextHelper.getObjList(message.getBody());
                 if (list != null && list.size() > 0) {
                     String source = list.get(0).get("value");
-                    String url = QtalkStringUtils.addFilePathDomain(source);
+                    String url = QtalkStringUtils.addFilePathDomain(source, true);
                     if (source != null) {
                         v.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.atom_ui_sharemore_picture));
                         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

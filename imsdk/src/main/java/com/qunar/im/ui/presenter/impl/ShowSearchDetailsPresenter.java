@@ -85,7 +85,6 @@ public class ShowSearchDetailsPresenter implements ILocalChatRecordPresenter {
                         }
 //                        try {
                             //转换对象
-                            //生成对象类似 {"message":{"from":"dba632082f6b4c7f89159c47537df561@conference.ejabhost1\/胡滨hubin","to":"dba632082f6b4c7f89159c47537df561@conference.ejabhost1","msec_times":"1505371744263","realfrom":"hubin.hu@ejabhost1","type":"groupchat"},"body":{"msgType":"1","maType":"1","id":"E4E3702936264A7FB68F5C7C37A31018","_text":"教小拿 [obj type=\"image\" value=\"https:\/\/qt.qunar.com\/file\/v2\/download\/temp\/538890fa234fa6b19a0545db02e5ce4f.jpg?name=538890fa234fa6b19a0545db02e5ce4f.jpg&file=file\/538890fa234fa6b19a0545db02e5ce4f.jpg&FileName=file\/538890fa234fa6b19a0545db02e5ce4f.jpg\" width=550.000000 height=464.000000 ]"},"stime":{"stamp":"20170914T06:49:04"}}
                            IMMessage message = XmlUtils.parseXmlToIMMessage(result.B);
 
                         if (message == null) continue;

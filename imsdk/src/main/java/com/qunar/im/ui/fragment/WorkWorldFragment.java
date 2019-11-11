@@ -655,71 +655,14 @@ public class WorkWorldFragment extends BaseFragment implements WorkWorldView {
     }
 
     private void getDataShow(Intent data) {
-        try {
-            if (data != null) {
-                //新版图片选择器
-                ArrayList<WorkWorldItem> list = (ArrayList<WorkWorldItem>) data.getSerializableExtra(WORK_WORLD_RESULT_DATA);
-                if (list != null && list.size() > 0) {
-                    workWorldAdapter.setNewData(list);
-//
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(500);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        work_world_rc.scrollToPosition(0);
-                                    }
-                                });
-                            } catch (Exception e) {
-
-                            }
-
-                        }
-                    }).start();
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(700);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        work_world_rc.scrollToPosition(0);
-                                    }
-                                });
-                            } catch (Exception e) {
-
-                            }
-
-                        }
-                    }).start();
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        work_world_rc.scrollToPosition(0);
-                                    }
-                                });
-                            } catch (Exception e) {
-
-                            }
-
-                        }
-                    }).start();
-
-                }
+        if (data != null) {
+            //新版图片选择器
+            ArrayList<WorkWorldItem> list = (ArrayList<WorkWorldItem>) data.getSerializableExtra(WORK_WORLD_RESULT_DATA);
+            if (list != null && list.size() > 0) {
+                workWorldAdapter.setNewData(list);
+                work_world_rc.scrollToPosition(0);
 
             }
-        } catch (Exception e) {
         }
     }
 

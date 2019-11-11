@@ -2,7 +2,6 @@ package com.qunar.im.ui.view.baseView.processor;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.MessageUtils;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.view.baseView.IMessageItem;

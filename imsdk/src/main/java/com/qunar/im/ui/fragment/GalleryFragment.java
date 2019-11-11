@@ -37,6 +37,7 @@ import com.qunar.im.ui.presenter.impl.BrowsingPresenter;
 import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.ui.util.QRRouter;
+import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.bigimageview.ImageBrowsUtil;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
@@ -315,7 +316,8 @@ public class GalleryFragment extends BaseFragment implements IBrowsingConversati
                                         File file = new File(str);
 
                                         if (file != null && file.exists()) {
-                                            ImageBrowsUtil.externalShare(file, CommonConfig.globalContext);
+//                                            ImageBrowsUtil.externalShare(file, CommonConfig.globalContext);
+                                            ShareUtil.shareImage(CommonConfig.globalContext,file,"分享图片");
                                         }
                                     }
                                 }, false);

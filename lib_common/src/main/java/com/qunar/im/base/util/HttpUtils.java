@@ -44,31 +44,37 @@ public class HttpUtils {
                         if(result1 == null || !result1.ret){
                             request.requestComplete.onRequestComplete(request.id, result);
                         }else {
-                            result.httpUrl = result1.data.substring(result1.data.indexOf("file/"));
-                            if(!result.httpUrl.contains("?")) result.httpUrl+="?";
-                            if(!result.httpUrl.contains("name="))
-                            {
-                                String fname = result.httpUrl.substring(result.httpUrl.lastIndexOf("/") + 1);
-                                result.httpUrl = result.httpUrl+"?name="+fname
-                                        +"&file="+fname+"&fileName="+fname;
-                                result.httpUrl = result.httpUrl +"&name="+fname+"&file="+
-                                        fname+"&fileName="+fname;
-                                result.fileName = fname;
-                            }
-                            else {
-                                String name =
-                                        result.httpUrl.substring(result.httpUrl.indexOf("name=")+5);
-                                result.fileName = name;
-                                result.httpUrl =result.httpUrl +"&file="+
-                                        name+"&fileName="+name;
-                            }
+
+                            result.fileName = result1.data.
+                                    substring(result1.data.lastIndexOf("/")+1);
+                            result.httpUrl = result1.data.
+                                    substring(result1.data.indexOf("file/"));
+//                            result.httpUrl = result1.data.substring(result1.data.indexOf("file/"));
+//                            if(!result.httpUrl.contains("?")) result.httpUrl+="?";
+//                            if(!result.httpUrl.contains("name="))
+//                            {
+//                                String fname = result.httpUrl.substring(result.httpUrl.lastIndexOf("/") + 1);
+//                                result.httpUrl = result.httpUrl+"?name="+fname
+//                                        +"&file="+fname+"&fileName="+fname;
+//                                result.httpUrl = result.httpUrl +"&name="+fname+"&file="+
+//                                        fname+"&fileName="+fname;
+//                                result.fileName = fname;
+//                            }
+//                            else {
+//                                String name =
+//                                        result.httpUrl.substring(result.httpUrl.indexOf("name=")+5);
+//                                result.fileName = name;
+//                                result.httpUrl =result.httpUrl +"&file="+
+//                                        name+"&fileName="+name;
+//                            }
+                            request.requestComplete.onRequestComplete(request.id, result);
                         }
                     }
                     catch (Exception e)
                     {
 //                        result.httpUrl = resultString;
                     }
-                    request.requestComplete.onRequestComplete(request.id, result);
+
                 }
             }
             @Override

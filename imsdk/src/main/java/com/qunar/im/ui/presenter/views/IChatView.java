@@ -91,4 +91,10 @@ public interface IChatView {
     void onRefreshComplete();
 
     boolean getSearching();
+
+    void showToast(String str);
+
+    void payAuth(String authInfo);
+    void payOrder(String orderInfo);
+    void payRedEnvelopChioce(String type,String rid);
 }

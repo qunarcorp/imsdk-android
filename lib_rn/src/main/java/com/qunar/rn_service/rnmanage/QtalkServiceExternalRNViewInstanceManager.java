@@ -3,6 +3,7 @@ package com.qunar.rn_service.rnmanage;
 import android.app.Activity;
 import android.content.Context;
 
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.common.LifecycleState;
@@ -72,6 +73,7 @@ public class QtalkServiceExternalRNViewInstanceManager {
                     .addPackage(new QtalkServiceReactPackage(mActivity))
                     .addPackage(new CookieManagerPackage())
                     .addPackage(new SvgPackage())
+                    .addPackage(new RNI18nPackage())
                     .setUseDeveloperSupport(CommonConfig.isDebug)
                     .setInitialLifecycleState(LifecycleState.RESUMED);
 

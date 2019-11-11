@@ -17,7 +17,7 @@ public class UnReadChatListActivity extends SwipeBackActivity {
         Bundle bundle = getIntent().getExtras();
         QtNewActionBar actionBar = (QtNewActionBar) this.findViewById(R.id.my_action_bar);
         setNewActionBar(actionBar);
-        setActionBarTitle("未读消息");
+        setActionBarTitle(getString(R.string.atom_ui_contact_tab_not_read));
         initList();
     }
 

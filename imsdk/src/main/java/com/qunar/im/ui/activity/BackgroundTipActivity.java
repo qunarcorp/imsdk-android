@@ -19,22 +19,19 @@ public class BackgroundTipActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_file_sharing);
-        ((TextView)findViewById(R.id.atom_ui_text1)).setText(getString(R.string.atom_ui_file_sharing_tips1) + GlobalConfigManager.getAppName());
+        ((TextView)findViewById(R.id.atom_ui_text1)).setText(getString(R.string.atom_ui_file_sharing_tips1));
         IconView iconView = (IconView) findViewById(R.id.sharing_file);
-        iconView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        iconView.setOnClickListener(v -> {
 //                Logger.i("点击了传送文件");
-                Intent intent = new Intent(BackgroundTipActivity.this,PbChatActivity.class);
-                intent.putExtra(PbChatActivity.KEY_JID, "file-transfer"+"@"+ QtalkNavicationService.getInstance().getXmppdomain());
-                intent.putExtra(PbChatActivity.KEY_SHOW_READSTATE,false);
+            Intent intent = new Intent(BackgroundTipActivity.this,PbChatActivity.class);
+            intent.putExtra(PbChatActivity.KEY_JID, "file-transfer"+"@"+ QtalkNavicationService.getInstance().getXmppdomain());
+            intent.putExtra(PbChatActivity.KEY_SHOW_READSTATE,false);
 //                intent.putExtra(PbChatActivity.KEY_REAL_JID,"file-transfer"+"@"+ QtalkNavicationService.getInstance().getXmppdomain());
-                intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, 0 + "");
-                intent.putExtra(PbChatActivity.KEY_IS_CHATROOM, false);
+            intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, 0 + "");
+            intent.putExtra(PbChatActivity.KEY_IS_CHATROOM, false);
 
-                startActivity(intent);
-                finish();
-            }
+            startActivity(intent);
+            finish();
         });
         initView();
     }

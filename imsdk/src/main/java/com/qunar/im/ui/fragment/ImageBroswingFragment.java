@@ -28,6 +28,7 @@ import com.qunar.im.ui.imagepicker.zoomview.DragPhotoView;
 import com.qunar.im.ui.imagepicker.zoomview.PhotoView;
 import com.qunar.im.ui.imagepicker.zoomview.PhotoViewAttacher;
 import com.qunar.im.ui.util.QRRouter;
+import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.bigimageview.ImageBrowsUtil;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
@@ -176,7 +177,8 @@ public class ImageBroswingFragment extends BaseFragment {
                                         File file = new File(str);
 
                                         if (file != null && file.exists()) {
-                                            ImageBrowsUtil.externalShare(file, CommonConfig.globalContext);
+//                                            ImageBrowsUtil.externalShare(file, CommonConfig.globalContext);
+                                            ShareUtil.shareImage(CommonConfig.globalContext,file,"分享图片");
                                         }
                                     }
                                 }, false);

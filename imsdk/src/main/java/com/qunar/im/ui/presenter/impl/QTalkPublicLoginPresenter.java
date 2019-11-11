@@ -29,7 +29,7 @@ import static com.qunar.im.base.util.Constants.Preferences.username;
 public class QTalkPublicLoginPresenter implements ILoginPresenter, IMNotificaitonCenter.NotificationCenterDelegate {
     private static final String TAG = QTalkPublicLoginPresenter.class.getSimpleName();
     ILoginView loginView;
-    private ConnectionUtil connectionUtil;
+    protected ConnectionUtil connectionUtil;
 
     @Override
     public void setLoginView(ILoginView view) {

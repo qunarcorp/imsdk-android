@@ -310,6 +310,7 @@ public class ChatViewAdapter extends BaseAdapter implements IMNotificaitonCenter
                         messages.get(i).setMessageState(sendMessage.getMessageState());
 //                        ConnectionUtil.getInstance(context.get()).workworldremoveEvent(this, key);
                         this.notifyDataSetChanged();
+
 //                ((PbIMChatBaseView) getView(i,null,null)).setMessage_progress_rightSuccess();
                         return;
                     }

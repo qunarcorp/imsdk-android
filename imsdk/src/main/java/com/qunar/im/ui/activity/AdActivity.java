@@ -211,7 +211,6 @@ public class AdActivity extends IMBaseActivity implements View.OnClickListener {
                     String json = new String(Base64.decode(base64Str,Base64.URL_SAFE|Base64.NO_WRAP));
 
                     try {
-//                        json = "{\"version\": 10002,\"adlist\": [{\"adtype\": 3,\"url\": \"https://qt.qunar.com/file/v2/download/temp/1452e27986269c637e61e183034aa322?name=VID_20180109_174006.mp4&file=VID_20180109_174006.mp4&fileName=VID_20180109_174006.mp4\",\"linkurl\": \"\"},{\"adtype\": 3, \"url\": \"https://qt.qunar.com/file/v2/download/temp/1452e27986269c637e61e183034aa322?name=VID_20180109_174006.mp4&file=VID_20180109_174006.mp4&fileName=VID_20180109_174006.mp4\",\"linkurl\": \"\"} ],\"adsec\": 8,\"shown\": false,\"carousel\": false}";
                         bean = JsonUtils.getGson().fromJson(json, AdvertiserBean.class);
                     }
                     catch (Exception ex)

@@ -330,7 +330,7 @@ public class QtalkPlugin extends ReactContextBaseJavaModule implements IMNotific
             }
         }
 
-        HttpUtil.refreshWorkWorldV2(1, 0, 1, "", "", 0, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
+        HttpUtil.refreshWorkWorldV2(1, 0, 1, "", "", 0, true, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
             @Override
             public void onCompleted(WorkWorldResponse workWorldResponse) {
                 try {

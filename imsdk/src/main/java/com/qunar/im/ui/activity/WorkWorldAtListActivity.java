@@ -59,19 +59,11 @@ public class WorkWorldAtListActivity extends SwipeBackActivity implements WorkWo
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         work_world_isselect_rc.setLayoutManager(manager);
         work_world_isselect_rc.setAdapter(isSelectAdapter);
-        adapter.setOnSelectChanage(new WorkWorldAtListAdapter.OnSelectChanage() {
-            @Override
-            public void onChanage(List<String> list) {
-                isSelectAdapter.setNewData(list);
-            }
-        });
+        adapter.setOnSelectChanage(list -> isSelectAdapter.setNewData(list));
 
-        isSelectAdapter.setOnCancelLis(new WorkWorldAtListIsSelectAdapter.OnCancelLis() {
-            @Override
-            public void onCancel(String str) {
-                //操作树形列表
-                adapter.setCancelInfo(str);
-            }
+        isSelectAdapter.setOnCancelLis(str -> {
+            //操作树形列表
+            adapter.setCancelInfo(str);
         });
 
         work_world_atlist_rc.setLayoutManager(new LinearLayoutManager(this));
@@ -84,25 +76,22 @@ public class WorkWorldAtListActivity extends SwipeBackActivity implements WorkWo
 
 
 
-        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    workWorldAtListPresenter.startSearch();
-                }
-                return false;
+        search_text.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                workWorldAtListPresenter.startSearch();
             }
+            return false;
         });
     }
 
     private void bindView() {
         qtNewActionBar = (QtNewActionBar) this.findViewById(R.id.my_action_bar);
         setNewActionBar(qtNewActionBar);
-        setActionBarTitle("提醒谁看");
+        setActionBarTitle(getString(R.string.atom_ui_notify_somebody));
         work_world_atlist_rc = (RecyclerView) findViewById(R.id.work_world_atlist_rc);
         work_world_isselect_rc = (RecyclerView) findViewById(R.id.work_world_isselect_rc);
         search_text = (EditText) findViewById(R.id.search_text);
-        setActionBarRightText("完成");
+        setActionBarRightText(getString(R.string.atom_ui_common_confirm));
         setActionBarRightTextClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

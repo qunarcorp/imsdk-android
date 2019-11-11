@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="atom_rtc_container_margin">16dp</dimen>
+    <dimen name="atom_rtc_text_size_medium">16sp</dimen>
+    <dimen name="atom_rtc_text_size_small">14sp</dimen>
+    <dimen name="atom_rtc_text_size_micro">12sp</dimen>
+    <dimen name="atom_rtc_input_height">48dip</dimen>
+    <dimen name="atom_rtc_image_mid_size">48dp</dimen>
+</resources>

@@ -12,6 +12,7 @@ import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.protobuf.utils.XmlUtils;
+import com.qunar.im.base.protocol.NativeApi;
 
 import org.json.JSONObject;
 

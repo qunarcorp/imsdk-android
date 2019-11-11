@@ -24,13 +24,14 @@ import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.MemoryCache;
-import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
+import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
+import com.qunar.im.log.LogDatabaseManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.thirdpush.QTPushConfiguration;
@@ -43,6 +44,11 @@ import com.qunar.im.ui.imagepicker.loader.GlideImageLoader;
 import com.qunar.im.ui.imagepicker.view.CropImageView;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.rn_service.fragment.RNContactsFragment;
+import com.qunar.im.ui.util.ProfileUtils;
+import com.qunar.im.utils.AppFrontBackHelper;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.ui.util.ProfileUtils;
+import com.qunar.im.utils.ConnectionUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 
@@ -54,7 +60,6 @@ import java.util.List;
  */
 
 public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
-
     public Config config = new Config();
 
     private LoginStatesListener loginListener;
@@ -121,14 +126,16 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
             }
         };
         Logger.setLogger(CommonConfig.globalContext, newLogger);
+
+
         //初始化push
         QTPushConfiguration.initPush(CommonConfig.globalContext);
 
         LogDatabaseManager.getInstance().initDB(CommonConfig.globalContext);
 
-        if (!ConnectionUtil.getInstance().isCanAutoLogin()) {
-            QTPushConfiguration.unRegistPush(CommonConfig.globalContext);
-        }
+//        if (!ConnectionUtil.getInstance().isCanAutoLogin()) {
+//            QTPushConfiguration.unRegistPush(CommonConfig.globalContext);
+//        }
 
         ConnectionUtil.getInstance().addEvent(this, QtalkEvent.LOGIN_EVENT);
         ConnectionUtil.getInstance().addEvent(this, QtalkEvent.LOGIN_FAILED);
@@ -176,6 +183,36 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
             QTPushConfiguration.MEIZU_APP_ID = applicationInfo.metaData.getString("MEIZU_APP_ID");
             QTPushConfiguration.MEIZU_APP_KEY = applicationInfo.metaData.getString("MEIZU_APP_KEY");
         }
+    }
+
+    /**
+     * 注册生命周期回调 处理切到前台后重连逻辑
+     * @param application
+     */
+    public void initActivityLifeCycle(Application application){
+        AppFrontBackHelper helper = new AppFrontBackHelper();
+        helper.register(application, new AppFrontBackHelper.OnAppStatusListener() {
+            @Override
+            public void onFront() {
+                //应用切到前台处理
+                CurrentPreference.getInstance().setBack(false);
+                boolean autoLogin = CurrentPreference.getInstance().isAutoLogin();
+
+                if (autoLogin) {
+                    if (!ConnectionUtil.getInstance().isLoginStatus()) {
+                        ConnectionUtil.getInstance().reConnectionForce();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onBack() {
+                //应用切到后台处理
+                CurrentPreference.getInstance().setBack(true);
+            }
+        });
     }
 
     /**
@@ -461,6 +498,7 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
     public void didReceivedNotification(String key, Object... args) {
         if (key.equals(QtalkEvent.LOGIN_EVENT)) {
             if (args[0].equals(LoginStatus.Login)) {
+
                 if (loginListener != null) {
                     loginListener.isScuess(true, "登录成功！");
                 }

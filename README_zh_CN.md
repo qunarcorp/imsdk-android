@@ -1,5 +1,5 @@
 Startalk, The Best open sourced instant messenger software in the world!
-* [English Version](https://github.com/qunarcorp/imsdk-android/blob/master/README.md)
+* [English Version](https://github.com/startalkIM/imsdk-android/blob/master/README.md)
 
 公有云（Startalk APP）
 =====
@@ -34,33 +34,36 @@ Startalk私有云是一种去中心化的部署方式，
 ```gradle
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
  
 allprojects {
     repositories {
-        maven {
-            url "http://qt.qunar.com/package/mvn/repository/maven-qim/"
-        }
-        
-        maven {
-            url "http://developer.huawei.com/repo/"
-        }
-    mavenCentral()
-        jcenter {
-           url "http://jcenter.bintray.com/"
-        }
-        jcenter()
-        google()
+         maven { url 'https://dl.google.com/dl/android/maven2' }
+         maven {
+             url "https://raw.githubusercontent.com/froyomu/im/master"
+         }
+         maven {
+             url "http://developer.huawei.com/repo/"
+         }
+         jcenter {
+             url "http://jcenter.bintray.com/"
+         }
+         maven {
+             url "https://jitpack.io"
+         }
+         google()
+         jcenter()
+         mavenCentral()
     }
 }
 ```
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:3.0.5' //或者直接引用imsdk Library工程,compile project(':imsdk')
+  compile project(':imsdk')//compile 'com.qunar.im:sdk-im:3.0.6'
 }
 ```
 
@@ -87,6 +90,8 @@ flavorDimensions "qim"
                     MIPUSH_APP_KEY : "123",
                     MEIZU_APP_ID : "123",//魅族push
                     MEIZU_APP_KEY : "123",
+                    VIVO_APP_ID : "123",//vivoo
+                    VIVO_APP_KEY : "123",
                     SCHEME : "qtalkaphone",
                     currentPlat  : "QTalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
@@ -108,6 +113,8 @@ flavorDimensions "qim"
                     MIPUSH_APP_KEY : "123",
                     MEIZU_APP_ID : "123",//魅族push
                     MEIZU_APP_KEY : "123",
+                    VIVO_APP_ID : "123",//vivoo
+                    VIVO_APP_KEY : "123",
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",
                     MAIN_SCHEMA : "start_qchat_activity",

@@ -6,10 +6,15 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNoticeItem;
+import com.qunar.im.base.util.Utils;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
@@ -87,6 +92,17 @@ public class WorkWorldAtShowAdapter  extends BaseMultiItemQuickAdapter<MultiItem
             case COMMENTATMESSAGE:
 
                 showNoticeInit(helper, (WorkWorldNoticeItem) item,mActivity);
+                RelativeLayout.LayoutParams params =new RelativeLayout.LayoutParams(Utils.dipToPixels(mActivity,43),Utils.dipToPixels(mActivity,43));
+                params.leftMargin=Utils.dipToPixels(mActivity,15);
+                helper.getView(R.id.user_header).setLayoutParams(params);
+                LinearLayout.LayoutParams ap = (LinearLayout.LayoutParams) ((TextView)helper.getView(R.id.comment_item_text)).getLayoutParams();
+                ap.leftMargin=Utils.dipToPixels(mActivity,9);
+                helper.getView(R.id.comment_item_text).setLayoutParams(ap);
+
+                LinearLayout.LayoutParams bp = (LinearLayout.LayoutParams) ((TextView)helper.getView(R.id.notice_time)).getLayoutParams();
+                ap.leftMargin=Utils.dipToPixels(mActivity,9);
+                helper.getView(R.id.notice_time).setLayoutParams(ap);
+
                 break;
 
             case WORKWORLDATMESSAGE:

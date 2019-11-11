@@ -86,4 +86,9 @@ public class WorkWorldAtShowManagerPresenter implements WorkWorldAtShowPresenter
             }
         });
     }
+
+    @Override
+    public void startSearch(String str) {
+
+    }
 }

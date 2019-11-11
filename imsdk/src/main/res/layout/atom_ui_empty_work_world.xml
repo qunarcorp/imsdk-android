@@ -5,19 +5,20 @@
     android:background="#ffffff"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_gravity="center"
-        android:layout_width="125dp"
-        android:background="@drawable/atom_ui_no_dynamic"
-        android:layout_height="125dp" />
+<!--    <ImageView-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_width="125dp"-->
+<!--        android:background="@drawable/atom_ui_no_dynamic"-->
+<!--        android:layout_height="125dp" />-->
 
     <TextView
         android:id="@+id/empty_tip"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:textColor="#888888"
+        android:gravity="center"
         android:textSize="13sp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:text="暂时没有动态"
         android:layout_height="wrap_content" />
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.text.TextUtils;
     public class NavConfigInfo {
         private String name;//配置名称
         private String url;//配置地址
+        private boolean isSelected;//是否被选中
 
         public String getName() {
             return name;
@@ -25,7 +26,15 @@ import android.text.TextUtils;
             this.url = url;
         }
 
-        @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    @Override
         public boolean equals(Object o) {
             if(this == o) return true;
             if(o == null) return false;

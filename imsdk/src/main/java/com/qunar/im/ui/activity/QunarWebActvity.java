@@ -1,25 +1,33 @@
+
 package com.qunar.im.ui.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.PermissionRequest;
@@ -58,9 +66,9 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.broadcastreceivers.ShareReceiver;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.util.NavConfigUtils;
+import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.util.VacationAdUtil;
 import com.qunar.im.ui.view.QtNewActionBar;
-import com.qunar.im.ui.view.bigimageview.ImageBrowsUtil;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
 import com.qunar.im.ui.view.dialog.BottomDialog;
 import com.qunar.im.utils.ConnectionUtil;
@@ -83,9 +91,23 @@ import static com.qunar.im.ui.activity.ShareWorkWorldRouteActivity.WORKWORLDSHAR
  *
  */
 public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnItemSelectedListener {
+
+
+    public static int REQUEST_CODE_ENABLE_LOCATION = 100;
+    public static int REQUEST_CODE_ACCESS_LOCATION_PERMISSION = 101;
+
+
+    private GeolocationPermissions.Callback mGeolocationPermissionsCallback;
+    private String mOrigin;
+
+    private boolean mShowRequestPermissionRationale = false;
+
+    private static final String VIDEO_DEFAULT_UA = "Mozilla/5.0 (BB10; Touch) AppleWebKit/537.1+ (KHTML, like Gecko) Version/10.0.0.1337 Mobile Safari/537.1+";
+
+
     public final static String IS_HIDE_BAR = "ishidebar";
     public final static String UA = "useragent";
-    protected String DOMAIN = "qunar.com";//
+    protected String DOMAIN = ".qunar.com";//
     protected WebView mWebView;
     protected ProgressBar mProgressBar;
     protected ProgressBar pb_central;
@@ -137,27 +159,13 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
 
         if ((Constants.BundleValue.HONGBAO.equals(from)) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            Window window = getWindow();
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            root_container.setBackgroundColor(getResources().getColor(R.color.atom_ui_trans_dark_gray));
         }
         setContentView(R.layout.atom_ui_activity_qunar_web_actvity);
         bindViews();
 
         initView();
         if (isHideBar && mNewActionBar != null && mNewActionBar.getVisibility() == View.VISIBLE) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-////                mNewActionBar.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-////                        getResources().getDimensionPixelSize(R.dimen.atom_ui_action_bar_padding)));
-//                mNewActionBar.setVisibility(View.INVISIBLE);
-//            } else {
-                mNewActionBar.setVisibility(View.GONE);
-//            }
+            mNewActionBar.setVisibility(View.GONE);
         }
         initWebView();
         loadUrl();
@@ -165,7 +173,154 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         adUtil = new VacationAdUtil(this);
     }
 
+    private boolean hasAccessLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+        }
+    }
 
+    private boolean isEnabledLocationFunction() {
+        int locationMode = 0;
+        String locationProviders;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        } else {
+            locationProviders = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+    }
+
+    private void doJudgeLocationServiceEnabled() {
+        //是否开启定位
+        if (isEnabledLocationFunction()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("温馨提示");
+            builder.setMessage(String.format("网站%s，正在请求使用您当前的位置，是否许可？", mOrigin));
+            builder.setPositiveButton("许可", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mGeolocationPermissionsCallback.invoke(mOrigin, true, true);
+                }
+            });
+            builder.setNegativeButton("不许可", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mGeolocationPermissionsCallback.invoke(mOrigin, false, false);
+                }
+            });
+            builder.create().show();
+        } else {
+            //请求开启定位功能
+            requestEnableLocationFunction(mOrigin, mGeolocationPermissionsCallback);
+        }
+    }
+
+    /**
+     * 请求开启定位服务
+     */
+    private void requestEnableLocationFunction(final String origin, final GeolocationPermissions.Callback geolocationPermissionsCallback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("温馨提示");
+        builder.setMessage(String.format("网站%s，正在请求使用您当前的位置，是否前往开启定位服务？", origin));
+        builder.setPositiveButton("前往开启", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, REQUEST_CODE_ENABLE_LOCATION);
+            }
+        });
+        builder.setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                geolocationPermissionsCallback.invoke(origin, false, false);
+            }
+        });
+        builder.create().show();
+    }
+
+    private void doRequestAppSetting() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("温馨提示");
+        builder.setMessage(String.format("您禁止了应用获取当前位置的权限，是否前往开启？", mOrigin));
+        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent mIntent = new Intent();
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (Build.VERSION.SDK_INT >= 9) {
+                    mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    mIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                } else if (Build.VERSION.SDK_INT <= 8) {
+                    mIntent.setAction(Intent.ACTION_VIEW);
+                    mIntent.setClassName("com.android.settings", "com.android.setting.InstalledAppDetails");
+                    mIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+                }
+                QunarWebActvity.this.startActivity(mIntent);
+            }
+        });
+        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mGeolocationPermissionsCallback.invoke(mOrigin, false, false);
+            }
+        });
+        builder.create().show();
+    }
+
+    private void requestAccessLocationPermission() {
+        // 是否要显示问什么要获取权限的解释界面
+        /**
+         * 什么情况下 shouldShowRequestPermissionRationale会返回true？
+         * - 首次请求权限，但是用户禁止了，但是没有勾选“禁止后不再询问”，这样，之后的请求都会返回true
+         * 什么情况下，shouldShowRequestPermissionRationale会返回false？
+         * - 首次请求权限或者请求权限时，用户勾选了“禁止后不再询问”，之后的请求都会返回false
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //请求过定位权限，但是被用户拒绝了（但是没有勾选“禁止后不再询问”）
+                // 显示解释权限用途的界面，然后再继续请求权限
+                mShowRequestPermissionRationale = true;
+            } else {
+                mShowRequestPermissionRationale = false;
+            }
+        } else {
+            mShowRequestPermissionRationale = false;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("温馨提示");
+        builder.setMessage(String.format("网站%s，正在请求使用您当前的位置，是否许可应用获取当前位置权限？", mOrigin));
+        builder.setPositiveButton(" 是 ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_CODE_ACCESS_LOCATION_PERMISSION);
+                } else {
+                    //额，版本低，正常情况下，安装默认许可，然鹅，国产ROM各种魔改，有阔轮提前实现了单独授权
+                    doRequestAppSetting();
+                }
+            }
+        });
+        builder.setNegativeButton(" 否 ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mGeolocationPermissionsCallback.invoke(mOrigin, false, false);
+            }
+        });
+        builder.create().show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void initWebView() {
         mProgressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -174,18 +329,23 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         mWebView.addView(mProgressBar);
         mWebView.setWebChromeClient(new WebChromeClient() {
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    request.deny();
-//                }
-                runOnUiThread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void run() {
-                        request.grant(request.getResources());
-                    }
-                });
+                runOnUiThread(() -> request.grant(request.getResources()));
+            }
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                mOrigin = origin;
+                mGeolocationPermissionsCallback = callback;
+                //是否拥有定位权限
+                if (hasAccessLocationPermission()) {
+                    doJudgeLocationServiceEnabled();
+                } else {
+                    //请求定位
+                    requestAccessLocationPermission();
+                }
             }
 
             //            添加弹窗 alert功能
@@ -477,6 +637,13 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setSupportZoom(true);
         mWebView.getSettings().setSavePassword(false);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
+
+        }
 
         // webview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         /*** 打开本地缓存提供JS调用 **/
@@ -499,11 +666,15 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         }
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setGeolocationEnabled(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         if (Build.VERSION.SDK_INT >= 19) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
         } else {
             mWebView.getSettings().setLoadsImagesAutomatically(false);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         }
         synCookie();
         if (Constants.BundleValue.HONGBAO.equals(from)) {
@@ -514,17 +685,24 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
                 USER_AGENT = "qchataphone-tts";
             } else {
                 if (CommonConfig.isQtalk) {
-                    USER_AGENT += "-" + GlobalConfigManager.getAppName();
+                    USER_AGENT += "-" + GlobalConfigManager.getAppName() + "-" + GlobalConfigManager.getAppVersion();
                 } else {
                     //qchat就是 qunarchat-设备-应用类型
-                    USER_AGENT = "qunarchat-android-" + GlobalConfigManager.getAppName();
+                    USER_AGENT = "qunarchat-android-" + GlobalConfigManager.getAppName() + "-" + GlobalConfigManager.getAppVersion();
                 }
             }
         } else {
             USER_AGENT = inputUA;
         }
         WebSettings webSettings = mWebView.getSettings();
-        mWebView.getSettings().setUserAgentString(webSettings.getUserAgentString() + ";" + USER_AGENT);
+        if(isVideoAudioCall){
+            mWebView.getSettings().setUserAgentString(VIDEO_DEFAULT_UA);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+            }
+        }else {
+            mWebView.getSettings().setUserAgentString(webSettings.getUserAgentString() + ";" + USER_AGENT);
+        }
     }
 
     @Override
@@ -577,29 +755,18 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         //qchat登录页显示反馈按钮
         if(!CommonConfig.isQtalk && mUrl.contains("user.qunar.com/mobile/login.jsp")){
             setActionBarRightSpecial(R.string.atom_ui_new_feedback);
-            setActionBarRightIconSpecialClick(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(QunarWebActvity.this, BugreportActivity.class);
-                    startActivity(intent);
-                }
+            setActionBarRightIconSpecialClick(v -> {
+                Intent intent = new Intent(QunarWebActvity.this, BugreportActivity.class);
+                startActivity(intent);
             });
         }
-        setActionBarLeftClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        setActionBarLeftClick(view -> finish());
+        setActionBarTitleClick(v -> {
+            clickCounts++;
+            if (clickCounts > 10) {
+                Intent intent1 = new Intent(QunarWebActvity.this, LoginActivity.class);
+                startActivity(intent1);
                 finish();
-            }
-        });
-        setActionBarTitleClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickCounts++;
-                if (clickCounts > 10) {
-                    Intent intent1 = new Intent(QunarWebActvity.this, LoginActivity.class);
-                    startActivity(intent1);
-                    finish();
-                }
             }
         });
     }
@@ -691,24 +858,19 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
 
     @JavascriptInterface
     public void sharePic(final String url){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(TextUtils.isEmpty(url)){
-                    toast("操作失败！");
-                    return;
-                }
-                DownloadPictureUtil.downloadPicture(QunarWebActvity.this, url, new DownloadPictureUtil.PicCallBack() {
-                    @Override
-                    public void onDownLoadSuccess(String str) {
-                        File file = new File(str);
-
-                        if (file != null && file.exists()) {
-                            ImageBrowsUtil.externalShare(file,CommonConfig.globalContext);
-                        }
-                    }
-                }, false);
+        runOnUiThread(() -> {
+            if(TextUtils.isEmpty(url)){
+                toast("操作失败！");
+                return;
             }
+            DownloadPictureUtil.downloadPicture(QunarWebActvity.this, url, str -> {
+                File file = new File(str);
+
+                if (file != null && file.exists()) {
+//                            ImageBrowsUtil.externalShare(file,CommonConfig.globalContext);
+                    ShareUtil.shareImage(CommonConfig.globalContext,file,"分享图片");
+                }
+            }, false);
         });
     }
 
@@ -752,6 +914,7 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (requestCode == VacationAdUtil.SELECT_PHOTO_REQUEST) {
             if (data == null) {
                 adUtil.cancelUpload();
@@ -786,7 +949,15 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
                 adUtil.reqChooseList(list);
 
             }
+        }else{
+            if (mLocationWebChromeClientListener != null) {
+                if (mLocationWebChromeClientListener.onReturnFromLocationSetting(requestCode)) {
+                    return;
+                }
+            }
         }
+
+
     }
 
     @Override
@@ -850,4 +1021,80 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
         }
         return true;
     }
+
+
+    interface LocationWebChromeClientListener {
+
+        /**
+         * 用户从开启定位页面回来了
+         */
+        boolean onReturnFromLocationSetting(int requestCode);
+
+        /**
+         * 请求权限结果
+         */
+        void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
+    }
+
+    private LocationWebChromeClientListener mLocationWebChromeClientListener = new LocationWebChromeClientListener() {
+        @Override
+        public boolean onReturnFromLocationSetting(int requestCode) {
+            if (requestCode == REQUEST_CODE_ENABLE_LOCATION) {
+                if (mGeolocationPermissionsCallback != null) {
+                    if (isEnabledLocationFunction()) {
+                        mGeolocationPermissionsCallback.invoke(mOrigin, true, true);
+                    } else {
+                        //显然，从设置界面回来还没有开启定位服务，肯定是要拒绝定位了
+                        Toast.makeText(QunarWebActvity.this, "您拒绝了定位请求", Toast.LENGTH_SHORT).show();
+                        mGeolocationPermissionsCallback.invoke(mOrigin, false, false);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            boolean pass = true;
+            for (Integer result : grantResults) {
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    pass = false;
+                    break;
+                }
+            }
+            if (pass) {
+                onAccessLocationPermissionGranted();
+            } else {
+                onAccessLocationPermissionRejected();
+            }
+        }
+
+        public void onAccessLocationPermissionGranted() {
+            doJudgeLocationServiceEnabled();
+        }
+
+        public void onAccessLocationPermissionRejected() {
+            if (mShowRequestPermissionRationale) {
+                Toast.makeText(QunarWebActvity.this, "您拒绝了定位请求", Toast.LENGTH_SHORT).show();
+                mGeolocationPermissionsCallback.invoke(mOrigin, false, false);
+            } else {
+                doRequestAppSetting();
+            }
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mLocationWebChromeClientListener != null) {
+            mLocationWebChromeClientListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//    }
 }

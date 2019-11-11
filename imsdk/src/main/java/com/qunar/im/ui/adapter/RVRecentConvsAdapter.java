@@ -357,7 +357,7 @@ public class RVRecentConvsAdapter extends BaseQuickAdapter<RecentConversation, B
     }
 
     public void showDetailed(final BaseViewHolder holder, final RecentConversation data) {
-        ((TextView) holder.getView(R.id.textview_time)).setText(DateTimeUtils.getTime(data.getLastMsgTime(), false));
+        ((TextView) holder.getView(R.id.textview_time)).setText(DateTimeUtils.getTime(data.getLastMsgTime(), false, true));
         if (!isFirst && data.getConversationType() == 1) {
             connectionUtil.getUserCard(data.getLastFrom(), new IMLogicManager.NickCallBack() {
                 @Override

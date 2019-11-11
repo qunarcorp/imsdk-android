@@ -40,16 +40,6 @@ public class DepartmentActivity extends SwipeBackActivity {
         final BaseFragment fragment;
         if(isNewDept){
             fragment = new OrganizationFragment();
-            setActionBarRightText(R.string.atom_ui_invite);
-            setActionBarRightTextClick(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(DepartmentActivity.this, QunarWebActvity.class);
-                    intent.setData(Uri.parse("https://im.qunar.com/#/user_list?domain=" + QtalkNavicationService.getInstance().getXmppdomain()));
-                    intent.putExtra(QunarWebActvity.IS_HIDE_BAR, true);
-                    startActivity(intent);
-                }
-            });
         }
         else fragment = new DeptFragment();
         // Transition for fragment1

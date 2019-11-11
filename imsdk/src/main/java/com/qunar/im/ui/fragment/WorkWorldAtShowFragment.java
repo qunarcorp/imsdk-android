@@ -214,24 +214,6 @@ public class WorkWorldAtShowFragment extends BaseFragment implements WorkWorldAt
 
 
     public void showNewDataHandle(final List<? extends MultiItemEntity> list) {
-//        if (work_world_notice_rc.isComputingLayout()) {
-//            work_world_notice_rc.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    showNewDataHandle(list);
-//                }
-//            }, 500);
-//        } else {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-////
-//                    workWorldNoticeAdapter.setNewData((List<MultiItemEntity>) list);
-//                    work_world_notice_rc.scrollToPosition(0);
-//                }
-//            });
-//
-//        }
 
 
         if (work_world_notice_rc.isComputingLayout()) {
@@ -301,6 +283,16 @@ public class WorkWorldAtShowFragment extends BaseFragment implements WorkWorldAt
     @Override
     public int getListCount() {
         return workWorldNoticeAdapter.getItemCount();
+    }
+
+    @Override
+    public void setEmptyText(String string) {
+
+    }
+
+    @Override
+    public void clearData() {
+
     }
 
 }

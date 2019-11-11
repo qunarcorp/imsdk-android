@@ -3,6 +3,8 @@ package com.qunar.im.ui.presenter.impl;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.qunar.im.ui.presenter.IPGroupRtc;
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.jsonbean.AutoDestroyMessageExtention;
@@ -37,7 +39,7 @@ import java.util.UUID;
 //群会话实现
 public class MultipleSessionPresenter extends ChatPresenter implements
         ICloudRecordPresenter, ISnapPresenter, IAddEmojiconPresenter,
-        IShowNickPresenter, IMeetingRTC {
+        IShowNickPresenter, IMeetingRTC, IPGroupRtc {
 
     public MultipleSessionPresenter() {
     }
@@ -226,6 +228,16 @@ public class MultipleSessionPresenter extends ChatPresenter implements
     }
 
     @Override
+    public void startGroupVideoRtc() {
+        IMMessage message = generateIMMessage();
+        message.setBody("当前客户端不支持群视频");
+        message.setMsgType(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_Group_VALUE);
+        curMsgNum++;
+        chatView.setNewMsg2DialogueRegion(message);
+        connectionUtil.sendGroupTextOrEmojiMessage(message);
+    }
+
+    @Override
     public void sendRobotMsg(String msg) {
 
     }
@@ -381,6 +393,26 @@ public class MultipleSessionPresenter extends ChatPresenter implements
                 break;
             case QtalkEvent.Chat_Message_Read_State:
                 showUnReadCount();
+                break;
+            case QtalkEvent.PAY_RED_ENVELOP_CHOICE:
+                String result = (String) args[0];
+                String rid = "";
+                if(args.length > 1){
+                    rid = (String) args[1];
+                }
+                chatView.payRedEnvelopChioce(result,rid);
+                break;
+            case QtalkEvent.PAY_AUTH:
+                String authInfo = (String) args[0];
+                chatView.payAuth(authInfo);
+                break;
+            case QtalkEvent.PAY_ORDER:
+                String orderInfo = (String) args[0];
+                chatView.payOrder(orderInfo);
+                break;
+            case QtalkEvent.PAY_FAIL:
+                String fail = (String) args[0];
+                chatView.showToast(Constants.Alipay.AUTH.equals(fail) ? "账户校验失败！" : "支付失败！");
                 break;
         }
     }

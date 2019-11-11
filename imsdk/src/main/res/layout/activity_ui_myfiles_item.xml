@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/myfile_status"
-        android:text="已下载"
+        android:text="@string/atom_ui_common_already_download"
         android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

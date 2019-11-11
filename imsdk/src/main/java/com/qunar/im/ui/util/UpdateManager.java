@@ -58,6 +58,8 @@ public class UpdateManager {
 
     private  String API_URL;
 
+    private static final String STARTALK_URL = "https://im.qunar.com/package/newapi";
+
     private static final int DOWN_NOSDCARD = 0;
     private static final int DOWN_UPDATE = 1;
     private static final int DOWN_OVER = 2;
@@ -144,8 +146,17 @@ public class UpdateManager {
     {
         APK_PACKAGE = CommonConfig.globalContext.getPackageName();
         APK_NAME = GlobalConfigManager.getAppName();
-        API_URL = QtalkNavicationService.getInstance().getHttpUrl() + "/nck/client/get_version.qunar?clientname="
-                + GlobalConfigManager.getAppName().toLowerCase()+ "_android&u=" + CurrentPreference.getInstance().getUserid() + "&ver=";
+        String user_id = CurrentPreference.getInstance().getUserid();
+        if(TextUtils.isEmpty(user_id)){
+            user_id = "test";
+        }
+        if(GlobalConfigManager.isStartalkPlat()) {
+            API_URL = STARTALK_URL + "/nck/client/get_version.qunar?clientname="
+                    + GlobalConfigManager.getAppName().toLowerCase()+ "_android&u=" + user_id + "&ver=";
+        } else {
+            API_URL = QtalkNavicationService.getInstance().getHttpUrl() + "/nck/client/get_version.qunar?clientname="
+                    + GlobalConfigManager.getAppName().toLowerCase()+ "_android&u=" + user_id + "&ver=";
+        }
     }
 
     /**
@@ -201,6 +212,10 @@ public class UpdateManager {
                     if(info != null) message = info.data;
                 } catch (Exception e) {
                     LogUtil.e(TAG,"ERROR",e);
+                    if (mProDialog != null && mProDialog.isShowing()) {
+                        mProDialog.dismiss();
+                        mProDialog = null;
+                    }
                 }
                 if (message == null)
                     return;
@@ -300,34 +315,41 @@ public class UpdateManager {
 	        noticeDialog.dismiss();
         }
 		final Builder builder = new Builder(mContext);
-		builder.setTitle(updateTitle);
+	    View view = LayoutInflater.from(mContext).inflate(R.layout.atom_ui_dialog_update,null);
+	    TextView content = (TextView) view.findViewById(R.id.atom_ui_update_content);
+        TextView un_update = (TextView) view.findViewById(R.id.atom_ui_not_update);
+        TextView update = (TextView) view.findViewById(R.id.atom_ui_update);
+	    builder.setView(view);
+//		builder.setTitle(updateTitle);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(updateMsg);
-		builder.setMessage(spannableStringBuilder);
+//		builder.setMessage(spannableStringBuilder);
+        content.setText(spannableStringBuilder);
         builder.setCancelable(false);
 
-		builder.setPositiveButton("立即更新", new OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog, int which) {
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
+                        noticeDialog.dismiss();
                         showDownloadDialog();
                     }
                 });
-			}
-		});
-        String cancelTitle = "跳过此版本";
+            }
+        });
+        String cancelTitle = getString(R.string.atom_ui_common_skip);
         if(mUpdate.forceUpdate){
-            cancelTitle="退出";
+            cancelTitle=getString(R.string.atom_ui_exit_text);
         }
         else if(isForce)
         {
-            cancelTitle = "以后再说";
+            cancelTitle = getString(R.string.atom_ui_next_time);
         }
-		builder.setNegativeButton(cancelTitle, new OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog, int which) {
+        un_update.setText(cancelTitle);
+        un_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (mUpdate.forceUpdate) {
                     System.exit(0);
                 } else {
@@ -338,12 +360,13 @@ public class UpdateManager {
                                 CurrentPreference.getInstance().setSkipVersion(mUpdate.version);
 //                                CurrentPreference.getInstance().saveExtConfig();
                             }
-                            dialog.dismiss();
+                            noticeDialog.dismiss();
                         }
                     });
                 }
             }
-		});
+        });
+
         uiHandler.post(new Runnable() {
             @Override
             public void run() {

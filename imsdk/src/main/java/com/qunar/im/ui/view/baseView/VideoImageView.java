@@ -19,7 +19,7 @@ import com.qunar.im.base.util.graphics.BitmapHelper;
  */
 public class VideoImageView extends SimpleDraweeView {
     private static final String TAG = VideoImageView.class.getSimpleName();
-    Bitmap icPlay;
+   public Bitmap icPlay;
     Paint paint,textpaint;
     String fileSize,duration;
     float textwidth,textheight,padding,durationWidth,horizationPadding;

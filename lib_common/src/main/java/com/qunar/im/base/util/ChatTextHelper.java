@@ -12,6 +12,8 @@ import com.qunar.im.base.transit.DownloadRequest;
 import com.qunar.im.base.transit.IDownloadRequestComplete;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
+import com.qunar.im.common.R;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.utils.QtalkStringUtils;
 
@@ -41,42 +43,46 @@ public class ChatTextHelper {
     private final static Map<Integer, String> defaultMsg = new HashMap<Integer, String>();
 
     static {
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeFile_VALUE, "[文件]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeLocalShare_VALUE, "[位置]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTopic_VALUE, "[新消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeActionRichText_VALUE, "[富文本消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRichText_VALUE, "[富文本消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeNotice_VALUE, "[通知消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSystem_VALUE, "[系统消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeBurnAfterRead_VALUE, "[阅后即焚]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE, "[视频]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotAnswer_VALUE, "[机器人回复]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeVoice_VALUE, "[语音]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeShock_VALUE, "[窗口抖动]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRedPack_VALUE, "[红包]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRedPackInfo_VALUE, "[红包领取通知]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeActivity_VALUE, "[活动消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeAA_VALUE, "[AA收款]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeAAInfo_VALUE, "[AA收款通知]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeNote_VALUE, "[产品详情]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeShareLocation_VALUE, "[共享位置]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeProduct_VALUE, "[产品链接]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTransChatToCustomerService_VALUE, "[会话转移]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTransChatToCustomer_VALUE, "[会话转移]");
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeFile_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_file));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeLocalShare_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_location));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTopic_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_newmsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeActionRichText_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_rich));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRichText_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_rich));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeNotice_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_notification));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSystem_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_system));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeBurnAfterRead_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_burn));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_videomsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotAnswer_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_robotmsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeVoice_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_voice));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeShock_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_shake));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRedPack_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_redpkg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRedPackInfo_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_redpkgnoc));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeActivity_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_activity));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeAA_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_aapay));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeAAInfo_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_aapaynoc));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeNote_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_productdtl));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeShareLocation_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sharelocation));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeProduct_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_productlink));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTransChatToCustomerService_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sestransfer));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeTransChatToCustomer_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sestransfer));
         defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeConsult_VALUE, "[来生意了]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeCommonTrdInfo_VALUE, "[链接卡片]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE, "[撤销消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE, "[实时视频]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotQuestionList_VALUE, "[问题列表]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotTurnToUser_VALUE, "[转人工]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE, "[实时音频]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuVcard_VALUE, "[抢单消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE, "[抢单消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeImageNew_VALUE, "[表情]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeMeetingRemind_VALUE, "[行程邀请]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeEncrypt_VALUE, "[加密消息]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSourceCode_VALUE, "[代码段]");
-        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypePhoto_VALUE, "[图片]");
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeCommonTrdInfo_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_linkcard));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_recall));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_recall));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_VideoCall_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_videocall));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_Group_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_videogroup));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Video_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_ui_tip_client_too_low));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_Audio_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_ui_tip_client_too_low));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotQuestionList_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_questionlist));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeRobotTurnToUser_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_turntocs));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.WebRTC_MsgType_AudioCall_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_audiocall));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuVcard_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_grabmsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeGrabMenuResult_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_grabmsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeImageNew_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sticker));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeMeetingRemind_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_meetinginvite));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeEncrypt_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_encryptmsg));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypeSourceCode_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sourcecode));
+        defaultMsg.put(ProtoMessageOuterClass.MessageType.MessageTypePhoto_VALUE, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_photo));
     }
 
     static public String showContentType(String strText, int msgType) {
@@ -170,7 +176,7 @@ public class ChatTextHelper {
             }
 
             final DownloadRequest request = new DownloadRequest();
-            request.url = QtalkStringUtils.addFilePathDomain(json.HttpUrl);
+            request.url = QtalkStringUtils.addFilePathDomain(json.HttpUrl, true);
             request.savePath = file.getAbsolutePath();
             request.requestComplete = new IDownloadRequestComplete() {
                 @Override
@@ -468,7 +474,7 @@ public class ChatTextHelper {
             String type = m.group(1);
 
             if (type.equals("image")) {
-                srcObj = srcObj.replace(oldStr, "[图片]");
+                srcObj = srcObj.replace(oldStr, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_photo));
             } else if (type.equals("emoticon")) {
                 String shortcut = m.group(2);
                 EmoticonEntity emotionEntry = null;
@@ -482,7 +488,7 @@ public class ChatTextHelper {
                     emotionEntry = getEmojiEntityByInvoke(shortcut,pkgId,true);
                 }
                 if (emotionEntry == null) {
-                    srcObj = srcObj.replace(oldStr, "[表情]");
+                    srcObj = srcObj.replace(oldStr, GlobalConfigManager.getGlobalContext().getString(R.string.atom_common_text_sticker));
                 } else {
                     srcObj = srcObj.replace(oldStr, "[" + emotionEntry.tip + "]");
                 }

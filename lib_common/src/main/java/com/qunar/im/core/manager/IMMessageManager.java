@@ -249,6 +249,7 @@ public class IMMessageManager {
                     jid,
                     IMLogicManager.getInstance().getRemoteLoginKey(),
                     GlobalConfigManager.getAppVersion());
+
             JSONObject inputBody = new JSONObject();
             inputBody.put("User", jid);
             inputBody.put("Host", domain);

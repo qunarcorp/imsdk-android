@@ -23,4 +23,5 @@ public interface IMainView {
 
     void restartApplication();
     void showFeedBackProgressView(String[] args,boolean isShowNotify,boolean uploadDb);
+    void startLoginView();
 }

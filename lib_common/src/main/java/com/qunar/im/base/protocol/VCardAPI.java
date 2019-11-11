@@ -4,10 +4,12 @@ import android.text.TextUtils;
 
 import com.qunar.im.base.jsonbean.GetMucVCardData;
 import com.qunar.im.base.jsonbean.GetMucVCardResult;
+import com.qunar.im.base.jsonbean.GetUserStatus;
 import com.qunar.im.base.jsonbean.GetVCardData;
 import com.qunar.im.base.jsonbean.GetVCardResult;
 import com.qunar.im.base.jsonbean.SetMucVCardResult;
 import com.qunar.im.base.jsonbean.SetVCardResult;
+import com.qunar.im.base.jsonbean.UserStatusResult;
 import com.qunar.im.base.structs.SetMucVCardData;
 import com.qunar.im.base.structs.SetProfileData;
 import com.qunar.im.base.structs.SetVCardData;
@@ -20,6 +22,8 @@ import com.qunar.im.protobuf.common.CurrentPreference;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.qunar.im.base.util.JsonUtils.getGson;
 
 /**
  * Created by saber on 16-3-1.
@@ -194,7 +198,7 @@ public class VCardAPI {
         sb.append("profile/set_profile.qunar?");
         if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {callback.doFailure();return;}
         Protocol.addBasicParamsOnHead(sb);
-        String url =Protocol. makeGetUri(QtalkNavicationService.getInstance().getHttpUrl(),
+        String url =Protocol.makeGetUri(QtalkNavicationService.getInstance().getHttpUrl(),
                 QtalkNavicationService.getInstance().getHttpPort(), sb.toString(), true);
         List<SetProfileData> list = new ArrayList<>();
         SetProfileData setProfileData = new SetProfileData();
@@ -231,5 +235,42 @@ public class VCardAPI {
                 callback.doFailure();
             }
         });
+    }
+
+    public static void getUserStatus(String jid, final ProtocolCallback.UnitCallback<UserStatusResult> callback) {
+        try {
+            StringBuilder queryString = new StringBuilder("domain/get_user_status.qunar?");
+            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
+                callback.doFailure();
+                return;
+            }
+            Protocol.addBasicParamsOnHead(queryString);
+            GetUserStatus status = new GetUserStatus();
+            status.users = new ArrayList<>();
+            status.users.add(jid);
+            String jsonParams = getGson().toJson(status);
+            String url = Protocol.makeGetUri(QtalkNavicationService.getInstance().getHttpUrl(), QtalkNavicationService.getInstance().getHttpPort(), queryString.toString(), true);
+            HttpUrlConnectionHandler.executePostJson(url, jsonParams, new HttpRequestCallback() {
+                @Override
+                public void onComplete(InputStream response) {
+                    UserStatusResult result = null;
+                    try {
+
+                        String resultString = Protocol.parseStream(response);
+                        result = getGson().fromJson(resultString, UserStatusResult.class);
+                    } catch (Exception e) {
+                        LogUtil.e(TAG, "error", e);
+                    }
+                    callback.onCompleted(result);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    callback.doFailure();
+                }
+            });
+        } catch (Exception e) {
+            LogUtil.e(TAG, "error", e);
+        }
     }
 }

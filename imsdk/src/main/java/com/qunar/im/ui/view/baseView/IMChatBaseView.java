@@ -2,7 +2,6 @@ package com.qunar.im.ui.view.baseView;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spannable;
@@ -20,27 +19,28 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.qunar.im.ui.view.IconView;
-import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.jsonbean.EncryptMsg;
 import com.qunar.im.base.module.BaseIMMessage;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.base.module.UserHaveMedalStatus;
 import com.qunar.im.base.util.AESTools;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
-import com.qunar.im.ui.util.ColorUtils;
 import com.qunar.im.ui.util.ResourceUtils;
+import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.baseView.processor.MessageProcessor;
 import com.qunar.im.ui.view.baseView.processor.ProcessorFactory;
 import com.qunar.im.ui.view.bubbleLayout.BubbleLayout;
+import com.qunar.im.utils.ConnectionUtil;
+
+import java.util.List;
 
 
 /**
@@ -54,9 +54,11 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     protected Handler handler;
     protected BubbleLayout bubble_layout_left, bubble_layout_right;
     protected TextView mLeftNickName, statusView;
+    protected LinearLayout nick_layout;
     protected IconView send_states_text;
     protected SimpleDraweeView mLeftRoundedImageView;
     protected SimpleDraweeView mRightRoundedImageView;
+    protected SimpleDraweeView medal_one, medal_two, medal_three;
     protected LinearLayout mLeftChatView, mRightChatView;
     protected RelativeLayout mLeftWrapper;
     protected LinearLayout mRightWrapper;
@@ -106,6 +108,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     }
 
     private void setLeftVisible() {
+        nick_layout.setVisibility(VISIBLE);
         mLeftNickName.setVisibility(VISIBLE);
         mLeftChatView.setVisibility(VISIBLE);
         mLeftWrapper.setVisibility(VISIBLE);
@@ -126,10 +129,14 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     }
 
     protected void findViewById() {
+        medal_one = findViewById(R.id.medal_one);
+        medal_two = findViewById(R.id.medal_two);
+        medal_three = findViewById(R.id.medal_three);
         mLeftWrapper = findViewById(R.id.chatview_left_wrapper);
         mRightWrapper = findViewById(R.id.chatview_right_wrapper);
         mLeftChatView = findViewById(R.id.chatview_left);
         mLeftNickName = findViewById(R.id.nickname_left);
+        nick_layout = findViewById(R.id.nick_layout);
         mLeftProgressBar = findViewById(R.id.message_progress_left);
         mLeftSendFailureImageView = findViewById(R.id.send_failure_icon_left);
         mLeftRoundedImageView = findViewById(R.id.imageview_left);
@@ -145,10 +152,11 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
 //        mLeftChatView.setBackgroundResource(R.drawable.atom_ui_balloon_left);
 //        mRightChatView.setBackgroundResource(R.drawable.atom_ui_balloon_right);
     }
-    public void setReadStateShow(boolean show){
-        if(show){
+
+    public void setReadStateShow(boolean show) {
+        if (show) {
             send_states_text.setVisibility(VISIBLE);
-        }else{
+        } else {
             send_states_text.setVisibility(GONE);
         }
     }
@@ -158,6 +166,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
 //        setReadStateShow(showNick);
         if (showNick) {
             mLeftNickName.setVisibility(VISIBLE);
+            nick_layout.setVisibility(VISIBLE);
             LayoutParams params = (LayoutParams) mLeftWrapper.getLayoutParams();
             params.addRule(RelativeLayout.ALIGN_TOP, 0);
             params.setMargins(0, m8dp, m48dp, m8dp);
@@ -166,6 +175,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
 
         } else {
             mLeftNickName.setVisibility(GONE);
+            nick_layout.setVisibility(GONE);
             LayoutParams params = (LayoutParams) mLeftWrapper.getLayoutParams();
             params.addRule(RelativeLayout.ALIGN_TOP, R.id.imageview_left);
             params.setMargins(0, 0, m48dp, m8dp);
@@ -246,7 +256,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
                 }
                 mRightChatView.removeAllViews();
             }
-            p.processErrorSendingView(mRightProgressBar,mRightSendFailureImageView,this);
+            p.processErrorSendingView(mRightProgressBar, mRightSendFailureImageView, this);
 //            p.processProgressbar(mRightProgressBar, this);
             p.processTimeText(mTimeTextView, this, adapter);
 //            p.processErrorImageView(mRightSendFailureImageView, this);
@@ -275,6 +285,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
                                 } else {
                                     gravatarHandler.requestGravatarEvent(message.getFromID(), defaultHeadUrl, mRightRoundedImageView);
                                 }
+                                hideMedal();
                             }
                         });
 
@@ -343,6 +354,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
                 if (message.isCollection()) {
                     mLeftRoundedImageView.setOnClickListener(null);
                     mLeftRoundedImageView.setOnLongClickListener(null);
+                    hideMedal();
                     connectionUtil.getCollectionUserCard(message.getRealfrom(), new IMLogicManager.NickCallBack() {
                         @Override
                         public void onNickCallBack(final Nick nick) {
@@ -356,6 +368,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
                                     } else {
                                         gravatarHandler.requestGravatarEvent(message.getFromID(), defaultHeadUrl, mLeftRoundedImageView);
                                     }
+                                    hideMedal();
                                 }
                             });
                         }
@@ -371,10 +384,21 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
                                         message.setNick(nick);
                                         gravatarHandler.requestGravatarEvent(nick.getXmppId(), TextUtils.isEmpty(nick.getHeaderSrc()) ? defaultHeadUrl : nick.getHeaderSrc(), mLeftRoundedImageView);
                                         String markupName = ConnectionUtil.getInstance().getMarkupNameById(nick.getXmppId());
-                                        if(TextUtils.isEmpty(markupName))
+                                        if (TextUtils.isEmpty(markupName)) {
                                             mLeftNickName.setText(TextUtils.isEmpty(nick.getName()) ? nick.getXmppId() : nick.getName());
-                                        else mLeftNickName.setText(markupName);
+                                        } else {
+                                            mLeftNickName.setText(markupName);
+                                        }
+
+                                        List<UserHaveMedalStatus> list= connectionUtil.getUserMedalList(nick.getXmppId());
+                                        if(list!=null && list.size()>0){
+                                            hideMedal();
+                                        }else{
+                                            hideMedal();
+                                        }
+
                                     } else {
+                                        hideMedal();
                                         gravatarHandler.requestGravatarEvent(message.getFromID(), defaultHeadUrl, mLeftRoundedImageView);
                                     }
                                 }
@@ -397,11 +421,17 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
         }
     }
 
-    private void handleUrlSpan(){
+    private void hideMedal(){
+        medal_one.setVisibility(GONE);
+        medal_two.setVisibility(GONE);
+        medal_three.setVisibility(GONE);
+    }
+
+    private void handleUrlSpan() {
         mTimeTextView.setMovementMethod(LinkMovementMethod.getInstance());
         CharSequence text = mTimeTextView.getText();
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(text);
-        if(text instanceof Spannable) {
+        if (text instanceof Spannable) {
             int end = text.length();
             Spannable spannable = (Spannable) mTimeTextView.getText();
             URLSpan[] urlSpans = spannable.getSpans(0, end, URLSpan.class);

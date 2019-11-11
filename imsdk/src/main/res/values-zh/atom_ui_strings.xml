@@ -139,7 +139,7 @@
     <string name="atom_ui_group_id">群ID</string>
     <string name="atom_ui_nav_server_port">导航服务器端口</string>
     <string name="atom_ui_nav_server_domain">导航服务器域名</string>
-    <string name="atom_ui_nav_server_httpHost">HTTP服务地址</string>
+    <string name="atom_ui_nav_server_httpHost">设置服务地址</string>
     <string name="atom_ui_nav_server_file">文件服务器地址</string>
     <string name="atom_ui_textbar_button_album">相册</string>
     <string name="atom_ui_textbar_button_camera">拍摄</string>
@@ -284,6 +284,7 @@
     <string name="atom_ui_common_yesterday">昨天</string>
     <string name="atom_ui_common_not_download">未下载</string>
     <string name="atom_ui_common_sent">已发送</string>
+    <string name="atom_ui_common_notsent">未发送</string>
     <string name="atom_ui_common_already_download">已下载</string>
     <string name="atom_ui_common_from">来自</string>
     <string name="atom_ui_common_issue">发给</string>
@@ -630,6 +631,7 @@
     <string name="atom_ui_menu_translate">转发</string>
     <string name="atom_ui_menu_revoke">撤销</string>
     <string name="atom_ui_menu_copy">复制</string>
+    <string name="atom_ui_menu_add_stickers">添加为表情</string>
     <string name="atom_ui_tip_somebody_at_you">我被@{0}次</string>
     <string name="atom_ui_tip_unread_message">条新消息</string>
     <string name="atom_ui_tip_too_frequent">歇一会再发窗口抖动吧!</string>
@@ -851,5 +853,121 @@
     <string name="atom_ui_string_domain_name">域名/服务器地址（必填)</string>
     <string name="atom_ui_hint_add_nav_name">请输入导航服务器名称或公司名</string>
     <string name="atom_ui_hint_add_nav_domain">请输入您的公司域名，如qunar.com</string>
+    <string name="atom_ui_next_time">下次再说</string>
+    <string name="atom_ui_update_now">立即更新</string>
+    <string name="atom_ui_new_version_update">新版本更新</string>
+    <string name="atom_ui_exit_text">退出</string>
 
+
+    <string name="selector_folder_all_easy_photos">所有图片</string>
+
+    <string name="selector_folder_all_video_photo_easy_photos">图片和视频</string>
+
+    <string name="selector_folder_video_easy_photos">所有视频</string>
+
+    <string name="selector_easy_photos">选择</string>
+
+    <!--http://stackoverflow.com/questions/17502824/whats-wrong-with-this-format-string-->
+    <string name="selector_action_done_easy_photos">完成(%1$d/%2$d)</string>
+
+    <string name="selector_preview_easy_photos">预览</string>
+
+    <string name="selector_reach_max_hint_easy_photos">最多只能选择%d张图片或视频</string>
+
+    <string name="selector_reach_max_image_hint_easy_photos">最多只能选择%d张图片</string>
+
+    <string name="selector_reach_max_video_hint_easy_photos">最多只能选择%d个视频</string>
+
+    <string name="selector_mutual_exclusion_easy_photos">不能同时选择图片或视频</string>
+
+    <string name="msg_no_file_easy_photos">文件不存在或损坏！</string>
+
+    <string name="msg_no_camera_easy_photos">无法启动相机！</string>
+
+    <string name="camera_temp_file_error_easy_photos">图片错误</string>
+
+    <string name="selector_permission_error_easy_photos">权限错误，无法正常工作！</string>
+
+    <string name="selector_image_size_error_easy_photos">图片的宽度必须大于%1$d,高度必须大于%2$d</string>
+
+    <string name="selector_image_type_error_easy_photos">不支持此图片格式</string>
+
+    <string name="edit_easy_photos">编辑</string>
+
+    <string name="empty_easy_photos">清空</string>
+
+    <string name="no_photos_easy_photos">没有符合要求的图片，拍一张吧</string>
+
+    <string name="permissions_again_easy_photos">请点击并允许相关权限</string>
+
+    <string name="permissions_die_easy_photos">请点击并在设置中允许相关权限</string>
+
+    <string name="original_easy_photos">原图</string>
+
+    <string name="preview_current_number_easy_photos">%1$d/%2$d</string>
+
+    <string name="done_easy_photos">完成</string>
+
+    <string name="cancel_easy_photos">取消</string>
+
+    <string name="template_easy_photos">模板</string>
+
+    <string name="text_sticker_easy_photos">文字</string>
+
+    <string name="text_sticker_date_easy_photos">日期</string>
+
+    <string name="text_sticker_hint_easy_photos">双击编辑</string>
+
+    <string name="text_sticker_hint_name_easy_photos">自定义</string>
+
+    <string name="picture_selection_easy_photos">图片选择</string>
+
+    <string name="puzzle_easy_photos">拼一张</string>
+
+    <string name="select_puzzle_photos">请选择2 \- 9张照片</string>
+
+    <string name="gif_easy_photos">动图</string>
+
+    <string name="video_easy_photos">视频</string>
+
+    <string name="tap_take_photo">轻触拍照</string>
+
+    <string name="long_press_camera">长按摄像</string>
+
+    <string name="tap_take_photo_long_press_camera_split">，</string>
+    <string name="recording_too_short">录制时间过短</string>
+
+
+    <string name="tips_not_wifi">您当前正在使用移动网络，继续播放将消耗流量</string>
+    <string name="tips_not_wifi_confirm">继续播放</string>
+    <string name="tips_not_wifi_cancel">停止播放</string>
+    <string name="no_url">播放地址无效</string>
+    <string name="replay">重播</string>
+    <string name="click_to_restart">点击重试</string>
+    <string name="video_loading_failed">视频加载失败</string>
+
+    <string name="atom_ui_search_chat_history">搜索聊天记录</string>
+    <string name="atom_ui_post">发布</string>
+    <string name="atom_ui_share_moments">发布动态</string>
+    <string name="atom_ui_idea_this_moment">这一刻的想法...</string>
+    <string name="atom_ui_my_moments">我的帖子</string>
+    <string name="atom_ui_my_repliess">我的回复</string>
+    <string name="atom_ui_at_me">提到我</string>
+    <string name="atom_ui_my_identify">发布身份</string>
+    <string name="atom_ui_use_my_real_name">实名发布</string>
+    <string name="atom_ui_anonymous">匿名发布</string>
+    <string name="atom_ui_nickname">花名</string>
+    <string name="atom_ui_change_change">换一换</string>
+    <string name="atom_ui_notify_somebody">提醒谁看</string>
+    <string name="atom_ui_search_after_input">输入完成后点击搜索</string>
+    <string name="atom_ui_change_medal_wear">佩戴成功</string>
+    <string name="atom_ui_change_medal_upload">已卸下</string>
+    <string name="atom_ui_fail_enve_status">获取红包状态失败</string>
+    <string name="atom_ui_pay_fail">支付失败</string>
+    <string name="atom_ui_auth_fail">授权失败</string>
+    <string name="atom_ui_user_cancel">用户取消</string>
+    <string name="atom_ui_fail_to_open">打开失败</string>
+    <string name="atom_ui_success_to_bind_alipay">账户绑定成功</string>
+    <string name="atom_ui_has_not_bind_alipay">您未绑定支付宝,去绑定？</string>
+    <string name="atom_ui_send_red_packet_success">红包发送成功！</string>
 </resources>

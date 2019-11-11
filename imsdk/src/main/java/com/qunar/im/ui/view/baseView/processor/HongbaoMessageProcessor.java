@@ -3,6 +3,7 @@ package com.qunar.im.ui.view.baseView.processor;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,9 @@ import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
@@ -21,6 +24,7 @@ import com.qunar.im.ui.view.baseView.HongbaoView;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.ViewPool;
 import com.qunar.im.ui.view.bubbleLayout.BubbleLayout;
+import com.qunar.im.ui.view.dialog.OpenRedEnvelopDialog;
 import com.qunar.im.utils.QtalkStringUtils;
 
 /**
@@ -59,9 +63,8 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                         .append("&ck=" + CurrentPreference.getInstance().getVerifyKey());
             }
             HongbaoView view = ViewPool.getView(HongbaoView.class,item.getContext());
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            view.setOnClickListener((v) -> {
+                if(TextUtils.isEmpty(QtalkNavicationService.getInstance().getPayurl())){
                     Uri uri = Uri.parse(sb.toString());
                     Intent intent = new Intent(item.getContext(), QunarWebActvity.class);
                     intent.putExtra(Constants.BundleKey.WEB_FROM,
@@ -69,6 +72,8 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
                     intent.putExtra(QunarWebActvity.IS_HIDE_BAR,true);
                     intent.setData(uri);
                     item.getContext().startActivity(intent);
+                }else {
+                    new OpenRedEnvelopDialog(item.getContext(),content.rid,message.getConversationID(),message.getFromID()).open();
                 }
             });
             view.setTitle(content.typestr);
@@ -90,6 +95,6 @@ public class HongbaoMessageProcessor extends DefaultMessageProcessor {
 
     @Override
     public void processBubbleView(BubbleLayout bubbleLayout, IMessageItem item) {
-        bubbleLayout.setBubbleColor(ContextCompat.getColor(item.getContext(), R.color.atom_ui_button_dark_red_5800));
+        bubbleLayout.setBubbleAndStrokeColor(ContextCompat.getColor(item.getContext(), R.color.atom_ui_button_dark_red_5800),ContextCompat.getColor(item.getContext(), R.color.translate));
     }
 }

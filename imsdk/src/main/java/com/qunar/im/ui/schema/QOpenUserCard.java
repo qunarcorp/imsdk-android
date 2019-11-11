@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
+import com.qunar.im.ui.util.ReflectUtil;
 
 import java.util.Map;
 
@@ -17,15 +17,10 @@ public class QOpenUserCard implements QChatSchemaService {
     @Override
     public boolean startActivityAndNeedWating(final IMBaseActivity context, Map<String, String> map) {
 
-
-//        Intent intent = new Intent(context.getApplicationContext(), PbChatActivity.class);
-//        intent.putExtra(PbChatActivity.KEY_JID, map.get(PbChatActivity.KEY_JID));
-//        intent.putExtra(PbChatActivity.KEY_REAL_JID, map.get(PbChatActivity.KEY_REAL_JID));
-//        intent.putExtra(PbChatActivity.KEY_CHAT_TYPE, "0");
-//        intent.putExtra(PbChatActivity.KEY_IS_CHATROOM, false);
-//        context.startActivity(intent);
-
-        Intent intent = new Intent(context.getApplicationContext(), QtalkServiceRNActivity.class);
+        Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(context);
+        if(intent == null){
+            return false;
+        }
         intent.putExtra("UserId", map.get(PbChatActivity.KEY_JID));
         intent.putExtra("module", "UserCard");
         intent.putExtra("Version", "1.0.0");

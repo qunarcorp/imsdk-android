@@ -381,6 +381,11 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
     }
 
     @Override
+    public void showToast(String str) {
+
+    }
+
+    @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
@@ -389,4 +394,20 @@ public class WebMsgActivity extends QunarWebActvity implements IChatView {
     public String getRefenceString() {
         return null;
     }
+
+    @Override
+    public void payRedEnvelopChioce(String type,String rid) {
+
+    }
+
+    @Override
+    public void payOrder(String orderInfo) {
+
+    }
+
+    @Override
+    public void payAuth(String authInfo) {
+
+    }
 }
+

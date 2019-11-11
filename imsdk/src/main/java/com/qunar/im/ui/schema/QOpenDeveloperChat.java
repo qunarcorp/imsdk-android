@@ -1,8 +1,11 @@
 package com.qunar.im.ui.schema;
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
+import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.PbChatActivity;
 
@@ -22,19 +25,28 @@ public class QOpenDeveloperChat implements QChatSchemaService {
     @Override
     public boolean startActivityAndNeedWating(final IMBaseActivity context, Map<String, String> map) {
 
-
-         Random random = new Random();
-        int r = random.nextInt(devs.length);
-        if (r < 0) {
-            r = 0;
-        } else if (r >= devs.length) {
-            r = devs.length - 1;
+        if(GlobalConfigManager.isQchatPlat()){
+            Intent intent = new Intent(context.getApplication(), PbChatActivity.class);
+            intent.putExtra("jid", "qcxjfu@ejabhost1");
+            intent.putExtra("isFromChatRoom", false);
+            context.startActivity(intent);
+        }else if(GlobalConfigManager.isQtalkPlat()){
+            Random random = new Random();
+            int r = random.nextInt(devs.length);
+            if (r < 0) {
+                r = 0;
+            } else if (r >= devs.length) {
+                r = devs.length - 1;
+            }
+            Intent intent = new Intent(context.getApplication(), PbChatActivity.class);
+            String jid = devs[r];
+            intent.putExtra("jid", jid);
+            intent.putExtra("isFromChatRoom", false);
+            context.startActivity(intent);
+        }else {
+            Toast.makeText(context,context.getString(R.string.atom_ui_look_forward),Toast.LENGTH_SHORT).show();
         }
-        Intent intent = new Intent(context.getApplication(), PbChatActivity.class);
-        String jid = devs[r];
-        intent.putExtra("jid", jid);
-        intent.putExtra("isFromChatRoom", false);
-        context.startActivity(intent);
+
         return false;
     }
 }

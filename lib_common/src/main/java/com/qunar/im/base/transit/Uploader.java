@@ -2,6 +2,7 @@ package com.qunar.im.base.transit;
 
 import android.text.TextUtils;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.CheckFileResult;
 import com.qunar.im.base.jsonbean.UploadImageResult;
@@ -19,7 +20,6 @@ import com.qunar.im.core.services.QtalkNavicationService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
 
 /**
  * Created by xinbo.wang on 2015/3/10.
@@ -56,7 +56,7 @@ public class Uploader implements Runnable,Comparable<Uploader> {
                 }
                 else if(TextUtils.isEmpty(request.url)) {
 
-                    StringBuilder chkUrl = new StringBuilder(QtalkNavicationService.getInstance().getUploadCheckLink());
+                    final StringBuilder chkUrl = new StringBuilder(QtalkNavicationService.getInstance().getUploadCheckLink());
                     if(request.FileType==UploadImageRequest.FILE)
                     {
                         chkUrl.append("file");
@@ -86,33 +86,36 @@ public class Uploader implements Runnable,Comparable<Uploader> {
 
 
                                 String result = Protocol.parseStream(response);
+                                Logger.i("检查返回接口:"+result);
                                 com.orhanobut.logger.Logger.i("检查返回接口:"+result);
                                 CheckFileResult checkFileResult =
                                         JsonUtils.getGson().fromJson(result, CheckFileResult.class);
                                 if(checkFileResult==null||TextUtils.isEmpty(checkFileResult.data))
                                 {
+                                    Logger.i("检查失败:"+chkUrl);
                                     HttpUtils.getUploadImageUrl(file, request.url, fname, request);
                                 }
                                 else {
+                                    Logger.i("检查成功:"+chkUrl);
                                     UploadImageResult result1 = new UploadImageResult();
                                     result1.fileName = checkFileResult.data.
                                             substring(checkFileResult.data.lastIndexOf("/")+1);
                                     result1.httpUrl = checkFileResult.data.
                                             substring(checkFileResult.data.indexOf("file/"));
-                                    if(!result1.httpUrl.contains("?")) result1.httpUrl+="?";
-                                    if(!result1.httpUrl.contains("name="))
-                                    {
-                                        result1.httpUrl = result1.httpUrl +"&name="+fname+"&file="+
-                                                fname+"&fileName="+fname;
-                                        result1.fileName = fname;
-                                    }
-                                    else {
-                                        String name =
-                                                result1.httpUrl.substring(result1.httpUrl.indexOf("name=")+5);
-                                        result1.fileName = name;
-                                        result1.httpUrl =result1.httpUrl +"&file="+
-                                                name+"&fileName="+name;
-                                    }
+//                                    if(!result1.httpUrl.contains("?")) result1.httpUrl+="?";
+//                                    if(!result1.httpUrl.contains("name="))
+//                                    {
+//                                        result1.httpUrl = result1.httpUrl +"&name="+fname+"&file="+
+//                                                fname+"&fileName="+fname;
+//                                        result1.fileName = fname;
+//                                    }
+//                                    else {
+//                                        String name =
+//                                                result1.httpUrl.substring(result1.httpUrl.indexOf("name=")+5);
+//                                        result1.fileName = name;
+//                                        result1.httpUrl =result1.httpUrl +"&file="+
+//                                                name+"&fileName="+name;
+//                                    }
                                     request.requestComplete.onRequestComplete(request.id,result1);
                                 }
                             } catch (IOException e) {

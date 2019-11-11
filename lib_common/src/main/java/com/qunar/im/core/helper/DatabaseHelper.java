@@ -1,19 +1,22 @@
 package com.qunar.im.core.helper;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.common.ConversitionType;
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.other.CacheDataType;
 import com.qunar.im.base.structs.MessageStatus;
+
+import org.sqlite.database.sqlite.SQLiteDatabase;
+import org.sqlite.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by may on 2017/7/5.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 32;
+    private static final int DB_VERSION = 36;
     //    private static final int DB_VERSION = 29;
     private static final String DB_NAME = "data.dat";
     private String dbname = "";
@@ -46,7 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "        UserInfo              BLOB," +
                     "        LastUpdateTime        INTEGER," +
                     "        IncrementVersion      INTEGER," +
-                    "        ExtendedFlag          BLOB);";
+                    "        ExtendedFlag          BLOB," +
+                    "        isVisible             INTEGER DEFAULT 1)";
             sqLiteDatabase.execSQL(sql);
 
             sql = "CREATE INDEX IF NOT EXISTS IX_IM_USER_USERID ON " +
@@ -774,6 +778,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "primary key (searchKey, searchType))";
             sqLiteDatabase.execSQL(sql);
 
+            /**
+             * 新增勋章列表
+             */
+            sql = "CREATE TABLE IF NOT EXISTS IM_Medal_List (" +
+                    "medalId  INTEGER," +
+                    "medalName TEXT ," +
+                    "obtainCondition TEXT ," +
+                    "smallIcon TEXT," +
+                    "bigLightIcon TEXT," +
+                    "bigGrayIcon TEXT," +
+                    "bigLockIcon TEXT," +
+                    "status INTEGER," +
+                    "primary key (medalId))";
+            sqLiteDatabase.execSQL(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS IM_User_Status_Medal(" +
+                    "medalId  INTEGER," +
+                    "userId TEXT," +
+                    "host TEXT," +
+                    "medalStatus INTEGER," +
+                    "mappingVersion INTEGER ," +
+                    "updateTime TEXT ," +
+                    "primary key (medalId,userId))";
+            sqLiteDatabase.execSQL(sql);
+
 
         } catch (Exception e) {
             Logger.e(e, "create table failed");
@@ -1352,6 +1381,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "primary key (searchKey, searchType))";
                 sqLiteDatabase.execSQL(sql);
             }
+
+            /**
+             * 删除之前热线缓存
+             */
+            if(oldVersion < 33){
+                sql = "DELETE from IM_Cache_Data where key = '" + CacheDataType.HOTLINE_KEY + "' and type = " + CacheDataType.HOTLINE_TYPE;
+                sqLiteDatabase.execSQL(sql);
+            }
+
+            /**
+             * IM_User新增是否显示字段
+             */
+            if(oldVersion < 34){
+                sql = "ALTER TABLE IM_User ADD COLUMN isVisible INTEGER DEFAULT 1;";
+                sqLiteDatabase.execSQL(sql);
+
+            }
+
+            /**
+             * fix 系统消息点不开的bug
+             */
+            if(oldVersion < 35){
+                sql = "update IM_SessionList set ChatType = " + ConversitionType.MSG_TYPE_HEADLINE + " where XmppId = '" + Constants.SYS.SYSTEM_MESSAGE + "';";
+                sqLiteDatabase.execSQL(sql);
+            }
+
+            if (oldVersion < 36) {
+                /**
+                 * 新增勋章列表
+                 */
+                sql = "CREATE TABLE IF NOT EXISTS IM_Medal_List (" +
+                        "medalId  INTEGER," +
+                        "medalName TEXT ," +
+                        "obtainCondition TEXT ," +
+                        "smallIcon TEXT," +
+                        "bigLightIcon TEXT," +
+                        "bigGrayIcon TEXT," +
+                        "bigLockIcon TEXT," +
+                        "status INTEGER," +
+                        "primary key (medalId))";
+                sqLiteDatabase.execSQL(sql);
+
+//
+                /**
+                 * 新增勋章列表
+                 */
+
+
+                sql = "CREATE TABLE IF NOT EXISTS IM_User_Status_Medal(" +
+                        "medalId  INTEGER," +
+                        "userId TEXT," +
+                        "host TEXT," +
+                        "medalStatus INTEGER," +
+                        "mappingVersion INTEGER ," +
+                        "updateTime TEXT ," +
+                        "primary key (medalId,userId))";
+                sqLiteDatabase.execSQL(sql);
+            }
+
+
 
         }
     }

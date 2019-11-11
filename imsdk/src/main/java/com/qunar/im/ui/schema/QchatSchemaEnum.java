@@ -34,6 +34,7 @@ public enum QchatSchemaEnum {
     publicNumber(QPublicImpl.instance,"/publicNumber"),
     addFriend(QAddFriend.instance,"/addFriend"),
     openUserCard(QOpenUserCard.instance,"/openUserCard"),
+    openUserMedalPage(QOpenFlutterView.instance,"/openMedalPage"),
     openWebView(QOpenWebView.instance,"/openWebView"),
     openSearchActivity(QopenSearchActivity.instance,"/openSearchActivity"),
     openBigImage(QOpenBigImage.instance,"/openBigImage"),
@@ -54,8 +55,8 @@ public enum QchatSchemaEnum {
     openExternalRN(QopenExternalRNImpl.getInstance(),"/openExternalRN"),
     openMySetting(QOpenRnMySetting.getInstance(),"/openMyRnSetting"),
     openDomainSearch(QOpenDomainSearchImpl.getInstance(),"/openDomainSearch"),
-    openHeadLine(QOpenHeadLineSchemaImpl.getInstance(),"/headLine");
-
+    openHeadLine(QOpenHeadLineSchemaImpl.getInstance(),"/headLine"),
+    openNavConfig(QOpenNavConfigImpl.getInstance(),"/openNavConfig");
 
 
 

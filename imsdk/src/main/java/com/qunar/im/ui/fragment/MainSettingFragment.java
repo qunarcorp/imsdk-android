@@ -277,9 +277,6 @@ public class MainSettingFragment extends BaseFragment implements View.OnClickLis
             startActivity(intent);
             //代收
         } else if (i == R.id.collection) {
-//            xxx?u=lilulucas.li&d=qunar.com&navBarBg=208EF2
-//            String url = String.format("http://qt.qunar.com/package/pub/mainSite/touchs/mconfig.php"+"?u=%s&d=%s&navBarBg=208EF2",
-//                    CurrentPreference.getInstance().getUserid(),QtalkNavicationService.getInstance().getXmppdomain());
             String url = String.format(QtalkNavicationService.getInstance().getMconfig()+"?u=%s&d=%s&navBarBg=208EF2",
                     CurrentPreference.getInstance().getUserid(),QtalkNavicationService.getInstance().getXmppdomain());
             Intent intent = new Intent(getContext(), QunarWebActvity.class);
