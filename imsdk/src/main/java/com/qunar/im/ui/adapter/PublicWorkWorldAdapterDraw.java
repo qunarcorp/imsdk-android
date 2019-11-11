@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.media.DurationUtils;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.ImageItemWorkWorldItem;
@@ -61,6 +63,7 @@ import com.qunar.im.ui.activity.WorkWorldDetailsActivity;
 import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.ui.util.ProfileUtils;
+import com.qunar.im.ui.util.videoPlayUtil.VideoPlayUtil;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.WorkWorldLinkTouchMovementMethod;
 import com.qunar.im.ui.view.WorkWorldSpannableTextView;
@@ -89,6 +92,7 @@ import java.util.UUID;
 
 import static com.qunar.im.base.structs.MessageType.image;
 import static com.qunar.im.base.structs.MessageType.link;
+import static com.qunar.im.base.structs.MessageType.video;
 import static com.qunar.im.ui.activity.WorkWorldDetailsActivity.WORK_WORLD_DETAILS_ITEM;
 
 public class PublicWorkWorldAdapterDraw {
@@ -164,6 +168,7 @@ public class PublicWorkWorldAdapterDraw {
                                     case link:
                                         ((TextView) helper.getView(R.id.text_item)).setText(contentData1.getLinkContent().title);
                                         helper.getView(R.id.img_item).setVisibility(View.GONE);
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
                                         helper.getView(R.id.text_item).setVisibility(View.VISIBLE);
                                         break;
                                     case image:
@@ -174,12 +179,22 @@ public class PublicWorkWorldAdapterDraw {
                                         ProfileUtils.displaySquareByImageSrc(mActivity, url, (ImageView) helper.getView(R.id.img_item),
                                                 mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp));
                                         helper.getView(R.id.img_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
+                                        helper.getView(R.id.text_item).setVisibility(View.GONE);
+                                        break;
+                                    case video:
+                                        String videoImage = contentData1.getVideoContent().ThumbUrl;
+                                        ProfileUtils.displaySquareByImageSrc(mActivity, videoImage, (ImageView) helper.getView(R.id.img_item),
+                                                mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp));
+                                        helper.getView(R.id.img_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.VISIBLE);
                                         helper.getView(R.id.text_item).setVisibility(View.GONE);
                                         break;
                                     default:
                                         ((TextView) helper.getView(R.id.text_item)).setText(contentData1.getContent());
                                         helper.getView(R.id.img_item).setVisibility(View.GONE);
                                         helper.getView(R.id.text_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
                                         break;
                                 }
                             }
@@ -375,9 +390,9 @@ public class PublicWorkWorldAdapterDraw {
 //                    @Override
 //                    public void run() {
                                 if (nick != null) {
-                                    ((TextView) helper.getView(R.id.comment_item_text)).setText(Html.fromHtml("<font color='#999999'>回复</font> <font color='#59918A'>" + nick.getName() + "</font> " + content));
+                                    ((TextView) helper.getView(R.id.comment_item_text)).setText(Html.fromHtml("<font color='#999999'>回复</font> <font color='#4dc1b5'>" + nick.getName() + "</font> " + content));
                                 } else {
-                                    ((TextView) helper.getView(R.id.comment_item_text)).setText(Html.fromHtml("<font color='#999999'>回复</font> <font color='#59918A'>" + nick.getXmppId() + "</font> " + content));
+                                    ((TextView) helper.getView(R.id.comment_item_text)).setText(Html.fromHtml("<font color='#999999'>回复</font> <font color='#4dc1b5'>" + nick.getXmppId() + "</font> " + content));
                                 }
 //                    }
 //                });
@@ -768,6 +783,7 @@ public class PublicWorkWorldAdapterDraw {
         switch (contentData.getType()) {
             case link:
             case image:
+            case video:
 //                if (TextUtils.isEmpty(exstr)) {
 ////            str = contentData.getContent();
 //                    sb.append(contentData.getContent());
@@ -814,10 +830,46 @@ public class PublicWorkWorldAdapterDraw {
 
         //初始情况全部控件不展示
         helper.getView(R.id.img_rc).setVisibility(View.GONE);
+        helper.getView(R.id.re_video_ll).setVisibility(View.GONE);
         helper.getView(R.id.re_link_ll).setVisibility(View.GONE);
 
         try {
             switch (contentData.getType()) {
+                case video:
+                    helper.getView(R.id.re_video_ll).setVisibility(View.VISIBLE);
+                    final String thumbUrl = QtalkStringUtils.addFilePathDomain(contentData.getVideoContent().ThumbUrl, true);
+                    final String fileUrl = QtalkStringUtils.addFilePathDomain(contentData.getVideoContent().FileUrl, true);
+                    final String fileSize = contentData.getVideoContent().FileSize;
+                    final String downLoadPath = contentData.getVideoContent().FileUrl;
+                    final String fileName = contentData.getVideoContent().FileName;
+                    final String localPath = contentData.getVideoContent().LocalVideoOutPath;
+                    final boolean onlyDownLoad = contentData.getVideoContent().newVideo;
+                    ProfileUtils.displayLinkImgByImageSrc(mActivity, thumbUrl,mActivity.getDrawable(R.drawable.atom_ui_link_default), (ImageView) helper.getView(R.id.re_video_image),
+                            Utils.dp2px(mActivity,144), Utils.dp2px(mActivity,144));
+//                    ProfileUtils.displayGravatarByImageSrc(mActivity,thumbUrl ,   (ImageView)helper.getView(R.id.re_video_image),
+//                                       mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image));
+                    ((TextView)helper.getView(R.id.re_video_time)).setText(DurationUtils.format(Integer.parseInt(contentData.getVideoContent().Duration)));
+                    helper.getView(R.id.re_video_image).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(!TextUtils.isEmpty(localPath)&&new File(localPath).exists()){
+                                VideoPlayUtil.conAndWwOpen((FragmentActivity) mActivity, localPath, fileName, thumbUrl, downLoadPath, !onlyDownLoad, fileSize);
+                            }else {
+
+                                VideoPlayUtil.conAndWwOpen((FragmentActivity) mActivity, fileUrl, fileName, thumbUrl, downLoadPath, !onlyDownLoad, fileSize);
+                            }
+//                            Intent intent = new Intent(mActivity, VideoPlayActivity.class);
+//                            intent.putExtra(VideoPlayActivity.PLAYPATH,fileUrl);
+//                            intent.putExtra(VideoPlayActivity.PLAYTHUMB,thumbUrl);
+//                            intent.putExtra(VideoPlayActivity.DOWNLOADPATH,downLoadPath);
+//                            intent.putExtra(VideoPlayActivity.SHOWSHARE,true);
+//                            intent.putExtra(VideoPlayActivity.FILENAME,fileName);
+//                            mActivity.startActivity(intent);
+                        }
+                    });
+//                    ProfileUtils.displayLinkImgByImageSrc(mActivity, contentData.getLinkContent().img,mActivity.getDrawable(R.drawable.atom_ui_link_default), (ImageView) helper.getView(R.id.re_link_icon),
+//                            imgsize, imgsize);
+                    break;
                 case link:
                     helper.getView(R.id.re_link_ll).setVisibility(View.VISIBLE);
                     ((TextView) helper.getView(R.id.re_link_title)).setText(contentData.getLinkContent().title);

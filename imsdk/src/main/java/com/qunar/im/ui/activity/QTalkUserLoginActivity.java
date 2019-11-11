@@ -19,7 +19,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,6 +35,7 @@ import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.base.util.NetworkUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -46,6 +46,11 @@ import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.presenter.ILoginPresenter;
+import com.qunar.im.ui.presenter.factory.LoginFactory;
+import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenter;
+import com.qunar.im.ui.presenter.views.ILoginView;
+import com.qunar.im.ui.sdk.QIMSdk;
 import com.qunar.im.ui.presenter.ILoginPresenter;
 import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenter;
 import com.qunar.im.ui.presenter.views.ILoginView;
@@ -66,7 +71,7 @@ import java.util.Map;
 /**
  * 公共域登陆
  */
-public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnClickListener, PermissionCallback,
+public class QTalkUserLoginActivity extends IMBaseLoginActivity implements View.OnClickListener, PermissionCallback,
         CompoundButton.OnCheckedChangeListener,ILoginView{
 
     private static final int LOGIN_TYPE = 10002;
@@ -79,9 +84,9 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
 
     private CheckBox qtuer_remember_me_cbx, qtuser_auto_login_cbx;
     private EditText qtuser_username_et, qtuser_password_et;
-    private TextView qtuser_company_et,atom_ui_forget_pwd,atom_ui_nav_name,atom_ui_eula_text,atom_ui_to_c_regiest;
+    private TextView qtuser_company_et,atom_ui_forget_pwd,atom_ui_nav_name,atom_ui_eula_text,atom_ui_to_c_regiest,text_login;
     private TextView qtuser_tv_version,regiest_txt;
-    private ImageButton qtuser_iv_nav_config;
+    private TextView qtuser_iv_nav_config;
     private LinearLayout qtuser_login_password_container,atom_ui_nav_layouot,atom_ui_nav_config_add_scan_layout;
     private ILoginPresenter loginPresenter;
     private Button qtuer_btnlogin;
@@ -89,6 +94,8 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
     private FrameLayout qt_login_layout;
     private RelativeLayout title_bar;
     private LinearLayout qtuser_company_layout;
+
+    private View atom_ui_user_line,atom_ui_password_line;
 
     private CheckBox atom_ui_eula_checkbox;
 
@@ -129,8 +136,6 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
             }
             isSwitchAccount = intent.getBooleanExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT,false);
         }
-        loginPresenter = new QTalkPublicLoginPresenter();
-        loginPresenter.setLoginView(this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(R.string.atom_ui_tip_dialog_prompt);
@@ -189,9 +194,14 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         qtuser_tv_version = (TextView) findViewById(R.id.qtuser_tv_version);
         qtuer_btnlogin = (Button) findViewById(R.id.qtuer_btnlogin);
         qtuser_img_show_pwd = (ImageView) findViewById(R.id.qtuser_img_show_pwd);
-        qtuser_iv_nav_config = (ImageButton) findViewById(R.id.qtuser_iv_nav_config);
+        qtuser_iv_nav_config = (TextView) findViewById(R.id.qtuser_iv_nav_config);
         qt_login_layout = (FrameLayout) findViewById(R.id.qt_login_layout);
         atom_ui_eula_checkbox = (CheckBox) findViewById(R.id.atom_ui_eula_checkbox);
+        text_login = (TextView) findViewById(R.id.text_login);
+        boolean isEulaChecked = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(Constants.Preferences.EULA_CHECK_TAG,false);
+        if(isEulaChecked) {
+            atom_ui_eula_checkbox.setChecked(true);
+        }
         qtuer_btnlogin.setOnClickListener(this);
         qtuser_tv_version.setOnClickListener(this);
         qtuser_iv_nav_config.setOnClickListener(this);
@@ -266,15 +276,38 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
                 startActivity(intent);
             }
         });
+
+        atom_ui_user_line = findViewById(R.id.atom_ui_user_line);
+        atom_ui_password_line = findViewById(R.id.atom_ui_password_line);
+//        qtuser_iv_nav_config.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+//        qtuser_iv_nav_config.getPaint().setAntiAlias(true);//抗锯齿
         if(GlobalConfigManager.isStartalkPlat()){
             title_bar.setVisibility(View.VISIBLE);
             atom_ui_forget_pwd.setVisibility(View.VISIBLE);
             atom_ui_nav_layouot.setVisibility(View.VISIBLE);
+            regiest_txt.setVisibility(View.VISIBLE);
+            qtuser_iv_nav_config.setVisibility(View.GONE);
         }else {
             title_bar.setVisibility(View.GONE);
             atom_ui_forget_pwd.setVisibility(View.GONE);
             atom_ui_nav_layouot.setVisibility(View.GONE);
+            regiest_txt.setVisibility(View.GONE);
+            qtuser_iv_nav_config.setVisibility(View.VISIBLE);
         }
+
+        qtuser_username_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                atom_ui_user_line.setBackgroundColor(hasFocus ? getResources().getColor(R.color.atom_ui_button_primary_color) : getResources().getColor(R.color.atom_ui_light_gray_ee));
+            }
+        });
+
+        qtuser_password_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                atom_ui_password_line.setBackgroundColor(hasFocus ? getResources().getColor(R.color.atom_ui_button_primary_color) : getResources().getColor(R.color.atom_ui_light_gray_ee));
+            }
+        });
 
         String company = DataUtils.getInstance(this).getPreferences(Constants.Preferences.COMPANY,"");
         freshCompany(company);
@@ -294,7 +327,11 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
             public void onClick(View view) {
                 Intent intent = new Intent(QTalkUserLoginActivity.this,QunarWebActvity.class);
                 intent.putExtra(QunarWebActvity.IS_HIDE_BAR, false);
-                intent.setData(Uri.parse("file:///android_asset/eula.html"));
+                if(NetworkUtils.isConnection(QunarIMApp.getContext()) != NetworkUtils.ConnectStatus.connected) {
+                    intent.setData(Uri.parse("file:///android_asset/eula.html"));
+                } else {
+                    intent.setData(Uri.parse("https://im.qunar.com/termsuse/#/"));
+                }
                 startActivity(intent);
             }
         });
@@ -318,6 +355,8 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         });
         freshRightTitle(QtalkNavicationService.getInstance().isToC());
 
+        bindCheckUpdateView(text_login);
+
     }
 
 
@@ -329,6 +368,9 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
         freshRightTitle(QtalkNavicationService.getInstance().isToC());
         if(!TextUtils.isEmpty(NavConfigUtils.getCurrentNavDomain()))
             freshCompany(NavConfigUtils.getCurrentNavDomain());
+
+        loginPresenter = LoginFactory.createLoginPresenter();
+        loginPresenter.setLoginView(this);
     }
 
     @Override
@@ -408,11 +450,17 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
                         LOGIN_REQUIRE);
     }
 
+    private boolean isTestAccount(){
+        return "".equals(qtuser_username_et.getText().toString());
+    }
+
     void loginListener() {
         LogUtil.d("performance", "login start:" + System.currentTimeMillis() + "");
-        if(TextUtils.isEmpty(NavConfigUtils.getCurrentNavDomain())){
+        if(!isTestAccount() && TextUtils.isEmpty(NavConfigUtils.getCurrentNavDomain())){
             showConfigNavDialog();
             return;
+        }else if(isTestAccount()){
+            QIMSdk.getInstance().setNavigationUrl(QtalkNavicationService.NAV_CONFIG_PUBLIC_DEFAULT + "?c=froyomu.com");
         }
         if(!atom_ui_eula_checkbox.isChecked()){
             Toast.makeText(this, "请勾选同意条款！", Toast.LENGTH_SHORT).show();
@@ -433,6 +481,8 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
 //            Toast.makeText(this, R.string.atom_ui_login_compnay_hint, Toast.LENGTH_SHORT).show();
 //            return;
 //        }
+        //保存使用条款勾选状态
+        DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.EULA_CHECK_TAG + "_" + QtalkNavicationService.getInstance().getXmppdomain(),atom_ui_eula_checkbox.isChecked());
         qtuser_username_et.clearFocus();
         qtuser_password_et.clearFocus();
         progressDialog.show();
@@ -615,7 +665,7 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
                     freshCompany(company);
                     freshRightTitle(QtalkNavicationService.getInstance().isToC());
                 }
-                if(!LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
+                if(LoginType.SMSLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
                     startActivity(new Intent(QTalkUserLoginActivity.this, LoginActivity.class));
                     finish();
                 }
@@ -652,16 +702,18 @@ public class QTalkUserLoginActivity extends IMBaseActivity implements View.OnCli
                             }
                         }
                     }
+                }else {
+                    if(LoginType.SMSLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
+                        startActivity(new Intent(QTalkUserLoginActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             }
-        } else if(resultCode == QtalkUserHostActivity.HOST_RESPONSE_CODE && bundle != null){
-//            String company = bundle.getStringExtra(Constants.BundleKey.RESULT_HOST_NAME);
-//            freshCompany(company);
-//
-//            navName = company;
-//            navUrl = bundle.getStringExtra(Constants.BundleKey.NAV_ADD_URL);
-//
-//            getServerConfig(navName,navUrl);
+        } else{
+            if(LoginType.SMSLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
+                startActivity(new Intent(QTalkUserLoginActivity.this, LoginActivity.class));
+                finish();
+            }
         }
     }
 

@@ -9,5 +9,8 @@
     <external-path
         name="my_download"
         path="Download"/>
+    <root-path
+        name="root_path"
+        path="."/>
 
 </paths>

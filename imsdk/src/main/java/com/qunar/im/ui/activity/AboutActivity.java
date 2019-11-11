@@ -25,7 +25,7 @@ import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 
 /**
- * 关于
+ * 关于类
  */
 public class AboutActivity extends SwipeBackActivity implements View.OnClickListener, PermissionCallback {
 
@@ -68,7 +68,9 @@ public class AboutActivity extends SwipeBackActivity implements View.OnClickList
             @Override
             public void onClick(View v) {
                 count++;
-                if(count>8){
+                toast(String.valueOf(count));
+                if(count>5){
+                    toast("导航已更新！");
                     DispatchHelper.sync("updateNav", new Runnable() {
                         @Override
                         public void run() {

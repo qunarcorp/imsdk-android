@@ -419,13 +419,13 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
                             emojiView = getSimpleDraweeView(context,
                                     QtalkStringUtils.addFilePathDomain("/file/v2/emo/d/oe/"
                                             + shortcut
-                                            + "/org"), null, 128, 128, -1);
+                                            + "/org", true), null, 128, 128, -1);
                         } else {
                             emojiView = getSimpleDraweeView(context,
                                     QtalkStringUtils.addFilePathDomain("/file/v2/emo/d/e/"
                                             + pkgId
                                             + "/"
-                                            + shortcut + "/org"), null, 128, 128, -1);
+                                            + shortcut + "/org", true), null, 128, 128, -1);
                         }
                         emojiView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         parent.addView(emojiView);
@@ -550,7 +550,7 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
 
         if (Utils.isGifUrl(url)) {
             Glide.with(context)
-                    .load(url.startsWith("file:///")?url:new MyGlideUrl(url))
+                    .load(url.startsWith("http")?new MyGlideUrl(url):url)
                     .asGif()
                     .toBytes()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)//缓存全尺寸
@@ -581,7 +581,7 @@ public class TextMessageProcessor extends DefaultMessageProcessor {
         } else {
             //glide 3+
             Glide.with(context)                             //配置上下文
-                    .load(url.startsWith("file:///")?url:new MyGlideUrl(url))      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
+                    .load(url.startsWith("http")?new MyGlideUrl(url):url)      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
                     .centerCrop()
                     .error(R.drawable.atom_ui_ic_default_image)           //设置错误图片
                     .placeholder(R.drawable.atom_ui_ic_default_image)     //设置占位图片

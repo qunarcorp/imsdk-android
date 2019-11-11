@@ -66,6 +66,7 @@ import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.UserConfigData;
+import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.EncryptMessageType;
 import com.qunar.im.base.structs.FuncButtonDesc;
@@ -78,12 +79,9 @@ import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.DateTimeUtils;
-import com.qunar.im.permission.PermissionCallback;
-import com.qunar.im.permission.PermissionDispatcher;
-import com.qunar.im.permission.PermissionUtils;
-import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
+import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
@@ -94,12 +92,17 @@ import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
+import com.qunar.im.core.manager.IMPayManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.log.LogConstans;
 import com.qunar.im.log.LogService;
 import com.qunar.im.log.QLog;
 import com.qunar.im.other.CacheDataType;
+import com.qunar.im.permission.PermissionCallback;
+import com.qunar.im.permission.PermissionDispatcher;
+import com.qunar.im.permission.PermissionUtils;
+import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
@@ -110,12 +113,11 @@ import com.qunar.im.ui.adapter.ExtendChatViewAdapter;
 import com.qunar.im.ui.broadcastreceivers.ShareReceiver;
 import com.qunar.im.ui.imagepicker.ImageDataSourceForRecommend;
 import com.qunar.im.ui.imagepicker.ImagePicker;
-import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;
 import com.qunar.im.ui.presenter.IAddEmojiconPresenter;
 import com.qunar.im.ui.presenter.IChatingPresenter;
 import com.qunar.im.ui.presenter.ICloudRecordPresenter;
 import com.qunar.im.ui.presenter.IDailyMindPresenter;
-import com.qunar.im.ui.presenter.IP2pRTC;
+import com.qunar.im.ui.presenter.IPGroupRtc;
 import com.qunar.im.ui.presenter.ISendLocationPresenter;
 import com.qunar.im.ui.presenter.IShakeMessagePresenter;
 import com.qunar.im.ui.presenter.IShowNickPresenter;
@@ -125,17 +127,22 @@ import com.qunar.im.ui.presenter.impl.SendLocationPresenter;
 import com.qunar.im.ui.presenter.impl.SingleSessionPresenter;
 import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.ui.presenter.views.IShowNickView;
+import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.ui.util.GenerateRandomPassword;
+import com.qunar.im.ui.util.ImageSelectUtil;
 import com.qunar.im.ui.util.ProfileUtils;
+import com.qunar.im.ui.util.ReflectUtil;
 import com.qunar.im.ui.util.WaterMarkTextUtil;
 import com.qunar.im.ui.util.atmanager.AtManager;
+import com.qunar.im.ui.util.easyphoto.easyphotos.callback.SelectCallback;
+import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
+import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.RecommendPhotoPop;
 import com.qunar.im.ui.view.TipsFloatView;
 import com.qunar.im.ui.view.baseView.ViewPool;
 import com.qunar.im.ui.view.camera.CameraActivity;
-import com.qunar.im.ui.view.chatExtFunc.FuncHanlder;
 import com.qunar.im.ui.view.chatExtFunc.FuncItem;
 import com.qunar.im.ui.view.chatExtFunc.FuncMap;
 import com.qunar.im.ui.view.chatExtFunc.OperationView;
@@ -151,15 +158,12 @@ import com.qunar.im.ui.view.kpswitch.widget.KPSwitchRootLinearLayout;
 import com.qunar.im.ui.view.medias.play.MediaPlayerImpl;
 import com.qunar.im.ui.view.medias.record.RecordView;
 import com.qunar.im.ui.view.quickreply.QuickReplyLayout;
-import com.qunar.im.ui.view.quickreply.QuickReplyListView;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.CapabilityUtil;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.im.utils.QuickReplyUtils;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
-import com.qunar.im.base.protocol.NativeApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -169,7 +173,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -226,6 +229,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     protected final int SELECT_VIDEO = PermissionDispatcher.getRequestCode();
     protected final int REAL_VIDEO = PermissionDispatcher.getRequestCode();
     protected final int REAL_AUDIO = PermissionDispatcher.getRequestCode();
+    protected final int REAL_GROUP_VIDEO = PermissionDispatcher.getRequestCode();
     //连接核心类
     private ConnectionUtil connectionUtil;
     //获取intent数据中所用key
@@ -318,16 +322,16 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
 
     //界面View
-    protected LinearLayout edit_region, linearlayout_tab2, outter_msg_prompt, atom_bottom_more,atom_ui_refence_layout;
+    protected LinearLayout edit_region, linearlayout_tab2, outter_msg_prompt, atom_bottom_more, atom_ui_refence_layout;
     protected OperationView linearlayout_tab;
     protected PullToRefreshListView chat_region;
     protected KPSwitchPanelLinearLayout mPanelRoot;
     //listview速度监听
 //    private VelocityTracker velocityTracker = null;
     //发送，新消息，按住语音说话，键盘切换，语音切换，表情，功能加号
-    protected TextView send_btn, new_msg_prompt, voice_prompt, outter_msg, no_prompt, close_prompt,atom_ui_refence_text;
+    protected TextView send_btn, new_msg_prompt, voice_prompt, outter_msg, no_prompt, close_prompt, atom_ui_refence_text;
     protected ImageView atom_ui_refence_close;
-    protected IconView left_btn,tv_options_btn,emotion_btn,voice_switch_btn;
+    protected IconView left_btn, tv_options_btn, emotion_btn, voice_switch_btn;
     protected ImageView shareMessgeBtn, deleteMessageBtn, collectMsgBtn, emailMsgBtn;
     protected EmojiconEditText edit_msg;
     protected RelativeLayout atom_bottom_frame;
@@ -384,6 +388,70 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             loadMoreHistory();
         }
 
+    };
+
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override //文本改变前
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            mAtManager.beforeTextChanged(s, start, count, after);
+            //这一套操作的意思不明确 应该为在删除状态时,不让@界面出现
+            if (count > 0 && after == 0) {
+                canShowAtActivity = false;
+            }
+        }
+
+        @Override //文本改变
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //如果当前文本没有值
+            if (TextUtils.isEmpty(s) || s.toString().trim().length() == 0) {
+                //设置发送按钮不可见
+                send_btn.setVisibility(View.GONE);
+                //设置更多功能按钮可见
+                tv_options_btn.setVisibility(View.VISIBLE);
+                return;
+            }
+            mAtManager.onTextChanged(s, start, before, count);
+            //设置更多功能按钮不可见
+            tv_options_btn.setVisibility(View.GONE);
+            //设置发送按钮可见
+            send_btn.setVisibility(View.VISIBLE);
+        }
+
+        @Override //文本改变后
+        public void afterTextChanged(Editable s) {
+            //判断是不是群聊
+            if (isFromChatRoom) {
+                mAtManager.afterTextChanged(s);
+                //根据当前是删除了字段或者新写字段来判断是否开启@界面
+                if (!canShowAtActivity) {
+                    canShowAtActivity = true;
+                    return;
+                }
+                //根据当前光标判断 并且还是"@" 才可开启AtListActivity
+                //里面应该相关群成员列表
+//                    int atIndex = edit_msg.getSelectionStart();
+//                    if (atIndex > 0) {
+//                        String at = s.subSequence(atIndex - 1, atIndex).toString();
+//                        if (at.equals("@")) {
+//                            Intent intent = new Intent(PbChatActivity.this, AtListActivity.class);
+//                            intent.putExtra("jid", jid);
+//                            startActivityForResult(intent, AT_MEMBER);
+//                        }
+//                    }
+            } else {
+                //todo:向对方发送当前正在输入的状态
+                //判断字段长度大于0  防止刚发送消息后,清空msg时调用了本方法
+                if (s.length() > 0) {
+                    chatingPresenter.sendTypingStatus();
+                }
+
+//                    //consult消息发送到的是一个无效的虚拟帐号 所以暂时不做typing
+//                    if (TextUtils.isEmpty(realUser)) {
+//
+////                        chatingPresenter.sendTypingStatus();
+//                    }
+            }
+        }
     };
 
 
@@ -454,6 +522,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         super.onResume();
         //push清理
         QPushClient.clearNotification(this);
+        Logger.i("分享:isFirstInit" + isFirstInit);
         if (isFirstInit) {
             clearMessage();
             isFirstInit = false;
@@ -472,9 +541,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     }
 
-    public void setReadState(){
+    public void setReadState() {
         //通知服务器消息已读 临时解决 先异步处理
-        DispatchHelper.Async("sendAllRead",false, new Runnable() {
+        DispatchHelper.Async("sendAllRead", false, new Runnable() {
             @Override
             public void run() {
                 //home回来未读文件设置为已读
@@ -484,9 +553,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                     } else {
 //                        if ("4".equals(chatType) || "5".equals(chatType)) {
                         if ("5".equals(chatType)) {
-                            connectionUtil.sendSingleAllRead(jid,realJid, MessageStatus.STATUS_SINGLE_READED + "");
+                            connectionUtil.sendSingleAllRead(jid, realJid, MessageStatus.STATUS_SINGLE_READED + "");
                         } else {
-                            connectionUtil.sendSingleAllRead(jid,jid, MessageStatus.STATUS_SINGLE_READED + "");
+                            connectionUtil.sendSingleAllRead(jid, jid, MessageStatus.STATUS_SINGLE_READED + "");
                         }
                     }
                 }
@@ -521,8 +590,8 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         ViewPool.clear();
         getHandler().removeCallbacks(typingShow);
 
-        if(keyBordOnGlobalLayoutListener != null){
-            KeyboardUtil.detach(this,keyBordOnGlobalLayoutListener);
+        if (keyBordOnGlobalLayoutListener != null) {
+            KeyboardUtil.detach(this, keyBordOnGlobalLayoutListener);
         }
         CommonConfig.isPlayVoice = false;
         releaseResource();
@@ -541,7 +610,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     /**
      * 页面finish后释放相关资源
      */
-    private void releaseResource(){
+    private void releaseResource() {
 //        if (faceView != null) faceView.removeAllViews();
 //        if (quickReplyLayout != null) quickReplyLayout.removeAllViews();
         if (pbChatViewAdapter != null) pbChatViewAdapter.releaseViews();
@@ -609,8 +678,8 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             if (extras.containsKey(KEY_UNREAD_MSG_COUNT)) {
                 unreadMsgCount.set(extras.getInt(KEY_UNREAD_MSG_COUNT, -1));
             }
-            if(extras.containsKey(KEY_IS_REMIND)){
-                isRemind = extras.getBoolean(KEY_IS_REMIND,true);
+            if (extras.containsKey(KEY_IS_REMIND)) {
+                isRemind = extras.getBoolean(KEY_IS_REMIND, true);
             }
             //针对反馈发送日志文件
             if (extras.containsKey("sendLogFile")) {
@@ -663,7 +732,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         if (atMap != null) {
             List<AtInfo> atMsgOwn = atMap.get(jid);
             if (!ListUtil.isEmpty(atMsgOwn)) {
-                for(AtInfo atInfo : atMsgOwn){
+                for (AtInfo atInfo : atMsgOwn) {
                     String msgid = atInfo.msgId;
                     setIndexByMsgid(msgid);
                 }
@@ -789,7 +858,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 //            AndroidBug5497Workaround.assistActivity(this);
         }
 
-        if (isRobot()) {
+        if (ConnectionUtil.getInstance().isHotline(jid)) {
             getQuestionList();
         }
     }
@@ -800,7 +869,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         map.put("tag", jid);
         map.put("to", CurrentPreference.getInstance().getUserid());
         map.put("tohost", QtalkNavicationService.getInstance().getXmppdomain());
-        HttpUtil.robotSessionPost(QtalkNavicationService.getInstance().getJavaUrl() + "/warning/nck/sendtips", map, new ProtocolCallback.UnitCallback<Boolean>() {
+//
+        String url = QtalkNavicationService.getInstance().getHttpUrl() + "/robot/qtalk_robot/sendtips?rexian_id=" + QtalkStringUtils.parseId(jid) + "&m_from=" + jid + "&m_to=" + CurrentPreference.getInstance().getPreferenceUserId();
+        HttpUtil.getUrl(url, new ProtocolCallback.UnitCallback<Boolean>() {
             @Override
             public void onCompleted(Boolean aBoolean) {
 
@@ -965,57 +1036,38 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             }
         });
 
-        pbChatViewAdapter.setRightSendFailureClickHandler(new ChatViewAdapter.RightSendFailureClickHandler() {
-            @Override
-            public void resendMessage(final IMMessage message) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(PbChatActivity.this);
-                builder.setTitle(R.string.atom_ui_title_resend_message);
+        pbChatViewAdapter.setRightSendFailureClickHandler(message -> {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(PbChatActivity.this);
+            builder.setTitle(R.string.atom_ui_title_resend_message);
 
-                builder.setPositiveButton(R.string.atom_ui_menu_resend, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        selectedMessages.clear();
-                        selectedMessages.add(message);
-                        chatingPresenter.resendMessage();
-                        selectedMessages.clear();
-                    }
-                });
+            builder.setPositiveButton(R.string.atom_ui_menu_resend, (dialog, which) -> {
+                dialog.dismiss();
+                selectedMessages.clear();
+                selectedMessages.add(message);
+                chatingPresenter.resendMessage();
+                selectedMessages.clear();
+            });
 
-                builder.setNegativeButton(R.string.atom_ui_common_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
-            }
+            builder.setNegativeButton(R.string.atom_ui_common_cancel, (dialog, which) -> dialog.dismiss());
+            builder.create().show();
         });
         //如果当前为群组,设置头像长按监听@方法
         if (isFromChatRoom) {
-            pbChatViewAdapter.setLeftImageLongClickHandler(new ChatViewAdapter.LeftImageLongClickHandler() {
+            pbChatViewAdapter.setLeftImageLongClickHandler(from -> connectionUtil.getUserCard(from, new IMLogicManager.NickCallBack() {
                 @Override
-                public void onLeftImageLongClickEvent(final String from) {
-                    connectionUtil.getUserCard(from, new IMLogicManager.NickCallBack() {
-                        @Override
-                        public void onNickCallBack(final Nick nick) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    edit_msg.requestFocus();
-                                    if (nick != null && !TextUtils.isEmpty(nick.getName())) {
-                                        mAtManager.insertAitMemberInner(from, nick.getName(), edit_msg.getSelectionStart(), true);
+                public void onNickCallBack(final Nick nick) {
+                    runOnUiThread(() -> {
+                        edit_msg.requestFocus();
+                        if (nick != null && !TextUtils.isEmpty(nick.getName())) {
+                            mAtManager.insertAitMemberInner(from, nick.getName(), edit_msg.getSelectionStart(), true);
 //                                        edit_msg.setText(edit_msg.getText() + "@" + nick.getName() + " ");
-                                    } else {
+                        } else {
 //                                        edit_msg.setText(edit_msg.getText() + "@" + from + " ");
-                                        mAtManager.insertAitMemberInner(from, from, edit_msg.getSelectionStart(), true);
-                                    }
-                                }
-                            });
+                            mAtManager.insertAitMemberInner(from, from, edit_msg.getSelectionStart(), true);
                         }
-                    }, false, false);
+                    });
                 }
-            });
+            }, false, false));
         }
 
 //        }
@@ -1080,37 +1132,27 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
 //        myActionBar.getRightImageBtn().setVisibility(View.VISIBLE);
         //判断当前是群聊还是单聊
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         if (isFromChatRoom) {
             //设置群聊应显示的图标
             setActionBarRightIcon(R.string.atom_ui_new_more);
-            connectionUtil.getMucCard(getToId(), new IMLogicManager.NickCallBack() {
-                @Override
-                public void onNickCallBack(final Nick nick) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(isFinishing()){
-                                return;
-                            }
-                            if (nick != null) {
-                                if (TextUtils.isEmpty(nick.getMark())) {
-                                    setActionBarTitle(nick.getName());
-                                } else {
-                                    setActionBarTitle(nick.getMark());
-                                }
-
-                            } else {
-                                setActionBarTitle(getToId());
-                            }
-                        }
-                    });
-
-
+            connectionUtil.getMucCard(getToId(), nick -> runOnUiThread(() -> {
+                if (isFinishing()) {
+                    return;
                 }
-            }, false, false);
+                if (nick != null) {
+                    if (TextUtils.isEmpty(nick.getMark())) {
+                        setActionBarTitle(nick.getName());
+                    } else {
+                        setActionBarTitle(nick.getMark());
+                    }
+
+                } else {
+                    setActionBarTitle(getToId());
+                }
+            }), false, false);
 
 
         } else {
@@ -1122,46 +1164,34 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             } else {
                 str = getRealJid();
             }
-            connectionUtil.getUserCard(str, new IMLogicManager.NickCallBack() {
-                @Override
-                public void onNickCallBack(final Nick nick) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(isFinishing()){
-                                return;
-                            }
-                            if (nick == null) {
-                                setActionBarTitle(getToId());
-                            } else {
-                                if (TextUtils.isEmpty(nick.getMark())) {
-                                    setActionBarTitle(nick.getName());
-                                } else {
-                                    setActionBarTitle(nick.getMark());
-                                }
-                                setActionBarMood(Html.fromHtml(nick.getMood()).toString());
-
-                            }
-                        }
-                    });
+            connectionUtil.getUserCard(str, nick -> runOnUiThread(() -> {
+                if (isFinishing()) {
+                    return;
+                }
+                if (nick == null) {
+                    setActionBarTitle(getToId());
+                } else {
+                    if (TextUtils.isEmpty(nick.getMark())) {
+                        setActionBarTitle(nick.getName());
+                    } else {
+                        setActionBarTitle(nick.getMark());
+                    }
+                    setActionBarMood(Html.fromHtml(nick.getMood()).toString());
 
                 }
-            }, false, false);
+            }), false, false);
             if ("5".equals(chatType) &&
-                    ((CommonConfig.isQtalk && connectionUtil.isHotlineMerchant(jid))
-                            || !CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants())) {
+                    (/*(CommonConfig.isQtalk && connectionUtil.isHotlineMerchant(jid))
+                            || */!CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants())) {
                 setActionBarRightSpecial(R.string.atom_ui_new_hungup);
-                setActionBarRightIconSpecialClick(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Logger.i("客服点击挂断  ");
-                        showConfirmHungupDialog();
-                    }
+                setActionBarRightIconSpecialClick(v -> {
+                    Logger.i("客服点击挂断  ");
+                    showConfirmHungupDialog();
                 });
             }
         }
 
-        if(!isRemind){
+        if (!isRemind) {
             setActionBarTitleRightImage(R.drawable.atom_ui_no_remind);
         }
 
@@ -1180,40 +1210,37 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
         //设置单机事件,开启了一个Activity,开启单人或群组设置
         //初始化时,传入当前聊天会话jid 和 是否是群组
-        setActionBarRightIconClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataUtils.getInstance(PbChatActivity.this).putPreferences("rightRed",false);
-                if (isFromChatRoom) {
-                    if (QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNGroupCardView) {
-                        NativeApi.openGroupChatInfo(jid);
-                    } else {
-                        Intent intent = new Intent(PbChatActivity.this,
-                                ChatroomMembersActivity.class);
-                        intent.putExtra(KEY_JID, jid);
-                        intent.putExtra(KEY_REAL_JID, realJid);
-                        intent.putExtra(KEY_CHAT_TYPE, chatType);
-                        intent.putExtra(KEY_IS_CHATROOM, isFromChatRoom);
-                        startActivityForResult(intent, UPDATE_NICK);
-                    }
+        setActionBarRightIconClick(v -> {
+            DataUtils.getInstance(PbChatActivity.this).putPreferences("rightRed", false);
+            if (isFromChatRoom) {
+                if (QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNGroupCardView) {
+                    NativeApi.openGroupChatInfo(jid);
                 } else {
+                    Intent intent = new Intent(PbChatActivity.this,
+                            ChatroomMembersActivity.class);
+                    intent.putExtra(KEY_JID, jid);
+                    intent.putExtra(KEY_REAL_JID, realJid);
+                    intent.putExtra(KEY_CHAT_TYPE, chatType);
+                    intent.putExtra(KEY_IS_CHATROOM, isFromChatRoom);
+                    startActivityForResult(intent, UPDATE_NICK);
+                }
+            } else {
 
-                    if (QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNUserCardView) {
-                        NativeApi.openSingleChatInfo(jid, realJid);
-                    } else {
-                        Intent intent = new Intent(PbChatActivity.this,
-                                ChatroomMembersActivity.class);
-                        intent.putExtra(KEY_JID, jid);
-                        intent.putExtra(KEY_REAL_JID, realJid);
-                        intent.putExtra(KEY_CHAT_TYPE, chatType);
-                        intent.putExtra(KEY_IS_CHATROOM, isFromChatRoom);
-                        startActivityForResult(intent, UPDATE_NICK);
-                    }
-
+                if (QtalkNavicationService.getInstance().getNavConfigResult().RNAndroidAbility.RNUserCardView) {
+                    NativeApi.openSingleChatInfo(jid, realJid);
+                } else {
+                    Intent intent = new Intent(PbChatActivity.this,
+                            ChatroomMembersActivity.class);
+                    intent.putExtra(KEY_JID, jid);
+                    intent.putExtra(KEY_REAL_JID, realJid);
+                    intent.putExtra(KEY_CHAT_TYPE, chatType);
+                    intent.putExtra(KEY_IS_CHATROOM, isFromChatRoom);
+                    startActivityForResult(intent, UPDATE_NICK);
                 }
 
-
             }
+
+
         });
 //        setActionBarRightSpecial(R.string.atom_ui_new_search);
 //        setActionBarRightIconSpecialClick(new View.OnClickListener() {
@@ -1250,82 +1277,19 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         //edtext清空焦点
         edit_msg.clearFocus();
         //edtext 设置 当输入完文字,点击软键盘上回车触发
-        edit_msg.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //当id等于发送时
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    //发送消息
-                    sendMessage();
-                    return true;//事件消耗
-                }
-                return false;
+        edit_msg.setOnEditorActionListener((v, actionId, event) -> {
+            //当id等于发送时
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                //发送消息
+                sendMessage();
+                return true;//事件消耗
             }
+            return false;
         });
         //添加文字改变事件
-        edit_msg.addTextChangedListener(new TextWatcher() {
-            @Override //文本改变前
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                mAtManager.beforeTextChanged(s, start, count, after);
-                //这一套操作的意思不明确 应该为在删除状态时,不让@界面出现
-                if (count > 0 && after == 0) {
-                    canShowAtActivity = false;
-                }
-            }
-
-            @Override //文本改变
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //如果当前文本没有值
-                if (TextUtils.isEmpty(s) || s.toString().trim().length() == 0) {
-                    //设置发送按钮不可见
-                    send_btn.setVisibility(View.GONE);
-                    //设置更多功能按钮可见
-                    tv_options_btn.setVisibility(View.VISIBLE);
-                    return;
-                }
-                mAtManager.onTextChanged(s, start, before, count);
-                //设置更多功能按钮不可见
-                tv_options_btn.setVisibility(View.GONE);
-                //设置发送按钮可见
-                send_btn.setVisibility(View.VISIBLE);
-            }
-
-            @Override //文本改变后
-            public void afterTextChanged(Editable s) {
-                //判断是不是群聊
-                if (isFromChatRoom) {
-                    mAtManager.afterTextChanged(s);
-                    //根据当前是删除了字段或者新写字段来判断是否开启@界面
-                    if (!canShowAtActivity) {
-                        canShowAtActivity = true;
-                        return;
-                    }
-                    //根据当前光标判断 并且还是"@" 才可开启AtListActivity
-                    //里面应该相关群成员列表
-//                    int atIndex = edit_msg.getSelectionStart();
-//                    if (atIndex > 0) {
-//                        String at = s.subSequence(atIndex - 1, atIndex).toString();
-//                        if (at.equals("@")) {
-//                            Intent intent = new Intent(PbChatActivity.this, AtListActivity.class);
-//                            intent.putExtra("jid", jid);
-//                            startActivityForResult(intent, AT_MEMBER);
-//                        }
-//                    }
-                } else {
-                    //todo:向对方发送当前正在输入的状态
-                    //判断字段长度大于0  防止刚发送消息后,清空msg时调用了本方法
-                    if (s.length() > 0) {
-                        chatingPresenter.sendTypingStatus();
-                    }
-
-//                    //consult消息发送到的是一个无效的虚拟帐号 所以暂时不做typing
-//                    if (TextUtils.isEmpty(realUser)) {
-//
-////                        chatingPresenter.sendTypingStatus();
-//                    }
-                }
-            }
-        });
+//        edit_msg.removeTextChangedListener();
+        edit_msg.removeTextChangedListener(textWatcher);
+        edit_msg.addTextChangedListener(textWatcher);
         //todo: 方法下部还有很多东西,先进行文本阶段测试,暂时不考虑
         //todo: 开始继续
         //初始化功能列表
@@ -1384,15 +1348,12 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             faceView.setOthersOnEmoricionsClickListener(new ExtentionEmoticionsClickListener());
             faceView.setAddFavoriteEmoticonClickListener(new OnAddFavoriteEmoticonClickListener());
             faceView.setFavoriteEmojiconOnClickListener(new FavoriteEmoticonOnClickListener());
-            faceView.setDeleteImageViewOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int keyCode = KeyEvent.KEYCODE_DEL;  //这里是退格键s
-                    KeyEvent keyEventDown = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
-                    KeyEvent keyEventUp = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
-                    edit_msg.onKeyDown(keyCode, keyEventDown);
-                    edit_msg.onKeyUp(keyCode, keyEventUp);
-                }
+            faceView.setDeleteImageViewOnClickListener(v -> {
+                int keyCode = KeyEvent.KEYCODE_DEL;  //这里是退格键s
+                KeyEvent keyEventDown = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+                KeyEvent keyEventUp = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
+                edit_msg.onKeyDown(keyCode, keyEventDown);
+                edit_msg.onKeyUp(keyCode, keyEventUp);
             });
             faceView.initFaceGridView(EmotionUtils.getExtEmotionsMap(this, false), EmotionUtils.getDefaultEmotion(this), getFavoriteMap(this));
         }
@@ -1410,13 +1371,10 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             return;
         }
         if (!quickReplyLayout.isInitialize()) {
-            quickReplyLayout.setOnQuickReplyClickListenter(new QuickReplyListView.OnQuickRepliesClickListener() {
-                @Override
-                public void onQuickReplyClick(String content) {
-                    edit_msg.setText(content);
-                    chatingPresenter.sendMsg();
-                    edit_msg.setText("");
-                }
+            quickReplyLayout.setOnQuickReplyClickListenter(content -> {
+                edit_msg.setText(content);
+                chatingPresenter.sendMsg();
+                edit_msg.setText("");
             });
             quickReplyLayout.initFaceGridView(QuickReplyUtils.quickRepliesMerchant);
         }
@@ -1437,14 +1395,14 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         EmoticonEntity entity = new EmoticonEntity();
         entity.id = FAVORITE_ID;
         map.pusEntity(entity.id, entity);
-        try{
+        try {
             for (UserConfigData f : list) {
                 EmoticonEntity tmpEntity = new EmoticonEntity();
                 tmpEntity.fileFiexd = f.getValue();
                 tmpEntity.fileOrg = f.getValue();
                 map.pusEntity(f.getSubkey(), tmpEntity);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Logger.e("getFavoriteMap:" + e.getMessage());
         }
         //收藏表情默认 8*2
@@ -1465,12 +1423,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         item.id = FuncMap.PHOTO;
         item.icon = "res:///" + R.drawable.atom_ui_sharemore_picture;
         item.textId = getString(R.string.atom_ui_function_photo);
-        item.hanlder = new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                checkShowGallary();
-                saveChatWindowActLog(FuncMap.PHOTO,"相册","会话详情页-扩展键盘");
-            }
+        item.hanlder = () -> {
+            checkShowGallary();
+            saveChatWindowActLog(FuncMap.PHOTO,"相册","会话详情页-扩展键盘");
         };
         funcMap.regisger(item);
 
@@ -1478,12 +1433,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         item.id = FuncMap.CAMERA;
         item.icon = "res:///" + R.drawable.atom_ui_sharemore_camera;
         item.textId = getString(R.string.atom_ui_user_camera);
-        item.hanlder =  new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                checkShowCamera();
-                saveChatWindowActLog(FuncMap.CAMERA,"拍照","会话详情页-扩展键盘");
-            }
+        item.hanlder = () -> {
+            checkShowCamera();
+            saveChatWindowActLog(FuncMap.CAMERA,"拍照","会话详情页-扩展键盘");
         };
         funcMap.regisger(item);
         if (CurrentPreference.getInstance().isMerchants() && GlobalConfigManager.isQchatPlat()
@@ -1492,12 +1444,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             item.id = FuncMap.QUICKREPLY;
             item.icon = "res:///" + R.drawable.atom_ui_quickreply;
             item.textId = getString(R.string.atom_ui_function_quickreply);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    quickReplySwitch();
-                    saveChatWindowActLog(FuncMap.QUICKREPLY,"快捷回复","会话详情页-扩展键盘");
-                }
+            item.hanlder = () -> {
+                quickReplySwitch();
+                saveChatWindowActLog(FuncMap.QUICKREPLY,"快捷回复","会话详情页-扩展键盘");
             };
             funcMap.regisger(item);
         }
@@ -1506,16 +1455,13 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         item.id = FuncMap.FILE;
         item.icon = "res:///" + R.drawable.atom_ui_sharemore_file;
         item.textId = getString(R.string.atom_ui_function_file);
-        item.hanlder = new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                PermissionDispatcher.
-                        requestPermissionWithCheck(PbChatActivity.this, new int[]{
-                                        PermissionDispatcher.REQUEST_WRITE_EXTERNAL_STORAGE,
-                                        PermissionDispatcher.REQUEST_READ_EXTERNAL_STORAGE}, PbChatActivity.this,
-                                READ_FILE);
-                saveChatWindowActLog(FuncMap.FILE,"文件","会话详情页-扩展键盘");
-            }
+        item.hanlder = () -> {
+            PermissionDispatcher.
+                    requestPermissionWithCheck(PbChatActivity.this, new int[]{
+                                    PermissionDispatcher.REQUEST_WRITE_EXTERNAL_STORAGE,
+                                    PermissionDispatcher.REQUEST_READ_EXTERNAL_STORAGE}, PbChatActivity.this,
+                            READ_FILE);
+            saveChatWindowActLog(FuncMap.FILE,"文件","会话详情页-扩展键盘");
         };
         funcMap.regisger(item);
 
@@ -1523,16 +1469,13 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         item.id = FuncMap.LOCATION;
         item.icon = "res:///" + R.drawable.atom_ui_ic_sharelocation;
         item.textId = getString(R.string.atom_ui_function_location);
-        item.hanlder = new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                PermissionDispatcher.
-                        requestPermissionWithCheck(PbChatActivity.this, new int[]{
-                                        PermissionDispatcher.REQUEST_ACCESS_COARSE_LOCATION,
-                                        PermissionDispatcher.REQUEST_ACCESS_FINE_LOCATION}, PbChatActivity.this,
-                                READ_LOCATION);
-                saveChatWindowActLog(FuncMap.LOCATION,"地理位置","会话详情页-扩展键盘");
-            }
+        item.hanlder = () -> {
+            PermissionDispatcher.
+                    requestPermissionWithCheck(PbChatActivity.this, new int[]{
+                                    PermissionDispatcher.REQUEST_ACCESS_COARSE_LOCATION,
+                                    PermissionDispatcher.REQUEST_ACCESS_FINE_LOCATION}, PbChatActivity.this,
+                            READ_LOCATION);
+            saveChatWindowActLog(FuncMap.LOCATION,"地理位置","会话详情页-扩展键盘");
         };
         funcMap.regisger(item);
 
@@ -1540,12 +1483,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         item.id = FuncMap.VIDEO;
         item.icon = "res:///" + R.drawable.atom_ui_icon_send_video;
         item.textId = getString(R.string.atom_ui_function_video);
-        item.hanlder = new FuncHanlder() {
-            @Override
-            public void handelClick() {
-                chooseVideoSource();
-                saveChatWindowActLog(FuncMap.VIDEO,"视频文件","会话详情页-扩展键盘");
-            }
+        item.hanlder = () -> {
+            chooseVideoSource();
+            saveChatWindowActLog(FuncMap.VIDEO,"视频文件","会话详情页-扩展键盘");
         };
         funcMap.regisger(item);
         //阅后即焚
@@ -1576,55 +1516,47 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 //        }
 
         //qchat会话转移功能 是客服单聊且chattype是5
-        if (GlobalConfigManager.isQchatPlat() &&
-                CurrentPreference.getInstance().isMerchants() &&
-                !isFromChatRoom &&
+        if (!isFromChatRoom &&
                 String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER).equals(chatType)) {
             item = new FuncItem();
             item.id = FuncMap.TRANSFER;
             item.icon = "res:///" + R.drawable.atom_ui_transfer;
             item.textId = getString(R.string.atom_ui_button_transfer_tip);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    transferConversation();
-                    saveChatWindowActLog(FuncMap.TRANSFER,"会话转移","会话详情页-扩展键盘");
-                }
+            item.hanlder = () -> {
+                transferConversation();
+                saveChatWindowActLog(FuncMap.TRANSFER,"会话转移","会话详情页-扩展键盘");
             };
             funcMap.regisger(item);
         }
-        if(!GlobalConfigManager.isStartalkPlat()){
-            //红包
-            item = new FuncItem();
-            item.id = FuncMap.HONGBAO;
-            item.icon = "res:///" + R.drawable.atom_ui_ic_lucky_money;
-            item.textId = getString(R.string.atom_ui_textbar_button_red_package);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    giveLuckyMoney(false);
-                    saveChatWindowActLog(FuncMap.HONGBAO,"红包","会话详情页-扩展键盘");
-                }
-            };
-            funcMap.regisger(item);
-        }
+//        if (!GlobalConfigManager.isStartalkPlat()) {
+//
+//        }
+        //红包
+        item = new FuncItem();
+        item.id = FuncMap.HONGBAO;
+        item.icon = "res:///" + R.drawable.atom_ui_ic_lucky_money;
+        item.textId = getString(R.string.atom_ui_textbar_button_red_package);
+        item.hanlder = () -> {
+            giveLuckyMoney(false);
+//                chooseRtcType();
+            saveChatWindowActLog(FuncMap.HONGBAO,"红包","会话详情页-扩展键盘");
+        };
+        funcMap.regisger(item);
 
-        if(!GlobalConfigManager.isStartalkPlat()){
-            //aa支付
-            if (!TextUtils.isEmpty(QtalkNavicationService.AA_PAY_URL) && CommonConfig.isQtalk) {
-                item = new FuncItem();
-                item.id = FuncMap.AA;
-                item.icon = "res:///" + R.drawable.atom_ui_ic_aa_pay_black;
-                item.textId = getString(R.string.atom_ui_textbar_button_aa);
-                item.hanlder = new FuncHanlder() {
-                    @Override
-                    public void handelClick() {
-                        giveLuckyMoney(true);
-                        saveChatWindowActLog(FuncMap.AA,"AA付款","会话详情页-扩展键盘");
-                    }
-                };
-                funcMap.regisger(item);
-            }
+//        if (!GlobalConfigManager.isStartalkPlat()) {
+//
+//        }
+        //aa支付
+        if (!TextUtils.isEmpty(QtalkNavicationService.AA_PAY_URL) && CommonConfig.isQtalk) {
+            item = new FuncItem();
+            item.id = FuncMap.AA;
+            item.icon = "res:///" + R.drawable.atom_ui_ic_aa_pay_black;
+            item.textId = getString(R.string.atom_ui_textbar_button_aa);
+            item.hanlder = () -> {
+                giveLuckyMoney(true);
+                saveChatWindowActLog(FuncMap.AA,"AA付款","会话详情页-扩展键盘");
+            };
+            funcMap.regisger(item);
         }
 
         //窗口抖动
@@ -1633,12 +1565,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             item.id = FuncMap.Shock;
             item.icon = "res:///" + R.drawable.atom_ui_icon_shake_window;
             item.textId = getString(R.string.atom_ui_textbar_button_shake);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    shake();
-                    saveChatWindowActLog(FuncMap.Shock,"窗口抖动","会话详情页-扩展键盘");
-                }
+            item.hanlder = () -> {
+                shake();
+                saveChatWindowActLog(FuncMap.Shock,"窗口抖动","会话详情页-扩展键盘");
             };
             funcMap.regisger(item);
         }
@@ -1648,12 +1577,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             item.id = FuncMap.VIDEO_CALL;
             item.icon = "res:///" + R.drawable.atom_ui_video;
             item.textId = getString(R.string.atom_ui_function_video_call);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    chooseRtcType();
-                    saveChatWindowActLog(FuncMap.VIDEO_CALL,"视频聊天","会话详情页-扩展键盘");
-                }
+            item.hanlder = () -> {
+                chooseRtcType();
+                saveChatWindowActLog(FuncMap.VIDEO_CALL,"视频聊天","会话详情页-扩展键盘");
             };
             funcMap.regisger(item);
         }
@@ -1663,13 +1589,10 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             item.id = FuncMap.ENCRYPT;
             item.icon = "res:///" + R.drawable.atom_ui_box_key;
             item.textId = getString(R.string.atom_ui_function_encrypt);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    if (!isSnapMsg) {//阅后即焚不能开启加密
-                        encryptConversation();
-                        saveChatWindowActLog(FuncMap.ENCRYPT,"加密会话","会话详情页-扩展键盘");
-                    }
+            item.hanlder = () -> {
+                if (!isSnapMsg) {//阅后即焚不能开启加密
+                    encryptConversation();
+                    saveChatWindowActLog(FuncMap.ENCRYPT,"加密会话","会话详情页-扩展键盘");
                 }
             };
             funcMap.regisger(item);
@@ -1680,13 +1603,10 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             item.id = FuncMap.ACTIVITY;
             item.icon = "res:///" + R.drawable.atom_ui_send_activity;
             item.textId = getString(R.string.atom_ui_send_activity);
-            item.hanlder = new FuncHanlder() {
-                @Override
-                public void handelClick() {
-                    sendActivity();
-                    saveChatWindowActLog(FuncMap.ACTIVITY,"活动","会话详情页-扩展键盘");
+            item.hanlder = () -> {
+                sendActivity();
+                saveChatWindowActLog(FuncMap.ACTIVITY,"活动","会话详情页-扩展键盘");
 
-                }
             };
             funcMap.regisger(item);
         }
@@ -1741,66 +1661,68 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                             item.hanlder = defaultFunMap.getItem(item.id).hanlder;
                         }
                     } else if (funcButtonDesc.linkType == 1) {
-                        item.hanlder = new FuncHanlder() {
-                            @Override
-                            public void handelClick() {
-                                if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey()))
-                                    return;
-                                StringBuilder builder = new StringBuilder(funcButtonDesc.linkurl);
-                                if (builder.indexOf("?") > -1) {
-                                    builder.append("&");
-                                } else {
-                                    builder.append("?");
-                                }
-                                builder.append("username=");
-                                builder.append(URLEncoder.encode(CurrentPreference.getInstance().getUserid()));
-                                builder.append("&rk=");
-                                builder.append(URLEncoder.encode(CurrentPreference.getInstance().getVerifyKey()));
-                                if (isFromChatRoom) {
-                                    builder.append("&group_id=");
-                                } else {
-                                    builder.append("&user_id=");
-                                }
-                                builder.append(URLEncoder.encode(getRealJid()));
-                                builder.append("&company=");
-                                builder.append(URLEncoder.encode(QtalkNavicationService.COMPANY));
-                                builder.append("&domain=");
-                                builder.append(URLEncoder.encode(QtalkNavicationService.getInstance().getXmppdomain()));
-                                builder.append("&q_d=");
-                                builder.append(URLEncoder.encode(QtalkNavicationService.getInstance().getXmppdomain()));
-                                Intent intent = new Intent(PbChatActivity.this, QunarWebActvity.class);
-                                intent.setData(Uri.parse(builder.toString()));
-                                intent.putExtra(WebMsgActivity.IS_HIDE_BAR, true);
-                                startActivity(intent);
-                                saveChatWindowActLog(item.id,item.textId,"会话详情页-扩展键盘");
+                        item.hanlder = () -> {
+                            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey()))
+                                return;
+                            StringBuilder builder = new StringBuilder(funcButtonDesc.linkurl);
+                            if (builder.indexOf("?") > -1) {
+                                builder.append("&");
+                            } else {
+                                builder.append("?");
                             }
+                            builder.append("username=");
+                            builder.append(CurrentPreference.getInstance().getUserid());
+                            builder.append("&rk=");
+                            builder.append(CurrentPreference.getInstance().getVerifyKey());
+                            if(chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER))){
+                                builder.append("&qchatid=5&type=consult");
+                                builder.append("&user_id=");
+                                builder.append(getToId());
+                                builder.append("&realfrom=");
+                                builder.append(CurrentPreference.getInstance().getPreferenceUserId());
+                                builder.append("&realto=");
+                                builder.append(getRealJid());
+                            }else if(chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_GROUP))){
+                                builder.append("&group_id=");
+                                builder.append(getToId());
+                                builder.append("&type=groupchat");
+                            }else {
+                                builder.append("&user_id=");
+                                builder.append(getToId());
+                                builder.append("&type=chat");
+                            }
+                            builder.append("&company=");
+                            builder.append(QtalkNavicationService.COMPANY);
+                            builder.append("&domain=");
+                            builder.append(QtalkNavicationService.getInstance().getXmppdomain());
+                            builder.append("&q_d=");
+                            builder.append(QtalkNavicationService.getInstance().getXmppdomain());
+                            Intent intent = new Intent(PbChatActivity.this, QunarWebActvity.class);
+                            intent.setData(Uri.parse(builder.toString()));
+                            intent.putExtra(WebMsgActivity.IS_HIDE_BAR, true);
+                            startActivity(intent);
+                            saveChatWindowActLog(item.id,item.textId,"会话详情页-扩展键盘");
                         };
                     } else if (funcButtonDesc.linkType == 2) {//request
-                        item.hanlder = new FuncHanlder() {
-                            @Override
-                            public void handelClick() {
-                                try {
-                                    JSONObject requestBody = new JSONObject();
-                                    requestBody.put("from", getFromId());
-                                    requestBody.put("to", getToId());
-                                    requestBody.put(KEY_REAL_JID, getRealJid());
-                                    requestBody.put(KEY_CHAT_TYPE, chatType);
-                                    HttpUtil.sendCapabilityRequest(funcButtonDesc.linkurl, requestBody);
-                                } catch (JSONException e) {
-
-                                }
-                                saveChatWindowActLog(item.id,item.textId,"会话详情页-扩展键盘");
+                        item.hanlder = () -> {
+                            try {
+                                JSONObject requestBody = new JSONObject();
+                                requestBody.put("from", getFromId());
+                                requestBody.put("to", getToId());
+                                requestBody.put(KEY_REAL_JID, getRealJid());
+                                requestBody.put(KEY_CHAT_TYPE, chatType);
+                                HttpUtil.sendCapabilityRequest(funcButtonDesc.linkurl, requestBody);
+                            } catch (JSONException e) {
+                                Logger.i(e.getMessage());
                             }
+                            saveChatWindowActLog(item.id,item.textId,"会话详情页-扩展键盘");
                         };
                     } else if (funcButtonDesc.linkType == 4) {//schema
-                        item.hanlder = new FuncHanlder() {
-                            @Override
-                            public void handelClick() {
-                                Intent i = new Intent("android.intent.action.VIEW", Uri.parse(funcButtonDesc.linkurl));
-                                startActivity(i);
-                            }
+                        item.hanlder = () -> {
+                            Intent i = new Intent("android.intent.action.VIEW", Uri.parse(funcButtonDesc.linkurl));
+                            startActivity(i);
                         };
-                        saveChatWindowActLog(item.id,item.textId,"会话详情页-扩展键盘");
+                        saveChatWindowActLog(item.id, item.textId, "会话详情页-扩展键盘");
                     }
                     funcMap.regisger(item);
                 }
@@ -1865,7 +1787,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         edit_msg.setText("");
 
         //处理引用消息
-        if(!TextUtils.isEmpty(refrenceString)){
+        if (!TextUtils.isEmpty(refrenceString)) {
             atom_ui_refence_text.setText("");
             atom_ui_refence_layout.setVisibility(View.GONE);
             refrenceString = "";
@@ -1877,7 +1799,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         return edit_msg.getText().toString();
     }
 
-    public String getRefenceString(){
+    public String getRefenceString() {
         return refrenceString;
     }
 
@@ -1975,13 +1897,10 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         atom_ui_refence_layout = (LinearLayout) findViewById(R.id.atom_ui_refence_layout);
         atom_ui_refence_text = (TextView) findViewById(R.id.atom_ui_refence_text);
         atom_ui_refence_close = (ImageView) findViewById(R.id.atom_ui_refence_close);
-        atom_ui_refence_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refrenceString = "";
-                atom_ui_refence_text.setText("");
-                atom_ui_refence_layout.setVisibility(View.GONE);
-            }
+        atom_ui_refence_close.setOnClickListener((view)-> {
+            refrenceString = "";
+            atom_ui_refence_text.setText("");
+            atom_ui_refence_layout.setVisibility(View.GONE);
         });
 
         shareMessgeBtn.setOnClickListener(this);
@@ -2123,49 +2042,46 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     @Override
     public void setNewMsg2DialogueRegion(final IMMessage newMsg) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(isFinishing()){
-                    return;
-                }
-                if (unreadMsgCount.intValue() > 0) {
-                    unreadMsgCount.incrementAndGet();
-                }
-                //向列表中添加一条新数据
-                pbChatViewAdapter.addNewMsg(newMsg);
-                //当前为普通消息时,记录新消息
-                if (newMsg.getDirection() == IMMessage.DIRECTION_RECV || newMsg.getDirection() == IMMessage.DIRECTION_SEND) {
-                    newMsgCount++;
-                }
-                //当前listview中有消息展示
-                if (chat_region.getRefreshableView().getCount() > 0) {
-                    //如果消息时自己发出
-                    if (newMsg.getDirection() == IMMessage.DIRECTION_SEND ||
-                            //如果输入框获得焦点
-                            edit_msg.isFocused() ||
-                            //如果更多功能View显示时
-                            (linearlayout_tab != null && linearlayout_tab.getVisibility() == View.VISIBLE) ||
-                            //如果现在展示的数据下滑了5条
-                            chat_region.getRefreshableView().getLastVisiblePosition() >= chat_region.getRefreshableView().getCount() - 5) {
-                        //把当前listview拉倒最底部
+        runOnUiThread(() -> {
+            if(isFinishing()){
+                return;
+            }
+            if (unreadMsgCount.intValue() > 0) {
+                unreadMsgCount.incrementAndGet();
+            }
+            //向列表中添加一条新数据
+            pbChatViewAdapter.addNewMsg(newMsg);
+            //当前为普通消息时,记录新消息
+            if (newMsg.getDirection() == IMMessage.DIRECTION_RECV || newMsg.getDirection() == IMMessage.DIRECTION_SEND) {
+                newMsgCount++;
+            }
+            //当前listview中有消息展示
+            if (chat_region.getRefreshableView().getCount() > 0) {
+                //如果消息时自己发出
+                if (newMsg.getDirection() == IMMessage.DIRECTION_SEND ||
+                        //如果输入框获得焦点
+                        edit_msg.isFocused() ||
+                        //如果更多功能View显示时
+                        (linearlayout_tab != null && linearlayout_tab.getVisibility() == View.VISIBLE) ||
+                        //如果现在展示的数据下滑了5条
+                        chat_region.getRefreshableView().getLastVisiblePosition() >= chat_region.getRefreshableView().getCount() - 5) {
+                    //把当前listview拉倒最底部
 //                        chat_region.getRefreshableView().setSelection(chat_region.getRefreshableView().getCount() - 1);
-                        chat_region.getRefreshableView().smoothScrollToPosition(chat_region.getRefreshableView().getCount() - 1);
-                        //提示新消息textview 设置为不可见
-                        new_msg_prompt.setVisibility(View.GONE);
-                        //把新消息数据重设为0
-                        newMsgCount = 0;
-                    } else {
-                        //如果当前是普通消息,即可以显示在左侧或右侧
-                        if (newMsg.getDirection() == IMMessage.DIRECTION_RECV || newMsg.getDirection() == IMMessage.DIRECTION_SEND) {
-                            //拼接 收到新消息几条 类似字段
+                    chat_region.getRefreshableView().smoothScrollToPosition(chat_region.getRefreshableView().getCount() - 1);
+                    //提示新消息textview 设置为不可见
+                    new_msg_prompt.setVisibility(View.GONE);
+                    //把新消息数据重设为0
+                    newMsgCount = 0;
+                } else {
+                    //如果当前是普通消息,即可以显示在左侧或右侧
+                    if (newMsg.getDirection() == IMMessage.DIRECTION_RECV || newMsg.getDirection() == IMMessage.DIRECTION_SEND) {
+                        //拼接 收到新消息几条 类似字段
 //                            showUnreadView(newMsgCount,true);
-                            //提示新消息textview设置为文本
-                            String msg = MessageFormat.format(getString(R.string.atom_ui_tip_new_msg_prompt), newMsgCount);
-                            new_msg_prompt.setText(msg);
-                            //提示新消息textview设置为可见
-                            new_msg_prompt.setVisibility(View.VISIBLE);
-                        }
+                        //提示新消息textview设置为文本
+                        String msg = MessageFormat.format(getString(R.string.atom_ui_tip_new_msg_prompt), newMsgCount);
+                        new_msg_prompt.setText(msg);
+                        //提示新消息textview设置为可见
+                        new_msg_prompt.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -2175,12 +2091,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     @Override
     public void showUnReadCount(final int count) {
         if (!isFinishing())
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setActionBarLeftCount(count);
-                }
-            });
+            runOnUiThread(() -> setActionBarLeftCount(count));
 
     }
 
@@ -2262,12 +2173,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void refreshDataset() {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                pbChatViewAdapter.notifyDataSetChanged();
-            }
-        });
+        getHandler().post(() -> pbChatViewAdapter.notifyDataSetChanged());
     }
 
     @Override
@@ -2277,32 +2183,35 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void setHistoryMessage(final List<IMMessage> historyMessage, final int unread) {
-        getHandler().post(new Runnable() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void run() {
-                if(isFinishing()){
-                    return;
-                }
-                unreadMsgCount.set(unread);
-                chat_region.onRefreshComplete();
-                if (historyMessage != null && historyMessage.size() > 0) {
+        runOnUiThread(() -> {
+            if(isFinishing()){
+                return;
+            }
+            unreadMsgCount.set(unread);
+            chat_region.onRefreshComplete();
+            if (historyMessage != null && historyMessage.size() > 0) {
 
-                    pbChatViewAdapter.setMessages(historyMessage);
-                    if (chat_region.getRefreshableView().getCount() > 0)
-                        chat_region.getRefreshableView().setSelection(chat_region.getRefreshableView().getCount() - 1);
-                }
-                // TODO: 2017/9/5 分享消息？
-                handlerReceivedData();
-                getAtOwnMsgIndexs();
-                if (unread > 5) {
-                    showUnreadView(unread);
-                    if (isFromChatRoom && atMsgIndex > 0) {
-                        showAtmsgView();
-                    }
+                pbChatViewAdapter.setMessages(historyMessage);
+                if (chat_region.getRefreshableView().getCount() > 0)
+                chat_region.getRefreshableView().setSelection(chat_region.getRefreshableView().getCount() - 1);
+            }
+            // TODO: 2017/9/5 分享消息？
+            handlerReceivedData();
+            getAtOwnMsgIndexs();
+            if (unread > 5) {
+                showUnreadView(unread);
+                if (isFromChatRoom && atMsgIndex > 0) {
+                    showAtmsgView();
                 }
             }
         });
+//        getHandler().post(new Runnable() {
+//            @TargetApi(Build.VERSION_CODES.M)
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
     }
 
     /**
@@ -2311,7 +2220,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
      */
     @SuppressLint("ObjectAnimatorBinding")
     public void showUnreadView(int unread) {
-        if(unread <= 0 || isFinishing()){
+        if (unread <= 0 || isFinishing()) {
             return;
         }
 
@@ -2337,28 +2246,22 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         textView.setTextColor(Color.parseColor("#666666"));
 
-        String msg  = unread + (String) getText(R.string.atom_ui_tip_unread_message);
+        String msg = unread + (String) getText(R.string.atom_ui_tip_unread_message);
         textView.setText(msg);
         textView.setPadding(padding*2, 0, 0, 0);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chat_region.getRefreshableView().smoothScrollToPosition(pbChatViewAdapter.getCount() - unreadMsgCount.intValue() - 1);
-                clearUnread();
-            }
+        textView.setOnClickListener((view) -> {
+            chat_region.getRefreshableView().smoothScrollToPosition(pbChatViewAdapter.getCount() - unreadMsgCount.intValue() - 1);
+            clearUnread();
         });
         linearLayout.addView(tipImage);
         linearLayout.addView(textView);
         linearLayout.setTag(TAG_UNREAD_VIEW);
         final LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.setAnimator(LayoutTransition.APPEARING, ObjectAnimator.ofFloat(this, "scaleX", 0, 1));
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!isFinishing()){
-                    chating_view.setLayoutTransition(layoutTransition);
-                    chating_view.addView(linearLayout);
-                }
+        getHandler().postDelayed(() -> {
+            if(!isFinishing()){
+                chating_view.setLayoutTransition(layoutTransition);
+                chating_view.addView(linearLayout);
             }
         }, 500);
     }
@@ -2368,35 +2271,32 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
      */
     @SuppressLint("ObjectAnimatorBinding")
     private void showSearchView() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         final TipsFloatView tipsFloatView = new TipsFloatView(this);
         tipsFloatView.setTag(TAG_SEARCH_VIEW);
-        tipsFloatView.setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PbChatActivity.this, QtalkServiceRNActivity.class);
-                intent.putExtra("module", "Search");
-                intent.putExtra("Version", "1.0.0");
-                intent.putExtra("xmppid", jid);
-                intent.putExtra("realjid", realJid);
-                intent.putExtra("chatType", chatType);
-                intent.putExtra("Screen", "LocalSearch");
-                startActivity(intent);
-                clearSearchTip();
+        tipsFloatView.setClickListener(v -> {
+            Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(PbChatActivity.this);
+            if(intent == null){
+                return;
             }
+            intent.putExtra("module", "Search");
+            intent.putExtra("Version", "1.0.0");
+            intent.putExtra("xmppid", jid);
+            intent.putExtra("realjid", realJid);
+            intent.putExtra("chatType", chatType);
+            intent.putExtra("Screen", "LocalSearch");
+            startActivity(intent);
+            clearSearchTip();
         });
 
         final LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.setAnimator(LayoutTransition.APPEARING, ObjectAnimator.ofFloat(this, "scaleX", 0, 1));
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!isFinishing()){
-                    chating_view.setLayoutTransition(layoutTransition);
-                    chating_view.addView(tipsFloatView);
-                }
+        getHandler().postDelayed(() -> {
+            if(!isFinishing()){
+                chating_view.setLayoutTransition(layoutTransition);
+                chating_view.addView(tipsFloatView);
             }
         }, 500);
 
@@ -2407,7 +2307,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
      */
     @SuppressLint("ObjectAnimatorBinding")
     public void showAtmsgView() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         ImageView tipImage = new ImageView(PbChatActivity.this);
@@ -2425,7 +2325,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                 size);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         layoutParams.setMargins(0, topMargin, 0, 0);
-        linearLayout.setPadding(padding*2, padding, padding*2, padding);
+        linearLayout.setPadding(padding * 2, padding, padding * 2, padding);
         linearLayout.setLayoutParams(layoutParams);
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         textView.setGravity(Gravity.CENTER);
@@ -2434,26 +2334,20 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         String msg = MessageFormat.format(getString(R.string.atom_ui_tip_somebody_at_you), atMsgIndexs.size());
         textView.setText(msg);
         textView.setTextColor(Color.parseColor("#EB524A"));
-        textView.setPadding(padding*2, 0, 0, 0);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chat_region.getRefreshableView().smoothScrollToPosition(atMsgIndex);
-                clearAtmsgTip();
-            }
+        textView.setPadding(padding * 2, 0, 0, 0);
+        textView.setOnClickListener(v -> {
+            chat_region.getRefreshableView().smoothScrollToPosition(atMsgIndex);
+            clearAtmsgTip();
         });
         linearLayout.addView(tipImage);
         linearLayout.addView(textView);
         linearLayout.setTag(TAG_ATMSG_VIEW);
         final LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.setAnimator(LayoutTransition.APPEARING, ObjectAnimator.ofFloat(this, "scaleX", 0, 1));
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!isFinishing()){
-                    chating_view.setLayoutTransition(layoutTransition);
-                    chating_view.addView(linearLayout);
-                }
+        getHandler().postDelayed(() -> {
+            if (!isFinishing()) {
+                chating_view.setLayoutTransition(layoutTransition);
+                chating_view.addView(linearLayout);
             }
         }, 500);
     }
@@ -2472,7 +2366,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         }
     }
 
-    protected void clearNewUnRead(){
+    protected void clearNewUnRead() {
         newMsgCount = 0;
         chating_view.setLayoutTransition(null);
         if (chating_view != null && chating_view.getChildCount() > 0) {
@@ -2486,7 +2380,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         }
     }
 
-    protected View isHasShowNewMsgTip(){
+    protected View isHasShowNewMsgTip() {
         if (chating_view != null && chating_view.getChildCount() > 0) {
             for (int i = 0; i <= chating_view.getChildCount() - 1; i++) {
                 View v = chating_view.getChildAt(i);
@@ -2539,29 +2433,26 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void addHistoryMessage(final List<IMMessage> historyMessage) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                chat_region.onRefreshComplete();
-                if (historyMessage == null || historyMessage.size() == 0) {
+        getHandler().post(() -> {
+            chat_region.onRefreshComplete();
+            if (historyMessage == null || historyMessage.size() == 0) {
+                return;
+            }
+            if (historyMessage.size() == 1) {
+                if (TextUtils.isEmpty(historyMessage.get(0).getBody())) {
+                    historyMessage.get(0).setBody(getString(R.string.atom_ui_cloud_record_prompt));
+                    pbChatViewAdapter.addOldMsg(historyMessage);
                     return;
                 }
-                if (historyMessage.size() == 1) {
-                    if (TextUtils.isEmpty(historyMessage.get(0).getBody())) {
-                        historyMessage.get(0).setBody(getString(R.string.atom_ui_cloud_record_prompt));
-                        pbChatViewAdapter.addOldMsg(historyMessage);
-                        return;
-                    }
-                    //已经拉取不到消息则不重复提示
-                    IMMessage firstMessage = pbChatViewAdapter.getFirstMessage();
-                    if (firstMessage != null && firstMessage.getMsgType() == MessageType.MSG_TYPE_NO_MORE_MESSAGE &&
-                            historyMessage.get(0).getMsgType() == MessageType.MSG_TYPE_NO_MORE_MESSAGE) {
-                        return;
-                    }
+                //已经拉取不到消息则不重复提示
+                IMMessage firstMessage = pbChatViewAdapter.getFirstMessage();
+                if (firstMessage != null && firstMessage.getMsgType() == MessageType.MSG_TYPE_NO_MORE_MESSAGE &&
+                        historyMessage.get(0).getMsgType() == MessageType.MSG_TYPE_NO_MORE_MESSAGE) {
+                    return;
                 }
-                pbChatViewAdapter.addOldMsg(historyMessage);
-                chat_region.getRefreshableView().setSelection(historyMessage.size());
             }
+            pbChatViewAdapter.addOldMsg(historyMessage);
+            chat_region.getRefreshableView().setSelection(historyMessage.size());
         });
     }
 
@@ -2572,14 +2463,14 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void showNoticePopupWindow(NoticeBean noticeBean) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         super.showNoticePopupWindow(noticeBean);
     }
 
     public void setTitleState(String titleState) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         String title = mNewActionBar.getTextTitle().getText().toString();
@@ -2617,7 +2508,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                             String url = map.get("value");
                             url = QtalkStringUtils.addFilePath(url);
                             intent.putExtra(Constants.BundleKey.IMAGE_URL, url);
-                            menu.add(0, MENU7, 0, "添加到表情").setIntent(intent);
+                            menu.add(0, MENU7, 0, getString(R.string.atom_ui_menu_add_stickers)).setIntent(intent);
                         }
                     }
                 }
@@ -2722,53 +2613,45 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                 break;
             //引用功能
             case MENU10:
-                connectionUtil.getUserCard(message.getFromID(), new IMLogicManager.NickCallBack() {
-                    @Override
-                    public void onNickCallBack(final Nick nick) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String s = "";
-                                String time = DateTimeUtils.getTime(message.getTime().getTime(),true) + "\n";
-                                List<Map<String, String>> list = ChatTextHelper.getObjList(message.getBody());
-                                if(ListUtil.isEmpty(list)){
-                                    return;
-                                }else {
-                                   for(Map<String,String> map : list){
-                                       switch (map.get("type")) {
-                                           case "image":
-                                               s += "【图片】";
-                                               break;
-                                           case "emoticon":
-                                               s += "【表情】";
-                                               break;
-                                           case "url":
-                                               s += "【链接】";
-                                               break;
-                                           case "text":
-                                               s += map.get("value");
-                                               break;
-                                       }
-                                   }
-                                }
-                                if (nick != null && !TextUtils.isEmpty(nick.getName())) {
-                                    s = time + "「" + nick.getName() + "：" + s + "」";
-                                    refrenceString = time +  "「" + nick.getName() + "：" + message.getBody() + "」" + "\n" + "- - - - - - - - - - - - - - -" + "\n";
-                                } else {
-                                    s = time +  "「" + message.getFromID() + "：" + s + "」";
-                                    refrenceString = time +  "「" + message.getFromID() + "：" + message.getBody() + "」" + "\n" + "- - - - - - - - - - - - - - -" + "\n";
-                                }
-
-                                edit_msg.setFocusable(true);
-                                edit_msg.setFocusableInTouchMode(true);
-                                edit_msg.requestFocus();
-
-                                atom_ui_refence_layout.setVisibility(View.VISIBLE);
-                                atom_ui_refence_text.setText(s);
+                connectionUtil.getUserCard(message.getFromID(), nick -> runOnUiThread(() -> {
+                    String s = "";
+                    String time = DateTimeUtils.getTime(message.getTime().getTime(), true, true) + "\n";
+                    List<Map<String, String>> list = ChatTextHelper.getObjList(message.getBody());
+                    if (ListUtil.isEmpty(list)) {
+                        return;
+                    } else {
+                        for (Map<String, String> map : list) {
+                            switch (map.get("type")) {
+                                case "image":
+                                    s += "【图片】";
+                                    break;
+                                case "emoticon":
+                                    s += "【表情】";
+                                    break;
+                                case "url":
+                                    s += "【链接】";
+                                    break;
+                                case "text":
+                                    s += map.get("value");
+                                    break;
                             }
-                        });
+                        }
                     }
-                }, false, false);
+                    if (nick != null && !TextUtils.isEmpty(nick.getName())) {
+                        s = time + "「" + nick.getName() + "：" + s + "」";
+                        refrenceString = time + "「" + nick.getName() + "：" + message.getBody() + "」" + "\n" + "- - - - - - - - - - - - - - -" + "\n";
+                    } else {
+                        s = time + "「" + message.getFromID() + "：" + s + "」";
+                        refrenceString = time + "「" + message.getFromID() + "：" + message.getBody() + "」" + "\n" + "- - - - - - - - - - - - - - -" + "\n";
+                    }
+
+                    edit_msg.setFocusable(true);
+                    edit_msg.setFocusableInTouchMode(true);
+                    edit_msg.requestFocus();
+
+                    atom_ui_refence_layout.setVisibility(View.VISIBLE);
+                    atom_ui_refence_text.setText(s);
+                }), false, false);
                 break;
 
         }
@@ -2778,12 +2661,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     @Override
     public void isEmotionAdd(boolean flag) {
         if (flag) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    faceView.resetFavoriteEmotion(getFavoriteMap(PbChatActivity.this));
-                }
-            });
+            runOnUiThread(() -> faceView.resetFavoriteEmotion(getFavoriteMap(PbChatActivity.this)));
         }
 
         toast(flag ? "已添加到表情" : "添加表情失败");
@@ -2792,7 +2670,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     //撤销消息
     @Override
     public void revokeItem(IMMessage imMessage) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         pbChatViewAdapter.replaceItem(imMessage);
@@ -2810,7 +2688,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void replaceItem(IMMessage imMessage) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         pbChatViewAdapter.replaceItem(imMessage);
@@ -2832,25 +2710,23 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void clearAndAddMsgs(final List<IMMessage> historyMessage, final int unread) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if(isFinishing()){
-                    return;
-                }
-                unreadMsgCount.set(unread);
-                chat_region.onRefreshComplete();
-                if (historyMessage != null) {
+        Logger.i("分享:clearAndAddMsgs");
+        getHandler().post(() -> {
+            if (isFinishing()) {
+                return;
+            }
+            unreadMsgCount.set(unread);
+            chat_region.onRefreshComplete();
+            if (historyMessage != null) {
 
-                    pbChatViewAdapter.clearAndAddMsgs(historyMessage);
-                    if (chat_region.getRefreshableView().getCount() > 0)
-                        chat_region.getRefreshableView().setSelection(chat_region.getRefreshableView().getCount() - 1);
-                }
-                // TODO: 2017/9/5 分享消息？
-                handlerReceivedData();
-                if (unread > 5) {
-                    showUnreadView(unread);
-                }
+                pbChatViewAdapter.clearAndAddMsgs(historyMessage);
+                if (chat_region.getRefreshableView().getCount() > 0)
+                    chat_region.getRefreshableView().setSelection(chat_region.getRefreshableView().getCount() - 1);
+            }
+            // TODO: 2017/9/5 分享消息？
+            handlerReceivedData();
+            if (unread > 5) {
+                showUnreadView(unread);
             }
         });
 
@@ -2863,6 +2739,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
         boolean fromShare = shareIntent.getBooleanExtra(Constants.BundleKey.IS_FROM_SHARE, false);
         boolean isMultiImg = shareIntent.getBooleanExtra(Constants.BundleKey.IS_TRANS_MULTI_IMG, false);
+        Logger.i("分享:fromShare" + fromShare);
         if (fromShare) {
             if (shareIntent.getExtras() != null && shareIntent.getBooleanExtra(ShareReceiver.SHARE_TAG, false)) {
                 String content = shareIntent.getStringExtra(ShareReceiver.SHARE_TEXT);
@@ -2886,7 +2763,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                         chatingPresenter.sendVideo(video);
                     }
                 }
-                if(!ListUtil.isEmpty(files)){
+                if (!ListUtil.isEmpty(files)) {
                     for (String file : files) {
                         chatingPresenter.sendFile(file);
                     }
@@ -2908,7 +2785,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                 if (beans != null && !beans.isEmpty()) {
                     for (ImgVideoBean bean : beans) {
                         if (bean.type == ImgVideoBean.IMG) {
-                            imageUrl = QtalkStringUtils.addFilePathDomain(bean.url);
+                            imageUrl = QtalkStringUtils.addFilePathDomain(bean.url, true);
                             chatingPresenter.sendImage();
                         } else if (bean.type == ImgVideoBean.VIDEO) {
                             chatingPresenter.sendVideo(VideoMessageResult.createInstance(bean));
@@ -2932,12 +2809,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public void setTitle(final String title) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setActionBarTitle(title);
-            }
-        });
+        runOnUiThread(() -> setActionBarTitle(title));
     }
 
     @Override
@@ -3251,39 +3123,46 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     }
 
     public void chooseRtcType() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.atom_ui_dialog_choose_picture, (ViewGroup) this.getWindow().getDecorView(), false);
-        TextView tv_change_gravtar_photos = (TextView) view.findViewById(R.id.tv_change_gravtar_photos);
-        TextView tv_change_gravtar_camera = (TextView) view.findViewById(R.id.tv_change_gravtar_camera);
-        tv_change_gravtar_photos.setText(R.string.atom_ui_rtc_call);
-        tv_change_gravtar_camera.setText(R.string.atom_ui_rtc_video_call);
-        tv_change_gravtar_photos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PermissionDispatcher.
-                        requestPermissionWithCheck(PbChatActivity.this, new int[]{PermissionDispatcher.REQUEST_RECORD_AUDIO},
-                                PbChatActivity.this, REAL_AUDIO);
-                if (mDialog != null && mDialog.isShowing()) {
-                    mDialog.dismiss();
+        if(isFromChatRoom){
+            PermissionDispatcher.
+                    requestPermissionWithCheck(PbChatActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA,
+                                    PermissionDispatcher.REQUEST_RECORD_AUDIO}, PbChatActivity.this,
+                            REAL_GROUP_VIDEO);
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View view = LayoutInflater.from(this).inflate(R.layout.atom_ui_dialog_choose_picture, (ViewGroup) this.getWindow().getDecorView(), false);
+            TextView tv_change_gravtar_photos = (TextView) view.findViewById(R.id.tv_change_gravtar_photos);
+            TextView tv_change_gravtar_camera = (TextView) view.findViewById(R.id.tv_change_gravtar_camera);
+            tv_change_gravtar_photos.setText(R.string.atom_ui_rtc_call);
+            tv_change_gravtar_camera.setText(R.string.atom_ui_rtc_video_call);
+            tv_change_gravtar_photos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PermissionDispatcher.
+                            requestPermissionWithCheck(PbChatActivity.this, new int[]{PermissionDispatcher.REQUEST_RECORD_AUDIO},
+                                    PbChatActivity.this, REAL_AUDIO);
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
                 }
-            }
-        });
-        tv_change_gravtar_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PermissionDispatcher.
-                        requestPermissionWithCheck(PbChatActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA,
-                                        PermissionDispatcher.REQUEST_RECORD_AUDIO}, PbChatActivity.this,
-                                REAL_VIDEO);
-                if (mDialog != null && mDialog.isShowing()) {
-                    mDialog.dismiss();
+            });
+            tv_change_gravtar_camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PermissionDispatcher.
+                            requestPermissionWithCheck(PbChatActivity.this, new int[]{PermissionDispatcher.REQUEST_CAMERA,
+                                            PermissionDispatcher.REQUEST_RECORD_AUDIO}, PbChatActivity.this,
+                                    REAL_VIDEO);
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
                 }
-            }
-        });
+            });
 
-        builder.setView(view);
-        mDialog = builder.show();
-        mDialog.setCanceledOnTouchOutside(true);
+            builder.setView(view);
+            mDialog = builder.show();
+            mDialog.setCanceledOnTouchOutside(true);
+        }
     }
 
     private void chooseLocationType() {
@@ -3376,56 +3255,38 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     }
 
     public void giveLuckyMoney(boolean isAA) {
-        StringBuilder sb = new StringBuilder();
-        String username = CurrentPreference.getInstance().getUserid();
-        sb.append(isAA ? QtalkNavicationService.AA_PAY_URL : QtalkNavicationService.HONGBAO_URL)
-                .append("?username=").append(username).append("&sign=")
-                .append(BinaryUtil.MD5(username + Constants.SIGN_SALT))
-                .append("&company=qunar&")
-                .append(isFromChatRoom ? "group_id=" : "user_id=")
-                .append(jid)
-                .append("&q_d=").append(QtalkNavicationService.getInstance().getXmppdomain())
-                .append("&rk=" + CurrentPreference.getInstance().getVerifyKey());
-        Uri uri = Uri.parse(sb.toString());
-        Intent intent = new Intent(this, QunarWebActvity.class);
-        intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.HONGBAO);
-        intent.putExtra(QunarWebActvity.IS_HIDE_BAR, true);
-        intent.setData(uri);
-        startActivityForResult(intent, HONGBAO);
+        if(TextUtils.isEmpty(QtalkNavicationService.getInstance().getPayurl())){
+            StringBuilder sb = new StringBuilder();
+            String username = CurrentPreference.getInstance().getUserid();
+            sb.append(isAA ? QtalkNavicationService.AA_PAY_URL : QtalkNavicationService.HONGBAO_URL)
+                    .append("?username=").append(username).append("&sign=")
+                    .append(BinaryUtil.MD5(username + Constants.SIGN_SALT))
+                    .append("&company=qunar&")
+                    .append(isFromChatRoom ? "group_id=" : "user_id=")
+                    .append(jid)
+                    .append("&q_d=").append(QtalkNavicationService.getInstance().getXmppdomain())
+                    .append("&rk=" + CurrentPreference.getInstance().getVerifyKey());
+            Uri uri = Uri.parse(sb.toString());
+            Intent intent = new Intent(this, QunarWebActvity.class);
+            intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.HONGBAO);
+            intent.putExtra(QunarWebActvity.IS_HIDE_BAR, true);
+            intent.setData(uri);
+            startActivityForResult(intent, HONGBAO);
+        }else {
+            chatingPresenter.checkAlipayAccount();
+        }
     }
 
     /**
      * 会话转移 获取店铺客服
      */
     public void transferConversation() {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View view = LayoutInflater.from(this).inflate(R.layout.atom_ui_transfer_conversation_ad, null);
-//        final EditText etContext = (EditText) view.findViewById(R.id.et_content);
-//        final TextView cancel = (TextView) view.findViewById(R.id.txt_cancel);
-//        final TextView confirm = (TextView) view.findViewById(R.id.txt_confirm);
-//        builder.setView(view);
-//        final AlertDialog dialog = builder.create();
-//        confirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mTransferConversationContext = etContext.getText().toString().trim();
-//                Intent selUser = new Intent(PbChatActivity.this, SearchUserActivity.class);
-//                selUser.putExtra("requestcode", TRANSFER_CONVERSATION_REQUEST_CODE);
-//                startActivityForResult(selUser, TRANSFER_CONVERSATION_REQUEST_CODE);
-//                dialog.dismiss();
-//            }
-//        });
-//        cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
 
-        Intent intent = new Intent(this, QtalkServiceRNActivity.class);
-
-        intent.putExtra("module", QtalkServiceRNActivity.MERCHANT);
+        Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(PbChatActivity.this);
+        if (intent == null) {
+            return;
+        }
+        intent.putExtra("module", Constants.RNKey.MERCHANT);
         intent.putExtra("Screen", "Seats");
 
         intent.putExtra("shopJid", QtalkStringUtils.parseId(jid));
@@ -3449,13 +3310,89 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 //        intent1.putExtra(PictureSelectorActivity.SHOW_EDITOR, true);
 //        startActivityForResult(intent1, ACTIVITY_SELECT_PHOTO);
         //新版图片选择器
-        ImagePicker.getInstance().setSelectLimit(9);
-        Intent intent1 = new Intent(this, ImageGridActivity.class);
-        /* 如果需要进入选择的时候显示已经选中的图片，
-         * 详情请查看ImagePickerActivity
-         * */
-//                                intent1.putExtra(ImageGridActivity.EXTRAS_IMAGES,images);
-        startActivityForResult(intent1, ACTIVITY_SELECT_PHOTO);
+        ImageSelectUtil.startSelectPhotos(this, new SelectCallback() {
+            @Override
+            public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
+//                new String();
+                try {
+                    if (photos != null) {
+                        //新版图片选择器
+//                        ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                        if (paths.size() > 0) {
+                            for (Photo image : photos) {
+                                if (image.type.startsWith("image")) {
+                                    imageUrl = image.path;
+                                    chatingPresenter.sendImage();
+                                } else if (image.type.startsWith("video")) {
+
+
+                                    String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
+                                            com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                    + QtalkNavicationService.getInstance().getXmppdomain()
+                                                    + CommonConfig.isDebug
+                                                    + "videoMaxTime");
+                                    if (TextUtils.isEmpty(time) || time.equals("0")) {
+                                        time = (300 * 1000) + "";
+                                    }
+                                    if (image.duration > Long.parseLong(time)) {
+                                        boolean flag = DataUtils.getInstance(PbChatActivity.this).getPreferences("notRemindVideoToFile", false);
+                                        if (flag) {
+                                            chatingPresenter.sendFile(image.path);
+                                        } else {
+                                            commonDialog = new CommonDialog.Builder(PbChatActivity.this);
+                                            commonDialog.setMessage("视频超过限制,只可转为文件发送!");
+                                            commonDialog.setPositiveButton(getString(R.string.atom_ui_common_confirm), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(final DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    chatingPresenter.sendFile(image.path);
+
+                                                }
+                                            });
+                                            commonDialog.setNegativeButton(getString(R.string.atom_ui_common_cancel), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(final DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+//                            finish();
+
+                                                }
+                                            });
+                                            commonDialog.setNeutralButton(getString(R.string.atom_ui_btn_not_remind), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int i) {
+                                                    dialog.dismiss();
+                                                    DataUtils.getInstance(PbChatActivity.this).putPreferences("notRemindVideoToFile", true);
+                                                    chatingPresenter.sendFile(image.path);
+                                                }
+                                            });
+                                            commonDialog.create().show();
+                                        }
+
+                                    } else {
+                                        chatingPresenter.sendVideo(image.path);
+                                    }
+
+
+                                } else {
+                                    Toast.makeText(PbChatActivity.this, "未知消息,不可发送", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        }
+
+                    }
+                } catch (Exception e) {
+                    LogUtil.e(TAG, "ERROR", e);
+                }
+            }
+//        ImagePicker.getInstance().setSelectLimit(9);
+//        Intent intent1 = new Intent(this, ImageGridActivity.class);
+//        /* 如果需要进入选择的时候显示已经选中的图片，
+//         * 详情请查看ImagePickerActivity
+//         * */
+////                                intent1.putExtra(ImageGridActivity.EXTRAS_IMAGES,images);
+//        startActivityForResult(intent1, ACTIVITY_SELECT_PHOTO);
+        });
     }
 
     void selectVideo() {
@@ -3487,7 +3424,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         atom_bottom_frame.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if(isFinishing()){
+                if (isFinishing()) {
                     return;
                 }
                 if (photoPop != null) {
@@ -3513,7 +3450,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                 getHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(isFinishing()){
+                        if (isFinishing()) {
                             return;
                         }
                         if (photoPop != null && photoPop.isShowing()) {
@@ -3651,30 +3588,33 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
             selectVideo();
         } else if (requestCode == REAL_VIDEO) {
             boolean isconsult = (Integer.valueOf(getChatType()) == ConversitionType.MSG_TYPE_CONSULT || Integer.valueOf(getChatType()) == ConversitionType.MSG_TYPE_CONSULT_SERVER) ? true : false;
-//            Intent i = new Intent("android.intent.action.VIEW",
-//                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
-//                            + CurrentPreference.getInstance().getPreferenceUserId()
-//                            + "&toid=" + (isconsult ? getRealJid() : getToId())
-//                            + "&chattype" + getChatType()
-//                            + "&realjid" + getRealJid()
-//                            + "&isFromChatRoom" + isFromChatRoom
-//                            + "&offer=false&video=true"));
-//            startActivity(i);
-            connectionUtil.lanuchVideo(true,CurrentPreference.getInstance().getUserid(),(isconsult ? getRealJid() : getToId()));
-            ((IP2pRTC) chatingPresenter).startVideoRtc();
+            Intent i = new Intent("android.intent.action.VIEW",
+                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid="
+                            + CurrentPreference.getInstance().getPreferenceUserId()
+                            + "&toid=" + (isconsult ? getRealJid() : getToId())
+                            + "&chattype=" + getChatType()
+                            + "&realjid=" + getRealJid()
+                            + "&isFromChatRoom=" + isFromChatRoom
+                            + "&offer=false&video=true"));
+            startActivity(i);
+//            connectionUtil.lanuchChatVideo(true, CurrentPreference.getInstance().getUserid(), (isconsult ? getRealJid() : getToId()));
+//            ((IP2pRTC) chatingPresenter).startVideoRtc();
         } else if (requestCode == REAL_AUDIO) {
             boolean isconsult = (Integer.valueOf(getChatType()) == ConversitionType.MSG_TYPE_CONSULT || Integer.valueOf(getChatType()) == ConversitionType.MSG_TYPE_CONSULT_SERVER) ? true : false;
-//            Intent i = new Intent("android.intent.action.VIEW",
-//                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid=" +
-//                            QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId())
-//                            + "&toid=" + (isconsult ? getRealJid() : getToId())
-//                            + "&chattype=" + getChatType()
-//                            + "&realjid=" + getRealJid()
-//                            + "&isFromChatRoom=" + isFromChatRoom
-//                            + "&offer=false&video=false"));
-//            startActivity(i);
-            connectionUtil.lanuchVideo(false,CurrentPreference.getInstance().getUserid(),(isconsult ? getRealJid() : getToId()));
-            ((IP2pRTC) chatingPresenter).startAudioRtc();
+            Intent i = new Intent("android.intent.action.VIEW",
+                    Uri.parse(CommonConfig.schema + "://qcrtc/webrtc?fromid=" +
+                            QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId())
+                            + "&toid=" + (isconsult ? getRealJid() : getToId())
+                            + "&chattype=" + getChatType()
+                            + "&realjid=" + getRealJid()
+                            + "&isFromChatRoom=" + isFromChatRoom
+                            + "&offer=false&video=false"));
+            startActivity(i);
+//            connectionUtil.lanuchChatVideo(false, CurrentPreference.getInstance().getUserid(), (isconsult ? getRealJid() : getToId()));
+//            ((IP2pRTC) chatingPresenter).startAudioRtc();
+        } else if (requestCode == REAL_GROUP_VIDEO){
+            connectionUtil.lanuchGroupVideo(jid,qtNewActionBar.getTextTitle().getText().toString());
+            ((IPGroupRtc) chatingPresenter).startGroupVideoRtc();
         }
     }
 
@@ -3788,7 +3728,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         if (isFinishing()) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.atom_ui_dialog_encrypt_choose, (ViewGroup) this.getWindow().getDecorView(), false);
-        ImageView atom_ui_app_icon = (ImageView) findViewById(R.id.atom_ui_app_icon);
+        ImageView atom_ui_app_icon = (ImageView) view.findViewById(R.id.atom_ui_app_icon);
         atom_ui_app_icon.setImageResource(getApplicationInfo().icon);
         Button cancel_btn = (Button) view.findViewById(R.id.cancel_btn);
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -3874,7 +3814,8 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         }
     }
 
-    private void createConversationSubPassword(DailyMindMain dailyMindMain, String passwordSubString) {
+    private void createConversationSubPassword(DailyMindMain dailyMindMain, String
+            passwordSubString) {
         try {
             if (dailyMindMain != null)//主密码创建成功
             {
@@ -4231,7 +4172,8 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     }
 
     @Override
-    public void updateUploadProgress(final IMMessage message, final int progress, final boolean isDone) {
+    public void updateUploadProgress(final IMMessage message, final int progress,
+                                     final boolean isDone) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -4284,7 +4226,62 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
         chatingPresenter.sendRobotMsg(msg);
     }
 
-    //    setM
+    @Override
+    public void payRedEnvelopChioce(String type,String rid) {
+        Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(PbChatActivity.this);
+        if(intent == null){
+            return;
+        }
+        switch (type){
+            case Constants.Alipay.RED_ENVELOP_SEND:
+                intent.putExtra("module", Constants.RNKey.PAY);
+                intent.putExtra("Screen", "SendRedPack");
+
+                intent.putExtra("xmppid", jid);
+                intent.putExtra("isChatRoom",isFromChatRoom);
+                startActivity(intent);
+                break;
+            case Constants.Alipay.RED_ENVELOP_DETAIL:
+                intent.putExtra("module", Constants.RNKey.PAY);
+                intent.putExtra("Screen", "RedPackDetail");
+                intent.putExtra("rid", rid);//红包ID
+                intent.putExtra("xmppid", jid);
+                intent.putExtra("isChatRoom",isFromChatRoom);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void payAuth(final String authInfo) {
+        IMPayManager.getInstance().payAuth(this,authInfo,resultStatus -> {
+            if(TextUtils.equals(resultStatus, "6001")){
+                toast(getString(R.string.atom_ui_user_cancel));
+            } else {
+                toast(getString(R.string.atom_ui_auth_fail));
+            }
+        });
+    }
+
+    @Override
+    public void payOrder(String orderInfo) {
+        IMPayManager.getInstance().payOrder(this, orderInfo, resultStatus -> {
+            if (TextUtils.equals(resultStatus, "9000")) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }finally {
+                    connectionUtil.sendEvent(QtalkEvent.PAY_SUCCESS,new Object());
+                    toast(getString(R.string.atom_ui_send_red_packet_success));
+                }
+            } else if(TextUtils.equals(resultStatus, "6001")){
+                toast(getString(R.string.atom_ui_user_cancel));
+            } else {
+                toast(getString(R.string.atom_ui_pay_fail));
+            }
+        });
+    }
 
     @Override
     public String getBackupInfo() {
@@ -4319,9 +4316,9 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
     @Override
     public IMMessage getListFirstItem() {
-        if(pbChatViewAdapter.getFirstMessage().getMsgType()==-99){
+        if (pbChatViewAdapter.getFirstMessage().getMsgType() == -99) {
             return pbChatViewAdapter.getItem(1);
-        }else {
+        } else {
             return pbChatViewAdapter.getFirstMessage();
         }
     }
@@ -4342,12 +4339,17 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
     }
 
     @Override
+    public void showToast(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public int getUnreadMsgCount() {
         return unreadMsgCount.get();
     }
 
-    private void saveChatWindowActLog(String eventId,String desc,String currentPage){
-        LogInfo logInfo = QLog.build(LogConstans.LogType.ACT,LogConstans.LogSubType.CLICK).eventId(eventId).describtion(desc).currentPage(currentPage);
+    private void saveChatWindowActLog(String eventId, String desc, String currentPage) {
+        LogInfo logInfo = QLog.build(LogConstans.LogType.ACT, LogConstans.LogSubType.CLICK).eventId(eventId).describtion(desc).currentPage(currentPage);
         LogService.getInstance().saveLog(logInfo);
     }
 

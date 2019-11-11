@@ -119,7 +119,7 @@ public class WorkWorldManagerPresenter implements WorkWorldPresenter, IMNotifica
             postType =  WorkWorldItemState.normal;
         }
 
-        HttpUtil.refreshWorkWorldV2(listSize, childListSize, postType, owner, ownerHost, Long.parseLong(item.getCreateTime()), new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
+        HttpUtil.refreshWorkWorldV2(listSize, childListSize, postType, owner, ownerHost, Long.parseLong(item.getCreateTime()), true, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
             @Override
             public void onCompleted(WorkWorldResponse workWorldResponse) {
                 mView.workworldshowMoreData(workWorldResponse.getData().getNewPost());
@@ -179,7 +179,7 @@ public class WorkWorldManagerPresenter implements WorkWorldPresenter, IMNotifica
             postType =  WorkWorldItemState.normal;
         }
         Logger.i("获取的数据类型为:"+postType);
-        HttpUtil.refreshWorkWorldV2(listSize, childListSize, postType, owner, ownerHost, 0, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
+        HttpUtil.refreshWorkWorldV2(listSize, childListSize, postType, owner, ownerHost, 0, true, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
             @Override
             public void onCompleted(WorkWorldResponse workWorldResponse) {
                 mView.workworldshowNewData(workWorldResponse.getData().getNewPost());

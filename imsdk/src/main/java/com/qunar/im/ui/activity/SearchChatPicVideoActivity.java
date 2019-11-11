@@ -286,7 +286,7 @@ public class SearchChatPicVideoActivity extends SwipeActivity implements IChatSe
         }
         File outfile = new File(appDir, fileName);
         String savePath = outfile.getPath();
-        url = QtalkStringUtils.addFilePathDomain(url);
+        url = QtalkStringUtils.addFilePathDomain(url, true);
         DownloadRequest request = new DownloadRequest();
         request.savePath = savePath;
         request.url = url;

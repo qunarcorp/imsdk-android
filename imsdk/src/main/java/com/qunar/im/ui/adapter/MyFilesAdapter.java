@@ -79,7 +79,7 @@ public class MyFilesAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, B
                     if(transitFileJSON != null) {
                         helper.setText(R.id.myfile_name, transitFileJSON.FileName);
                         helper.setText(R.id.myfile_size, transitFileJSON.FileSize);
-                        helper.setText(R.id.myfile_time, DateTimeUtils.getTime(imMessage.getTime().getTime(), false));
+                        helper.setText(R.id.myfile_time, DateTimeUtils.getTime(imMessage.getTime().getTime(), false, true));
                         int ids = transitFileJSON.FileName.lastIndexOf(".");
                         int fileType = R.drawable.atom_ui_icon_zip_video;;
                         if(ids>0) {
@@ -91,16 +91,16 @@ public class MyFilesAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, B
                         File file = new File(FileUtils.savePath + transitFileJSON.FileName);
                         if(CurrentPreference.getInstance().getPreferenceUserId().equals(imMessage.getFromID())) {
                             if (MessageStatus.isExistStatus (imMessage.getMessageState(),MessageStatus.LOCAL_STATUS_SUCCESS)) {
-                                helper.setText(R.id.myfile_status, "已发送");
+                                helper.setText(R.id.myfile_status, context.getString(R.string.atom_ui_common_sent));
                             } else {
-                                helper.setText(R.id.myfile_status, "未发送");
+                                helper.setText(R.id.myfile_status, context.getString(R.string.atom_ui_common_notsent));
                             }
                             if (imMessage.getToID().contains("@conference")) {
                                 ConnectionUtil.getInstance().getMucCard(imMessage.getToID(), new IMLogicManager.NickCallBack() {
                                     @Override
                                     public void onNickCallBack(Nick nick) {
                                         StringBuilder builder = new StringBuilder();
-                                        builder.append("发给 ");
+                                        builder.append(context.getString(R.string.atom_ui_common_issue) + " ");
                                         if(nick != null){
                                             builder.append(nick.getName());
                                         } else {
@@ -115,7 +115,7 @@ public class MyFilesAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, B
                                     @Override
                                     public void onNickCallBack(Nick nick) {
                                         StringBuilder builder = new StringBuilder();
-                                        builder.append("发给 ");
+                                        builder.append(context.getString(R.string.atom_ui_common_issue) + " ");
                                         if(nick != null){
                                             builder.append(nick.getName());
                                         } else {
@@ -128,15 +128,15 @@ public class MyFilesAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, B
 
                         } else {
                             if (file.exists()) {
-                                helper.setText(R.id.myfile_status, "已下载");
+                                helper.setText(R.id.myfile_status, context.getString(R.string.atom_ui_common_already_download));
                             } else {
-                                helper.setText(R.id.myfile_status, "未下载");
+                                helper.setText(R.id.myfile_status, context.getString(R.string.atom_ui_common_not_download));
                             }
                             ConnectionUtil.getInstance().getUserCard(imMessage.getFromID(), new IMLogicManager.NickCallBack() {
                                 @Override
                                 public void onNickCallBack(Nick nick) {
                                     StringBuilder builder = new StringBuilder();
-                                    builder.append("来自 ");
+                                    builder.append(context.getString(R.string.atom_ui_from) + " ");
                                     if(nick != null && !TextUtils.isEmpty(nick.getName())){
                                         builder.append(nick.getName());
                                     } else {

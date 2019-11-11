@@ -26,13 +26,10 @@ public class CodeMessageProcessor extends DefaultMessageProcessor {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.atom_ui_layout_code,null);
         ((TextView)view.findViewById(R.id.source_code)).setText(code);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, CodeActivty.class);
-                intent.putExtra(Constants.BundleKey.MESSAGE_ID,msgId);
-                context.startActivity(intent);
-            }
+        view.setOnClickListener((v) -> {
+            Intent intent = new Intent(context, CodeActivty.class);
+            intent.putExtra(Constants.BundleKey.MESSAGE_ID,msgId);
+            context.startActivity(intent);
         });
         parent.addView(view);
     }

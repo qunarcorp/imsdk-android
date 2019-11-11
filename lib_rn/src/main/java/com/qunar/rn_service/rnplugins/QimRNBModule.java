@@ -30,6 +30,7 @@ import com.qunar.im.base.jsonbean.SetWorkWorldRemindResponse;
 import com.qunar.im.base.module.CityLocal;
 import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.module.MedalsInfo;
+import com.qunar.im.base.module.UserHaveMedalStatus;
 import com.qunar.im.base.protocol.HttpRequestCallback;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.log.LogConstans;
@@ -44,20 +45,27 @@ import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.common.CommonUploader;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.LeadInfo;
+import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.jsonbean.NewRemoteConfig;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
 import com.qunar.im.base.jsonbean.SetMucVCardResult;
 import com.qunar.im.base.jsonbean.SetVCardResult;
+import com.qunar.im.base.jsonbean.SetWorkWorldRemindResponse;
 import com.qunar.im.base.jsonbean.UploadImageResult;
 import com.qunar.im.base.module.AreaLocal;
 import com.qunar.im.base.module.AvailableRoomRequest;
 import com.qunar.im.base.module.AvailableRoomResponse;
 import com.qunar.im.base.module.CalendarTrip;
+import com.qunar.im.base.module.CityLocal;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.base.module.MedalsInfo;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.TripMemberCheckResponse;
 import com.qunar.im.base.module.UserConfigData;
+import com.qunar.im.base.protocol.HttpRequestCallback;
+import com.qunar.im.base.protocol.NativeApi;
+import com.qunar.im.base.protocol.PayApi;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.protocol.ThirdProviderAPI;
@@ -82,15 +90,23 @@ import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.google.auth.OtpProvider;
+import com.qunar.im.log.LogConstans;
+import com.qunar.im.log.LogService;
+import com.qunar.im.log.QLog;
+import com.qunar.im.other.CacheDataType;
+import com.qunar.im.permission.PermissionCallback;
+import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.CalendarSynchronousUtil;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 import com.qunar.im.utils.QRUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 import com.qunar.rn_service.activity.QtalkServiceRNActivity;
-import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.rn_service.rnmanage.QtalkServiceExternalRNViewInstanceManager;
 import com.qunar.rn_service.util.DateUtil;
 import com.qunar.rn_service.util.QTalkServicePatchDownloadHelper;
@@ -100,6 +116,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -124,6 +141,7 @@ import de.greenrobot.event.EventBus;
 
 public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotificaitonCenter.NotificationCenterDelegate, PermissionCallback {
 
+    private static final String MyMedal = "MyMedal";
     private static final String MyRedBag = "MyRedBag";
     private static final String BalanceInquiry = "BalanceInquiry";
     private static final String AccountInfo = "AccountInfo";
@@ -142,6 +160,8 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
     private static final String AccountSwitch = "AccountSwitch";
     private static final String DomainSearch = "DomainSearch";
     private static final String OpenToCManager = "OpenToCManager";
+    private static final String NavAddress = "NavAddress";
+    private static final String OpenNavigationConfig = "NavigationConfig";
 
 
     private static final String InternalApplication = "InternalApplication";
@@ -158,7 +178,6 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
     public static final int REQUEST_GRANT_CALL = PermissionDispatcher.getRequestCode();
 
     public Activity mActivity;//activity 为华为push要用
-
     //转发 分享 创建的群
     public static Map<String, ReadableMap> createGroups = new HashMap<>();
 
@@ -224,6 +243,8 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         ConnectionUtil.getInstance().addEvent(this, QtalkEvent.WORK_WORLD_PERMISSIONS);
         ConnectionUtil.getInstance().addEvent(this, QtalkEvent.Group_Member_Update);
         ConnectionUtil.getInstance().addEvent(this, QtalkEvent.Remove_Session);
+        ConnectionUtil.getInstance().addEvent(this,QtalkEvent.UPDATE_MEDAL_SELF);
+        ConnectionUtil.getInstance().addEvent(this, QtalkEvent.PAY_SUCCESS);
     }
 
     @Override
@@ -285,6 +306,14 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             map.putBoolean("notNeedShowEmailInfo",TextUtils.isEmpty(QtalkNavicationService.getInstance().getEmail()));
 
             map.putBoolean("isToCManager",DataUtils.getInstance(CommonConfig.globalContext).getPreferences(Constants.Preferences.isAdminFlag + "_" + QtalkNavicationService.getInstance().getXmppdomain(),false));
+
+            if(GlobalConfigManager.isQtalkPlat()){
+                map.putInt("nativeAppType", 2);
+            }else if(GlobalConfigManager.isQchatPlat()){
+                map.putInt("nativeAppType", 1);
+            }else if(GlobalConfigManager.isStartalkPlat()){
+                map.putInt("nativeAppType", 0);
+            }
 //            map.putDouble("timestamp", System.currentTimeMillis());
             callback.invoke(map);
         } catch (Exception e) {
@@ -518,6 +547,10 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         String nativeName = params.getString("NativeName");
 
         switch (nativeName) {
+            case MyMedal:
+                String userid = params.getString("userId");
+                NativeApi.openUserMedal(QtalkStringUtils.addIdDomain(userid));
+                break;
             case MyRedBag:
                 NativeApi.openUserHongBao();
                 break;
@@ -577,7 +610,14 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             case OpenToCManager:
                 String appweb = QtalkNavicationService.getInstance().getAppWeb();
                 String domain = QtalkNavicationService.getInstance().getXmppdomain();
-                NativeApi.openWebPage(appweb + "/manage#/nav_code?domain=" + domain, true);
+                NativeApi.openWebPage(appweb + "/manage#/audit_user?domain=" + domain, true);
+                break;
+            case NavAddress:
+                String weburl = QtalkNavicationService.getInstance().getAppWeb();
+                NativeApi.openWebPage(weburl + "/manage#/nav_code", true);
+                break;
+            case OpenNavigationConfig:
+                NativeApi.openNavConfig();
                 break;
             default:
                 break;
@@ -807,6 +847,12 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         hm.putString("Mood", cache.getMood());
         WritableNativeMap map = new WritableNativeMap();
         map.putMap("UserInfo", hm);
+        List<UserHaveMedalStatus> list = IMDatabaseManager.getInstance().selectUserHaveMedalStatusByUserid(QtalkStringUtils.parseId(userId),QtalkStringUtils.parseDomain(userId));
+        WritableArray medalList = new WritableNativeArray();
+        for (int i = 0; i < list.size(); i++) {
+            medalList.pushString(list.get(i).getSmallIcon());
+        }
+        map.putArray("medalList",medalList);
         callback.invoke(map);
 
         ConnectionUtil.getInstance().getUserCard(userId, new IMLogicManager.NickCallBack() {
@@ -1386,6 +1432,13 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
                 hm.putString("Mood", nick.getMood());
                 WritableNativeMap map = new WritableNativeMap();
                 map.putMap("MyInfo", hm);
+                List<UserHaveMedalStatus> list = IMDatabaseManager.getInstance().selectUserWearMedalStatusByUserid(CurrentPreference.getInstance().getUserid(),QtalkNavicationService.getInstance().getXmppdomain());
+                WritableArray medalList = new WritableNativeArray();
+                for (int i = 0; i < list.size(); i++) {
+                    medalList.pushString(list.get(i).getSmallIcon());
+                }
+                map.putArray("medalList",medalList);
+
                 callback.invoke(map);
             }
         }, true, true);
@@ -2065,6 +2118,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             map.putString("xmppId", nick.getXmppId());
             map.putString("headerUri", TextUtils.isEmpty(nick.getHeaderSrc()) ? defaultUserImage : nick.getHeaderSrc());
             map.putBoolean("hasInGroup", nick.isInGroup());
+            map.putString("desc",nick.getDescInfo());
             array.pushMap(map);
 
         }
@@ -2091,6 +2145,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             map.putString("name", TextUtils.isEmpty(nick.getName()) ? nick.getXmppId() : nick.getName());
             map.putString("xmppId", nick.getXmppId());
             map.putString("headerUri", TextUtils.isEmpty(nick.getHeaderSrc()) ? defaultUserImage : nick.getHeaderSrc());
+            map.putString("desc",nick.getDescInfo());
             map.putBoolean("friend", true);
             array.pushMap(map);
 
@@ -3300,8 +3355,78 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         map.putArray("areaList", array);
         callback.invoke(map);
 
+
     }
 
+    @ReactMethod
+    public void getHotlineSeats(String customerName,String hotlineName,final Callback callback){
+        HttpUtil.getHotlineSeats(customerName,hotlineName, new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                WritableNativeMap map = new WritableNativeMap();
+                try{
+                    String resultString = Protocol.parseStream(response);
+
+                    if(!TextUtils.isEmpty(resultString)){
+                        JSONObject jsonObject = new JSONObject(resultString);
+                        map.putBoolean("ret",jsonObject.optBoolean("ret"));
+                        map.putString("errmsg",jsonObject.optString("errmsg"));
+                        JSONArray array = jsonObject.optJSONArray("data");
+                        int size = array == null ? 0: array.length();
+                        WritableNativeArray datas = new WritableNativeArray();
+                        for(int i = 0;i<size;i++){
+                            JSONObject item = array.getJSONObject(i);
+                            WritableNativeMap data = new WritableNativeMap();
+                            data.putString("userId",item.optString("userId"));
+                            data.putString("userName",item.optString("userName"));
+                            datas.pushMap(data);
+                        }
+                        map.putArray("data",datas);
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Logger.e(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    @ReactMethod
+    public void transArtificial(String customerName,String hotlineName,String newCsrName,String reason,final Callback callback){
+        HttpUtil.transArtificial(customerName,hotlineName,newCsrName,reason, new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                WritableNativeMap map = new WritableNativeMap();
+                try{
+                    String resultString = Protocol.parseStream(response);
+
+                    if(!TextUtils.isEmpty(resultString)){
+                        JSONObject jsonObject = new JSONObject(resultString);
+                        map.putBoolean("ret",jsonObject.optBoolean("ret"));
+                        map.putString("errmsg",jsonObject.optString("errmsg"));
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Logger.e(e.getLocalizedMessage());
+            }
+        });
+    }
+
+    /**
+     * 获取跨域列表
+     * @param callback
+     */
     @ReactMethod
     public void getDomainList(final Callback callback){
         HttpUtil.getDomainList(new HttpRequestCallback() {
@@ -3795,12 +3920,247 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         LogService.getInstance().saveLog(logInfo);
     }
 
+    /**
+     * 红包详情
+     * @param rid
+     * @param xmppid
+     * @param isChatRoom
+     * @param callback
+     */
+    @ReactMethod
+    public void redEnvelopeGet(String rid,String xmppid,boolean isChatRoom,final Callback callback){
+        final WritableNativeMap map = new WritableNativeMap();
+        PayApi.red_envelope_get(xmppid, rid, isChatRoom, new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                try{
+                    String resultString = Protocol.parseStream(response);
+                    JSONObject result = new JSONObject(resultString);
+                    if(result != null && result.optInt("ret") == 1){
+                        JSONObject data = result.optJSONObject("data");
+                        map.putBoolean("ok",true);
+                        map.putString("credit",data.optString("credit"));
+                        String user_id = data.optString("user_id");
+                        ConnectionUtil.getInstance().getUserCard(QtalkStringUtils.userId2Jid(user_id), nick->{
+                            map.putString("user_img",nick.getHeaderSrc());
+                            map.putString("user_name",nick.getName());
+                        });
+                        map.putString("red_content",data.optString("red_content"));
+                        map.putString("red_type",data.optString("red_type"));
+                        map.putInt("over_time",data.optInt("grab_over_time"));
+                        map.putInt("red_number",data.optInt("red_number"));
+                        JSONArray array = data.optJSONArray("draw_record");
+                        WritableNativeArray lists = new WritableNativeArray();
+                        for(int i = 0; i<array.length(); i++){
+                            JSONObject item = array.optJSONObject(i);
+                            WritableNativeMap writableNativeMap = new WritableNativeMap();
+                            writableNativeMap.putString("Credit",item.optString("credit"));
+                            ConnectionUtil.getInstance().getUserCard(QtalkStringUtils.userId2Jid(item.optString("host_user_id")), nick->{
+                                writableNativeMap.putString("Name",nick.getName());
+                                writableNativeMap.putString("HeaderUri",nick.getHeaderSrc());
+                            });
+                            writableNativeMap.putString("Time",item.optString("draw_time"));
+                            int rank = item.optInt("rank");
+                            writableNativeMap.putString("Rank",rank == 1 ? "手气最佳" :"");
+                            lists.pushMap(writableNativeMap);
+                        }
+                        map.putArray("redPackList",lists);
+                        callback.invoke(map);
+                    }else {
+                        map.putBoolean("ok",false);
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+                    map.putBoolean("ok",false);
+                    callback.invoke(map);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                map.putBoolean("ok",false);
+                callback.invoke(map);
+            }
+        });
+    }
+
+    /**
+     * 我收到的红包
+     * @param page
+     * @param pagesie
+     * @param year
+     * @param callback
+     */
+    @ReactMethod
+    public void redEnvelopeReceive(int page,int pagesie,int year,final Callback callback){
+        final WritableNativeMap map = new WritableNativeMap();
+        PayApi.red_envelope_receive(page, pagesie, year, new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                try{
+                    String resultString = Protocol.parseStream(response);
+                    JSONObject result = new JSONObject(resultString);
+                    if(result != null && result.optInt("ret") == 1){
+                        JSONObject data = result.optJSONObject("data");
+                        JSONObject count = data.optJSONObject("count");
+                        map.putBoolean("ok",true);
+                        map.putString("total_credit",count.optString("total_credit"));
+                        map.putString("count",count.optString("count"));
+                        ConnectionUtil.getInstance().getUserCard(CurrentPreference.getInstance().getPreferenceUserId(), nick->{
+                            map.putString("user_img",nick.getHeaderSrc());
+                        });
+                        JSONArray array = data.optJSONArray("list");
+                        WritableNativeArray lists = new WritableNativeArray();
+                        for(int i = 0; i<array.length(); i++){
+                            JSONObject item = array.optJSONObject(i);
+                            WritableNativeMap writableNativeMap = new WritableNativeMap();
+                            writableNativeMap.putString("Credit",item.optString("credit"));
+                            writableNativeMap.putString("Name",item.optString("realname"));
+                            String host_user_id = item.optString("host_user_id");
+                            ConnectionUtil.getInstance().getUserCard(host_user_id, nick-> {
+                                writableNativeMap.putString("HeaderUri",nick.getHeaderSrc());
+                            });
+                            writableNativeMap.putString("Time",item.optString("draw_time"));
+                            writableNativeMap.putString("Type",item.optString("red_type"));
+                            lists.pushMap(writableNativeMap);
+                        }
+                        map.putArray("redPackList",lists);
+                        callback.invoke(map);
+                    }else {
+                        map.putBoolean("ok",false);
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+                    map.putBoolean("ok",false);
+                    callback.invoke(map);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                map.putBoolean("ok",false);
+                callback.invoke(map);
+            }
+        });
+    }
+
+    /**
+     * 我发出去的红包
+     * @param page
+     * @param pagesie
+     * @param year
+     * @param callback
+     */
+    @ReactMethod
+    public void redEnvelopeSend(int page,int pagesie,int year,final Callback callback){
+        final WritableNativeMap map = new WritableNativeMap();
+        PayApi.red_envelope_send(page, pagesie, year, new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                try{
+                    String resultString = Protocol.parseStream(response);
+                    JSONObject result = new JSONObject(resultString);
+                    if(result != null && result.optInt("ret") == 1){
+                        JSONObject data = result.optJSONObject("data");
+                        JSONObject count = data.optJSONObject("count");
+                        map.putBoolean("ok",true);
+                        map.putString("total_credit",count.optString("total_credit"));
+                        map.putString("count",count.optString("count"));
+                        ConnectionUtil.getInstance().getUserCard(CurrentPreference.getInstance().getPreferenceUserId(), nick->{
+                            map.putString("user_img",nick.getHeaderSrc());
+                        });
+                        JSONArray array = data.optJSONArray("list");
+                        WritableNativeArray lists = new WritableNativeArray();
+                        for(int i = 0; i<array.length(); i++){
+                            JSONObject item = array.optJSONObject(i);
+                            WritableNativeMap writableNativeMap = new WritableNativeMap();
+                            writableNativeMap.putString("Credit",item.optString("credit"));
+                            writableNativeMap.putString("Name",CurrentPreference.getInstance().getUserName());
+                            writableNativeMap.putString("Time",item.optString("create_time"));
+                            writableNativeMap.putString("Type",item.optString("red_type"));
+                            writableNativeMap.putInt("Expire",item.optInt("is_expire"));
+                            writableNativeMap.putInt("Number",item.optInt("red_number"));
+                            writableNativeMap.putInt("Draw",item.optInt("draw_number"));
+                            lists.pushMap(writableNativeMap);
+                        }
+                        map.putArray("redPackList",lists);
+                        callback.invoke(map);
+                    }else {
+                        map.putBoolean("ok",false);
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+                    map.putBoolean("ok",false);
+                    callback.invoke(map);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                map.putBoolean("ok",false);
+                callback.invoke(map);
+            }
+        });
+    }
+
+    private void sendPayFailNotification(){
+        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.PAY_FAIL,Constants.Alipay.PAY);
+    }
+
+    @ReactMethod
+    public void createRedEnvelope(final ReadableMap params, final Callback callback){
+        final WritableNativeMap map = new WritableNativeMap();
+        PayApi.send_red_envelope(params.toHashMap(), new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                try{
+                    String resultString = Protocol.parseStream(response);
+                    JSONObject result = new JSONObject(resultString);
+                    if(result != null && result.optInt("ret") == 1){
+                        JSONObject data = result.optJSONObject("data");
+                        String params = data.optString("pay_parmas");
+                        if(!TextUtils.isEmpty(params)){//唤起支付宝授权登录
+                            map.putBoolean("ok",true);
+                            callback.invoke(map);
+                            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.PAY_ORDER,params);
+                        }else {
+                            callback.invoke(map);
+                        }
+                    }else {
+                        callback.invoke(map);
+                    }
+                }catch (Exception e){
+                    callback.invoke(map);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.invoke(map);
+            }
+        });
+    }
+
 
     @Override
     public void didReceivedNotification(String key, Object... args) {
         WritableNativeMap map = new WritableNativeMap();
         switch (key) {
+            case QtalkEvent.UPDATE_MEDAL_SELF:
+
+                List<UserHaveMedalStatus> userMedalList = IMDatabaseManager.getInstance().selectUserWearMedalStatusByUserid(CurrentPreference.getInstance().getUserid(),QtalkNavicationService.getInstance().getXmppdomain());
+                WritableArray medalList = new WritableNativeArray();
+                for (int i = 0; i < userMedalList.size(); i++) {
+                    medalList.pushString(userMedalList.get(i).getSmallIcon());
+                }
+                map.putArray("medalList",medalList);
+                map.putString("UserId",CurrentPreference.getInstance().getPreferenceUserId());
+                sendEvent("updateMedalList",map);
+//                map.putArray();
+                break;
+
             case QtalkEvent.Remove_Session:
+            case QtalkEvent.Destory_Muc:
                 map.putString("groupId", (String) args[0]);
                 sendEvent("Remove_Session", map);
 
@@ -3808,10 +4168,6 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             case QtalkEvent.Del_Muc_Register:
                 map.putString("groupId", (String) args[0]);
                 sendEvent("Del_Destory_Muc", map);
-                break;
-            case QtalkEvent.Destory_Muc:
-                map.putString("groupId", (String) args[0]);
-                sendEvent("Remove_Session", map);
                 break;
             case QtalkEvent.Update_Muc_Vcard:
                 //更新群名片
@@ -3895,6 +4251,9 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             case QtalkEvent.WORK_WORLD_PERMISSIONS:
                 String workWorldPermissions = (String) args[0];
                 //todo这里发通知  告知一下
+                break;
+            case QtalkEvent.PAY_SUCCESS:
+                sendEvent("paySuccessNotify",map);
                 break;
 
         }

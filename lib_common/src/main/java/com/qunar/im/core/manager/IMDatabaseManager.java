@@ -2,8 +2,6 @@ package com.qunar.im.core.manager;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
 import android.util.LruCache;
 
@@ -28,20 +26,20 @@ import com.qunar.im.base.jsonbean.NewReadStateByJson;
 import com.qunar.im.base.jsonbean.NewRemoteConfig;
 import com.qunar.im.base.jsonbean.QuickReplyResult;
 import com.qunar.im.base.jsonbean.RNSearchData;
-import com.qunar.im.base.module.CityLocal;
-import com.qunar.im.base.module.FoundConfiguration;
-import com.qunar.im.base.module.SearchKeyData;
-import com.qunar.im.base.module.WorkWorldAtShowItem;
-import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.AreaLocal;
 import com.qunar.im.base.module.AtData;
 import com.qunar.im.base.module.CalendarTrip;
+import com.qunar.im.base.module.CityLocal;
 import com.qunar.im.base.module.CollectionConversation;
 import com.qunar.im.base.module.DepartmentItem;
+import com.qunar.im.base.module.FoundConfiguration;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.IMSessionList;
+import com.qunar.im.base.module.MedalListResponse;
+import com.qunar.im.base.module.MedalSingleUserStatusResponse;
+import com.qunar.im.base.module.MedalUserStatusResponse;
 import com.qunar.im.base.module.MedalsInfo;
 import com.qunar.im.base.module.MucListResponse;
 import com.qunar.im.base.module.Nick;
@@ -49,8 +47,12 @@ import com.qunar.im.base.module.PublishPlatform;
 import com.qunar.im.base.module.PublishPlatformNews;
 import com.qunar.im.base.module.QuickReplyData;
 import com.qunar.im.base.module.RecentConversation;
+import com.qunar.im.base.module.SearchKeyData;
 import com.qunar.im.base.module.SetLikeDataResponse;
 import com.qunar.im.base.module.UserConfigData;
+import com.qunar.im.base.module.UserHaveMedalStatus;
+import com.qunar.im.base.module.WorkWorldAtShowItem;
+import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldDetailsCommenData;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNewCommentBean;
@@ -88,6 +90,8 @@ import com.qunar.im.utils.QtalkStringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sqlite.database.sqlite.SQLiteDatabase;
+import org.sqlite.database.sqlite.SQLiteStatement;
 
 import java.io.File;
 import java.text.ParseException;
@@ -108,6 +112,9 @@ import java.util.Vector;
  */
 
 public class IMDatabaseManager {
+    static {
+        System.loadLibrary("sqliteX");
+    }
     private static final long DBDefalultTimeThreshold = 200;//sql耗时阀值 单位毫秒
     private static IMDatabaseManager instance = new IMDatabaseManager();
     private String dataCachePath;
@@ -723,13 +730,17 @@ public class IMDatabaseManager {
      * @return
      */
     public List<GetDepartmentResult.UserItem> getAllOrgaUsers() {
-        String sql = "Select UserId,Name, DescInfo,XmppId from IM_User;";
+        String sql = "Select UserId,Name, DescInfo,XmppId,isVisible from IM_User;";
         Object result = query(sql, null, new IQuery() {
             @Override
             public Object onQuery(Cursor cursor) {
                 List<GetDepartmentResult.UserItem> list = new ArrayList<>();
                 try {
                     while (cursor.moveToNext()) {
+                        int isVisible = cursor.getInt(4);
+                        if(isVisible != 1){
+                            continue;
+                        }
                         String u = cursor.getString(0);
                         String n = cursor.getString(1);
                         String d = cursor.getString(2);
@@ -1000,14 +1011,14 @@ public class IMDatabaseManager {
                 ustat.bindString(5, LastUpdateTime);
                 ustat.bindString(6, GroupId);
                 int count = ustat.executeUpdateDelete();
-                if(count <= 0){
+                if (count <= 0) {
                     stat.bindString(1, GroupId);
                     stat.bindString(2, Name);
                     stat.bindString(3, Introduce);
                     stat.bindString(4, HeaderSrc);
                     stat.bindString(5, Topic);
                     stat.bindString(6, "");
-                    stat.bindString(7,LastUpdateTime);
+                    stat.bindString(7, LastUpdateTime);
                     stat.executeInsert();
                 }
             }
@@ -1328,7 +1339,7 @@ public class IMDatabaseManager {
      */
     public List<Nick> SelectUserListBySearchText(String groupId, String text) {
         deleteJournal();
-        String sql = "select * ,(case when xmppid in (select MemberId from IM_Group_Member where GroupId = ?) then 1 else 0 END) as isInGroup from IM_User as a Where (UserId like ? or Name like  ? or SearchIndex like ?) order by UserId limit 100 ";
+        String sql = "select UserId,XmppId,Name,DescInfo,HeaderSrc,SearchIndex,UserInfo,LastUpdateTime,IncrementVersion ,(case when xmppid in (select MemberId from IM_Group_Member where GroupId = ?) then 1 else 0 END) as isInGroup from IM_User as a Where (UserId like ? or Name like  ? or SearchIndex like ?) order by UserId limit 100 ";
         Object result = query(sql, new String[]{groupId, "%" + text + "%", "%" + text + "%", "%" + text + "%"}, new IQuery() {
             @Override
             public Object onQuery(Cursor cursor) {
@@ -1348,7 +1359,7 @@ public class IMDatabaseManager {
                         nick.setUserInfo(cursor.getString(6));
                         nick.setLastUpdateTime(cursor.getString(7));
                         nick.setIncrementVersion(cursor.getColumnName(8));
-                        nick.setInGroup(cursor.getInt(11) == 1);
+                        nick.setInGroup(cursor.getInt(9) == 1);
                         list.add(nick);
                     }
                 } catch (Exception e) {
@@ -1374,7 +1385,7 @@ public class IMDatabaseManager {
      * @return
      */
     public List<Nick> selectFriendListForGroupAdd(String groupId) {
-        String sql = "select a.UserId,a.XmppId,b.Name,b.HeaderSrc,b.SearchIndex from IM_Friend_List as a join IM_User as b where a.UserId = b.UserId " +
+        String sql = "select a.UserId,a.XmppId,b.Name,b.HeaderSrc,b.SearchIndex,b.DescInfo from IM_Friend_List as a join IM_User as b where a.UserId = b.UserId " +
                 "and a.XmppId NOT IN(select MemberId from IM_Group_Member where GroupId = ?)";
         Cursor cursor = helper.getReadableDatabase().rawQuery(sql, new String[]{groupId});
         List<Nick> list = new ArrayList<>();
@@ -1389,6 +1400,7 @@ public class IMDatabaseManager {
                 nick.setName(cursor.getString(2));
                 nick.setHeaderSrc(cursor.getString(3));
                 nick.setSearchIndex(cursor.getString(4));
+                nick.setDescInfo(cursor.getString(5));
                 list.add(nick);
             }
         } catch (Exception e) {
@@ -1455,8 +1467,8 @@ public class IMDatabaseManager {
      * @return
      */
     public List<Nick> selectMemberFromGroup(String groupId, String searchIndex) {
-        String sql = "select a.MemberId,b.UserId,b.Name,b.HeaderSrc from IM_Group_Member as a left join IM_User as b  where a.MemberId = b.XmppId and b.SearchIndex like ? and GroupId = ?";
-        Cursor cursor = helper.getReadableDatabase().rawQuery(sql, new String[]{"%" + searchIndex + "%", groupId});
+        String sql = "select a.MemberId,b.UserId,b.Name,b.HeaderSrc from IM_Group_Member as a left join IM_User as b  where a.MemberId = b.XmppId and (b.UserId like ? or b.Name like  ? or b.SearchIndex like ?) and GroupId = ?";
+        Cursor cursor = helper.getReadableDatabase().rawQuery(sql, new String[]{"%" + searchIndex + "%","%" + searchIndex + "%","%" + searchIndex + "%", groupId});
         List<Nick> list = new ArrayList<>();
         int id = 0;
         try {
@@ -1740,8 +1752,8 @@ public class IMDatabaseManager {
 
         String domain = QtalkNavicationService.getInstance().getXmppdomain();
 
-        String insertSql = "insert or IGNORE into IM_User (UserId,XmppId,Name,DescInfo,SearchIndex,LastUpdateTime) values(?,?,?,?,?,?);";
-        String updateSql = "update IM_User set DescInfo = ? , SearchIndex =? ,LastUpdateTime =? where XmppId = ?";
+        String insertSql = "insert or IGNORE into IM_User (UserId,XmppId,Name,DescInfo,SearchIndex,LastUpdateTime,isVisible) values(?,?,?,?,?,?,?);";
+        String updateSql = "update IM_User set DescInfo = ? , SearchIndex =? ,LastUpdateTime =?,isVisible =? where XmppId = ?";
         String deleteSql = "delete from IM_User where XmppId = ?";
         String changeVersionSql = "insert or replace into IM_Cache_Data (key,type,valueInt) values (?,?,?)";
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -1758,12 +1770,14 @@ public class IMDatabaseManager {
             insertStat.bindString(4, incrementUser.D);
             insertStat.bindString(5, incrementUser.pinyin);
             insertStat.bindString(6, version + "");
+            insertStat.bindString(7, String.valueOf(incrementUser.visibleFlag ? 1 : 0));
             insertStat.executeInsert();
 
             updateStat.bindString(1, incrementUser.D);
             updateStat.bindString(2, incrementUser.pinyin);
             updateStat.bindString(3, version + "");
-            updateStat.bindString(4, incrementUser.U + "@" + domain);
+            updateStat.bindString(4, String.valueOf(incrementUser.visibleFlag ? 1 : 0));
+            updateStat.bindString(5, incrementUser.U + "@" + domain);
             updateStat.executeUpdateDelete();
         }
         for (IncrementUsersResult.IncrementUser incrementUser : deletes) {
@@ -2603,12 +2617,12 @@ public class IMDatabaseManager {
 
     private void setAtMessageValue(AtInfo atInfo) {
         List<AtInfo> atList = AtMessageMap.get(atInfo.xmppid);
-        if(atList == null){
+        if (atList == null) {
             atList = new ArrayList<>();
         }
-        if(!atList.contains(atInfo))
-            atList.add(0,atInfo);
-        AtMessageMap.put(atInfo.xmppid,atList);
+        if (!atList.contains(atInfo))
+            atList.add(0, atInfo);
+        AtMessageMap.put(atInfo.xmppid, atList);
     }
 
     //获取会话列表数据
@@ -2800,7 +2814,7 @@ public class IMDatabaseManager {
             stat.executeUpdateDelete();
             db.setTransactionSuccessful();
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db.endTransaction();
@@ -3179,8 +3193,8 @@ public class IMDatabaseManager {
     }
 
     //有撤销消息更新数据
-    public void UpdateRevokeChatMessage(String MsgId, String str) {
-        String sql = "update IM_Message set Content = ?, Direction =2,Type = -1 where MsgId = ?";
+    public void UpdateRevokeChatMessage(String MsgId, String str, int msgtype) {
+        String sql = "update IM_Message set Content = ?, Direction =2,Type = "+ msgtype + " where MsgId = ?";
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransactionNonExclusive();
         SQLiteStatement stat = db.compileStatement(sql);
@@ -3998,7 +4012,7 @@ public class IMDatabaseManager {
                         stat.bindString(2, header.getValue());
 //                        updateStat.bindString(3, header.getValue());
                         members.add(header.getValue());
-                    }else if (header.getDefinedKey().equals(ProtoMessageOuterClass.StringHeaderType.StringHeaderTypeAffiliation)) {
+                    } else if (header.getDefinedKey().equals(ProtoMessageOuterClass.StringHeaderType.StringHeaderTypeAffiliation)) {
                         String mPower = header.getValue();
                         if (mPower.equals("m_user")) {
                             //普通成员
@@ -4630,7 +4644,7 @@ public class IMDatabaseManager {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("from", cursor.getString(0));
                 jsonObject.put("content", cursor.getString(1));
-                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false));
+                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false, true));
                 jsonObject.put("name", cursor.getString(3));
                 jsonObject.put("headerSrc", cursor.getString(4));
                 jsonArray.put(jsonObject);
@@ -4697,6 +4711,11 @@ public class IMDatabaseManager {
     }
 
 
+    /**
+     * 获取本地最新的群readmark时间
+     *
+     * @return
+     */
     public boolean getFocusSearch() {
         String sql = "select value from IM_Cache_Data where  type = " + CacheDataType.Focus_Search_TYPE;
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -4740,7 +4759,6 @@ public class IMDatabaseManager {
             db.endTransaction();
         }
     }
-
 
 
     /**
@@ -4821,11 +4839,11 @@ public class IMDatabaseManager {
      *
      * @return
      */
-    public LruCache<String,String> selectMarkupNames() {
+    public LruCache<String, String> selectMarkupNames() {
 
-        LruCache<String,String> markupNames = new LruCache<>(CurrentPreference.MAX_MARKUP_NAMES_COUNT);
+        LruCache<String, String> markupNames = new LruCache<>(CurrentPreference.MAX_MARKUP_NAMES_COUNT);
 
-        String sql = " select subkey,value from im_user_config where pkey=?";
+        String sql = " select subkey,value from im_user_config where pkey=? and isdel<>1";
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{CacheDataType.kMarkupNames});
         try {
@@ -4841,16 +4859,16 @@ public class IMDatabaseManager {
         return markupNames;
     }
 
-    public String selectMarkupNameById(String xmppid){
+    public String selectMarkupNameById(String xmppid) {
         String name = "";
-        String sql = " select value from im_user_config where pkey=? and subkey=? ";
+        String sql = " select value from im_user_config where pkey=? and subkey=? and isdel<>1";
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql, new String[]{CacheDataType.kMarkupNames,xmppid});
+        Cursor cursor = db.rawQuery(sql, new String[]{CacheDataType.kMarkupNames, xmppid});
         try {
             while (cursor.moveToNext()) {
                 name = cursor.getString(0);
-                if(!TextUtils.isEmpty(name))
-                    CurrentPreference.getInstance().getMarkupNames().put(xmppid,name);
+                if (!TextUtils.isEmpty(name))
+                    CurrentPreference.getInstance().getMarkupNames().put(xmppid, name);
             }
         } catch (Exception e) {
             Logger.e(e, "selectMarkupNameById crashed.");
@@ -5156,9 +5174,11 @@ public class IMDatabaseManager {
     public boolean bulkInsertGroupHistoryFroJson(List<JSONMucHistorys.DataBean> list, String selfUser, boolean isUpturn) throws Exception {
         String sql = "insert or ignore into IM_Message(MsgId, XmppId, \"From\", \"To\", Content, " +
                 "Platform, Type, State, Direction,LastUpdateTime,ReadedTag,MessageRaw,RealJid,ExtendedInfo) values" +
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?);";
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?) " +
+                "ON CONFLICT(MsgId) DO " +
+                "update set Content = ?,Type = ?, Direction = ?, State = ? where MsgId = ?;";
 
-        String revokeSql = "update IM_Message set Content = ?, Direction = ?,Type = ? where MsgId = ?";//撤销消息
+//        String revokeSql = "update IM_Message set Content = ?, Direction = ?,Type = ? where MsgId = ?";//撤销消息
 
         String ssql = "insert or replace into IM_SessionList (XmppId,RealJid,UserId,LastMessageId," +
                 "LastUpdateTime,ChatType,ExtendedFlag) values(?,?,?,?,?,?,?);";
@@ -5173,7 +5193,7 @@ public class IMDatabaseManager {
         boolean success = true;
         try {
             SQLiteStatement imstat = db.compileStatement(sql);
-            SQLiteStatement revokeStat = db.compileStatement(revokeSql);
+//            SQLiteStatement revokeStat = db.compileStatement(revokeSql);
             SQLiteStatement insertSessionStat = db.compileStatement(ssql);
 
             SQLiteStatement updateSessionStat = db.compileStatement(updateSql);
@@ -5224,20 +5244,22 @@ public class IMDatabaseManager {
                     imstat.bindString(8, String.valueOf(MessageStatus.LOCAL_STATUS_SUCCESS_PROCESSION));
                     //如果真实发送人等于自己,证明是自己发出的
                     //否则是其他人发出,根据这个条件判断方向
+                    int direction;
                     if (selfUser.equals(message.getRealfrom())) {
-                        imstat.bindString(9, "1");
+                        direction = IMMessage.DIRECTION_SEND;
                     } else {
-                        imstat.bindString(9, "0");
+                        direction = IMMessage.DIRECTION_RECV;
                     }
                     if ("-1".equals(body.getMsgType())) {
-                        imstat.bindString(9, "2");
                         imstat.bindString(3, message.getFrom());
                         imstat.bindString(5, msg.getNick() + body.getContent());
+                        direction = IMMessage.DIRECTION_MIDDLE;
                     }
                     if ("15".equals(body.getMsgType())) {
-                        imstat.bindString(9, "2");
+                        direction = IMMessage.DIRECTION_MIDDLE;
 //                        imstat.bindString(3, message.getFrom());
                     }
+                    imstat.bindString(9, String.valueOf(direction));
                     String t = "";
                     if (TextUtils.isEmpty(message.getMsec_times())) {
                         if (time == null || TextUtils.isEmpty(time.getStamp())) {
@@ -5277,6 +5299,16 @@ public class IMDatabaseManager {
                         imstat.bindString(14, "");
                     }
 
+                    imstat.bindString(15,body.getContent());
+                    imstat.bindString(16,msgType);
+                    if(msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))){
+                        imstat.bindString(17,String.valueOf(IMMessage.DIRECTION_MIDDLE));
+                    }else {
+                        imstat.bindString(17,String.valueOf(direction));
+                    }
+                    imstat.bindString(18,String.valueOf(MessageStatus.LOCAL_STATUS_SUCCESS_PROCESSION));
+                    imstat.bindString(19,msgId);
+
                     updateSessionStat.bindString(1, body.getId());
                     updateSessionStat.bindString(2, t);
                     updateSessionStat.bindString(3, message.getTo());
@@ -5297,13 +5329,13 @@ public class IMDatabaseManager {
                     }
 
                     long count = imstat.executeInsert();
-                    if (count <= 0 && msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))) {//撤销消息 update body
-                        revokeStat.bindString(1, body.getContent());
-                        revokeStat.bindString(2, String.valueOf(IMMessage.DIRECTION_MIDDLE));
-                        revokeStat.bindString(3, String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE));
-                        revokeStat.bindString(4, msgId);
-                        revokeStat.executeUpdateDelete();
-                    }
+//                    if (count <= 0 && msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))) {//撤销消息 update body
+//                        revokeStat.bindString(1, body.getContent());
+//                        revokeStat.bindString(2, String.valueOf(IMMessage.DIRECTION_MIDDLE));
+//                        revokeStat.bindString(3, String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE));
+//                        revokeStat.bindString(4, msgId);
+//                        revokeStat.executeUpdateDelete();
+//                    }
 
                 } catch (Exception e) {
                     success = false;
@@ -5922,6 +5954,7 @@ public class IMDatabaseManager {
                 int type = Integer.parseInt(cursor.getString(8));
                 rc.setType(type + "");
                 if (type != ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE
+                        && type != ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE
                         && type != ProtoMessageOuterClass.MessageType.MessageTypeGroupNotify_VALUE
                         && type != 12) {
                     switch (type) {
@@ -6372,8 +6405,10 @@ public class IMDatabaseManager {
     public boolean bulkInsertChatHistoryFroJson(List<JSONChatHistorys.DataBean> list, String selfId, boolean isUpdown) {
         String imsql = "insert or ignore into IM_Message(MsgId, XmppId, \"From\", \"To\", Content, " +
                 "Platform, Type, State, Direction,LastUpdateTime,ReadedTag,MessageRaw,RealJid,ExtendedInfo) values" +
-                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?);";
-        String revokeSql = "update IM_Message set Content = ?, Direction = ?,Type = ? where MsgId = ?";//撤销消息
+                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)" +
+                "ON CONFLICT(MsgId) DO " +
+                "update set Content = ?,Type = ?, Direction = ?, State = ? where MsgId = ?;";
+//        String revokeSql = "update IM_Message set Content = ?, Direction = ?,Type = ? where MsgId = ?";//撤销消息
         String imcsql = "insert or ignore into IM_Message_Collection(MsgId,Originfrom,Originto,Origintype) values" +
                 "(?,?,?,?)";
         String icusql = "insert or ignore into IM_Collection_User (XmppId,BIND) values (?,?)";
@@ -6391,7 +6426,7 @@ public class IMDatabaseManager {
         boolean success = true;
         try {
             SQLiteStatement imstat = db.compileStatement(imsql);
-            SQLiteStatement revokeStat = db.compileStatement(revokeSql);
+//            SQLiteStatement revokeStat = db.compileStatement(revokeSql);
             SQLiteStatement imcstat = db.compileStatement(imcsql);
             SQLiteStatement icustat = db.compileStatement(icusql);
             SQLiteStatement isstat = db.compileStatement(issql);
@@ -6458,14 +6493,15 @@ public class IMDatabaseManager {
                     imstat.bindString(7, msgType);
 
                     imstat.bindString(8, String.valueOf(MessageStatus.LOCAL_STATUS_SUCCESS));
-
+                    int direction;
                     if ("-1".equals(body.getMsgType())
                             || "15".equals(body.getMsgType())
                             || (ProtoMessageOuterClass.MessageType.MessageTypeRobotTurnToUser_VALUE + "").equals(body.getMsgType())) {
-                        imstat.bindString(9, "2");
+                        direction = IMMessage.DIRECTION_MIDDLE;
                     } else {
-                        imstat.bindString(9, from.equals(selfId) ? "1" : "0");
+                        direction = from.equals(selfId) ? IMMessage.DIRECTION_SEND : IMMessage.DIRECTION_RECV;
                     }
+                    imstat.bindString(9, String.valueOf(direction));
                     String t = "";
                     if (TextUtils.isEmpty(message.getMsec_times())) {
                         String d = time.getStamp();
@@ -6500,6 +6536,16 @@ public class IMDatabaseManager {
                     //// TODO: 2017/12/6 少一个强化消息字段
                     imstat.bindString(14, TextUtils.isEmpty(body.getExtendInfo()) ? "" : body.getExtendInfo());
 
+                    imstat.bindString(15,body.getContent());
+                    imstat.bindString(16,msgType);
+                    if(msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))){
+                        imstat.bindString(17,String.valueOf(IMMessage.DIRECTION_MIDDLE));
+                    }else {
+                        imstat.bindString(17,String.valueOf(direction));
+                    }
+                    imstat.bindString(18,String.valueOf(MessageStatus.LOCAL_STATUS_SUCCESS_PROCESSION));
+                    imstat.bindString(19,msgId);
+
                     //代收表数据绑定
                     if ("collection".equals(message.getType())) {
                         //代收数据方向肯定在左边故写死
@@ -6514,8 +6560,9 @@ public class IMDatabaseManager {
                             //代收群组类型消息 message表from存realJid
                             imstat.bindString(3, realFrom);
                             imcstat.bindString(4, 1 + "");
-                        }else{
-                            imstat.bindString(4,0+"");
+                        } else {
+                            //防止崩溃
+                            imcstat.bindString(4, 0 + "");
                         }
                         imcstat.executeInsert();
                         icustat.bindString(1, oto);
@@ -6570,13 +6617,13 @@ public class IMDatabaseManager {
 
                     }
                     long count = imstat.executeInsert();
-                    if (count <= 0 && msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))) {//撤销消息 update body
-                        revokeStat.bindString(1, body.getContent());
-                        revokeStat.bindString(2, String.valueOf(IMMessage.DIRECTION_MIDDLE));
-                        revokeStat.bindString(3, String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE));
-                        revokeStat.bindString(4, msgId);
-                        revokeStat.executeUpdateDelete();
-                    }
+//                    if (count <= 0 && msgType.equals(String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE))) {//撤销消息 update body
+//                        revokeStat.bindString(1, body.getContent());
+//                        revokeStat.bindString(2, String.valueOf(IMMessage.DIRECTION_MIDDLE));
+//                        revokeStat.bindString(3, String.valueOf(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE));
+//                        revokeStat.bindString(4, msgId);
+//                        revokeStat.executeUpdateDelete();
+//                    }
                 } catch (Exception e) {
                     success = false;
                     continue;
@@ -7785,7 +7832,7 @@ public class IMDatabaseManager {
         }
     }
 
-    public Map<String, String> searchHotlines() {
+    public List<String> searchHotlines() {
         String sql = "select value from IM_Cache_Data where type = " + CacheDataType.HOTLINE_TYPE + " and key='" + CacheDataType.HOTLINE_KEY + "'";
         Cursor cursor = null;
         String json = "";
@@ -7804,7 +7851,7 @@ public class IMDatabaseManager {
             if (TextUtils.isEmpty(json)) {
                 return null;
             }
-            final Map<String, String> results = JsonUtils.getGson().fromJson(json, new TypeToken<Map<String, String>>() {
+            final List<String> results = JsonUtils.getGson().fromJson(json, new TypeToken<List<String>>() {
             }.getType());
             return results;
         }
@@ -7828,7 +7875,7 @@ public class IMDatabaseManager {
         try {
             while (cursor.moveToNext()) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false));
+                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false, true));
                 jsonObject.put("timeLong", String.valueOf(cursor.getLong(2)));
                 jsonObject.put("content", cursor.getString(1));
                 jsonObject.put("nickName", cursor.getString(3));
@@ -8059,7 +8106,7 @@ public class IMDatabaseManager {
         try {
             while (cursor.moveToNext()) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false));
+                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false, true));
                 jsonObject.put("timeLong", String.valueOf(cursor.getLong(2)));
                 String ext = "";
                 if (TextUtils.isEmpty(cursor.getString(6))) {
@@ -8107,7 +8154,7 @@ public class IMDatabaseManager {
         try {
             while (cursor.moveToNext()) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false));
+                jsonObject.put("time", DateTimeUtils.getTime(cursor.getLong(2), false, true));
                 jsonObject.put("timeLong", String.valueOf(cursor.getLong(2)));
                 jsonObject.put("ext", cursor.getString(1));
                 jsonObject.put("nickName", cursor.getString(3));
@@ -8453,19 +8500,16 @@ public class IMDatabaseManager {
     }
 
 
-
-
-
     /**
      * 删除所有驼圈
      *
      * @param worldDeleteResponse
      */
-    public void DeleteWorkWorldDeleteByAll(String owner,String host) {
+    public void DeleteWorkWorldDeleteByAll(String owner, String host) {
         String sql = "";
-        if(!TextUtils.isEmpty(owner)&&!TextUtils.isEmpty(host)){
-            sql = "update im_work_world set isDelete = ?  where owner = "+owner+" and owner_host = "+host;
-        }else {
+        if (!TextUtils.isEmpty(owner) && !TextUtils.isEmpty(host)) {
+            sql = "update im_work_world set isDelete = ?  where owner = " + owner + " and owner_host = " + host;
+        } else {
             sql = "update im_work_world set isDelete = ? ";
         }
 
@@ -8475,8 +8519,8 @@ public class IMDatabaseManager {
 
         try {
 
-                stat.bindString(1,  "1");
-                stat.executeUpdateDelete();
+            stat.bindString(1, "1");
+            stat.executeUpdateDelete();
 
 
             db.setTransactionSuccessful();
@@ -8487,7 +8531,6 @@ public class IMDatabaseManager {
         }
 
     }
-
 
 
     /**
@@ -8586,7 +8629,7 @@ public class IMDatabaseManager {
                 stat.bindString(15, TextUtils.isEmpty(item.getIsLike()) ? "" : item.getIsLike());
                 stat.bindString(16, TextUtils.isEmpty(item.getIsDelete()) ? "" : item.getIsDelete());
                 stat.bindString(17, TextUtils.isEmpty(item.getPostType()) ? "1" : item.getPostType());
-                if (item.getAttachCommentList()!=null&&item.getAttachCommentList().size() > 0) {
+                if (item.getAttachCommentList() != null && item.getAttachCommentList().size() > 0) {
                     String str = JsonUtils.getGson().toJson(item.getAttachCommentList());
                     stat.bindString(18, str);
                 } else {
@@ -8824,7 +8867,6 @@ public class IMDatabaseManager {
 //                stat.bindString(23, TextUtils.isEmpty(item.getAtList()) ? "" : item.getAtList());
 
 
-
                 if (item.getNewChild() != null && item.getNewChild().size() > 0) {
                     String str = JsonUtils.getGson().toJson(item.getNewChild());
                     stat.bindString(23, str);
@@ -8987,9 +9029,6 @@ public class IMDatabaseManager {
     }
 
 
-
-
-
     /**
      * 更新通知数据
      *
@@ -9006,8 +9045,8 @@ public class IMDatabaseManager {
 
         try {
 
-                stat.bindString(1, eventType + "");
-                stat.executeUpdateDelete();
+            stat.bindString(1, eventType + "");
+            stat.executeUpdateDelete();
 
 
             db.setTransactionSuccessful();
@@ -9086,9 +9125,9 @@ public class IMDatabaseManager {
                 stat.bindString(13, TextUtils.isEmpty(item.getPostUUID()) ? "" : item.getPostUUID());
                 stat.bindString(14, TextUtils.isEmpty(item.getUuid()) ? "" : item.getUuid());
                 stat.bindString(15, TextUtils.isEmpty(item.getCreateTime()) ? "0" : item.getCreateTime());
-                if(isRead){
-                    stat.bindString(16, TextUtils.isEmpty(item.getReadState()) ? "1" : item.getReadState());
-                }else {
+                if (isRead) {
+                    stat.bindString(16, "1");
+                } else {
                     stat.bindString(16, TextUtils.isEmpty(item.getReadState()) ? "0" : item.getReadState());
                 }
 //                stat.bindString(17, TextUtils.isEmpty(item.getOwner()) ? "" : item.getOwner());
@@ -9117,9 +9156,9 @@ public class IMDatabaseManager {
         deleteJournal();
         int count = 0;
         String sql = "select count(1) from im_work_world_notice where readstate = 0 " +
-                "and (eventType="+Constants.WorkWorldState.NOTICE+" " +
-                "or eventType="+Constants.WorkWorldState.WORKWORLDATMESSAGE+" " +
-                "or eventType="+Constants.WorkWorldState.COMMENTATMESSAGE+")";
+                "and (eventType=" + Constants.WorkWorldState.NOTICE + " " +
+                "or eventType=" + Constants.WorkWorldState.WORKWORLDATMESSAGE + " " +
+                "or eventType=" + Constants.WorkWorldState.COMMENTATMESSAGE + ")";
         Cursor cursor = helper.getReadableDatabase().rawQuery(sql, null);
         try {
             while (cursor.moveToNext()) {
@@ -9146,9 +9185,9 @@ public class IMDatabaseManager {
         List<WorkWorldNoticeItem> imMessageList = new ArrayList<>();
 
         String sql = "SELECT * FROM im_work_world_notice where readstate = ? " +
-                "and (eventType="+Constants.WorkWorldState.NOTICE+" " +
-                "or eventType="+Constants.WorkWorldState.WORKWORLDATMESSAGE+" " +
-                "or eventType="+Constants.WorkWorldState.COMMENTATMESSAGE+")" +
+                "and (eventType=" + Constants.WorkWorldState.NOTICE + " " +
+                "or eventType=" + Constants.WorkWorldState.WORKWORLDATMESSAGE + " " +
+                "or eventType=" + Constants.WorkWorldState.COMMENTATMESSAGE + ")" +
                 " ORDER BY createTime DESC Limit ?,?";
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{0 + "", limit + "", size + ""});
@@ -9218,21 +9257,21 @@ public class IMDatabaseManager {
         List<WorkWorldNoticeItem> imMessageList = new ArrayList<>();
         String sql = "SELECT * FROM im_work_world_notice where (";
         for (int i = 0; i < typeList.size(); i++) {
-            sql+="eventType = "+typeList.get(i)+ "  or ";
+            sql += "eventType = " + typeList.get(i) + "  or ";
         }
-       sql =  sql.substring(0,(sql.lastIndexOf("or")));
-        sql+=" ) ORDER BY createTime DESC Limit ?,?";
+        sql = sql.substring(0, (sql.lastIndexOf("or")));
+        sql += " ) ORDER BY createTime DESC Limit ?,?";
 //        String sql = "SELECT * FROM im_work_world_notice where eventType = ? " +
 //                " ORDER BY createTime DESC Limit ?,?";
         SQLiteDatabase db = helper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, new String[]{ limit + "", size + ""});
+        Cursor cursor = db.rawQuery(sql, new String[]{limit + "", size + ""});
         try {
             while (cursor.moveToNext()) {
                 WorkWorldNoticeItem item;
-                if(isAtShow){
+                if (isAtShow) {
                     item = new WorkWorldAtShowItem();
-                }else {
-                 item=new WorkWorldNoticeItem();
+                } else {
+                    item = new WorkWorldNoticeItem();
                 }
 //
 //                sql ="CREATE TABLE IM_Work_World_Notice (" +
@@ -9291,10 +9330,6 @@ public class IMDatabaseManager {
     }
 
 
-
-
-
-
     /**
      * 获取最后一条消息时间,
      * 这条消息一定是正常状态,即为 1
@@ -9305,9 +9340,9 @@ public class IMDatabaseManager {
     public WorkWorldNoticeTimeData getLastestWorkWorldTime() {
         deleteJournal();
         String sql = "select createTime,uuid from im_work_world_notice " +
-                "where (eventType = "+Constants.WorkWorldState.NOTICE+" " +
-                "or eventType = "+Constants.WorkWorldState.WORKWORLDATMESSAGE+" " +
-                "or eventType = "+Constants.WorkWorldState.COMMENTATMESSAGE+")" +
+                "where (eventType = " + Constants.WorkWorldState.NOTICE + " " +
+                "or eventType = " + Constants.WorkWorldState.WORKWORLDATMESSAGE + " " +
+                "or eventType = " + Constants.WorkWorldState.COMMENTATMESSAGE + ")" +
                 " order by createTime desc limit 1";
         Object result = query(sql, null, new IQuery() {
             @Override
@@ -9373,7 +9408,7 @@ public class IMDatabaseManager {
     }
 
 
-    public void InsertWorkWorldRemind(boolean isopen){
+    public void InsertWorkWorldRemind(boolean isopen) {
         String sql = "insert or replace into IM_Cache_Data (key,type,value) values(?,?,?)";
         SQLiteDatabase db = helper.getWritableDatabase();
         SQLiteStatement stat = db.compileStatement(sql);
@@ -9450,7 +9485,6 @@ public class IMDatabaseManager {
     }
 
 
-
     public boolean SelectWorkWorldRemind() {
         deleteJournal();
         String sql = "select value from im_cache_data  where key = ? and type = ?";
@@ -9474,7 +9508,6 @@ public class IMDatabaseManager {
 
         return is;
     }
-
 
 
     public boolean SelectWorkWorldPremissions() {
@@ -9591,7 +9624,7 @@ public class IMDatabaseManager {
         String sql = "select * from IM_SearchHistory  where searchType = ? order by searchTime desc limit ?";
 
         boolean is = true;
-        Cursor cursor = helper.getReadableDatabase().rawQuery(sql, new String[]{type+"", "" + limit});
+        Cursor cursor = helper.getReadableDatabase().rawQuery(sql, new String[]{type + "", "" + limit});
         List<SearchKeyData> list = new ArrayList<>();
         try {
 
@@ -9623,7 +9656,7 @@ public class IMDatabaseManager {
         SQLiteStatement stat = db.compileStatement(sql);
         db.beginTransactionNonExclusive();
         String time = paramsData.get("searchTime");
-        if(TextUtils.isEmpty(paramsData.get("searchTime"))||Long.parseLong(paramsData.get("searchTime"))==0){
+        if (TextUtils.isEmpty(paramsData.get("searchTime")) || Long.parseLong(paramsData.get("searchTime")) == 0) {
             time = String.valueOf(System.currentTimeMillis());
         }
         try {
@@ -9645,7 +9678,7 @@ public class IMDatabaseManager {
         try {
             db.beginTransactionNonExclusive();
             SQLiteStatement stat = db.compileStatement(sql);
-            stat.bindString(1, searchType+"");
+            stat.bindString(1, searchType + "");
             stat.executeUpdateDelete();
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -9654,6 +9687,567 @@ public class IMDatabaseManager {
             db.endTransaction();
         }
     }
+
+
+    /**
+     * 插入勋章用户状态列表
+     *
+     * @param medalList
+     */
+    public void InsertUserMedalStatusList(MedalUserStatusResponse medalList) {
+        String sql = "INSERT or REPLACE INTO IM_User_Status_Medal (medalId,userId,host,medalStatus,mappingVersion,updateTime) VALUES(?,?,?,?,?,?)";
+        SQLiteDatabase db = helper.getWritableDatabase();
+        try {
+            db.beginTransactionNonExclusive();
+            SQLiteStatement stat = db.compileStatement(sql);
+            for (int i = 0; i < medalList.getData().getUserMedals().size(); i++) {
+                MedalUserStatusResponse.DataBean.UserMedalsBean data = medalList.getData().getUserMedals().get(i);
+
+                stat.bindString(1, data.getMedalId() + "");
+                stat.bindString(2, data.getUserId());
+                stat.bindString(3, data.getHost());
+                stat.bindString(4, data.getMedalStatus() + "");
+                stat.bindString(5, data.getMappingVersion() + "");
+                stat.bindString(6, data.getUpdateTime() + "");
+                stat.executeInsert();
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
+    /**
+     * 插入勋章列表
+     *
+     * @param medalList
+     */
+    public void InsertMedalList(MedalListResponse medalList) {
+        String sql = "INSERT or REPLACE INTO IM_Medal_List (medalId,medalName,obtainCondition,smallIcon,bigLightIcon,bigGrayIcon,bigLockIcon,status) VALUES(?,?,?,?,?,?,?,?)";
+        SQLiteDatabase db = helper.getWritableDatabase();
+        try {
+            db.beginTransactionNonExclusive();
+            SQLiteStatement stat = db.compileStatement(sql);
+            for (int i = 0; i < medalList.getData().getMedalList().size(); i++) {
+                MedalListResponse.DataBean.MedalListBean data = medalList.getData().getMedalList().get(i);
+
+                stat.bindString(1, data.getId() + "");
+                stat.bindString(2, data.getMedalName());
+                stat.bindString(3, data.getObtainCondition());
+                stat.bindString(4, data.getIcon().getSmall()+"");
+                stat.bindString(5, data.getIcon().getBigLight()+"");
+                stat.bindString(6, data.getIcon().getBigGray()+"");
+                stat.bindString(7, data.getIcon().getBigLock()+"");
+                stat.bindString(8, data.getStatus() + "");
+                stat.executeInsert();
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
+    public List<MedalListResponse.DataBean.MedalListBean> selectMedalList() {
+        deleteJournal();
+        String sql = "select * from IM_Medal_List  where status =" + CacheDataType.Y;
+        final List<MedalListResponse.DataBean.MedalListBean> medalList = new ArrayList<>();
+
+
+        Object result = query(sql, null, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                try {
+                    while (cursor.moveToNext()) {
+                        MedalListResponse.DataBean.MedalListBean data = new MedalListResponse.DataBean.MedalListBean();
+                        MedalListResponse.DataBean.MedalListBean.IconBean iconBean = new MedalListResponse.DataBean.MedalListBean.IconBean();
+                        data.setId(cursor.getInt(0));
+                        data.setMedalName(cursor.getString(1));
+                        data.setObtainCondition(cursor.getString(2));
+                        iconBean.setSmall(cursor.getString(3));
+                        iconBean.setBigLight(cursor.getString(4));
+                        iconBean.setBigGray(cursor.getString(5));
+                        iconBean.setBigLock(cursor.getString(6));
+                        data.setStatus(cursor.getInt(7));
+                        data.setIcon(iconBean);
+                        medalList.add(data);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return medalList;
+            }
+        });
+
+
+        return medalList;
+    }
+
+
+    /**
+     * 更新勋章配置
+     *
+     * @param value
+     */
+    public void updateMedalListVersion(int value) {
+        String sql = "insert or replace into IM_Cache_Data(key, type, value" + ") values" +
+                "(?, ?, ?);";
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.beginTransactionNonExclusive();
+        SQLiteStatement stat = db.compileStatement(sql);
+        try {
+            stat.bindString(1, CacheDataType.medalListVersionValue);
+            stat.bindString(2, CacheDataType.medalListVersionType + "");
+            stat.bindString(3, value + "");
+            stat.executeInsert();
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Logger.e(e, "updateCollectEmojConfig crashed.");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
+    /**
+     * 更新收藏表情配置
+     *
+     * @param value
+     */
+    public void updateUserMedalStatusListVersion(int value) {
+        String sql = "insert or replace into IM_Cache_Data(key, type, value" + ") values" +
+                "(?, ?, ?);";
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.beginTransactionNonExclusive();
+        SQLiteStatement stat = db.compileStatement(sql);
+        try {
+            stat.bindString(1, CacheDataType.medalUserStatusValue);
+            stat.bindString(2, CacheDataType.medalUserStatusType + "");
+            stat.bindString(3, value + "");
+            stat.executeInsert();
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Logger.e(e, "updateCollectEmojConfig crashed.");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    /**
+     * 查询勋章列表版本号
+     *
+     * @return
+     */
+    public int selectMedalListVersion() {
+        deleteJournal();
+        String sql = "select value from IM_Cache_Data where key=? and type=?";
+        Object result = query(sql, new String[]{CacheDataType.medalListVersionValue, String.valueOf(CacheDataType.medalListVersionType)}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+                        count = Integer.parseInt(cursor.getString(0));
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return count;
+            }
+        });
+        if (result == null) {
+            return 0;
+        } else {
+            return (int) result;
+        }
+    }
+
+    /**
+     * 查询勋章列表版本号
+     *
+     * @return
+     */
+    public int selectUserMedalStatusVersion() {
+        deleteJournal();
+        String sql = "select value from IM_Cache_Data where key=? and type=?";
+        Object result = query(sql, new String[]{CacheDataType.medalUserStatusValue, String.valueOf(CacheDataType.medalUserStatusType)}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+                        count = Integer.parseInt(cursor.getString(0));
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return count;
+            }
+        });
+        if (result == null) {
+            return 0;
+        } else {
+            return (int) result;
+        }
+    }
+
+
+    /**
+     * 查询勋章列表版本号
+     *
+     * @return
+     */
+    public List<UserHaveMedalStatus> selectUserHaveMedalStatus(String userid, String host) {
+        deleteJournal();
+
+        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon," +
+                "a.bigLightIcon,a.BigGrayIcon,a.bigLockIcon,a.status, " +
+                "COALESCE(b.userid, ?), COALESCE(b.host, ?)" +
+                ",COALESCE(b.medalStatus, 0), (select count(*) from IM_User_Status_Medal as e" +
+                " where e.medalId=a.medalId and (e.medalstatus & "+MessageStatus.MEDAL_HAVE+"=="+MessageStatus.MEDAL_HAVE+")) as userCount from IM_Medal_List as a left " +
+                "join IM_User_Status_Medal as b on a.medalid  = b.medalid and b.UserId = ?" +
+                " and b.Host = ? where a.status = 1 order by b.medalStatus desc, b.updateTime;";
+//        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon,a.BigGrayIcon,a.status," +
+//                " COALESCE(userid, ?), COALESCE(medalStatus, 0)  from im_medal_list as a left join im_user_status_medal as b " +
+//                "on a.medalid  = b.medalid where a.status = 1 and b.UserId = ?";
+        final List<UserHaveMedalStatus> list = new ArrayList<>();
+        Object result = query(sql, new String[]{userid, host, userid, host}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+                        UserHaveMedalStatus data = new UserHaveMedalStatus();
+                        data.setMedalId(cursor.getInt(0));
+                        data.setMedalName(cursor.getString(1));
+                        data.setObtainCondition(cursor.getString(2));
+                        data.setSmallIcon(cursor.getString(3));
+                        data.setBigLightIcon(cursor.getString(4));
+                        data.setBigGrayIcon(cursor.getString(5));
+                        data.setBigLockIcon(cursor.getString(6));
+                        data.setStatus(cursor.getInt(7));
+                        data.setMedalUserId(cursor.getString(8));
+                        data.setMedalHost(cursor.getString(9));
+                        data.setMedalUserStatus(cursor.getInt(10));
+                        data.setUserCount(cursor.getInt(11));
+                        list.add(data);
+//                        count = Integer.parseInt(cursor.getString(0));
+//                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return list;
+            }
+        });
+        if (result == null) {
+            return list;
+        } else {
+            return (List<UserHaveMedalStatus>) result;
+        }
+    }
+
+    /**
+     * 查询指定用户佩戴勋章
+     *
+     * @return
+     */
+    public List<UserHaveMedalStatus> selectUserWearMedalStatusByUserid(String userid, String host) {
+        deleteJournal();
+
+        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon, " +
+                "a.BigGrayIcon,a.bigLockIcon,a.status, COALESCE(userid, ?), COALESCE(host, ?), b.medalStatus, " +
+                "(select count(*) from IM_User_Status_Medal where medalId=a.medalId) as userCount from " +
+                "IM_Medal_List as a left join IM_User_Status_Medal as b on a.medalid  = b.medalid and" +
+                " b.UserId = ? and b.Host = ? where a.status = 1 and (b.medalStatus & " + MessageStatus.MEDAL_WEAL + " = " + MessageStatus.MEDAL_WEAL +
+                ") order by b.medalStatus desc, b.updateTime;";
+//        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon,a.BigGrayIcon,a.status," +
+//                " COALESCE(userid, ?), COALESCE(medalStatus, 0)  from im_medal_list as a left join im_user_status_medal as b " +
+//                "on a.medalid  = b.medalid where a.status = 1 and b.UserId = ?";
+        final List<UserHaveMedalStatus> list = new ArrayList<>();
+        Object result = query(sql, new String[]{userid, host, userid, host}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+                        UserHaveMedalStatus data = new UserHaveMedalStatus();
+                        data.setMedalId(cursor.getInt(0));
+                        data.setMedalName(cursor.getString(1));
+                        data.setObtainCondition(cursor.getString(2));
+                        data.setSmallIcon(cursor.getString(3));
+                        data.setBigLightIcon(cursor.getString(4));
+                        data.setBigGrayIcon(cursor.getString(5));
+                        data.setBigLockIcon(cursor.getString(6));
+                        data.setStatus(cursor.getInt(7));
+                        data.setMedalUserId(cursor.getString(8));
+                        data.setMedalHost(cursor.getString(9));
+                        data.setMedalUserStatus(cursor.getInt(10));
+                        data.setUserCount(cursor.getInt(11));
+                        list.add(data);
+//                        count = Integer.parseInt(cursor.getString(0));
+//                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return list;
+            }
+        });
+        if (result == null) {
+            return list;
+        } else {
+            return (List<UserHaveMedalStatus>)result;
+//            return (int) result;
+        }
+    }
+
+    /**
+     * 查询指定用户佩戴勋章
+     *
+     * @return
+     */
+    public List<UserHaveMedalStatus> selectUserHaveMedalStatusByUserid(String userid, String host) {
+        deleteJournal();
+
+        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon, " +
+                "a.BigGrayIcon,a.bigLockIcon,a.status, COALESCE(userid, ?), COALESCE(host, ?), b.medalStatus, " +
+                "(select count(*) from IM_User_Status_Medal where medalId=a.medalId) as userCount from " +
+                "IM_Medal_List as a left join IM_User_Status_Medal as b on a.medalid  = b.medalid and" +
+                " b.UserId = ? and b.Host = ? where a.status = 1 and (b.medalStatus & " + MessageStatus.MEDAL_HAVE + " = " + MessageStatus.MEDAL_HAVE +
+                ") order by b.medalStatus desc, b.updateTime;";
+//        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon,a.BigGrayIcon,a.status," +
+//                " COALESCE(userid, ?), COALESCE(medalStatus, 0)  from im_medal_list as a left join im_user_status_medal as b " +
+//                "on a.medalid  = b.medalid where a.status = 1 and b.UserId = ?";
+        final List<UserHaveMedalStatus> list = new ArrayList<>();
+        Object result = query(sql, new String[]{userid, host, userid, host}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+                        UserHaveMedalStatus data = new UserHaveMedalStatus();
+                        data.setMedalId(cursor.getInt(0));
+                        data.setMedalName(cursor.getString(1));
+                        data.setObtainCondition(cursor.getString(2));
+                        data.setSmallIcon(cursor.getString(3));
+                        data.setBigLightIcon(cursor.getString(4));
+                        data.setBigGrayIcon(cursor.getString(5));
+                        data.setBigLockIcon(cursor.getString(6));
+                        data.setStatus(cursor.getInt(7));
+                        data.setMedalUserId(cursor.getString(8));
+                        data.setMedalHost(cursor.getString(9));
+                        data.setMedalUserStatus(cursor.getInt(10));
+                        data.setUserCount(cursor.getInt(11));
+                        list.add(data);
+//                        count = Integer.parseInt(cursor.getString(0));
+//                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return list;
+            }
+        });
+        if (result == null) {
+            return list;
+        } else {
+            return (List<UserHaveMedalStatus>)result;
+//            return (int) result;
+        }
+    }
+
+    /**
+     * 查询某用户下的某勋章佩戴详情
+     */
+
+    public UserHaveMedalStatus getUserMedalWithMedalId(int medalId, String userId, String host) {
+
+        deleteJournal();
+
+        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon, " +
+                "a.BigGrayIcon,a.bigLockIcon,a.status, COALESCE(userid, ?), COALESCE(host, ?), b.medalStatus, " +
+                "(select count(*) from IM_User_Status_Medal where medalId=b.medalId) as userCount " +
+                "from IM_Medal_List as a left join IM_User_Status_Medal as b on a.medalid  " +
+                "= b.medalid and b.medalid = ? and b.UserId = ? and b.host = ? where a.status = 1 " +
+                "and (b.medalStatus & 0x02 = 0x02 or b.medalStatus & 0x01 = 0x01) order by " +
+                "b.medalStatus desc, b.updateTime;";
+//        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon,a.BigGrayIcon,a.status," +
+//                " COALESCE(userid, ?), COALESCE(medalStatus, 0)  from im_medal_list as a left join im_user_status_medal as b " +
+//                "on a.medalid  = b.medalid where a.status = 1 and b.UserId = ?";
+        final List<UserHaveMedalStatus> list = new ArrayList<>();
+        final UserHaveMedalStatus data = new UserHaveMedalStatus();
+        Object result = query(sql, new String[]{userId, host, medalId + "", userId, host}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                int count = 0;
+                try {
+                    while (cursor.moveToNext()) {
+
+                        data.setMedalId(cursor.getInt(0));
+                        data.setMedalName(cursor.getString(1));
+                        data.setObtainCondition(cursor.getString(2));
+                        data.setSmallIcon(cursor.getString(3));
+                        data.setBigLightIcon(cursor.getString(4));
+                        data.setBigGrayIcon(cursor.getString(5));
+                        data.setBigLockIcon(cursor.getString(6));
+                        data.setStatus(cursor.getInt(7));
+                        data.setMedalUserId(cursor.getString(8));
+                        data.setMedalHost(cursor.getString(9));
+                        data.setMedalUserStatus(cursor.getInt(10));
+                        data.setUserCount(cursor.getInt(11));
+//                        count = Integer.parseInt(cursor.getString(0));
+//                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return data;
+            }
+        });
+        if (result == null) {
+            return null;
+        } else {
+            return (UserHaveMedalStatus) result;
+
+        }
+    }
+
+
+    /**
+     * 获取某个用户下的勋章list
+     *
+     * @param medalId
+     * @param limit
+     * @param offset
+     */
+    public List<Nick> getUsersInMedal(int medalId, int limit, int offset) {
+
+        deleteJournal();
+
+        String sql = "select d.UserId, d.XmppId, d.Name, d.DescInfo, d.headersrc from im_user as d left join" +
+                " (select b.UserId||'@'||b.host as XmppId from IM_Medal_List as a left join IM_User_Status_Medal " +
+                "as b on a.medalid = b.medalId where b.medalId = ? and a.status = 1 and (b.medalstatus &"+MessageStatus.MEDAL_HAVE+"=="+MessageStatus.MEDAL_HAVE+")order by b.updateTime " +
+                "desc LIMIT ? OFFSET ?) as c where d.XmppId = c.XmppId;";
+//        String sql = "select a.medalid ,a.medalName, a.obtainCondition,a.smallIcon,a.bigLightIcon,a.BigGrayIcon,a.status," +
+//                " COALESCE(userid, ?), COALESCE(medalStatus, 0)  from im_medal_list as a left join im_user_status_medal as b " +
+//                "on a.medalid  = b.medalid where a.status = 1 and b.UserId = ?";
+
+        final List<Nick> list = new ArrayList<>();
+        Object result = query(sql, new String[]{medalId + "", limit + "", offset + ""}, new IQuery() {
+            @Override
+            public Object onQuery(Cursor cursor) {
+                try {
+                    while (cursor.moveToNext()) {
+                        Nick data = new Nick();
+                        data.setUserId(cursor.getString(0));
+                        data.setXmppId(cursor.getString(1));
+                        data.setName(cursor.getString(2));
+                        data.setDescInfo(cursor.getString(3));
+                        data.setHeaderSrc(cursor.getString(4));
+                        list.add(data);
+//                        data.setBigGrayIcon(cursor.getString(5));
+//                        data.setBigLockIcon(cursor.getString(6));
+//                        data.setStatus(cursor.getInt(7));
+//                        data.setMedalUserId(cursor.getString(8));
+//                        data.setMedalHost(cursor.getString(9));
+//                        data.setMedalUserStatus(cursor.getInt(10));
+//                        data.setUserCount(cursor.getInt(11));
+//                        count = Integer.parseInt(cursor.getString(0));
+//                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                return list;
+            }
+        });
+        if (result == null) {
+            return null;
+        } else {
+            return (List<Nick>) result;
+        }
+    }
+
+
+    public void updateUserMedalStatus(MedalSingleUserStatusResponse medalSingleUserStatusResponse) {
+        String sql = "";
+
+        sql = "update IM_User_Status_Medal set mappingVersion=?, " +
+                "medalStatus=?, updateTime=? " +
+                "where userId=? and host=? and medalId=?";
+
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteStatement stat = db.compileStatement(sql);
+        db.beginTransactionNonExclusive();
+
+        try {
+
+//            for (int i = 0; i < list.size(); i++) {
+            stat.bindString(1, medalSingleUserStatusResponse.getData().getMappingVersion() + "");
+            stat.bindString(2, medalSingleUserStatusResponse.getData().getMedalStatus() + "");
+            stat.bindString(3, medalSingleUserStatusResponse.getData().getUpdateTime() + "");
+            stat.bindString(4, medalSingleUserStatusResponse.getData().getUserId());
+            stat.bindString(5, medalSingleUserStatusResponse.getData().getHost());
+            stat.bindString(6, medalSingleUserStatusResponse.getData().getMedalId() + "");
+
+            stat.executeUpdateDelete();
+//            }
+
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Logger.i(e + "");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
 }
 
 

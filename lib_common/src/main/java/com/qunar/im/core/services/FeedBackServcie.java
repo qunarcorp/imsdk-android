@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.CommonUploader;
 import com.qunar.im.base.common.QunarIMApp;
+import com.qunar.im.base.jsonbean.BaseJsonResult;
 import com.qunar.im.base.jsonbean.SendMailJson;
 import com.qunar.im.base.jsonbean.UploadImageResult;
 import com.qunar.im.base.protocol.HttpRequestCallback;
@@ -21,6 +22,7 @@ import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.DeviceUtil;
@@ -160,7 +162,7 @@ public class FeedBackServcie {
                     stringBuffer.append(CurrentPreference.getInstance().getPreferenceUserId() + "\n");
                     stringBuffer.append("\n导航地址：");
                     stringBuffer.append(QtalkNavicationService.getInstance().getCurrentNavUrl() + "\n\n\n");
-                    stringBuffer.append("\n\n\n日志地址：");
+                    stringBuffer.append("\n日志地址：");
                     stringBuffer.append(QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/" + result.httpUrl + "\n");
                     stringBuffer.append("\n手机信息：");
                     stringBuffer.append(DeviceUtil.getTelephonyManagerInfo());
@@ -173,8 +175,8 @@ public class FeedBackServcie {
                     json.subject = CurrentPreference.getInstance().getPreferenceUserId();
                     json.alt_body = QtalkNavicationService.getInstance().getInnerFiltHttpHost() + "/" + result.httpUrl;
                     json.is_html = "1";
+                    json.plat = GlobalConfigManager.getAppName().toLowerCase();
 
-//                    StringBuilder params = new StringBuilder(send_mail_url);
                     String url = send_mail_url;//Protocol.makeGetUri(QtalkNavicationService.getInstance().getSimpleapiurl(), QtalkNavicationService.getInstance().getHttpPort(), params.toString(), true);
                     Logger.i("上传日志文件成功  logfile url = " + result.httpUrl + "  \n请求url=" + url + "  \n请求参数=" + JsonUtils.getGson().toJson(json));
 
@@ -185,7 +187,21 @@ public class FeedBackServcie {
                     HttpUrlConnectionHandler.executePostJson(url, cookie, JsonUtils.getGson().toJson(json), new HttpRequestCallback() {
                         @Override
                         public void onComplete(InputStream response) {
-                            sendNotify(true);
+                            try {
+                                String resutString = Protocol.parseStream(response);
+                                if(!TextUtils.isEmpty(resutString)){
+                                    BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(resutString, BaseJsonResult.class);
+                                    if(baseJsonResult != null && baseJsonResult.ret){
+                                        sendNotify(true);
+                                    }else {
+                                        sendNotify(false);
+                                    }
+                                }else {
+                                    sendNotify(false);
+                                }
+                            } catch (Exception e) {
+                                sendNotify(false);
+                            }
 
                         }
 

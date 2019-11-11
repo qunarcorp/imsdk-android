@@ -39,7 +39,6 @@ import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 import com.qunar.im.ui.util.FileTypeUtil;
-import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.progressbarview.NumberProgressBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
@@ -129,7 +128,7 @@ public class MyFilesDetailActivity extends SwipeBackActivity implements View.OnC
                 if (transitFileJSON != null) {
                     myfile_detail_name.setText(transitFileJSON.FileName);
                     myfile_detail_size.setText(transitFileJSON.FileSize);
-                    myfile_detail_time.setText(DateTimeUtils.getTime(imMessage.getTime().getTime(), false));
+                    myfile_detail_time.setText(DateTimeUtils.getTime(imMessage.getTime().getTime(), false, true));
                     int ids = transitFileJSON.FileName.lastIndexOf(".");
                     int fileType = R.drawable.atom_ui_icon_zip_video;;
                     if (ids > 0) {
@@ -337,7 +336,7 @@ public class MyFilesDetailActivity extends SwipeBackActivity implements View.OnC
     public void downloadFile() {
         if(transitFileJSON == null) return;
 
-        String url = QtalkStringUtils.addFilePathDomain(transitFileJSON.HttpUrl);
+        String url = QtalkStringUtils.addFilePathDomain(transitFileJSON.HttpUrl, true);
         StringBuilder urlbuilder =new StringBuilder(url);
         Protocol.addBasicParamsOnHead(urlbuilder);
         url = urlbuilder.toString();

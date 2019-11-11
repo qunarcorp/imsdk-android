@@ -43,7 +43,7 @@ public class ShareLocationProcessor extends DefaultMessageProcessor {
             shareLocation.fileUrl = "res:///" + R.drawable.atom_ui_share_location;
         } else {
             if (!shareLocation.fileUrl.startsWith("file:///"))
-                shareLocation.fileUrl = QtalkStringUtils.addFilePathDomain(shareLocation.fileUrl);
+                shareLocation.fileUrl = QtalkStringUtils.addFilePathDomain(shareLocation.fileUrl, true);
         }
         MapView mapView = ViewPool.getView(MapView.class, context);
         mapView.setMapInfo(Uri.parse(shareLocation.fileUrl),

@@ -52,4 +52,6 @@ public interface IChatingPresenter extends IVoiceMessagePresenter {
     void sendRobotMsg(String msg);
 
     void setMessage(String msg);
+
+    void checkAlipayAccount();
 }

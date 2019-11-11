@@ -4,6 +4,7 @@ package com.qunar.rn_service.activity;
 import android.app.Activity;
 import android.app.Application;
 
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.common.LifecycleState;
@@ -65,6 +66,7 @@ public class QTalkSearchRNViewInstanceManager {
                     .addPackage(new MainReactPackage())
                     .addPackage(new SearchReactPackage())
                     .addPackage( new SvgPackage())
+                    .addPackage(new RNI18nPackage())
                     .setUseDeveloperSupport(CommonConfig.isDebug)
                     .setInitialLifecycleState(LifecycleState.RESUMED);
 

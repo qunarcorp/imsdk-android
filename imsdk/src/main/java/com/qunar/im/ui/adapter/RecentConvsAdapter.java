@@ -88,6 +88,16 @@ public class RecentConvsAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public int getFirstUnreadIndex(){
+        for(int i = 0; i < getCount();i++){
+            RecentConversation item = getItem(i);
+            if(item.getUnread_msg_cont() > 0 && item.getRemind() != 1){
+                return i;
+            }
+        }
+        return 0;
+    }
+
 //    public void setRecentConversationList(List<RecentConversation> recentConversationList,boolean isFirst) {
 //        this.isFirst = isFirst;
 //        this.recentConversationList = recentConversationList;
@@ -184,16 +194,13 @@ public class RecentConvsAdapter extends BaseAdapter {
         }
 
         if (data.getConversationType() == ConversitionType.MSG_TYPE_GROUP ) {
-            connectionUtil.getMucCard(data.getId(), new IMLogicManager.NickCallBack() {
-                @Override
-                public void onNickCallBack(Nick nick) {
-                    data.setNick(nick);
-                    showCard(nick,holder,data.getId(),true);
-                    if (data.isChan().indexOf("send") != -1) {
-                        holder.mConsultImageView.setVisibility(View.GONE);
-                    }
-
+            connectionUtil.getMucCard(data.getId(), nick -> {
+                data.setNick(nick);
+                showCard(nick,holder,data.getId(),true);
+                if (data.isChan().indexOf("send") != -1) {
+                    holder.mConsultImageView.setVisibility(View.GONE);
                 }
+
             },data.isToNetWork(), data.isToDB());
 
             connectionUtil.getUserCard(data.getLastFrom(), new IMLogicManager.NickCallBack() {

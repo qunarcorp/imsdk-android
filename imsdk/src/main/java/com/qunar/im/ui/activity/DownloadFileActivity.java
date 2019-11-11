@@ -56,6 +56,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
     private String fileName;
     private String fileSize;
     private String fileMd5Path;
+    private String localFile;
     private TransitFileJSON jsonObject;
 
     private IMMessage message;
@@ -106,14 +107,18 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
                 jsonObject = JsonUtils.getGson().fromJson(encryptMsg.Content, TransitFileJSON.class);
         } else {
             jsonObject = JsonUtils.getGson().fromJson(message.getBody(), TransitFileJSON.class);
+            if(jsonObject == null || TextUtils.isEmpty(jsonObject.HttpUrl)){
+                jsonObject = JsonUtils.getGson().fromJson(message.getExt(), TransitFileJSON.class);
+            }
         }
-        url = QtalkStringUtils.addFilePathDomain(jsonObject.HttpUrl);
+        url = QtalkStringUtils.addFilePathDomain(jsonObject.HttpUrl, true);
         StringBuilder urlbuilder = new StringBuilder(url);
         Protocol.addBasicParamsOnHead(urlbuilder);
         url = urlbuilder.toString();
 
         fileName = jsonObject.FileName;
         fileSize = jsonObject.FileSize;
+        localFile = jsonObject.LocalFile;
 
         tvFileName.setText(getText(R.string.atom_ui_tip_filename) + ": " + fileName);
 
@@ -171,28 +176,22 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
         final DownloadRequest request = new DownloadRequest();
         request.savePath = FileUtils.savePath + fileName;
         request.url = url;
-        request.requestComplete = new IDownloadRequestComplete() {
-            @Override
-            public void onRequestComplete(DownloadImageResult result) {
-                if (mHandler != null) {
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = DOWNLOAD_FINISH;
-                    mHandler.sendMessage(msg);
-                }
+        request.requestComplete = result -> {
+            if (mHandler != null) {
+                Message msg = mHandler.obtainMessage();
+                msg.what = DOWNLOAD_FINISH;
+                mHandler.sendMessage(msg);
             }
         };
-        request.progressListener = new ProgressResponseListener() {
-            @Override
-            public void onResponseProgress(long bytewriten, long length, boolean complete) {
-                if (mHandler != null) {
-                    int current = (int) (bytewriten * 100 / length);
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = UPDATE_PROGRESS;
-                    Bundle b = new Bundle();
-                    b.putInt(PROGRESS, current);
-                    msg.setData(b);
-                    mHandler.sendMessage(msg);
-                }
+        request.progressListener = (bytewriten, length, complete) -> {
+            if (mHandler != null) {
+                int current = (int) (bytewriten * 100 / length);
+                Message msg = mHandler.obtainMessage();
+                msg.what = UPDATE_PROGRESS;
+                Bundle b = new Bundle();
+                b.putInt(PROGRESS, current);
+                msg.setData(b);
+                mHandler.sendMessage(msg);
             }
         };
         CommonDownloader.getInsatnce().setDownloadRequest(request);
@@ -248,29 +247,46 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
 
         tvFileSize.setText(getText(R.string.atom_ui_tip_filesize) + ": " + fileSize);
         final File file = new File(FileUtils.savePath + fileName);
+         File lFile = null;
+        if(!TextUtils.isEmpty(localFile)){
+            lFile = new File(localFile);
+        }
+
         if (file.exists()) {
-            DispatchHelper.Async("getFileMd5", true, new Runnable() {//文件存在校验md5是否一致
-                @Override
-                public void run() {
+            //文件存在校验md5是否一致
+            DispatchHelper.Async("getFileMd5", true, () -> {
 
-                    String md5 = FileUtils.fileToMD5(file);
-                    if (!TextUtils.isEmpty(md5) && !TextUtils.isEmpty(fileMd5Path) && md5.equals(fileMd5Path.toLowerCase())) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tvfile_path.setText(getText(R.string.atom_ui_tip_filepath) + ": " + file.getAbsolutePath());
-                                tvfile_path.setVisibility(View.VISIBLE);
-                                btnDownload.setText(R.string.atom_ui_tip_open_other_app);
-                                btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
-                                btnDownload.setId(R.id.atom_ui_open_file);
-                                showShareTitleView(file);
+                String md5 = FileUtils.fileToMD5(file);
+                if (!TextUtils.isEmpty(md5) && !TextUtils.isEmpty(fileMd5Path) && md5.equals(fileMd5Path.toLowerCase())) {
+                    runOnUiThread(()->{
+                        tvfile_path.setText(getText(R.string.atom_ui_tip_filepath) + ": " + file.getAbsolutePath());
+                        tvfile_path.setVisibility(View.VISIBLE);
+                        btnDownload.setText(R.string.atom_ui_tip_open_other_app);
+                        btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
+                        btnDownload.setId(R.id.atom_ui_open_file);
+                        showShareTitleView(file);
+                    });
 
-                            }
-                        });
+                } else {
+                    file.delete();
+                }
+            });
+        }else if(lFile!=null&&lFile.exists()){
+            File finalLFile = lFile;
+            DispatchHelper.Async("getFileMd5", true, ()->{
+                String md5 = FileUtils.fileToMD5(finalLFile);
+                if (!TextUtils.isEmpty(md5) && !TextUtils.isEmpty(fileMd5Path) && md5.equals(fileMd5Path.toLowerCase())) {
+                    runOnUiThread(()->{
+                        tvfile_path.setText(getText(R.string.atom_ui_tip_filepath) + ": " + finalLFile.getAbsolutePath());
+                        tvfile_path.setVisibility(View.VISIBLE);
+                        btnDownload.setText(R.string.atom_ui_tip_open_other_app);
+                        btnDownload.setBackgroundResource(R.drawable.atom_ui_common_button_blue_selector);
+                        btnDownload.setId(R.id.atom_ui_open_local_file);
+                        showShareTitleView(finalLFile);
+                    });
 
-                    } else {
-                        file.delete();
-                    }
+                } else {
+                    finalLFile.delete();
                 }
             });
         }
@@ -281,12 +297,7 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
             return;
         }
         setActionBarRightSpecial(R.string.atom_ui_new_share);
-        setActionBarRightIconSpecialClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                externalShare(file);
-            }
-        });
+        setActionBarRightIconSpecialClick(v -> externalShare(file));
     }
 
     private void externalShare(File file) {
@@ -312,6 +323,14 @@ public class DownloadFileActivity extends IMBaseActivity implements View.OnClick
             downloadFile();
         } else if (v.getId() == R.id.atom_ui_open_file) {
             Intent intent = getFileIntent(FileUtils.savePath + fileName);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                LogUtil.e(TAG, "ERROR", e);
+                Toast.makeText(this, R.string.atom_ui_tip_file_open_failed, Toast.LENGTH_LONG).show();
+            }
+        }else if(v.getId() ==R.id.atom_ui_open_local_file){
+            Intent intent = getFileIntent(localFile);
             try {
                 startActivity(intent);
             } catch (Exception e) {

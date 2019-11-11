@@ -116,7 +116,7 @@ public class ManageEmotionPresenter implements IManageEmotionPresenter {
                     request.requestComplete = new IUploadRequestComplete() {
                         @Override
                         public void onRequestComplete(String id, final UploadImageResult result) {
-                            String url = URLEncoder.encode(QtalkStringUtils.addFilePathDomain(result.httpUrl));
+                            String url = URLEncoder.encode(QtalkStringUtils.addFilePathDomain(result.httpUrl, true));
                             String perUrl = Constants.Config.PERSISTENT_IMAGE + "?url=" + url;
                             HttpUrlConnectionHandler.executeGet(perUrl, new HttpRequestCallback() {
                                 @Override

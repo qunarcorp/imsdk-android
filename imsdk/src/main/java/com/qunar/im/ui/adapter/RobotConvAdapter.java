@@ -98,7 +98,7 @@ public class RobotConvAdapter extends BaseAdapter {
         holder.mLastMsgTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,text2FontSize);
         final RobotConversation data = getItem(position);
 
-        holder.mTimeTextView.setText(DateTimeUtils.getTime(data.lastMsgTime, false));
+        holder.mTimeTextView.setText(DateTimeUtils.getTime(data.lastMsgTime, false, true));
         String latestMsg = ChatTextHelper.showContentType(data.lastMsg, data.msgType);
         if (data.unread_msg_cont > 0) {
                 if (data.unread_msg_cont < 100) {

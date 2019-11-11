@@ -12,6 +12,7 @@ import com.qunar.im.base.jsonbean.QRCodeAuthResultJson;
 import com.qunar.im.base.jsonbean.QVTResponseResult;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.base.util.PhoneInfoUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
 
 import java.io.IOException;
@@ -254,7 +255,7 @@ public class LoginAPI {
         String url = "" + keyword;
         HttpUrlConnectionHandler.executeGet(url, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response)  {
                 try {
                     String resultString = Protocol.parseStream(response);
                     DomainResult result = JsonUtils.getGson().fromJson(resultString,DomainResult.class);
@@ -285,7 +286,7 @@ public class LoginAPI {
         params.put("phonenumber",phonenumber);
         HttpUrlConnectionHandler.executePostJson(url, JsonUtils.getGson().toJson(params), new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response){
+            public void onComplete(InputStream response)  {
                 try {
                     String resultString = Protocol.parseStream(response);
                     BaseJsonResult result = JsonUtils.getGson().fromJson(resultString,BaseJsonResult.class);
@@ -342,12 +343,48 @@ public class LoginAPI {
         String url = "";
         HttpUrlConnectionHandler.executePostJson(url, params, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response)  {
                 try {
                     String resultString = Protocol.parseStream(response);
                     BaseJsonResult result = JsonUtils.getGson().fromJson(resultString,BaseJsonResult.class);
                     if(callback != null){
                         callback.onCompleted(result);
+                    }
+                } catch (Exception e) {
+                    if(callback != null){
+                        callback.onCompleted(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                if(callback != null){
+                    callback.onCompleted(null);
+                }
+            }
+        });
+    }
+
+    public static void getNewLoginToken(String u,String p,final ProtocolCallback.UnitCallback<String[]> callback){
+        String url = QtalkNavicationService.getInstance().getHttpUrl() + "/nck/qtlogin.qunar";
+        Map<String,String> params = new HashMap<>();
+        params.put("u",u);
+        params.put("h",QtalkNavicationService.getInstance().getXmppdomain());
+        params.put("p",p);
+        params.put("mk", PhoneInfoUtils.getUniqueID());
+        HttpUrlConnectionHandler.executePostJson(url, JsonUtils.getGson().toJson(params), new HttpRequestCallback() {
+            @Override
+            public void onComplete(InputStream response) {
+                try {
+                    String resultString = Protocol.parseStream(response);
+                    GeneralJson result = JsonUtils.getGson().fromJson(resultString,GeneralJson.class);
+                    if(callback != null){
+                        if(result.ret){
+                            callback.onCompleted(new String[]{result.data.get("u"),result.data.get("t")});
+                        }else {
+                            callback.onCompleted(null);
+                        }
                     }
                 } catch (Exception e) {
                     if(callback != null){

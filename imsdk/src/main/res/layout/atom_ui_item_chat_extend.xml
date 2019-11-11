@@ -14,11 +14,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/atom_ui_container_margin"
         android:padding="@dimen/dp_4"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:textSize="11sp"
         android:background="@drawable/atom_ui_chat_time_bg"
         android:textColor="@android:color/white"/>
 
-    <LinearLayout
+    <com.qunar.im.ui.view.MyLinearLayout
         android:id="@+id/rich_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +33,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
-    </LinearLayout>
+    </com.qunar.im.ui.view.MyLinearLayout>
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/imageview_left"
@@ -51,21 +53,53 @@
         fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
         fresco:atom_imagecache_roundingBorderWidth="1dp" />
 
-    <TextView
-        android:id="@+id/nickname_left"
-        android:text=""
+    <LinearLayout
+        android:id="@+id/nick_layout"
         android:layout_width="wrap_content"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageview_left"
         android:layout_toRightOf="@id/imageview_left"
         android:layout_toEndOf="@id/imageview_left"
-        android:layout_marginLeft="6dp"
-        android:textColor="#888888" />
+        android:layout_marginLeft="6dp">
+        <TextView
+            android:id="@+id/nickname_left"
+            android:text="哈哈哈"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#888888" />
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/medal_one"
+            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/atom_ui_image_medal_size"
+            android:layout_height="@dimen/atom_ui_image_medal_size"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            fresco:atom_imagecache_roundAsCircle="true" />
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/medal_two"
+            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/atom_ui_image_medal_size"
+            android:layout_height="@dimen/atom_ui_image_medal_size"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            fresco:atom_imagecache_roundAsCircle="true" />
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/medal_three"
+            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/atom_ui_image_medal_size"
+            android:layout_height="@dimen/atom_ui_image_medal_size"
+            fresco:atom_imagecache_actualImageScaleType="centerCrop"
+            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+            fresco:atom_imagecache_roundAsCircle="true" />
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/chatview_left_wrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nickname_left"
+        android:layout_below="@id/nick_layout"
         android:layout_toRightOf="@id/imageview_left"
         android:layout_toEndOf="@id/imageview_left"
         android:layout_marginRight="48dp"

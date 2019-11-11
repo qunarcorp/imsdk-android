@@ -87,6 +87,7 @@ import java.util.UUID;
 
 import static com.qunar.im.base.structs.MessageType.image;
 import static com.qunar.im.base.structs.MessageType.link;
+import static com.qunar.im.base.structs.MessageType.video;
 import static com.qunar.im.ui.activity.WorkWorldDetailsActivity.WORK_WORLD_DETAILS_ITEM;
 
 public class WorkWorldDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
@@ -695,6 +696,7 @@ public class WorkWorldDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItem
                                         ((TextView) helper.getView(R.id.text_item)).setText(contentData1.getLinkContent().title);
                                         helper.getView(R.id.img_item).setVisibility(View.GONE);
                                         helper.getView(R.id.text_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
                                         break;
                                     case image:
                                         String url = contentData1.getImgList().get(0).getData();
@@ -703,13 +705,24 @@ public class WorkWorldDetailsAdapter extends BaseMultiItemQuickAdapter<MultiItem
 
                                         ProfileUtils.displaySquareByImageSrc(mActivity, url, (ImageView) helper.getView(R.id.img_item),
                                                 mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp));
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
                                         helper.getView(R.id.img_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.text_item).setVisibility(View.GONE);
+                                        break;
+
+                                    case video:
+                                        String videoImage = contentData1.getVideoContent().ThumbUrl;
+                                        ProfileUtils.displaySquareByImageSrc(mActivity, videoImage, (ImageView) helper.getView(R.id.img_item),
+                                                mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_work_world_56dp));
+                                        helper.getView(R.id.img_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.VISIBLE);
                                         helper.getView(R.id.text_item).setVisibility(View.GONE);
                                         break;
                                     default:
                                         ((TextView) helper.getView(R.id.text_item)).setText(contentData1.getContent());
                                         helper.getView(R.id.img_item).setVisibility(View.GONE);
                                         helper.getView(R.id.text_item).setVisibility(View.VISIBLE);
+                                        helper.getView(R.id.play_button).setVisibility(View.GONE);
                                         break;
                                 }
                             }

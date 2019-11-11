@@ -107,6 +107,7 @@
     <string name="atom_ui_new_home_search">&#xe752;</string>
     <string name="atom_ui_new_my_work_world">&#xe737;</string>
     <string name="atom_ui_new_setting_six_edge">&#xe735;</string>
+    <string name="atom_ui_new_cancle_x">&#xe33c;</string>
 
     <string name="atom_ui_new_message_read">&#xe797;</string>
     <string name="atom_ui_new_message_unread">&#xe796;</string>
@@ -121,5 +122,10 @@
     <string name="atom_ui_new_chat_input_keybord">&#xe758;</string>
     <string name="atom_ui_new_right_arrow">&#xe7e0;</string>
     <string name="atom_ui_new_activity_back_arrow">&#xe7df;</string>
+
+    <string name="atom_ui_new_at">&#xe89a;</string>
+    <string name="atom_ui_new_image">&#xe89c;</string>
+    <string name="atom_ui_new_video">&#xe89b;</string>
     <string name="atom_ui_new_toc_manager">&#xe894;</string>
+    <string name="atom_ui_new_nav_address">&#xe90f;</string>
 </resources>

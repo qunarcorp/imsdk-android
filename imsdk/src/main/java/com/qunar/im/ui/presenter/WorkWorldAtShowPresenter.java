@@ -9,4 +9,6 @@ public interface WorkWorldAtShowPresenter {
     void startRefresh();
 
     void loadingMore();
+    void startSearch(String str);
+
 }

@@ -108,7 +108,7 @@ public class ViewPool {
 //                        ((TextView)v).setMaxLines(128);
 //                        ((TextView)v).setFilters(
 //                                new InputFilter[]{new InputFilter.LengthFilter(2048)});
-                        ((TextView)v).setEllipsize(TextUtils.TruncateAt.END);
+//                        ((TextView)v).setEllipsize(TextUtils.TruncateAt.END);
                         ((TextView)v).setTextColor(QunarIMApp.getContext().getResources().getColor(R.color.atom_ui_light_gray_33));
                         v.setPadding(l_r_padding_size, t_b_padding_size, l_r_padding_size, t_b_padding_size);
                     }

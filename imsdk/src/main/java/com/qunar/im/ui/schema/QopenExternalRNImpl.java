@@ -3,9 +3,7 @@ package com.qunar.im.ui.schema;
 import android.content.Intent;
 
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.ui.activity.QtalkOpenTravelCalendar;
 import com.qunar.im.ui.activity.QtalkServiceExternalRNActivity;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
 
 import java.util.Map;
 

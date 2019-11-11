@@ -2,11 +2,14 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
+import com.qunar.im.base.module.UserHaveMedalStatus;
+import com.qunar.im.base.util.JsonUtils;
+import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
+import com.qunar.im.ui.util.ReflectUtil;
 
+import java.util.List;
 import java.util.Map;
 
 public class QOpenRnMySetting implements QChatSchemaService{
@@ -16,14 +19,12 @@ public class QOpenRnMySetting implements QChatSchemaService{
     @Override
     public boolean startActivityAndNeedWating(IMBaseActivity context, Map<String, String> map) {
         if(map != null){
-//            String groupId = map.get("groupId");
-            Intent intent = new Intent(context, QtalkServiceRNActivity.class);
+            Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(context);
+            if(intent == null){
+                return false;
+            }
             intent.putExtra("module","MySetting");
             intent.putExtra("Screen","Setting");
-//            intent.putExtra("groupId", groupId);
-//            int permissions = ConnectionUtil.getInstance().selectGroupMemberPermissionsByGroupIdAndMemberId(groupId, CurrentPreference.getInstance().getPreferenceUserId());
-//            com.orhanobut.logger.Logger.i("权限："+permissions);
-//            intent.putExtra("permissions", permissions);
             context.startActivity(intent);
         }
         return false;

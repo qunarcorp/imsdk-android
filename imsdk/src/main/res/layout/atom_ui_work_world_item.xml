@@ -212,6 +212,50 @@
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/re_video_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="144dp"
+                    android:layout_height="144dp"
+                    android:layout_marginLeft="66dp">
+
+
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/re_video_image"
+
+                        android:layout_width="144dp"
+                        android:layout_height="144dp"
+                        android:scaleType="centerCrop"
+                        fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                        fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+                        fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+                        fresco:atom_imagecache_roundingBorderWidth="1dp" />
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/atom_ui_play_button"></ImageView>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:id="@+id/re_video_time"
+                        android:textSize="12sp"
+                        android:textColor="#ffffff"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout

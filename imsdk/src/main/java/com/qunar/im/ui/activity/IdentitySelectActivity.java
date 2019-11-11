@@ -80,13 +80,13 @@ public class IdentitySelectActivity extends SwipeBackActivity {
             try {
                 identity_anonymous.setTextColor(getResources().getColor(R.color.atom_ui_new_like_select));
                 identity_real.setTextColor(getResources().getColor(R.color.send_no));
-                if(getIntent().hasExtra(ANONYMOUS_DATA)){
+                if (getIntent().hasExtra(ANONYMOUS_DATA)) {
                     mAnonymousData = (AnonymousData) getIntent().getSerializableExtra(ANONYMOUS_DATA);
-                    anonymous_real_name.setText("花名: " + mAnonymousData.getData().getAnonymous());
+                    anonymous_real_name.setText(getString(R.string.atom_ui_nickname) + "：" + mAnonymousData.getData().getAnonymous());
                 }
 
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 Logger.i("初始化花名出错");
             }
 
@@ -94,28 +94,27 @@ public class IdentitySelectActivity extends SwipeBackActivity {
     }
 
 
-    private void showChang(final int type){
+    private void showChang(final int type) {
 
-                if(type == 0){
-                    change_text.setTextColor(getResources().getColor(R.color.bfbfbf));
-                    change_text.setText("花名已确定,不可更改");
-                    change_icon.setVisibility(View.GONE);
-                    change_layout.setEnabled(false);
-                }else if(type == 1){
-                    change_text.setTextColor(getResources().getColor(R.color.atom_ui_light_gray_99));
-                    change_text.setText("换一换");
+        if (type == 0) {
+            change_text.setTextColor(getResources().getColor(R.color.bfbfbf));
+            change_text.setText("花名已确定,不可更改");
+            change_icon.setVisibility(View.GONE);
+            change_layout.setEnabled(false);
+        } else if (type == 1) {
+            change_text.setTextColor(getResources().getColor(R.color.atom_ui_light_gray_99));
+            change_text.setText(getString(R.string.atom_ui_change_change));
 //            change_icon.setTextColor(getResources().getColor(R.color.atom_ui_new_like_select));
-                    change_icon.setVisibility(View.VISIBLE);
-                    change_layout.setEnabled(true);
-                }
-
+            change_icon.setVisibility(View.VISIBLE);
+            change_layout.setEnabled(true);
+        }
 
 
     }
 
 
     private void bindData() {
-        setActionBarTitle("发布身份");
+        setActionBarTitle(getString(R.string.atom_ui_my_identify));
         showSelect();
         uuid = getIntent().getStringExtra(UUID_STR);
         real_name.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +143,7 @@ public class IdentitySelectActivity extends SwipeBackActivity {
 
         getAnonymousByUUID(false);
 
-        setActionBarRightText("确定");
+        setActionBarRightText(getString(R.string.atom_ui_common_confirm));
         setActionBarRightTextClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,31 +159,25 @@ public class IdentitySelectActivity extends SwipeBackActivity {
             @Override
             public void onCompleted(final AnonymousData anonymousData) {
 //                mView.setAnonymousData(anonymousData);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(isChange){
-                                    mAnonymousData = anonymousData;
-                                    anonymous_real_name.setText("花名: " + mAnonymousData.getData().getAnonymous());
-                                }else{
-                                    if(mAnonymousData == null){
-                                        mAnonymousData = anonymousData;
-                                        anonymous_real_name.setText("花名: " + mAnonymousData.getData().getAnonymous());
-                                    }
-                                }
-
-
-
-
-                                showChang(anonymousData.getData().getReplaceable());
+                        if (isChange) {
+                            mAnonymousData = anonymousData;
+                            anonymous_real_name.setText(getString(R.string.atom_ui_nickname) + ": " + mAnonymousData.getData().getAnonymous());
+                        } else {
+                            if (mAnonymousData == null) {
+                                mAnonymousData = anonymousData;
+                                anonymous_real_name.setText(getString(R.string.atom_ui_nickname) + ": " + mAnonymousData.getData().getAnonymous());
                             }
-                        });
+                        }
 
 
+                        showChang(anonymousData.getData().getReplaceable());
                     }
+
+
                 });
 
             }

@@ -1,10 +1,7 @@
 package com.qunar.rn_service.fragment;
 
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,12 +15,11 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.orhanobut.logger.Logger;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.enums.LoginStatus;
+import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.protobuf.Event.QtalkEvent;
+import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.rn_service.rnmanage.QtalkServiceRNViewInstanceManager;
-import com.qunar.rn_service.viewmodel.RNViewModel;
 
 /**
  * Created by hubin on 2018/3/28.

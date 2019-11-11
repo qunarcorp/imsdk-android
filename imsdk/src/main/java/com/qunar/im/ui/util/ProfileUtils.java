@@ -175,6 +175,45 @@ public final class ProfileUtils {
 
     }
 
+    public static void displayMedalSmallByImageSrc(final Activity context, final String imageSrc, final ImageView headView, final int w, final int h){
+
+
+        if(context == null){
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if(context.isDestroyed()){
+                return;
+            }
+        }
+        if(TextUtils.isEmpty(imageSrc) || headView == null){
+            return;
+        }
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //glide
+                Glide.with(context)
+//                        .load(imageSrc)//配置上下文
+                        .load(new MyGlideUrl(imageSrc))      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
+                        .asBitmap()
+//                        .error(defaultRes)
+                        .centerCrop()
+                        .thumbnail(0.1f)
+                        .transform(new CenterCrop(context)
+                                ,new GlideCircleTransform(context))
+                        .placeholder(defaultRes)
+                        .override(w > 0 ? w + 5 : Target.SIZE_ORIGINAL, h > 0 ? h + 5 : Target.SIZE_ORIGINAL)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)//缓存全尺寸
+                        .dontAnimate()
+                        .into(headView);
+            }
+        });
+
+
+
+    }
+
     public static void displaySquareByImageSrc(final Activity context, final String imageSrc, final ImageView headView, final int w, final int h){
 
 
@@ -572,7 +611,7 @@ public final class ProfileUtils {
         File file = null;
         if(!TextUtils.isEmpty(imageString))
         {
-            String url = QtalkStringUtils.addFilePathDomain(imageString);
+            String url = QtalkStringUtils.addFilePathDomain(imageString, true);
             file = MyDiskCache.getFile(url);
             if(!file.exists()) return null;
         }
@@ -586,7 +625,7 @@ public final class ProfileUtils {
                 if (TextUtils.isEmpty(chatRoom.getPicUrl())) {
                     return null;
                 }
-                String url = QtalkStringUtils.addFilePathDomain(chatRoom.getPicUrl());
+                String url = QtalkStringUtils.addFilePathDomain(chatRoom.getPicUrl(), true);
                 file = MyDiskCache.getFile(url);
                 if (!file.exists()) return null;
                 InternDatas.JidToUrl.put(jid,url);

@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="atom_rtc_ic_app_name">atom_rtc</string>
+    <string name="atom_rtc_ic_diconnect">&#xe616;</string>
+    <string name="atom_rtc_ic_ting">&#xe6f6;</string>
+    <string name="atom_rtc_ic_mute">&#xe60a;</string>
+    <string name="atom_rtc_ic_call">&#xe6e5;</string>
+    <string name="atom_rtc_ic_camera_turn">&#xe8e3;</string>
+    <string name="atom_rtc_ic_mic">&#xe74e;</string>
+    <string name="atom_rtc_ic_camera_shooting">&#xe612;</string>
+    <string name="atom_rtc_ic_loudspeaker">&#xe62d;</string>
+    <string name="atom_rtc_pref_speakerphone_default">true</string>
+
+
+    <string name="pub_imsdk_rtc_mute">Hands-free</string>
+    <string name="pub_imsdk_rtc_hungup">Hang up</string>
+    <string name="pub_imsdk_rtc_camera">Camera</string>
+    <string name="pub_imsdk_rtc_microphone">Mute</string>
+    <string name="pub_imsdk_rtc_pickup">Accept</string>
+
+
+    <string name="atom_rtc_canceled">Canceled</string>
+    <string name="atom_rtc_canceled_by_caller">Call Canceled by caller</string>
+    <string name="atom_rtc_duration">Duration：%s</string>
+    <string name="atom_rtc_deny">Declined</string>
+    <string name="atom_rtc_deny_other">Call Declined</string>
+    <string name="atom_rtc_timeout">"Call wasn't answered"</string>
+
+    <string name="atom_rtc_rtcinvite">Invite you to</string>
+    <string name="atom_rtc_rtcinvitevideo"> video</string>
+    <string name="atom_rtc_rtcinviteaudio"> audio</string>
+    <string name="atom_rtc_rtcinvitechat"> chat...</string>
+    <string name="atom_rtc_calling">calling</string>
+    <string name="atom_rtc_trylater">The other side is busy, please try again later
+</string>
+</resources>

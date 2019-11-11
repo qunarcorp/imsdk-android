@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,25 +17,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.RecentConversation;
-import com.qunar.im.core.utils.GlobalConfigManager;
-import com.qunar.im.ui.activity.TabMainActivity;
-import com.qunar.im.ui.presenter.IChatingPanelPresenter;
-import com.qunar.im.ui.presenter.IConversationsManagePresenter;
-import com.qunar.im.ui.presenter.impl.ChatingPanelPresenter;
-import com.qunar.im.ui.presenter.impl.PbConversationManagePresenter;
-import com.qunar.im.base.common.ConversitionType;
-import com.qunar.im.ui.presenter.views.IConversationListView;
-import com.qunar.im.ui.presenter.views.IRefreshConversation;
-import com.qunar.im.ui.presenter.views.ITopMeesageView;
 import com.qunar.im.base.structs.EncryptMessageType;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.MessageUtils;
-import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
+import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.BackgroundTipActivity;
@@ -45,7 +36,16 @@ import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.activity.RobotChatActivity;
 import com.qunar.im.ui.activity.RobotExtendChatActivity;
+import com.qunar.im.ui.activity.TabMainActivity;
 import com.qunar.im.ui.adapter.RecentConvsAdapter;
+import com.qunar.im.ui.presenter.IChatingPanelPresenter;
+import com.qunar.im.ui.presenter.IConversationsManagePresenter;
+import com.qunar.im.ui.presenter.impl.ChatingPanelPresenter;
+import com.qunar.im.ui.presenter.impl.PbConversationManagePresenter;
+import com.qunar.im.ui.presenter.views.IConversationListView;
+import com.qunar.im.ui.presenter.views.IRefreshConversation;
+import com.qunar.im.ui.presenter.views.ITopMeesageView;
+import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.List;
@@ -140,70 +140,54 @@ public class ConversationFragment extends BaseFragment implements IConversationL
         }
         list.setAdapter(recentConvsAdapter);
 
-        list.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        list.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
 
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-                int position = info.position - list.getHeaderViewsCount();
-                if(position < 0){
-                    return;
-                }
-                RecentConversation rc = recentConvsAdapter.getItem(position);
-                if (rc.getConversationType() == 1 || rc.getConversationType() == 0 || rc.getConversationType() == 3) {
-
-
-                    if (rc.getTop() == 0) {
-                        menu.add(0, MENU4, 0, R.string.atom_ui_menu_sticky_on_top);
-                    } else {
-                        menu.add(0, MENU4, 0, R.string.atom_ui_menu_remove_from_top);
-                    }
-                }
-                //群才显示
-                if (rc.getConversationType() == 1) {
-                    if (rc.getRemind() == 0) {
-                        menu.add(0, MENU6, 0, R.string.atom_ui_menu_mute_notification);
-                    } else {
-                        menu.add(0, MENU6, 0, R.string.atom_ui_menu_open_notification);
-                    }
-                }
-                if (rc.getUnread_msg_cont() == 0) {
-//                    menu.add(0, MENU3, 0, R.string.atom_ui_menu_mark_asunread);
-                } else {
-                    menu.add(0, MENU3, 0, R.string.atom_ui_menu_mark_asread);
-                }
-                menu.add(0, MENU2, 0, R.string.atom_ui_menu_delete_conversation);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            int position = info.position - list.getHeaderViewsCount();
+            if(position < 0){
+                return;
             }
+            RecentConversation rc = recentConvsAdapter.getItem(position);
+            if (rc.getConversationType() == 1 || rc.getConversationType() == 0 || rc.getConversationType() == 3) {
 
 
-
-
+                if (rc.getTop() == 0) {
+                    menu.add(0, MENU4, 0, R.string.atom_ui_menu_sticky_on_top);
+                } else {
+                    menu.add(0, MENU4, 0, R.string.atom_ui_menu_remove_from_top);
+                }
+            }
+            //群才显示
+            if (rc.getConversationType() == 1) {
+                if (rc.getRemind() == 0) {
+                    menu.add(0, MENU6, 0, R.string.atom_ui_menu_mute_notification);
+                } else {
+                    menu.add(0, MENU6, 0, R.string.atom_ui_menu_open_notification);
+                }
+            }
+            if (rc.getUnread_msg_cont() == 0) {
+//                    menu.add(0, MENU3, 0, R.string.atom_ui_menu_mark_asunread);
+            } else {
+                menu.add(0, MENU3, 0, R.string.atom_ui_menu_mark_asread);
+            }
+            menu.add(0, MENU2, 0, R.string.atom_ui_menu_delete_conversation);
         });
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position - list.getHeaderViewsCount() < 0){//防止点击header 数组越界crash
-                    return;
-                }
-                recentConvClick(recentConvsAdapter.getItem(position - list.getHeaderViewsCount()), view);
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            if(position - list.getHeaderViewsCount() < 0){//防止点击header 数组越界crash
+                return;
             }
+            recentConvClick(recentConvsAdapter.getItem(position - list.getHeaderViewsCount()), view);
         });
 
         header = LayoutInflater.from(getActivity()).inflate(R.layout.atom_ui_header_file_sharing,null);
-        header.findViewById(R.id.atom_ui_home_pc_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), BackgroundTipActivity.class);
-                startActivity(intent);
-            }
+        header.findViewById(R.id.atom_ui_home_pc_layout).setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), BackgroundTipActivity.class);
+            startActivity(intent);
         });
-        header.findViewById(R.id.atom_ui_home_search_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getActivity() != null){
-                    ((TabMainActivity)getActivity()).startSearchActivity();
-                }
+        header.findViewById(R.id.atom_ui_home_search_layout).setOnClickListener(v -> {
+            if(getActivity() != null){
+                ((TabMainActivity)getActivity()).startSearchActivity();
             }
         });
         ((TextView)header.findViewById(R.id.atom_ui_file_sharing_text)).setText(getString(R.string.atom_ui_desktop) + GlobalConfigManager.getAppName() + getString(R.string.atom_ui_logged));
@@ -301,12 +285,9 @@ public class ConversationFragment extends BaseFragment implements IConversationL
 
     @Override
     public void setRecentConvList(final List<RecentConversation> convers) {
-        super.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (recentConvsAdapter != null)
-                    recentConvsAdapter.setRecentConversationList(convers);
-            }
+        super.getHandler().post(() -> {
+            if (recentConvsAdapter != null)
+                recentConvsAdapter.setRecentConversationList(convers);
         });
 
     }
@@ -429,26 +410,25 @@ public class ConversationFragment extends BaseFragment implements IConversationL
         return true;
     }
 
-    //    private static int count;
-    private int position;
-
     public void MoveToUnread() {
         if (recentConvsAdapter == null) return;
         int count = recentConvsAdapter.getCount();
-
-        for (int i = position; i < count; i++) {
+        int firstVisibleIndex = list.getFirstVisiblePosition();
+        int lastVisibleIndex = list.getLastVisiblePosition();
+        if(lastVisibleIndex == count){
+            firstVisibleIndex = 0;
+        }
+        Logger.i("MoveToUnread:count=" + count + "firstVisibleIndex=:" + firstVisibleIndex + "lastVisibleIndex=:" + lastVisibleIndex);
+        for (int i = firstVisibleIndex + 1; i < count; i++) {
             RecentConversation rc = recentConvsAdapter.getItem(i);
             //逻辑是判断是否有未读,并且没有设置不提醒
             if (rc.getUnread_msg_cont() > 0 && rc.getRemind() != 1) {
                 list.setSelection(i + list.getHeaderViewsCount());
-//                list.scrollToPosition(i);
-
-                position = i + 1;
 
                 break;
             }
-            if (i == count - 1) {
-                position = 0;
+            if(i == count -1){
+                list.setSelection(recentConvsAdapter.getFirstUnreadIndex() + list.getHeaderViewsCount());
             }
 
         }

@@ -105,4 +105,18 @@ public class RNMineFragment extends RNBaseFragment implements IMNotificaitonCent
 //                }
         }
     }
+
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (mReactInstanceManager != null) {
+//            mReactInstanceManager.onHostDestroy(getActivity());
+//        }
+//
+//        if (mReactRootView != null) {
+//            mReactRootView.unmountReactApplication();
+//            mReactRootView = null;
+//        }
+//        ConnectionUtil.getInstance().removeEvent(this, QtalkEvent.SHOW_MY_INFO);
+//    }
 }

@@ -250,7 +250,7 @@ public class QChatLoginActivity extends IMBaseActivity implements
     protected void go2WebLogin() {
         Intent intent = new Intent(QChatLoginActivity.this, QunarWebActvity.class);
         intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.UC_LOGIN);
-        intent.putExtra(WebMsgActivity.IS_HIDE_BAR, CommonConfig.isDebug);
+        intent.putExtra(WebMsgActivity.IS_HIDE_BAR, !CommonConfig.isDebug);
         intent.setData(Uri.parse("https://user.qunar.com/mobile/login.jsp?ret=" +
                 Constants.BundleKey.WEB_LOGIN_RESULT + "&loginType=mobile&onlyLogin=true"));
         startActivityForResult(intent, WEB_LOGIN);

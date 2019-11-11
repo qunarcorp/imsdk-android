@@ -26,33 +26,36 @@ Configure Gradle
 ```gradle
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
  
 allprojects {
     repositories {
-        maven {
-            url "http://qt.qunar.com/package/mvn/repository/maven-qim/"
+             maven { url 'https://dl.google.com/dl/android/maven2' }
+             maven {
+                 url "https://raw.githubusercontent.com/froyomu/im/master"
+             }
+             maven {
+                 url "http://developer.huawei.com/repo/"
+             }
+             jcenter {
+                 url "http://jcenter.bintray.com/"
+             }
+             maven {
+                 url "https://jitpack.io"
+             }
+             google()
+             jcenter()
+             mavenCentral()
         }
-        
-        maven {
-            url "http://developer.huawei.com/repo/"
-        }
-    mavenCentral()
-        jcenter {
-           url "http://jcenter.bintray.com/"
-        }
-        jcenter()
-        google()
-    }
 }
 ```
 
 ```gradle
 dependencies {
-  compile 'com.qunar.im:sdk-im:3.0.5' //Or quote the imsdk Library directly,compile project(':imsdk')
+  compile project(':imsdk')//compile 'com.qunar.im:sdk-im:3.0.6'
 }
 ```
 
@@ -79,6 +82,8 @@ flavorDimensions "qim"
                     MIPUSH_APP_KEY : "123",
                     MEIZU_APP_ID : "123",//MEIZU push
                     MEIZU_APP_KEY : "123",
+                    VIVO_APP_ID : "123",//vivoo
+                    VIVO_APP_KEY : "123",
                     SCHEME : "qtalkaphone",
                     currentPlat  : "QTalk",
                     MAIN_SCHEMA : "start_qtalk_activity"
@@ -100,6 +105,8 @@ flavorDimensions "qim"
                     MIPUSH_APP_KEY : "123",
                     MEIZU_APP_ID : "123",//meizu push
                     MEIZU_APP_KEY : "123",
+                    VIVO_APP_ID : "123",//vivoo
+                    VIVO_APP_KEY : "123",
                     SCHEME : "qchataphone",
                     currentPlat  : "QChat",
                     MAIN_SCHEMA : "start_qchat_activity",

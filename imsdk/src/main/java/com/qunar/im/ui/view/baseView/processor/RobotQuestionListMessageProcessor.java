@@ -41,6 +41,7 @@ public class RobotQuestionListMessageProcessor extends DefaultMessageProcessor {
     public void processChatView(ViewGroup parent, final IMessageItem item) {
 //        super.processChatView(parent, item);
         String ex = item.getMessage().getExt();
+        Logger.i("查看消息65536:"+ex);
         final RbtSuggestionListJson suggestionListJson
                 = JsonUtils.getGson().fromJson(ex, RbtSuggestionListJson.class);
         IMMessage message = item.getMessage();

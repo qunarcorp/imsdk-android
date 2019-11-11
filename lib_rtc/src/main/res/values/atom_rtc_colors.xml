@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="atom_rtc_light_gray_33">#FF333333</color>
+    <color name="atom_rtc_trans_white">#19FFFFFF</color>
+    <color name="atom_rtc_white">#FFFFFFFF</color>
+    <color name="atom_rtc_red_67">#E86767</color>
+    <color name="atom_rtc_primary_color">#FF03BB64</color>
+</resources>

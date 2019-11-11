@@ -28,7 +28,6 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.ImageBrowersingActivity;
 import com.qunar.im.ui.activity.VideoPlayerActivity;
 import com.qunar.im.ui.view.MyGridView;
-import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
 import com.qunar.im.utils.DeviceUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
@@ -106,12 +105,12 @@ public class MuliSizeImageAdapter extends RecyclerView.Adapter<MuliSizeImageAdap
                     ImgVideoBean bean = beans.get(position);
                     if(bean.type == ImgVideoBean.IMG){
                         Intent intent = new Intent(context, ImageBrowersingActivity.class);
-                        intent.putExtra(Constants.BundleKey.IMAGE_URL,QtalkStringUtils.addFilePathDomain(bean.url));
+                        intent.putExtra(Constants.BundleKey.IMAGE_URL,QtalkStringUtils.addFilePathDomain(bean.url, true));
                         context.startActivity(intent);
                     }else if(bean.type == ImgVideoBean.VIDEO){
                         Intent intent = new Intent();
                         intent.setClass(context, VideoPlayerActivity.class);
-                        intent.setData(Uri.parse(QtalkStringUtils.addFilePathDomain(bean.url)));
+                        intent.setData(Uri.parse(QtalkStringUtils.addFilePathDomain(bean.url, true)));
                         intent.putExtra(Constants.BundleKey.FILE_NAME, bean.fileName);
                         context.startActivity(intent);
                     }
@@ -154,7 +153,7 @@ public class MuliSizeImageAdapter extends RecyclerView.Adapter<MuliSizeImageAdap
             final ImgVideoBean bean = getItem(position);
             String url;
             if(bean.type == ImgVideoBean.IMG){
-                url = QtalkStringUtils.addFilePathDomain(bean.url);
+                url = QtalkStringUtils.addFilePathDomain(bean.url, true);
                 holder.videoView.setVisibility(View.GONE);
                 if(TextUtils.isEmpty(url)){
                     com.orhanobut.logger.Logger.i("图片崩溃错误5");
@@ -179,7 +178,7 @@ public class MuliSizeImageAdapter extends RecyclerView.Adapter<MuliSizeImageAdap
                     duration += String.format("%02d", d%60);
                     holder.video_duaration.setText(duration);
                 }
-                url = QtalkStringUtils.addFilePathDomain(bean.thumbUrl);
+                url = QtalkStringUtils.addFilePathDomain(bean.thumbUrl, true);
                 DraweeController controller = Fresco.newDraweeControllerBuilder()
                         .setUri(Uri.parse(url))
                         .setAutoPlayAnimations(false)

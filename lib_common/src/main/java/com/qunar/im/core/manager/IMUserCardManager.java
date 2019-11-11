@@ -459,7 +459,7 @@ public class IMUserCardManager {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });
@@ -782,7 +782,6 @@ public class IMUserCardManager {
             public void onJsonResponse(JSONObject result) throws JSONException {
                 Logger.i("获取的名片--网络:" + result);
                 JSONArray insertDatas = new JSONArray();
-                //{"ret":true,"errcode":0,"errmsg":"","data":[{"domain":"ejabhost1","users":[{"type":"qunar_emp","loginName":"hubin.hu","email":"","gender":"1","nickname":"胡滨hubin","V":"1","imageurl":"file\/v2\/download\/perm\/ff1a003aa731b0d4e2dd3d39687c8a54.png","uid":0,"username":"hubin.hu","commenturl":"https:\/\/qt.qunar.com\/dianping\/user_comment.php"}]}]}
                 if (result != null) {
                     boolean ret = result.getBoolean("ret");
                     if (ret) {
@@ -838,7 +837,7 @@ public class IMUserCardManager {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });

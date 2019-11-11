@@ -11,14 +11,19 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.orhanobut.logger.Logger;
+import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.module.BaseIMMessage;
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.log.LogConstans;
+import com.qunar.im.log.LogService;
+import com.qunar.im.log.QLog;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
+import com.qunar.im.ui.view.MyLinearLayout;
 import com.qunar.im.ui.view.baseView.processor.MessageProcessor;
 import com.qunar.im.ui.view.baseView.processor.ProcessorFactory;
 
@@ -27,7 +32,7 @@ import com.qunar.im.ui.view.baseView.processor.ProcessorFactory;
  */
 public class ExtendBaseView extends IMChatBaseView {
 
-    private LinearLayout richText;
+    private MyLinearLayout richText;
     private CheckBox chb_share_msg;
 
     public ExtendBaseView(Context context) {
@@ -149,6 +154,17 @@ public class ExtendBaseView extends IMChatBaseView {
                 message.setDirection(IMMessage.DIRECTION_MIDDLE);
             }
             super.setMessage(adapter, handler, message, position);
+        }
+    }
+
+    @Override
+    public void dispatchWindowFocusChanged(boolean hasFocus) {
+        try{
+            super.dispatchWindowFocusChanged(hasFocus);
+        }catch (Exception e){
+            Logger.e("dispatchWindowFocusChanged");
+            LogInfo logInfo = QLog.build(LogConstans.LogType.CRA,LogConstans.LogSubType.CRASH).eventId("ExtendBaseView").describtion("会话内crash").currentPage("会话页面");
+            LogService.getInstance().saveLog(logInfo);
         }
     }
 }

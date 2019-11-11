@@ -21,7 +21,7 @@ public class QOpenWebView implements QChatSchemaService {
         String action = map.get("action");
         String time = map.get("time");
         String from, to, muc;
-        String url = "https://qim.qunar.com/lookback/main_controller.php?action=" + action + "&time=" + time + "&method=showDetails";
+        String url = "" + action + "&time=" + time + "&method=showDetails";
         if ("single_details".equals(action)) {
             from = CurrentPreference.getInstance().getUserid();
             to = map.get("jid");

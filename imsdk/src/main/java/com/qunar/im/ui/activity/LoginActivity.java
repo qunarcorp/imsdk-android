@@ -1,10 +1,12 @@
 package com.qunar.im.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -54,7 +56,7 @@ import java.util.TimerTask;
 /**
  * Created by jiang.cheng on 2014/10/27.
  */
-public class  LoginActivity extends IMBaseActivity implements View.OnClickListener, PermissionCallback,
+public class  LoginActivity extends IMBaseLoginActivity implements View.OnClickListener, PermissionCallback,
         CompoundButton.OnCheckedChangeListener, ILoginView {
     private final String TAG = LoginActivity.class.getSimpleName();
     private final int WEB_LOGIN = 0x02;
@@ -64,20 +66,21 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
     private static final int CONFIG_REQUIRE = PermissionDispatcher.getRequestCode();
     //    //pb工具
     private ConnectionUtil connectionUtil;
-    CheckBox remember_me_cbx, auto_login_cbx;
+    CheckBox remember_me_cbx, auto_login_cbx,atom_ui_eula_checkbox;
     EditText verify_code, editText_username, editText2;
     TextView verify_code_btn, tv_version;
     LinearLayout verify_code_container;
     LinearLayout login_password_container;
     ILoginPresenter loginPresenter;
     Button btnlogin;
-    TextView tv_reset_account;
     ImageView img_show_pwd;
-    ImageButton iv_nav_config;
+    TextView iv_nav_config;
     ImageView atom_ui_icon;
 
     ProgressDialog progressDialog;
     LinearLayout login_layout;
+
+    View atom_ui_user_line,atom_ui_code_line,atom_ui_password_line;
 
     private int mClickTime = 0;
 
@@ -130,6 +133,7 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void bindViews() {
         login_layout = (LinearLayout) findViewById(R.id.login_layout);
         editText2 = (EditText) findViewById(R.id.editText2);
@@ -140,35 +144,36 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         login_password_container = (LinearLayout) findViewById(R.id.login_password_container);
         remember_me_cbx = (CheckBox) findViewById(R.id.remember_me_cbx);
         auto_login_cbx = (CheckBox) findViewById(R.id.auto_login_cbx);
+        atom_ui_eula_checkbox = (CheckBox) findViewById(R.id.atom_ui_eula_checkbox);
         tv_version = (TextView) findViewById(R.id.tv_version);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         img_show_pwd = (ImageView) findViewById(R.id.img_show_pwd);
-        iv_nav_config= (ImageButton) findViewById(R.id.iv_nav_config);
+        iv_nav_config= (TextView) findViewById(R.id.iv_nav_config);
+        atom_ui_user_line = (View) findViewById(R.id.atom_ui_user_line);
+        atom_ui_code_line = (View) findViewById(R.id.atom_ui_code_line);
+        atom_ui_password_line = (View) findViewById(R.id.atom_ui_password_line);
         btnlogin.setOnClickListener(this);
         tv_version.setOnClickListener(this);
         auto_login_cbx.setOnCheckedChangeListener(this);
         verify_code_btn.setOnClickListener(this);
-        tv_reset_account = (TextView) findViewById(R.id.tv_reset_account);
-        tv_reset_account.setOnClickListener(this);
         iv_nav_config.setOnClickListener(this);
-        img_show_pwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        editText2.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                        //edit_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_POINTER_UP:
-                        editText2.setInputType(InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        //edit_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        return true;
-                }
-                return false;
+//        iv_nav_config.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+//        iv_nav_config.getPaint().setAntiAlias(true);//抗锯齿
+        img_show_pwd.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    editText2.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    //edit_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    return true;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_POINTER_UP:
+                    editText2.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    //edit_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    return true;
             }
+            return false;
         });
     }
 
@@ -223,54 +228,25 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
             setActionBarLeftIcon(0);
 //            myActionBar.getLeftButton().setVisibility(View.GONE);
         }
-//        switch (connectionUtil.getLoginType()) {
-//            case PasswordLogin:
-//                //todo: 密码登陆
-//                login_password_container.setVisibility(View.VISIBLE);
-//                editText2.setText("");
-//                verify_code_container.setVisibility(View.GONE);
-//                remember_me_cbx.setEnabled(false);
-//                break;
-//            case SMSLogin:
-//                //todo: 短信验证码登陆
-//                login_password_container.setVisibility(View.GONE);
-//                editText2.setText("password");
-//                verify_code_container.setVisibility(View.VISIBLE);
-//                editText_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                    @Override
-//                    public void onFocusChange(View v, boolean hasFocus) {
-//                        if (!hasFocus) {
-//                            if (!TextUtils.isEmpty(editText_username.getText().toString().trim())) {
-//                                if (!isTimerRunning) {
-//
-//                                    resendCode();
-//                                }
-//
-//                            }
-//                        }
-//                    }
-//                });
-//                break;
-//        }
         if (CommonConfig.isQtalk) {
             login_password_container.setVisibility(View.GONE);
             editText2.setText(R.string.atom_ui_common_password);
             verify_code_container.setVisibility(View.VISIBLE);
-            editText_username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(!isClickSend) {
-                        if (!hasFocus) {
-                            if (!TextUtils.isEmpty(editText_username.getText().toString().trim())) {
-                                if (!isTimerRunning) {
-                                    resendCode();
-                                }
-
+            editText_username.setOnFocusChangeListener((v, hasFocus) -> {
+                atom_ui_user_line.setBackgroundColor(hasFocus ? getResources().getColor(R.color.atom_ui_button_primary_color) : getResources().getColor(R.color.atom_ui_light_gray_ee));
+                if(!isClickSend) {
+                    if (!hasFocus) {
+                        if (!TextUtils.isEmpty(editText_username.getText().toString().trim())) {
+                            if (!isTimerRunning) {
+                                resendCode();
                             }
+
                         }
                     }
                 }
             });
+            verify_code.setOnFocusChangeListener((v, hasFocus) -> atom_ui_code_line.setBackgroundColor(hasFocus ? getResources().getColor(R.color.atom_ui_button_primary_color) : getResources().getColor(R.color.atom_ui_light_gray_ee)));
+            editText2.setOnFocusChangeListener((v,hasFocus)-> atom_ui_password_line.setBackgroundColor(hasFocus ? getResources().getColor(R.color.atom_ui_button_primary_color) : getResources().getColor(R.color.atom_ui_light_gray_ee)));
         } else {
             login_password_container.setVisibility(View.VISIBLE);
             editText2.setText("");
@@ -283,9 +259,6 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
                 editText_username.setText(userName);
             }
         }
-        if (CommonConfig.isQtalk) {
-            tv_reset_account.setVisibility(View.GONE);
-        }
         tv_version.setText(getText(R.string.atom_ui_title_current_version)+":" + QunarIMApp.getQunarIMApp().getVersionName() +
                 " (" + QunarIMApp.getQunarIMApp().getVersion() + ")");
 
@@ -295,6 +268,7 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         }else {
             atom_ui_icon.setImageResource(CommonConfig.globalContext.getApplicationInfo().icon);
         }
+        bindCheckUpdateView(atom_ui_icon);
     }
 
 
@@ -311,17 +285,14 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
 
             @Override
             public void run() {
-                getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        verify_code_btn.setText(String.valueOf(counter));
-                        if (--counter == -1) {
-                            verify_code_btn.setEnabled(true);
-                            verify_code_btn.setText(R.string.atom_ui_btn_resend_code);
+                getHandler().post(() -> {
+                    verify_code_btn.setText(String.valueOf(counter));
+                    if (--counter == -1) {
+                        verify_code_btn.setEnabled(true);
+                        verify_code_btn.setText(R.string.atom_ui_get_verify_code);
 
-                            timer.cancel();
-                            isTimerRunning = false;
-                        }
+                        timer.cancel();
+                        isTimerRunning = false;
                     }
                 });
             }
@@ -339,95 +310,34 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         connectionUtil.takeSmsCode(username, new IQTalkLoginDelegate() {
             @Override
             public void onSmsCodeReceived(final int code, final String errCode) {
-                getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (code == 0) {
-                            Toast.makeText(LoginActivity.this, R.string.atom_ui_common_sent, Toast.LENGTH_SHORT).show();
-                            isClickSend = true;
-                            verify_code.setFocusable(true);
-                            verify_code.setFocusableInTouchMode(true);
-                            verify_code.requestFocus();
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(verify_code,0);
-                            isTimerRunning = true;
-                        } else if(code == QtalkHttpRequest.NO_NETWORK_CODE){
-                            new AlertDialog.Builder(LoginActivity.this)
-                                    .setTitle(getString(R.string.atom_ui_common_prompt))
-                                    .setMessage(errCode)
-                                    .setPositiveButton(getString(R.string.atom_ui_ok), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                                        }
-                                    })
-                                    .create().show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, errCode+";status_id:"+code, Toast.LENGTH_SHORT).show();
-                            timer.cancel();
-                            verify_code_btn.setEnabled(true);
-                            verify_code_btn.setText(R.string.atom_ui_btn_resend_code);
-                            isTimerRunning = false;
-                        }
+                getHandler().post(() -> {
+                    if (code == 0) {
+                        Toast.makeText(LoginActivity.this, R.string.atom_ui_common_sent, Toast.LENGTH_SHORT).show();
+                        isClickSend = true;
+                        verify_code.setFocusable(true);
+                        verify_code.setFocusableInTouchMode(true);
+                        verify_code.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(verify_code,0);
+                        isTimerRunning = true;
+                    } else if(code == QtalkHttpRequest.NO_NETWORK_CODE){
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setTitle(getString(R.string.atom_ui_common_prompt))
+                                .setMessage(errCode)
+                                .setPositiveButton(getString(R.string.atom_ui_ok), (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS)))
+                                .create().show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, errCode+";status_id:"+code, Toast.LENGTH_SHORT).show();
+                        timer.cancel();
+                        verify_code_btn.setEnabled(true);
+                        verify_code_btn.setText(R.string.atom_ui_get_verify_code);
+                        isTimerRunning = false;
                     }
                 });
             }
         });
 
     }
-
-//    private void sendSMSCode(String rtxId, final Timer timer) {
-//        LoginAPI.getSmsCode(rtxId, new ProtocolCallback.UnitCallback<GetSMSCodeResult>() {
-//            @Override
-//            public void onCompleted(final GetSMSCodeResult getSMSCodeResult) {
-//                if (getSMSCodeResult != null) {
-//                    getHandler().post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (getSMSCodeResult.status_id == 0) {
-//                                Toast.makeText(LoginActivity.this, R.string.atom_ui_common_sent, Toast.LENGTH_SHORT).show();
-//                                isTimerRunning = true;
-//                            } else {
-//                                Toast.makeText(LoginActivity.this, getSMSCodeResult.msg, Toast.LENGTH_SHORT).show();
-//                                timer.cancel();
-//                                verify_code_btn.setEnabled(true);
-//                                verify_code_btn.setText(R.string.atom_ui_resend_verification_code);
-//                                isTimerRunning = false;
-//                            }
-//                        }
-//                    });
-//
-//                } else {
-//                    getHandler().post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            timer.cancel();
-//                            verify_code_btn.setEnabled(true);
-//                            verify_code_btn.setText(R.string.atom_ui_resend_verification_code);
-//                            Toast.makeText(LoginActivity.this, R.string.atom_ui_sms_code_sent_failure, Toast.LENGTH_SHORT).show();
-//                            isTimerRunning = false;
-//                        }
-//                    });
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//                getHandler().post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        timer.cancel();
-//                        verify_code_btn.setEnabled(true);
-//                        verify_code_btn.setText(R.string.atom_ui_resend_verification_code);
-//                        Toast.makeText(LoginActivity.this, R.string.atom_ui_network_error, Toast.LENGTH_SHORT).show();
-//                        isTimerRunning = false;
-//                    }
-//                });
-//            }
-//        });
-//    }
 
     @Override
     public void responsePermission(int requestCode, boolean granted) {
@@ -451,6 +361,10 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
     void loginListener() {
         //todo:暂时先不验证非空字段
         LogUtil.d("performance", "login start:" + System.currentTimeMillis() + "");
+        if(!atom_ui_eula_checkbox.isChecked()){
+            Toast.makeText(this, "请勾选同意条款！", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (TextUtils.isEmpty(editText_username.getText().toString().trim())) {
             Toast.makeText(this, R.string.atom_ui_common_input_username, Toast.LENGTH_SHORT).show();
             return;
@@ -484,33 +398,6 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         }
     }
 
-
-    /**
-     * login state feedback
-     *
-     * @param bSuccess
-     */
-    private void onLoginResult(final boolean bSuccess) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (bSuccess) {
-                    if (remember_me_cbx.isChecked()) {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setRememberMe(true);
-                    } else {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setRememberMe(false);
-                    }
-
-                    if (auto_login_cbx.isChecked()) {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setAutoLogin(true);
-                    } else {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setAutoLogin(false);
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int i = buttonView.getId();
@@ -528,8 +415,6 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         } else if (i == R.id.verify_code_btn) {
             resendCode();
 
-        } else if (i == R.id.tv_reset_account) {
-            go2WebLogin();
         } else if (i == R.id.tv_version) {
             mClickTime++;
             if (mClickTime == 5) {
@@ -560,98 +445,18 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         return password.replaceAll(" ","");
     }
 
-    public String getSMS() {
-        return verify_code.getText().toString();
-    }
-
     @Override
     public void setLoginResult(final boolean success, int errcode) {
-        if (!success && (errcode == 10 || errcode == 20 || errcode == 30 ||
-                errcode == 100 || errcode == 200)) {
-            QunarIMApp.mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LoginActivity.this, "保障帐号安全，需要增强验证", Toast.LENGTH_SHORT).show();
-                    go2WebLogin();
-                }
-            });
-            return;
-        }
-        if (!success && errcode == 300) {
-            QunarIMApp.mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LoginActivity.this, "不允许登陆，强制重置密码后登陆", Toast.LENGTH_SHORT).show();
 
-                }
-            });
-            return;
-        }
-
-        if (!success && errcode == 400)
-
-        {
-            QunarIMApp.mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LoginActivity.this, "不允许登陆，强制绑定手机后登陆", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            return;
-        }
-
-        if (!success && errcode == 500)
-
-        {
-            QunarIMApp.mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LoginActivity.this, "不允许登陆，强制回答密保问题后登陆", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            return;
-        }
-
-        if (!success && errcode == 1000)
-
-        {
-            QunarIMApp.mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LoginActivity.this, "该帐号禁止登陆", Toast.LENGTH_SHORT).show();
-                }
-            });
-            return;
-        }
-
-//        super.presenter.getMyCapability();
-        if (!CommonConfig.isQtalk)
-
-        {
-            onLoginResult(success);
-        }
-
-        getHandler().post(new Runnable() {
-                              @Override
-                              public void run() {
-                                  progressDialog.dismiss();
-                                  if (success) {
-                                      Toast.makeText(LoginActivity.this, R.string.atom_ui_tip_login_successful, Toast.LENGTH_SHORT).show();
-                                      getVirtualUser();
-                                      finish();
-                                  } else {
-                                      Toast.makeText(LoginActivity.this, R.string.atom_ui_login_faild, Toast.LENGTH_SHORT).show();
-                                  }
-                              }
-                          }
-
-        );
-    }
-
-    private void getVirtualUser() {
-        //获取虚拟账号身份
+        runOnUiThread(() -> {
+            progressDialog.dismiss();
+            if (success) {
+                Toast.makeText(LoginActivity.this, R.string.atom_ui_tip_login_successful, Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, R.string.atom_ui_login_faild, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -668,7 +473,7 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
                     }
                 }
             }else if(requestCode == LOGIN_TYPE){
-                if(LoginType.PasswordLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
+                if(!LoginType.SMSLogin.equals(QtalkNavicationService.getInstance().getLoginType())){
                     Intent intent = new Intent(LoginActivity.this, QTalkUserLoginActivity.class);
                     intent.putExtra(Constants.BundleKey.IS_SWITCH_ACCOUNT,isSwitchAccount);
                     startActivity(intent);
@@ -678,13 +483,11 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
         }
     }
 
-    protected void go2WebLogin() {
-        Intent intent = new Intent(LoginActivity.this, QunarWebActvity.class);
-        intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.UC_LOGIN);
-        intent.putExtra(WebMsgActivity.IS_HIDE_BAR, true);
-        intent.setData(Uri.parse("https://user.qunar.com/mobile/login.jsp?ret=" +
-                Constants.BundleKey.WEB_LOGIN_RESULT + "&loginType=mobile&onlyLogin=true"));
-        startActivityForResult(intent, WEB_LOGIN);
+    public void eulaView(View view){
+        Intent intent = new Intent(this,QunarWebActvity.class);
+        intent.putExtra(QunarWebActvity.IS_HIDE_BAR, false);
+        intent.setData(Uri.parse("file:///android_asset/" + (GlobalConfigManager.isStartalkPlat() ? "eula_startalk.html" : "eula_qtalk.html")));
+        startActivity(intent);
     }
 
     @Override
@@ -700,14 +503,10 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
 
     @Override
     public void getVirtualUserRole(final boolean b) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(b){
-                    progressDialog.dismiss();
-//                    Toast.makeText(LoginActivity.this, "自动登录成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+        runOnUiThread(()->{
+            if(b){
+                progressDialog.dismiss();
+                finish();
             }
         });
     }
@@ -758,39 +557,4 @@ public class  LoginActivity extends IMBaseActivity implements View.OnClickListen
     public boolean isSwitchAccount() {
         return isSwitchAccount;
     }
-    //    @Override
-//    public void didReceivedNotification(final String key, final Object... args) {
-//        Logger.d("返回状态:" + key + ",返回值:" + args);
-//
-//        if (key.equals(QtalkEvent.LOGIN_FAILED)){
-//            Logger.i("登陆失败:"+args[0]);
-//            mProgressDialog.dismiss();
-//            Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        if (key.equals(QtalkEvent.LOGIN_EVENT) && args[0].equals("succeeded")) {
-//            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//            Logger.d("登陆返回:" + args[0]);
-////            connectionUtil.get_virtual_user_role_list(new IQGetVirtualUserRoleDelegate() {
-////                @Override
-////                public void onVirtualUserResult(ProtoMessageOuterClass.IQMessage iqMessage, String err) {
-////                    Logger.i("获取虚拟用户返回状态:"+err);
-////                    if(err.equals("success")){
-////                        Logger.i("获取虚拟用户的消息:"+iqMessage);
-////                        mProgressDialog.dismiss();
-////                        finish();
-////                        //todo: 获取虚拟用户成功操作
-////                    }else{
-////                        //todo: 获取虚拟用户失败操作
-////                    }
-////                }
-////            });
-//
-//        } else {
-//            mProgressDialog.dismiss();
-//            Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-//        }
-//
-//
-//    }
 }

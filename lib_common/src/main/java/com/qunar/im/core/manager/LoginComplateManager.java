@@ -4,6 +4,19 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.jsonbean.SetWorkWorldRemindResponse;
+import com.qunar.im.base.module.CityLocal;
+import com.qunar.im.base.module.MedalListResponse;
+import com.qunar.im.base.module.MedalUserStatusResponse;
+import com.qunar.im.base.module.VideoSetting;
+import com.qunar.im.base.module.WorkWorldNoticeHistoryResponse;
+import com.qunar.im.base.module.WorkWorldResponse;
+import com.qunar.im.base.structs.WorkWorldItemState;
+import com.qunar.im.log.LogConstans;
+import com.qunar.im.log.LogService;
+import com.qunar.im.log.QLog;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.jsonbean.BaseJsonResult;
 import com.qunar.im.base.jsonbean.DepartmentResult;
 import com.qunar.im.base.jsonbean.HotlinesResult;
@@ -13,12 +26,9 @@ import com.qunar.im.base.jsonbean.NewRemoteConfig;
 import com.qunar.im.base.jsonbean.OpsUnreadResult;
 import com.qunar.im.base.jsonbean.PushSettingResponseBean;
 import com.qunar.im.base.jsonbean.QuickReplyResult;
-import com.qunar.im.base.jsonbean.SetWorkWorldRemindResponse;
 import com.qunar.im.base.module.AreaLocal;
 import com.qunar.im.base.module.CalendarTrip;
-import com.qunar.im.base.module.CityLocal;
 import com.qunar.im.base.module.MucListResponse;
-import com.qunar.im.base.module.WorkWorldNoticeHistoryResponse;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageStatus;
@@ -33,17 +43,12 @@ import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.services.ClearLogService;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.log.LogConstans;
-import com.qunar.im.log.LogService;
-import com.qunar.im.log.QLog;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.entity.XMPPJID;
 import com.qunar.im.protobuf.stream.PbAssemblyUtil;
 import com.qunar.im.utils.CalendarSynchronousUtil;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 
 import org.json.JSONException;
@@ -51,8 +56,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 import java.lang.reflect.Method;
 
@@ -86,14 +91,14 @@ public class LoginComplateManager {
             long a5e = System.currentTimeMillis();
             long time5 = a5e - a5s;
             Logger.i("time5:" + time5);
-            try{
+            try {
                 //日志记录
                 LogService.getInstance()
-                        .saveLog(QLog.build(LogConstans.LogType.COD,LogConstans.LogSubType.NATIVE)
-                        .describtion("收取历史耗时")
-                        .costTime(time5)
-                        .method("updateOfflineMessages"));
-            }catch (Exception e){
+                        .saveLog(QLog.build(LogConstans.LogType.COD, LogConstans.LogSubType.NATIVE)
+                                .describtion("收取历史耗时")
+                                .costTime(time5)
+                                .method("updateOfflineMessages"));
+            } catch (Exception e) {
 
             }
             //请求checkconfig
@@ -117,6 +122,9 @@ public class LoginComplateManager {
             updateMyPushSetting();
 
 
+
+            updateMedalList();
+
 //            long a13s = System.currentTimeMillis();
 //            updateUserMucPushConfig();
 //            long a13e = System.currentTimeMillis();
@@ -125,7 +133,7 @@ public class LoginComplateManager {
             //更新自己的名片
             long a2s = System.currentTimeMillis();
             updateMyCard();
-            if(!CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants()){//qchat 是客服 通知服务器 客服已上线
+            if (!CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants()) {//qchat 是客服 通知服务器 客服已上线
                 notifyOnLine();
             }
             long a2e = System.currentTimeMillis();
@@ -136,7 +144,6 @@ public class LoginComplateManager {
             long a3e = System.currentTimeMillis();
             Logger.i("time3:" + (a3e - a3s));
             //TODO 暂时注释掉更新全量的群信息 以后看时候可以做成增量的
-
 
 
             long a4s = System.currentTimeMillis();
@@ -152,6 +159,8 @@ public class LoginComplateManager {
             long a6e = System.currentTimeMillis();
             //获取虚拟用户信息
             Logger.i("time6:" + (a6e - a6s));
+
+            getVideoSetting();
 
             long a7s = System.currentTimeMillis();
             get_virtual_user_role();
@@ -169,7 +178,7 @@ public class LoginComplateManager {
             long a9e = System.currentTimeMillis();
             Logger.i("time9:" + (a9e - a9s));
 
-            if(!CommonConfig.isQtalk) {
+            if (!CommonConfig.isQtalk) {
                 updateQuickReply(false);
             }
 
@@ -178,8 +187,8 @@ public class LoginComplateManager {
                 Logger.i("qtalk情况下,拉取密码箱");
                 try {
                     Class<?> clazz = Class.forName("com.qunar.im.ui.services.PullPasswordBoxService");
-                    Method method = clazz.getMethod("runPullPasswordBoxService",Context.class);
-                    method.invoke(null,CommonConfig.globalContext);
+                    Method method = clazz.getMethod("runPullPasswordBoxService", Context.class);
+                    method.invoke(null, CommonConfig.globalContext);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -225,6 +234,53 @@ public class LoginComplateManager {
         }
     }
 
+    public static void updateMedalList() {
+
+
+        int version = IMDatabaseManager.getInstance().selectMedalListVersion();
+        HttpUtil.getMedal(version, new ProtocolCallback.UnitCallback<MedalListResponse>() {
+            @Override
+            public void onCompleted(MedalListResponse medalListResponse) {
+                new String();
+            }
+
+            @Override
+            public void onFailure(String errMsg) {
+
+            }
+        });
+
+        int statusVersion = IMDatabaseManager.getInstance().selectUserMedalStatusVersion();
+        HttpUtil.getUserMedalStatus(statusVersion, new ProtocolCallback.UnitCallback<MedalUserStatusResponse>() {
+            @Override
+            public void onCompleted(MedalUserStatusResponse medalUserStatusResponse) {
+                new String();
+            }
+
+            @Override
+            public void onFailure(String errMsg) {
+
+            }
+        });
+    }
+
+    /**
+     * 获取视频权限设定接口
+     */
+    private static void getVideoSetting() {
+        HttpUtil.videoSetting(new ProtocolCallback.UnitCallback<VideoSetting>() {
+            @Override
+            public void onCompleted(VideoSetting videoSetting) {
+                Logger.i("获取视频接口设定成功:" + JsonUtils.getGson().toJson(videoSetting));
+            }
+
+            @Override
+            public void onFailure(String errMsg) {
+                Logger.i("获取视频接口设定失败");
+            }
+        });
+    }
+
 
     /**
      * 更新会议城市
@@ -246,7 +302,7 @@ public class LoginComplateManager {
     /**
      * 更新会议区域
      */
-    public static void updateTripArae(){
+    public static void updateTripArae() {
         HttpUtil.getArea(new ProtocolCallback.UnitCallback<AreaLocal>() {
             @Override
             public void onCompleted(AreaLocal areaLocal) {
@@ -263,9 +319,9 @@ public class LoginComplateManager {
     /**
      * 更新日历列表
      */
-    public static void updateTripList(){
+    public static void updateTripList() {
 
-        long  version =IMDatabaseManager.getInstance().selectUserTripVersion();
+        long version = IMDatabaseManager.getInstance().selectUserTripVersion();
 //        version = 0;
         HttpUtil.getUserTripList(version, new ProtocolCallback.UnitCallback<CalendarTrip>() {
             @Override
@@ -293,7 +349,7 @@ public class LoginComplateManager {
         if (list == null || list.size() < 1) {
             return;
         }
-        Logger.i("json查到的状态为0的数据 第一次 "+JsonUtils.getGson().toJson(list));
+        Logger.i("json查到的状态为0的数据 第一次 " + JsonUtils.getGson().toJson(list));
         Logger.i("开始发送收到消息已送达状态,同时更新客户端本地消息状态");
         for (int i = 0; i < list.size(); i++) {
             ProtoMessageOuterClass.ProtoMessage receive = PbAssemblyUtil.getBeenNewReadStateMessage(MessageStatus.STATUS_SINGLE_DELIVERED + "", list.get(i).getJsonArray(), list.get(i).getUserid(), null);
@@ -302,21 +358,22 @@ public class LoginComplateManager {
 
         }
     }
+
     public static void updateQuickReply(boolean isForce) {
         int gversion = 0;
         int cversion = 0;
-        if(isForce) {
-            gversion =0;
-            cversion =0;
+        if (isForce) {
+            gversion = 0;
+            cversion = 0;
             IMDatabaseManager.getInstance().deleteQuickReply();
-        }else{
+        } else {
             gversion = IMDatabaseManager.getInstance().selectQuickReplyGroupMaxVersion();
             cversion = IMDatabaseManager.getInstance().selectQuickReplyContentMaxVersion();
         }
         HttpUtil.getQuickReplies(gversion, cversion, new ProtocolCallback.UnitCallback<QuickReplyResult>() {
             @Override
             public void onCompleted(QuickReplyResult quickReplyResult) {
-                if(quickReplyResult != null && quickReplyResult.data != null){
+                if (quickReplyResult != null && quickReplyResult.data != null) {
                     ConnectionUtil.getInstance().refreshTheQuickReply(quickReplyResult.data);
                 }
             }
@@ -329,7 +386,7 @@ public class LoginComplateManager {
     }
 
 
-    private static void updateMyOPSMessage(){
+    private static void updateMyOPSMessage() {
         HttpUtil.getUnreadCountFromOps(new ProtocolCallback.UnitCallback<OpsUnreadResult>() {
             @Override
             public void onFailure(String errMsg) {
@@ -346,10 +403,8 @@ public class LoginComplateManager {
         HttpUtil.getPushMsgSettings(new ProtocolCallback.UnitCallback<PushSettingResponseBean>() {
             @Override
             public void onCompleted(PushSettingResponseBean pushSettingResponseBean) {
-                if(pushSettingResponseBean != null && pushSettingResponseBean.isRet()){
-                    if(pushSettingResponseBean.getData() != null){
-                        IMDatabaseManager.getInstance().updatePushSettingAllState(pushSettingResponseBean.getData().getPush_flag());
-                    }
+                if (pushSettingResponseBean.isRet()) {
+                    IMDatabaseManager.getInstance().updatePushSettingAllState(pushSettingResponseBean.getData().getPush_flag());
                     com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
                     com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
 
@@ -365,9 +420,9 @@ public class LoginComplateManager {
 
     private static void updateMucInfoList(long time) {
         Logger.i("开始更新群信息");
-        try{
+        try {
             IMUserCardManager.getInstance().updateMucCardSync(time);
-        }catch (Exception e){
+        } catch (Exception e) {
             Logger.e("updateMucInfoList error:" + e.getLocalizedMessage());
         }
 //        if(time == 0){//只有第一次安装 全量更新一次
@@ -388,18 +443,18 @@ public class LoginComplateManager {
 //        }
         int version = 0;
         //这么写虽然没意义 但为了逻辑清晰明了 强制时 清苦数据 拉全量,否则 正常增量迭代
-        if(isForce) {
-             version =0;
+        if (isForce) {
+            version = 0;
             IMDatabaseManager.getInstance().deleteUserConfig();
-        }else{
+        } else {
             version = IMDatabaseManager.getInstance().selectUserConfigVersion();
         }
 //        int version = 0;
         HttpUtil.getUserConfig(version, new ProtocolCallback.UnitCallback<NewRemoteConfig>() {
             @Override
             public void onCompleted(NewRemoteConfig newRemoteConfigs) {
-                if(newRemoteConfigs.getData().getClientConfigInfos().size()>0){
-                   ConnectionUtil.getInstance().refreshTheConfig(newRemoteConfigs);
+                if (newRemoteConfigs.getData().getClientConfigInfos().size() > 0) {
+                    ConnectionUtil.getInstance().refreshTheConfig(newRemoteConfigs);
                 }
             }
 
@@ -463,7 +518,7 @@ public class LoginComplateManager {
 
         } catch (Exception e) {
 
-        }finally {
+        } finally {
             return time;
         }
     }
@@ -499,7 +554,7 @@ public class LoginComplateManager {
             //原本在这里设置自身名字,现在更改位置 改为获取body后也获取一次
             String myNickName = IMDatabaseManager.getInstance().selectUserByJID(userId).optString("Name");
             CurrentPreference.getInstance().setUserName(myNickName);
-            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.SHOW_MY_INFO,"");
+            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.SHOW_MY_INFO, "");
         } catch (JSONException e) {
             Logger.e(e, "updateMyCard failed.");
         }
@@ -508,7 +563,7 @@ public class LoginComplateManager {
     /**
      * qchat 通知后台客服上线
      */
-    private static void notifyOnLine(){
+    private static void notifyOnLine() {
         HttpUtil.notifyOnline();
     }
 
@@ -517,7 +572,7 @@ public class LoginComplateManager {
      */
     public static void processBuddy() {
 
-        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Update_Buddy);//更新好友列表
+//        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Update_Buddy);//更新好友列表
         int version = IMDatabaseManager.getInstance().getLastIncrementUsersVersion();
 
         HttpUtil.getIncrementUsers(version, new ProtocolCallback.UnitCallback<IncrementUsersResult>() {
@@ -544,7 +599,7 @@ public class LoginComplateManager {
     }
 
     public static void getQchatDepInfo() {
-        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Update_Buddy);//更新好友列表
+//        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Update_Buddy);//更新好友列表
         String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
                 + QtalkNavicationService.getInstance().getXmppdomain()
                 + Constants.Preferences.buddytime);
@@ -605,7 +660,7 @@ public class LoginComplateManager {
     private static void clearLogFile() {
         //上次清理时间，大于7点进行清理
         long lastClearTime = DataUtils.getInstance(CommonConfig.globalContext).getPreferences("lastClearTime", 0L);
-        Logger.i(TAG + " clearLogFile lastClearTime = " + DateTimeUtils.getTime(lastClearTime, true) + "  当前时间" + DateTimeUtils.getTime(System.currentTimeMillis(),false));
+        Logger.i(TAG + " clearLogFile lastClearTime = " + DateTimeUtils.getTime(lastClearTime, true, true) + "  当前时间" + DateTimeUtils.getTime(System.currentTimeMillis(), false, true));
         if (lastClearTime > 0) {
             if (System.currentTimeMillis() - lastClearTime > 7 * 24 * 60 * 60 * 1000) {
                 ClearLogService.runClearLogService(CommonConfig.globalContext);
@@ -622,14 +677,8 @@ public class LoginComplateManager {
             @Override
             public void onCompleted(HotlinesResult.DataBean hotlines) {
                 if(hotlines != null){
-                    //映射关系对调再存一份
-                    Map<String, String> newhotlines = new HashMap<>();
-                    newhotlines.putAll(hotlines.allhotlines);
-                    for(String key : hotlines.allhotlines.keySet()) {
-                        newhotlines.put(hotlines.allhotlines.get(key).toString(), key);
-                    }
-                    ConnectionUtil.getInstance().cacheHotlines(newhotlines);
-                    CurrentPreference.getInstance().setHotLineList(newhotlines);
+                    ConnectionUtil.getInstance().cacheHotlines(hotlines.allhotlines);
+                    CurrentPreference.getInstance().setHotLineList(hotlines.allhotlines);
                     CurrentPreference.getInstance().setMyHotlines(hotlines.myhotlines);
                 }
             }
@@ -664,9 +713,9 @@ public class LoginComplateManager {
             public void onCompleted(Boolean aBoolean) {
                 boolean workworldState = IMDatabaseManager.getInstance().SelectWorkWorldPremissions();
                 IMDatabaseManager.getInstance().InsertWorkWorldPremissions(aBoolean);
-                if(aBoolean==workworldState){
+                if (aBoolean == workworldState) {
                     //证明当前朋友圈权限没有改变不进行更改
-                }else{
+                } else {
                     IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.RESTART);
                 }
 
@@ -683,14 +732,58 @@ public class LoginComplateManager {
     }
 
 
+    public static void getWordWorldNoticeHistory() {
+        final String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
 
-    public static void getWordWorldNoticeHistory(){
+        boolean show = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
+                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        + QtalkNavicationService.getInstance().getXmppdomain()
+                        + CommonConfig.isDebug
+                        + MD5.hex(navurl)
+                        + "WORKWORLDSHOWUNREAD", false);
+        if (show) {
+
+            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.WORK_WORLD_NOTICE);
+        } else {
+
+
+            HttpUtil.refreshWorkWorldV2(1, 0, WorkWorldItemState.normal, "", "", 0, false, new ProtocolCallback.UnitCallback<WorkWorldResponse>() {
+                @Override
+                public void onCompleted(WorkWorldResponse workWorldResponse) {
+                    if (workWorldResponse != null && workWorldResponse.getData().getNewPost() != null && workWorldResponse.getData().getNewPost().size() > 0) {
+                        boolean isHave = IMDatabaseManager.getInstance().selectHistoryWorkWorldItemIsHave(workWorldResponse.getData().getNewPost().get(0));
+
+
+                        if (!isHave) {
+
+                            IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                    .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                            + QtalkNavicationService.getInstance().getXmppdomain()
+                                            + CommonConfig.isDebug
+                                            + MD5.hex(navurl)
+                                            + "WORKWORLDSHOWUNREAD", true)
+                                    .synchronize();
+
+                            IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.WORK_WORLD_NOTICE);
+//
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(String errMsg) {
+                    Logger.i("获取帖子失败:" + errMsg);
+//                mView.workworldcloseRefresh();
+                }
+            });
+        }
+
         IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.WORK_WORLD_NOTICE);
         //// TODO: 2017/9/4 实际上应该把最后一条消息的时间提前获取,提前到连接建立之前
 
 
 //        long start = System.currentTimeMillis();
-        final String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
+
         String timeId = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
                 com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
@@ -726,11 +819,9 @@ public class LoginComplateManager {
                         .synchronize();
 
 
-
-
 //                if(workWorldNoticeHistoryResponse.getData().getMsgList().size()>0){
-                    //通知
-                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.WORK_WORLD_NOTICE);
+                //通知
+                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.WORK_WORLD_NOTICE);
 //                }
             }
 
@@ -741,22 +832,21 @@ public class LoginComplateManager {
         });
 
 
-
     }
 
 
-    public static void getWorkWorldRemind(){
-            HttpUtil.getWorkWorldRemind(new ProtocolCallback.UnitCallback<SetWorkWorldRemindResponse>() {
-                @Override
-                public void onCompleted(SetWorkWorldRemindResponse setWorkWorldRemindResponse) {
+    public static void getWorkWorldRemind() {
+        HttpUtil.getWorkWorldRemind(new ProtocolCallback.UnitCallback<SetWorkWorldRemindResponse>() {
+            @Override
+            public void onCompleted(SetWorkWorldRemindResponse setWorkWorldRemindResponse) {
 
-                }
+            }
 
-                @Override
-                public void onFailure(String errMsg) {
+            @Override
+            public void onFailure(String errMsg) {
 
-                }
-            });
+            }
+        });
     }
 
 }

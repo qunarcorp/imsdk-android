@@ -24,15 +24,13 @@ public class SelfWorkWorldActivity extends SwipeBackActivity {
     private ViewPager vp;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
-    private final String[] mTitles = {
-            "我的帖子", "我的回复", "@提到我"
-
-    };
+    private String[] mTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atom_ui_self_work_world_activity);
+        mTitles = new String[]{getString(R.string.atom_ui_my_moments), getString(R.string.atom_ui_my_repliess), "@" + getString(R.string.atom_ui_at_me)};
         initView();
         bindData();
     }

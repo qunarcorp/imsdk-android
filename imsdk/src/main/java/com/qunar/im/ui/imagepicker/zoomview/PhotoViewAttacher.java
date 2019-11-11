@@ -387,7 +387,8 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                 getImageViewHeight(imageView), (int) velocityX, (int) velocityY);
         imageView.post(mCurrentFlingRunnable);
         if(velocityY > 5000){
-            mOnFlingListener.onFlingExit(getImageView(), velocityX, velocityY);
+            if(mOnFlingListener != null)
+                mOnFlingListener.onFlingExit(getImageView(), velocityX, velocityY);
         }
     }
 

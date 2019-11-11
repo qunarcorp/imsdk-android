@@ -5,7 +5,7 @@ import android.content.Intent;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.SearchUserActivity;
-import com.qunar.rn_service.activity.QTalkSearchActivity;
+import com.qunar.im.ui.util.ReflectUtil;
 
 import java.util.Map;
 
@@ -20,8 +20,10 @@ public class QopenSearchActivity implements QChatSchemaService {
 
 
         if (CommonConfig.isQtalk) {
-            Intent i = null;
-            i = new Intent(context.getApplicationContext(), QTalkSearchActivity.class);
+            Intent i = ReflectUtil.getQTalkSearchActivityIntent(context.getApplicationContext());
+            if(i == null){
+                return false;
+            }
             context.startActivity(i);
         } else {
             Intent intent = new Intent(context.getApplicationContext(), SearchUserActivity.class);

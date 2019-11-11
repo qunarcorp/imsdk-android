@@ -24,6 +24,8 @@ import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.ui.util.QRRouter;
+import com.qunar.im.ui.util.ShareUtil;
+import com.qunar.im.ui.util.easyphoto.easyphotos.EasyPhotos;
 import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.bigimageview.bean.ImageInfo;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
@@ -320,6 +322,26 @@ public class ImageBrowsUtil {
                 imagesList.add(info);
             }
         }
+        //有可能是搜索情况下未找到本地数据库中图片 则添加进imagelist里面
+        if(position==-1){
+            MessageUtils.ImageMsgParams params = new MessageUtils.ImageMsgParams();
+            params.sourceUrl = item.mImageUrl;
+            MessageUtils.getDownloadFile(params, QunarIMApp.getContext(), true);
+//                IBrowsingConversationImageView.PreImage image = new IBrowsingConversationImageView.PreImage();
+//                image.originUrl = params.sourceUrl;
+//                image.smallUrl = params.smallUrl;
+//                image.width = params.width;
+//                image.height = params.height;
+            ImageInfo info = new ImageInfo();
+            info.setOriginUrl(params.sourceUrl);
+            info.setThumbnailUrl(params.smallUrl);
+            info.setWidth(params.width);
+            info.setHeight(params.height);
+//            imagesList.add(info);
+            imagesList.add(0,info);
+            position=0;
+        }
+//            startPreView(position, imagesList, context);
 
         startPreView(position, imagesList, context);
     }
@@ -348,7 +370,7 @@ public class ImageBrowsUtil {
                 //=================================================================================================
 
                 // 加载策略，默认为手动模式
-                .setLoadStrategy(ImagePreview.LoadStrategy.NetworkAuto)
+                .setLoadStrategy(ImagePreview.LoadStrategy.AlwaysOrigin)
 
                 // 保存的文件夹名称，会在SD卡根目录进行文件夹的新建。
                 // (你也可设置嵌套模式，比如："BigImageView/Download"，会在SD卡根目录新建BigImageView文件夹，并在BigImageView文件夹中新建Download文件夹)
@@ -401,7 +423,7 @@ public class ImageBrowsUtil {
                                         DownloadPictureUtil.downloadPicture(view.getContext(), loadUrl, new DownloadPictureUtil.PicCallBack() {
                                             @Override
                                             public void onDownLoadSuccess(String str) {
-
+                                                EasyPhotos.notifyMedia(view.getContext(), str);
                                             }
                                         }, true);
 
@@ -415,6 +437,7 @@ public class ImageBrowsUtil {
                                                 if (imageFile == null || !imageFile.exists()) {
                                                     return;
                                                 }
+                                                EasyPhotos.notifyMedia(view.getContext(), imageFile.getAbsoluteFile());
                                                 Result result = DecodeBitmap.scanningImage(imageFile.getPath());
                                                 if (result == null) {
 
@@ -430,10 +453,13 @@ public class ImageBrowsUtil {
                                         DownloadPictureUtil.downloadPicture(view.getContext(), loadUrl, new DownloadPictureUtil.PicCallBack() {
                                             @Override
                                             public void onDownLoadSuccess(String str) {
+
                                                 File file = new File(str);
 
                                                 if (file != null && file.exists()) {
-                                                    externalShare(file,view.getContext());
+                                                    EasyPhotos.notifyMedia(view.getContext(), file.getAbsoluteFile());
+                                                    ShareUtil.shareImage(view.getContext(),file,"分享图片");
+//                                                    ShareUtil.imageExternalShare(file,view.getContext());
                                                 }
                                             }
                                         }, false);
@@ -597,50 +623,50 @@ public class ImageBrowsUtil {
 
 
 
-    public static void externalShare(File file,Context context) {
-        Intent share_intent = new Intent();
-        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
-        share_intent.setType("image/*");  //设置分享内容的类型
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= 24) {
-            share_intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            uri = FileProvider.getUriForFile(mContext, ProviderUtil.getFileProviderName(mContext), file);//android 7.0以上
-            uri = getImageContentUri(context, file);
-        } else {
-//            uri = Uri.fromFile(file);
-            uri = getImageContentUri(context, file);
-        }
-        share_intent.putExtra(Intent.EXTRA_STREAM, uri);
-        //创建分享的Dialog
-        share_intent = Intent.createChooser(share_intent, "分享");
-        context.startActivity(share_intent);
-    }
-
-
-    /**
-     * Gets the content:// URI from the given corresponding path to a file
-     *
-     * @param context
-     * @param imageFile
-     * @return content Uri
-     */
-    public static Uri getImageContentUri(Context context, java.io.File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            Uri baseUri = Uri.parse("content://media/external/images/media");
-            return Uri.withAppendedPath(baseUri, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
-        }
-    }
+//    private static void externalShare(File file,Context context) {
+//        Intent share_intent = new Intent();
+//        share_intent.setAction(Intent.ACTION_SEND);//设置分享行为
+//        share_intent.setType("image/*");  //设置分享内容的类型
+//        Uri uri;
+//        if (Build.VERSION.SDK_INT >= 24) {
+//            share_intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////            uri = FileProvider.getUriForFile(mContext, ProviderUtil.getFileProviderName(mContext), file);//android 7.0以上
+//            uri = getImageContentUri(context, file);
+//        } else {
+////            uri = Uri.fromFile(file);
+//            uri = getImageContentUri(context, file);
+//        }
+//        share_intent.putExtra(Intent.EXTRA_STREAM, uri);
+//        //创建分享的Dialog
+//        share_intent = Intent.createChooser(share_intent, "分享");
+//        context.startActivity(share_intent);
+//    }
+//
+//
+//    /**
+//     * Gets the content:// URI from the given corresponding path to a file
+//     *
+//     * @param context
+//     * @param imageFile
+//     * @return content Uri
+//     */
+//    public static Uri getImageContentUri(Context context, java.io.File imageFile) {
+//        String filePath = imageFile.getAbsolutePath();
+//        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ",
+//                new String[]{filePath}, null);
+//        if (cursor != null && cursor.moveToFirst()) {
+//            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+//            Uri baseUri = Uri.parse("content://media/external/images/media");
+//            return Uri.withAppendedPath(baseUri, "" + id);
+//        } else {
+//            if (imageFile.exists()) {
+//                ContentValues values = new ContentValues();
+//                values.put(MediaStore.Images.Media.DATA, filePath);
+//                return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//            } else {
+//                return null;
+//            }
+//        }
+//    }
 }

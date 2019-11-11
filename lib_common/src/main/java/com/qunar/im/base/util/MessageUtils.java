@@ -49,19 +49,19 @@ public class MessageUtils {
             if (chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_CONSULT))) {
                 message.setQchatid("4");
                 message.setType(ConversitionType.MSG_TYPE_CONSULT);
-                IMMessage.ConsultInfo ci = new IMMessage.ConsultInfo();
-                ci.setCn("consult");
-                ci.setD("send");
-                ci.setUserType("usr");
-                message.setConsultInfo(ci);
+//                IMMessage.ConsultInfo ci = new IMMessage.ConsultInfo();
+//                ci.setCn("consult");
+//                ci.setD("send");
+//                ci.setUserType("usr");
+//                message.setConsultInfo(ci);
             } else if (chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER))) {
                 message.setQchatid("5");
                 message.setType(ConversitionType.MSG_TYPE_CONSULT_SERVER);
-                IMMessage.ConsultInfo ci = new IMMessage.ConsultInfo();
-                ci.setCn("consult");
-                ci.setD("send");
-                ci.setUserType("common");
-                message.setConsultInfo(ci);
+//                IMMessage.ConsultInfo ci = new IMMessage.ConsultInfo();
+//                ci.setCn("consult");
+//                ci.setD("send");
+//                ci.setUserType("common");
+//                message.setConsultInfo(ci);
             }
             message.setChannelid("consult");
             message.setRealfrom(from);
@@ -248,9 +248,9 @@ public class MessageUtils {
                     params.sourceUrl.startsWith("https://")) {
                 if( params.sourceUrl.startsWith("http://") ||
                         params.sourceUrl.startsWith("https://")){
-                    imageUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl);
-                    smallUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl);
-                    thumbUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl);
+                    imageUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl, true);
+                    smallUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl, true);
+                    thumbUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl, true);
                 }else{
                     imageUrl =params.sourceUrl;
                     smallUrl = params.sourceUrl;
@@ -291,7 +291,7 @@ public class MessageUtils {
                     filePath = MyDiskCache.getFile(params.sourceUrl);
                 }
             } else {
-                imageUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl);
+                imageUrl = QtalkStringUtils.addFilePathDomain(params.sourceUrl, true);
                 filePath = MyDiskCache.getFile(imageUrl);
                 String append = null;
                 String sappend = null;
@@ -350,10 +350,11 @@ public class MessageUtils {
 
 
         if(thumbUrl.startsWith("http")){
+            params.sourceUrl +=params.sourceUrl+"&webp=true";
+            thumbUrl += thumbUrl+"&webp=true";
             params.thumbUrl = thumbUrl+"&imgtype=thumb";
             params.smallUrl = thumbUrl+"&imgtype=fuzzy";
         }
-
 
     }
 

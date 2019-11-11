@@ -130,7 +130,7 @@ public class CollectionAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
             case TYPE_LEVEL_1:
                 final CollectionConvItemDate lv1 = (CollectionConvItemDate) item;
                 Logger.i("二级消息:" + new Gson().toJson(lv1));
-                helper.setText(R.id.textview_time, DateTimeUtils.getTime(Long.parseLong(lv1.getLastUpdateTime()), false));
+                helper.setText(R.id.textview_time, DateTimeUtils.getTime(Long.parseLong(lv1.getLastUpdateTime()), false, true));
                 if (lv1.getUnCount() > 0) {
                     helper.getView(R.id.textView_new_msg).setVisibility(View.VISIBLE);
                     if (lv1.getUnCount() > 99) {

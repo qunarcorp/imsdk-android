@@ -101,7 +101,7 @@
     <string name="atom_ui_share_message_tips">Please select the message you want to share！</string>
     <string name="atom_ui_share_select_user_tips">Select a shared object and share it again</string>
     <string name="atom_ui_share_to">Share to</string>
-    <string name="atom_ui_message_revoke_msg">Revoked a message</string>
+    <string name="atom_ui_message_revoke_msg">Recalled a message</string>
     <string name="atom_ui_message_send_msg">Sent a message</string>
     <string name="atom_ui_message_add_friend">Request to add as a friend</string>
     <string name="atom_ui_message_agree_friend">Agree to add</string>
@@ -127,7 +127,7 @@
     <string name="atom_ui_iosamap">Navigate by AutoNavi Maps</string>
     <string name="atom_ui_appleMap">Navigate by Apple Maps</string>
     <string name="atom_ui_login_userNameInputView_placeholder">e.g. : wu.wang</string>
-    <string name="atom_ui_tab_title_chat">Chat</string>
+    <string name="atom_ui_tab_title_chat">Chats</string>
     <string name="atom_ui_tab_title_contact">Discover</string>
     <string name="atom_ui_tab_title_explore">Explore</string>
     <string name="atom_ui_tab_title_myself">Self</string>
@@ -139,7 +139,7 @@
     <string name="atom_ui_group_id">ID</string>
     <string name="atom_ui_nav_server_port">Navigation server port</string>
     <string name="atom_ui_nav_server_domain">Navigation server domain</string>
-    <string name="atom_ui_nav_server_httpHost">Http server address</string>
+    <string name="atom_ui_nav_server_httpHost">Server address</string>
     <string name="atom_ui_nav_server_file">File server address</string>
     <string name="atom_ui_textbar_button_album">Album</string>
     <string name="atom_ui_textbar_button_camera">Camera</string>
@@ -161,7 +161,7 @@
     <string name="atom_ui_textbar_refer_input_tips">Reference input to reply</string>
     <string name="atom_ui_contact_tab_friend">Friend</string>
     <string name="atom_ui_contact_tab_group">Group</string>
-    <string name="atom_ui_contact_tab_not_read">No Read</string>
+    <string name="atom_ui_contact_tab_not_read">Unread Messages</string>
     <string name="atom_ui_contact_tab_tips">Please goto the \search\ channel -> \luotuobang\ function for your classmate searching</string>
     <string name="atom_ui_explore_tab_lvtu">Lvtu</string>
     <string name="atom_ui_explore_tab_luotuobang">luotuo bang</string>
@@ -170,7 +170,7 @@
     <string name="atom_ui_explore_tab_my_file">My File</string>
     <string name="atom_ui_send_custom_pruduct">Send Product</string>
     <string name="atom_ui_explore_tab_history">History Message Search</string>
-    <string name="atom_ui_explore_tab_onekeyread">One key read</string>
+    <string name="atom_ui_explore_tab_onekeyread">Mark All as Read</string>
     <string name="atom_ui_explore_tab_clear_message_list">Clear message list</string>
     <string name="atom_ui_Setting_nav_back">Back</string>
     <string name="atom_ui_Setting_tab_account">My Account</string>
@@ -284,9 +284,10 @@
     <string name="atom_ui_common_yesterday">Yesterday</string>
     <string name="atom_ui_common_not_download">Not Download</string>
     <string name="atom_ui_common_sent">Sent</string>
+    <string name="atom_ui_common_notsent">not sent</string>
     <string name="atom_ui_common_already_download">Already Download</string>
     <string name="atom_ui_common_from">From</string>
-    <string name="atom_ui_common_issue">Issue</string>
+    <string name="atom_ui_common_issue">Send</string>
     <string name="atom_ui_common_old_file">Before the file can not be viewed. ~! -.-</string>
     <string name="atom_ui_common_all_group">All Group</string>
     <string name="atom_ui_common_search_tips">Please enter search keywords</string>
@@ -389,7 +390,7 @@
     <string name="atom_ui_todolist_pull_add">Pull to Add Task</string>
     <string name="atom_ui_todolist_think">I think...</string>
     <string name="atom_ui_everNote">QTNote</string>
-    <string name="atom_ui_tab_mine">Mine</string>
+    <string name="atom_ui_tab_mine">Me</string>
     <string name="atom_ui_open_notification_switch">Open Notification Switch</string>
     <string name="atom_ui_open_permission_title">Apply</string>
     <string name="atom_ui_open_permission_voice_message">Allow microphone access in Settings->Apps->QTALK to use audio, Sight</string>
@@ -452,7 +453,7 @@
     <string name="atom_ui_chat_title_detail">Chat Detail</string>
     <string name="atom_ui_tip_connecting">connecting</string>
     <string name="atom_ui_tip_disconnected">Disconnected</string>
-    <string name="atom_ui_tab_message">Messages</string>
+    <string name="atom_ui_tab_message">Chats</string>
     <string name="atom_ui_tab_contacts">Contacts</string>
     <string name="atom_ui_setting_switch_account">Switch Account</string>
     <string name="atom_ui_qtalk_text">QTalk</string>
@@ -631,8 +632,9 @@
     <string name="atom_ui_tip_resend_failed">Resend failed</string>
     <string name="atom_ui_menu_reference">Reference</string>
     <string name="atom_ui_menu_translate">Translate</string>
-    <string name="atom_ui_menu_revoke">Revoke</string>
+    <string name="atom_ui_menu_revoke">Recall</string>
     <string name="atom_ui_menu_copy">Copy</string>
+    <string name="atom_ui_menu_add_stickers">Add to Stickers</string>
     <string name="atom_ui_tip_somebody_at_you">Somebody@you</string>
     <string name="atom_ui_tip_unread_message">new messages</string>
     <string name="atom_ui_tip_too_frequent">Too frequent！</string>
@@ -739,7 +741,7 @@
     <string name="atom_ui_null_content">(Empty)</string>
     <string name="atom_ui_search_more">Search A Robot</string>
     <string name="atom_ui_title_shared">Share</string>
-    <string name="atom_ui_common_password">password</string>
+    <string name="atom_ui_common_password">Password</string>
     <string name="atom_ui_qtalk_user_login">Username Login</string>
     <string name="atom_ui_common_agree">Agrees</string>
     <string name="atom_ui_delete_friend">Delete Buddy</string>
@@ -815,7 +817,7 @@
     <string name="atom_ui_readed">Read</string>
     <string name="atom_ui_sent">Been Sent</string>
     <string name="atom_ui_send_activity">activity</string>
-    <string name="atom_ui_create_group">Add Groups</string>
+    <string name="atom_ui_create_group">Create Group</string>
     <string name="atom_ui_tab_trip">Calendar</string>
 
     <string name="atom_ui_quickreply_empty">Please set up a quick reply on the computer</string>
@@ -834,21 +836,182 @@
     <string name="atom_ui_input_user_mobile">Input account</string>
     <string name="atom_ui_modify">Modify</string>
     <string name="atom_ui_nav_qrcode_share">Share the QR code to your team members\n invite them to join</string>
-    <string name="atom_ui_desktop">PC&#160;</string>
-    <string name="atom_ui_logged">&#160;Has Logged</string>
-    <string name="atom_ui_file_sharing_tips1">You are already logged in on your computer &#160;</string>
-    <string name="atom_ui_file_sharing_tips2">No need for data lines, computers and mobile phones can easily transfer files to each other. \nTry it~~</string>
+    <string name="atom_ui_desktop">Logged in to&#160;</string>
+    <string name="atom_ui_logged">&#160;on compute</string>
+    <string name="atom_ui_file_sharing_tips1">You have logged in on your computer &#160;</string>
+    <string name="atom_ui_file_sharing_tips2">Transfer files between phone and computer without using USB. \nTry it now!</string>
     <string name="atom_ui_typing">Typing...</string>
-    <string name="atom_ui_workworld">Moment</string>
+    <string name="atom_ui_workworld">Moments</string>
 
     <string name="indicator">%1$s/%2$s</string>
     <string name="atom_ui_sharecon">Session Sharing</string>
     <string name="atom_ui_sharemoment">Moment Sharing</string>
-    <string name="atom_ui_third_logo_text">Efficient work begins with efficient communication</string>
+    <string name="atom_ui_third_logo_text">Communication makes work efficient</string>
     <string name="atom_ui_scan_nav_config">Scan code configuration navigation</string>
     <string name="atom_ui_manaually_nav_config">You can also enter navigation manually</string>
     <string name="atom_ui_string_nav_name">Navigation name</string>
     <string name="atom_ui_string_domain_name">Domain name/server address (required)</string>
     <string name="atom_ui_hint_add_nav_name">Please enter the navigation server name or company name</string>
     <string name="atom_ui_hint_add_nav_domain">Please enter your company domain name, such as qunar.com</string>
+    <string name="atom_ui_next_time">Next time</string>
+    <string name="atom_ui_update_now">Update now</string>
+    <string name="atom_ui_new_version_update">New version update</string>
+    <string name="atom_ui_exit_text">Exit</string>
+
+
+
+
+    <string name="selector_folder_all_easy_photos">All Images</string>
+
+
+    <string name="selector_folder_all_video_photo_easy_photos">Images and videos</string>
+
+
+    <string name="selector_folder_video_easy_photos">All videos</string>
+
+
+    <string name="selector_easy_photos">Select</string>
+
+    <!--http://stackoverflow.com/questions/17502824/whats-wrong-with-this-format-string-->
+
+    <string name="selector_action_done_easy_photos">Finish(%1$d/%2$d)</string>
+
+
+    <string name="selector_preview_easy_photos">Preview</string>
+
+
+    <string name="selector_reach_max_hint_easy_photos">Select a maximum of %d photos or videos</string>
+
+
+    <string name="selector_reach_max_image_hint_easy_photos">Select a maximum of %d photos</string>
+
+
+    <string name="selector_reach_max_video_hint_easy_photos">Select a maximum of %d videos</string>
+
+
+    <string name="selector_mutual_exclusion_easy_photos">Can not choose photos and videos simultaneously</string>
+
+
+    <string name="msg_no_file_easy_photos">File not found or broken</string>
+
+
+    <string name="msg_no_camera_easy_photos">Can not access to camera </string>
+
+
+    <string name="camera_temp_file_error_easy_photos">Image error </string>
+
+    <string name="selector_permission_error_easy_photos">Error. Permission required. </string>
+
+
+    <string name="selector_image_size_error_easy_photos">The image\'s width must be greater than %1$d and height must be greater than %2$d </string>
+
+
+    <string name="selector_image_type_error_easy_photos">Unsupported image format</string>
+
+
+    <string name="edit_easy_photos">Edit</string>
+
+
+    <string name="empty_easy_photos">Refresh</string>
+
+
+    <string name="no_photos_easy_photos">No matching photos available. Take a new photo.</string>
+
+
+    <string name="permissions_again_easy_photos">Please allow permissions for this</string>
+
+
+    <string name="permissions_die_easy_photos">Please set permissions for this in Settings</string>
+
+
+    <string name="original_easy_photos">Full image</string>
+
+
+    <string name="preview_current_number_easy_photos">%1$d/%2$d</string>
+
+
+    <string name="done_easy_photos">Finish</string>
+
+
+    <string name="cancel_easy_photos">Cancel</string>
+
+
+    <string name="template_easy_photos">Pattern</string>
+
+
+    <string name="text_sticker_easy_photos">Text</string>
+
+
+    <string name="text_sticker_date_easy_photos">Date</string>
+
+
+    <string name="text_sticker_hint_easy_photos">Double tap to edit</string>
+
+
+    <string name="text_sticker_hint_name_easy_photos">Customize</string>
+
+
+    <string name="picture_selection_easy_photos">Select images</string>
+
+
+    <string name="puzzle_easy_photos">Merge photos</string>
+
+
+    <string name="select_puzzle_photos">Select 2 \- 9 photos</string>
+
+
+    <string name="gif_easy_photos">GIF</string>
+
+
+    <string name="video_easy_photos">Video</string>
+
+
+    <string name="tap_take_photo">Tap to take photo</string>
+
+
+    <string name="long_press_camera">Hold to record video</string>
+
+
+    <string name="tap_take_photo_long_press_camera_split">, </string>
+
+
+    <string name="recording_too_short">Too short</string>
+
+
+
+
+
+    <string name="tips_not_wifi">You are currently using the mobile network, the player will continue to consume traffic</string>
+    <string name="tips_not_wifi_confirm">Resume</string>
+    <string name="tips_not_wifi_cancel">Stop play</string>
+    <string name="no_url">No url</string>
+    <string name="replay">Replay</string>
+    <string name="click_to_restart">Click to try again</string>
+    <string name="video_loading_failed">Video loading failed</string>
+
+    <string name="atom_ui_search_chat_history">Search chat history</string>
+    <string name="atom_ui_post">Post</string>
+    <string name="atom_ui_share_moments">Share Moments</string>
+    <string name="atom_ui_idea_this_moment">Thoughts at this moment...</string>
+
+    <string name="atom_ui_my_moments">My Moments</string>
+    <string name="atom_ui_my_repliess">My Replies</string>
+    <string name="atom_ui_at_me">Mentioned Me</string>
+    <string name="atom_ui_my_identify">My Identity</string>
+    <string name="atom_ui_use_my_real_name">Use My Real Name</string>
+    <string name="atom_ui_anonymous">Anonymous User</string>
+    <string name="atom_ui_nickname">Nickname</string>
+    <string name="atom_ui_change_change">Change</string>
+    <string name="atom_ui_notify_somebody">Mention</string>
+    <string name="atom_ui_search_after_input">Enter here to search</string>
+    <string name="atom_ui_change_medal_wear">Wearing a success</string>
+    <string name="atom_ui_change_medal_upload">Remove wear</string>
+    <string name="atom_ui_fail_enve_status">Failed to get red envelope status</string>
+    <string name="atom_ui_pay_fail">pay failed!</string>
+    <string name="atom_ui_auth_fail">auth failed!</string>
+    <string name="atom_ui_user_cancel">user canceled!</string>
+    <string name="atom_ui_fail_to_open">open fail!</string>
+    <string name="atom_ui_success_to_bind_alipay">bind success!</string>
+    <string name="atom_ui_has_not_bind_alipay">You are not bind Alipay, to bind?</string>
+    <string name="atom_ui_send_red_packet_success">Red envelope sent successfully！</string>
 </resources>

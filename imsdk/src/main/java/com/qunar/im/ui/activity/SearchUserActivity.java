@@ -15,11 +15,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.PublishPlatform;
 import com.qunar.im.base.module.RecentConversation;
+import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.im.ui.presenter.ISearchFriendPresenter;
 import com.qunar.im.ui.presenter.ITransferRecentCovnPresenter;
 import com.qunar.im.ui.presenter.impl.SearchFriendPresenter;
@@ -38,7 +40,6 @@ import com.qunar.im.ui.fragment.DeptFragment;
 import com.qunar.im.ui.view.MySearchView;
 import com.qunar.im.ui.view.QtSearchActionBar;
 import com.qunar.im.utils.QtalkStringUtils;
-import com.qunar.im.base.protocol.NativeApi;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -454,6 +455,7 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
             i.putExtra(Constants.BundleKey.IS_FROM_SHARE, true);
             i.putExtra(PbChatActivity.KEY_JID, jid);
             i.putExtra(PbChatActivity.KEY_IS_CHATROOM, isMuc);
+            Logger.i("分享:开启"+i.getDataString());
             startActivity(i);
 //            EventBus.getDefault().post(new EventBusEvent.SendShareMsg(shareMsgJson, jid));
 
@@ -469,6 +471,7 @@ public class SearchUserActivity extends IMBaseActivity implements ISearchFriendV
             i.setClass(this, PbChatActivity.class);
             i.putExtra(PbChatActivity.KEY_JID, jid);
             i.putExtra(PbChatActivity.KEY_IS_CHATROOM, isMuc);
+
             startActivity(i);
 
             finish();

@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="@dimen/dp_4"
             android:paddingRight="3dp"
-            android:text="搜索聊天记录"
+            android:text="@string/atom_ui_search_chat_history"
             android:textColor="#666666"
             android:layout_height="wrap_content"
             android:textSize="13sp"/>

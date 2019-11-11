@@ -41,7 +41,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/user_header"
                 android:text="旺旺旺"
-                android:textColor="#59918A"
+                android:textColor="#4dc1b5"
                 android:textSize="15sp" />
 
             <TextView
@@ -96,7 +96,7 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
+    <RelativeLayout
         android:layout_marginTop="16dp"
         android:layout_marginRight="15dp"
         android:layout_width="56dp"
@@ -104,17 +104,29 @@
 
 
 
-
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/img_item"
+        <RelativeLayout
             android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:visibility="gone"
-            android:scaleType="centerCrop"
-            fresco:atom_imagecache_actualImageScaleType="centerCrop"
-            fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
-            fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
-            fresco:atom_imagecache_roundingBorderWidth="1dp" />
+            android:layout_height="56dp">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_item"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:visibility="gone"
+                android:scaleType="centerCrop"
+                fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                fresco:atom_imagecache_roundWithOverlayColor="@color/atom_ui_light_gray_f2"
+                fresco:atom_imagecache_roundingBorderColor="@color/atom_ui_green_8e"
+                fresco:atom_imagecache_roundingBorderWidth="1dp" />
+
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/play_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/atom_ui_play_button"></ImageView>
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/text_item"
             android:textColor="#999999"
@@ -126,7 +138,7 @@
             android:ellipsize="end"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

@@ -2,8 +2,9 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
+import com.qunar.im.base.util.Constants;
 import com.qunar.im.ui.activity.IMBaseActivity;
-import com.qunar.rn_service.activity.QtalkServiceRNActivity;
+import com.qunar.im.ui.util.ReflectUtil;
 
 import java.util.Map;
 
@@ -14,8 +15,11 @@ public class QOpenSingleChatInfoSchemaImpl implements QChatSchemaService{
     @Override
     public boolean startActivityAndNeedWating(IMBaseActivity context, Map<String, String> map) {
         if(map != null){
-            Intent intent = new Intent(context, QtalkServiceRNActivity.class);
-            intent.putExtra("module", QtalkServiceRNActivity.USERCARD);
+            Intent intent = ReflectUtil.getQtalkServiceRNActivityIntent(context);
+            if(intent == null){
+                return false;
+            }
+            intent.putExtra("module", Constants.RNKey.USERCARD);
             intent.putExtra("UserId", map.get("userId"));
             intent.putExtra("RealJid", map.get("realJid"));
             intent.putExtra("Screen", "ChatInfo");

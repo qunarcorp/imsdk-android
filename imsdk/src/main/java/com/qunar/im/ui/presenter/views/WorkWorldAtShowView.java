@@ -21,4 +21,8 @@ public interface WorkWorldAtShowView {
     public void closeRefresh();
 
     public int getListCount();
+
+    public void setEmptyText(String string);
+
+    public void clearData();
 }

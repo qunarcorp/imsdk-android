@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,14 @@ public class QtNewActionBar extends Toolbar {
     private IconView rightIcon;
     private IconView rightIconSpecial;
     private LinearLayout titleLayout;
+    private RelativeLayout title_bar_layout;
+
+    //搜索部分
+    private LinearLayout search_bar_layout;
+    private LinearLayout search_bar_left_layout;
+    private EditText search_bar_search_edittext;
+    private IconView search_bar_clean;
+    private LinearLayout search_bar_cancle;
 
 
     WeakReference<Context> wContext;
@@ -45,6 +54,49 @@ public class QtNewActionBar extends Toolbar {
     public QtNewActionBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+    }
+
+    public RelativeLayout getTitleBarLayout() {
+        if (title_bar_layout == null) {
+            title_bar_layout = (RelativeLayout) findViewById(R.id.title_bar_layout);
+        }
+        return title_bar_layout;
+    }
+
+    public LinearLayout getSearchBarCancleLayout() {
+        if (search_bar_cancle == null) {
+            search_bar_cancle = (LinearLayout) findViewById(R.id.search_bar_cancle);
+        }
+        return search_bar_cancle;
+    }
+
+    public IconView getSearchBarCleanView(){
+        if (search_bar_clean == null) {
+            search_bar_clean = (IconView) findViewById(R.id.search_bar_clean);
+        }
+        return search_bar_clean;
+    }
+
+    public EditText getSearchBarSearchEdittext() {
+        if (search_bar_search_edittext == null) {
+            search_bar_search_edittext = (EditText) findViewById(R.id.search_bar_search_edittext);
+        }
+        return search_bar_search_edittext;
+    }
+
+    public LinearLayout getSearchLayout(){
+        if (search_bar_layout == null) {
+            search_bar_layout = (LinearLayout) findViewById(R.id.search_bar_layout);
+        }
+        return search_bar_layout;
+    }
+
+    public LinearLayout getSearchLayoutLeftLayout(){
+
+        if (search_bar_left_layout == null) {
+            search_bar_left_layout = (LinearLayout) findViewById(R.id.search_bar_left_layout);
+        }
+        return search_bar_left_layout;
     }
 
     public IconView getRightIconSpecial(){

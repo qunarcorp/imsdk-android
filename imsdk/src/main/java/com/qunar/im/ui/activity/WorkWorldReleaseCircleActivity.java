@@ -2,6 +2,8 @@ package com.qunar.im.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -20,6 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.ui.util.easyphoto.easyphotos.callback.SelectCallback;
+import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.PhotoUtil;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.media.DurationUtils;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.ExtendMessageEntity;
 import com.qunar.im.base.module.AnonymousData;
@@ -34,6 +40,8 @@ import com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter;
 import com.qunar.im.ui.presenter.views.ReleaseCircleView;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.IMUserDefaults;
+import com.qunar.im.ui.util.ImageSelectGlideEngine;
+import com.qunar.im.ui.util.ImageSelectUtil;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
@@ -52,7 +60,11 @@ import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.view.GridSpacingItemDecoration;
 import com.qunar.im.ui.util.atmanager.AtManager;
 import com.qunar.im.ui.util.atmanager.WorkWorldAtManager;
+import com.qunar.im.ui.util.videoPlayUtil.VideoPlayUtil;
+import com.qunar.im.ui.view.Control;
+import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;
+import com.qunar.im.ui.view.RSoftInputLayout;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.ConnectionUtil;
@@ -61,6 +73,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 import static com.qunar.im.base.module.ReleaseCircleType.TYPE_UNCLICKABLE;
 import static com.qunar.im.ui.activity.PbChatActivity.AT_MEMBER;
@@ -86,24 +99,41 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
     private WorkWorldAtManager mAtManager;
     protected boolean canShowAtActivity = true;
 
+    protected IconView release_image_layout;
+    protected IconView release_video_layout;
+
+    Control mControl;
+
 
     protected QtNewActionBar qtNewActionBar;//头部导航
     protected EditText release_text;//朋友圈文字内容
     protected RecyclerView mRecyclerView;//图片排版
     protected ReleaseCircleGridAdapter releaseCircleGridAdapter;//图片排版用
+    protected SimpleDraweeView re_video_image;
     protected ItemTouchHelper itemTouchHelper;
     protected List<MultiItemEntity> picList;
-    protected RelativeLayout release_identity_layout;
-    protected RelativeLayout release_at_layout;
+    protected LinearLayout release_identity_layout;
+    protected RelativeLayout re_video_ll;
+    protected TextView re_video_time;
+    protected IconView release_at_layout;
     protected TextView release_identity;
     protected SimpleDraweeView an_header;
     protected LinearLayout re_link_ll;
     protected SimpleDraweeView re_link_icon;
     protected TextView re_link_title;
+    protected ImageView clear_video;
     private int imgSize = 9;
     private int mImageSize;
     private ProgressDialog dialog;
     private ExtendMessageEntity entity;//分享用
+    private TextView release_number_words;
+    private int releaseType = -1;
+
+    public static int imageType = 1;
+    public static int videoType = 2;
+    public static int linkType = 3;
+
+    private Photo videoData;
 
     private boolean check = true;
 
@@ -123,6 +153,8 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
         setContentView(R.layout.atom_ui_activity_release_circle);
         bindView();
         bindData();
+        mControl = new Control((RSoftInputLayout) findViewById(R.id.soft_input_layout),
+                this);
 
         mAtManager = new WorkWorldAtManager(this, CurrentPreference.getInstance().getPreferenceUserId());
         mAtManager.setTextChangeListener(this);
@@ -163,11 +195,13 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
 //                        }
 
 //                    }
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    re_video_ll.setVisibility(View.GONE);
 
                     for (String img : icons) {
                         ImageItem i = new ImageItem();
-                        if(!new File(img).exists()){
-                            Toast.makeText(this,"分享失败",Toast.LENGTH_SHORT).show();
+                        if (!new File(img).exists()) {
+                            Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
                             finish();
                             break;
                         }
@@ -179,10 +213,24 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
 //                        imageUrl = "";
                     }
                     releaseCircleGridAdapter.setNewData(picList);
+                    releaseType = imageType;
                 }
                 if (!ListUtil.isEmpty(videos)) {
                     for (String video : videos) {
+                        if (!new File(video).exists()) {
+                            Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+                            finish();
+                            break;
+                        }
+                        Photo photo = PhotoUtil.getPhoto(video);
+                        mRecyclerView.setVisibility(View.GONE);
+                        re_video_ll.setVisibility(View.VISIBLE);
+                        List<Photo> list = new ArrayList<>();
+                        list.add(photo);
+                        parseVideoResult((ArrayList<Photo>) list);
+
                         Logger.i("分享的视频:" + video);
+                        break;
 //                        chatingPresenter.sendVideo(video);
                     }
                 }
@@ -200,21 +248,22 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
                     Logger.i("分享的json:" + jsonStr);
                     mRecyclerView.setVisibility(View.GONE);
                     re_link_ll.setVisibility(View.VISIBLE);
-                    String  title =entity.title;
-                    if(TextUtils.isEmpty(title)){
-                        if(TextUtils.isEmpty(entity.desc)){
-                            title="分享链接";
-                            entity.title="分享链接";
-                        }else{
+                    String title = entity.title;
+                    if (TextUtils.isEmpty(title)) {
+                        if (TextUtils.isEmpty(entity.desc)) {
+                            title = "分享链接";
+                            entity.title = "分享链接";
+                        } else {
                             title = entity.desc;
-                            entity.title=entity.desc;
+                            entity.title = entity.desc;
                         }
 
-                    }else{
-                        title =entity.title;
+                    } else {
+                        title = entity.title;
                     }
 
                     re_link_title.setText(title);
+                    releaseType = linkType;
                     int size = Utils.dp2px(this, 40);
                     if (TextUtils.isEmpty(entity.img)) {
                         re_link_icon.setBackground(getDrawable(R.drawable.atom_ui_link_default));
@@ -222,6 +271,7 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
                         ProfileUtils.displayLinkImgByImageSrc(this, entity.img, getDrawable(R.drawable.atom_ui_link_default), (ImageView) re_link_icon,
                                 size, size);
                     }
+
 //                    chatingPresenter.sendExtendMessage(entity);
                 } catch (Exception ex) {
 //                    LogUtil.e(TAG, "ERROR", ex);
@@ -239,12 +289,20 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
         release_text = (EditText) findViewById(R.id.release_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.collection_rv);
         release_identity = (TextView) findViewById(R.id.release_identity);
-        release_identity_layout = (RelativeLayout) findViewById(R.id.release_identity_layout);
-        release_at_layout = (RelativeLayout) findViewById(R.id.release_at_layout);
+        release_identity_layout = (LinearLayout) findViewById(R.id.release_identity_layout);
+        release_at_layout = (IconView) findViewById(R.id.release_at_layout);
         re_link_ll = (LinearLayout) findViewById(R.id.re_link_ll);
         re_link_icon = (SimpleDraweeView) findViewById(R.id.re_link_icon);
         re_link_title = (TextView) findViewById(R.id.re_link_title);
+        release_number_words = (TextView) findViewById(R.id.release_number_words);
+        release_image_layout = (IconView) findViewById(R.id.release_image_layout);
+        release_video_layout = (IconView) findViewById(R.id.release_video_layout);
+        re_video_ll = (RelativeLayout) findViewById(R.id.re_video_ll);
+        re_video_image = (SimpleDraweeView) findViewById(R.id.re_video_image);
+        clear_video = (ImageView) findViewById(R.id.clear_video);
+        re_video_time = (TextView) findViewById(R.id.re_video_time);
     }
+
 
     private void initReleaseHeader() {
         String user = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, Constants.Preferences.lastuserid);
@@ -270,19 +328,19 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
         //初始化自身头像
 //        CurrentPreference.getInstance().get
 
-        releaseCirclePresenter = new ReleaseCircleManagerPresenter();
+        releaseCirclePresenter = new ReleaseCircleManagerPresenter(this);
         releaseCirclePresenter.setView(this);
 
         mImageSize = Utils.getImageItemWidth(this);
-        setActionBarTitle("发布动态");
-        setActionBarRightText("发布");
+        setActionBarTitle(getString(R.string.atom_ui_share_moments));
+        setActionBarRightText(getString(R.string.atom_ui_post));
         setActionBarRightTextClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 releaseCirclePresenter.release();
             }
         });
-        setActionBarLeftText("取消");
+        setActionBarLeftText(getString(R.string.atom_ui_cancel));
         setActionBarLeftClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,6 +349,83 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
         });
         initPicList();
 
+        //清空video数据 隐藏界面
+        clear_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                releaseType = -1;
+                videoData = null;
+                re_video_ll.setVisibility(View.GONE);
+            }
+        });
+
+
+        release_image_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                ImagePicker.getInstance().setSelectLimit();
+//                Intent intent1 = new Intent(WorkWorldReleaseCircleActivity.this, ImageGridActivity.class);
+                /* 如果需要进入选择的时候显示已经选中的图片，
+                 * 详情请查看ImagePickerActivity
+                 * */
+//                                intent1.putExtra(ImageGridActivity.EXTRAS_IMAGES,images);
+//                startActivityForResult(intent1, ACTIVITY_SELECT_PHOTO_Release);
+                if (releaseType == imageType) {
+
+                    int size = 0;
+                    if (picList.get((picList.size() - 1)) instanceof ReleaseCircleNoChangeItemDate) {
+                        size = (imgSize - picList.size() + 1);
+                    } else {
+                        size = (imgSize - picList.size());
+                    }
+
+                    if (size > 0) {
+                        ImageSelectUtil.startSelectWorkWorld(WorkWorldReleaseCircleActivity.this, size, false, new SelectCallback() {
+                            @Override
+                            public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
+                                parseImageResult(photos);
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(WorkWorldReleaseCircleActivity.this, "最多只可选择9张图片", Toast.LENGTH_LONG).show();
+                    }
+                } else if (releaseType == videoType) {
+                    if(videoData!=null){
+                        Toast.makeText(WorkWorldReleaseCircleActivity.this, "最多只可选择1个视频", Toast.LENGTH_LONG).show();
+                    }
+
+                } else if (releaseType == linkType) {
+                    Toast.makeText(WorkWorldReleaseCircleActivity.this, "分享连接时,不可添加图片/视频", Toast.LENGTH_LONG).show();
+                } else {
+                    ImageSelectUtil.startSelectWorkWorld(WorkWorldReleaseCircleActivity.this, (imgSize - picList.size() + 1), true, new SelectCallback() {
+                        @Override
+                        public void onResult(final ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
+                            if (photos.get(0).type.contains("image")) {
+                                mRecyclerView.setVisibility(View.VISIBLE);
+                                re_video_ll.setVisibility(View.GONE);
+                                parseImageResult(photos);
+                            } else if (photos.get(0).type.contains("video")) {
+
+                                mRecyclerView.setVisibility(View.GONE);
+                                re_video_ll.setVisibility(View.VISIBLE);
+                                parseVideoResult(photos);
+//                                ProfileUtils.displayGravatarByImageSrc(WorkWorldReleaseCircleActivity.this, photos.get(0).path, re_video_image,
+//                                        getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image), getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image));
+                            } else {
+                                mRecyclerView.setVisibility(View.GONE);
+                                re_video_ll.setVisibility(View.GONE);
+
+                                Toast.makeText(WorkWorldReleaseCircleActivity.this, "所选项目,不可使用", Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
 
         release_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -310,18 +445,21 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
             @Override
             public void afterTextChanged(Editable s) {
                 mAtManager.afterTextChanged(s);
+                release_number_words.setText(s.length() + "/1000");
                 //根据当前是删除了字段或者新写字段来判断是否开启@界面
-                if (!canShowAtActivity) {
-                    canShowAtActivity = true;
-                    return;
-                }
-
                 if (s.length() > 1000) {
                     showToast("请输入不超过1000个字符的票圈");
                     check = false;
                 } else {
                     check = true;
                 }
+                if (!canShowAtActivity) {
+                    canShowAtActivity = true;
+                    return;
+                }
+
+
+
             }
         });
 
@@ -489,6 +627,44 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
 
     }
 
+    private void parseVideoResult(final ArrayList<Photo> photos) {
+        videoData = photos.get(0);
+        releaseType = videoType;
+        re_video_time.setText(DurationUtils.format(videoData.duration));
+        ImageSelectGlideEngine.getInstance().loadPhoto(WorkWorldReleaseCircleActivity.this, photos.get(0).path, re_video_image);
+        re_video_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VideoPlayUtil.openLocalVideo(WorkWorldReleaseCircleActivity.this,photos.get(0).path,photos.get(0).name,photos.get(0).path);
+            }
+        });
+    }
+
+    private void parseImageResult(ArrayList<Photo> photos) {
+        try {
+            if (photos != null) {
+                //新版图片选择器
+//                                        ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                if (photos.size() > 0) {
+                    picList.remove(picList.size() - 1);
+                    for (Photo image : photos) {
+
+                        picList.add(ImageSelectUtil.parseImageItemForPhotos(image));
+                    }
+                    if (picList.size() < 9) {
+                        ReleaseCircleNoChangeItemDate no = new ReleaseCircleNoChangeItemDate();
+                        no.setImgUrl(plusImg);
+                        picList.add(no);
+                    }
+                    releaseType = imageType;
+                    releaseCircleGridAdapter.setNewData(picList);
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
     private void initPicList() {
         picList = new ArrayList<>();
 
@@ -531,13 +707,13 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
         switch (i) {
             case REAL_NAME:
                 identityType = REAL_NAME;
-                release_identity.setText("实名发布");
+                release_identity.setText(getString(R.string.atom_ui_use_my_real_name));
                 initReleaseHeader();
                 break;
 
             case ANONYMOUS_NAME:
                 identityType = ANONYMOUS_NAME;
-                release_identity.setText("匿名发布");
+                release_identity.setText(getString(R.string.atom_ui_anonymous));
                 mAnonymousData = (AnonymousData) data.getSerializableExtra(ANONYMOUS_DATA);
                 setAnonymousData(mAnonymousData);
 //                releaseCirclePresenter.getAnonymous();
@@ -570,6 +746,10 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
                             no.setImgUrl(plusImg);
                             picList.add(no);
                         }
+                    }
+                    if (picList.size() == 1 && picList.get(0) instanceof ReleaseCircleNoChangeItemDate) {
+                        mRecyclerView.setVisibility(View.GONE);
+                        releaseType = -1;
                     }
                     releaseCircleGridAdapter.setNewData(picList);
                 }
@@ -624,6 +804,11 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
             return new ArrayList<>();
         }
 
+    }
+
+    @Override
+    public Photo getUpdateVideo() {
+        return videoData;
     }
 
     @Override
@@ -694,6 +879,13 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mControl.onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
+
 
     @Override
     public void onTextAdd(String content, int stat, int length) {
@@ -706,6 +898,22 @@ public class WorkWorldReleaseCircleActivity extends SwipeBackActivity implements
     public void onTextDelete(int start, int length) {
         Editable edit = release_text.getEditableText();
         edit.delete(start, start + length);
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  //设置横屏
+            Logger.i("发布页横评");
+//            Toast.makeText(WorkWorldReleaseCircleActivity.this,"当前屏幕为横屏",Toast.LENGTH_SHORT).show();
+        } else {
+            Logger.i("发布页竖评");
+//            Toast.makeText(WorkWorldReleaseCircleActivity.this, "当前屏幕为竖屏", Toast.LENGTH_SHORT).show();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//设置竖屏
+
+        }
+        super.onConfigurationChanged(newConfig);
 
     }
 }

@@ -96,7 +96,7 @@ public class MyFilesActivity extends SwipeBackActivity {
             }
             for(Long time : map.keySet()) {
                 MyFilesTitle myFilesTitle = new MyFilesTitle();
-                myFilesTitle.title = DateTimeUtils.getTime(time,false);
+                myFilesTitle.title = DateTimeUtils.getTime(time,false, false);
                 for(int i = 0;i < map.get(time).size();i++){
                     myFilesTitle.addSubItem(map.get(time).get(i));
                 }

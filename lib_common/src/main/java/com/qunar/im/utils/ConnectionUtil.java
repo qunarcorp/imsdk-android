@@ -8,6 +8,7 @@ import android.util.LruCache;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.ConversitionType;
+import com.qunar.im.base.common.QChatRSA;
 import com.qunar.im.base.jsonbean.AtInfo;
 import com.qunar.im.base.jsonbean.GetDepartmentResult;
 import com.qunar.im.base.jsonbean.JSONChatHistorys;
@@ -22,14 +23,17 @@ import com.qunar.im.base.module.DepartmentItem;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.base.module.MedalListResponse;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.QuickReplyData;
 import com.qunar.im.base.module.RecentConversation;
 import com.qunar.im.base.module.UserConfigData;
+import com.qunar.im.base.module.UserHaveMedalStatus;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNewCommentBean;
 import com.qunar.im.base.module.WorkWorldNoticeItem;
 import com.qunar.im.base.module.WorkWorldSingleResponse;
+import com.qunar.im.base.protocol.LoginAPI;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.shortutbadger.ShortcutBadger;
@@ -42,6 +46,7 @@ import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
+import com.qunar.im.core.manager.IMPayManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.other.CacheDataType;
 import com.qunar.im.other.IQTalkLoginDelegate;
@@ -50,6 +55,7 @@ import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
+import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.protobuf.entity.XMPPJID;
 import com.qunar.im.protobuf.stream.PbAssemblyUtil;
 
@@ -149,33 +155,9 @@ public class ConnectionUtil {
         qtalkSDK.removeEvent(delegate, key);
     }
 
-    //获取虚拟用户
-    //// TODO: 2017/10/30 这个需要很多操作 先去判断是否有list列表的值,
-    //其次 再去再根据值去请求
-//    public  get_virtual_user_role_list() {
-////        qtalkSDK.get_virtual_user_role_list();
-//    }
-
-    /**
-     * 获取热线账号对应的shop jid
-     * @param jid
-     * @return
-     */
-    public String getHotlineJid(String jid) {
-        Map<String, String> hotlines = CurrentPreference.getInstance().getHotLineList();
-        if(hotlines == null){
-            hotlines = IMDatabaseManager.getInstance().searchHotlines();
-            if(hotlines == null) {
-                return jid;
-            }else {
-                CurrentPreference.getInstance().setHotLineList(hotlines);
-            }
-        }
-        if(hotlines.containsKey(jid)) {
-            return hotlines.get(jid);
-        }
-
-        return jid;
+    //发送event
+    public void sendEvent(String key,Object... objects){
+        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.PAY_SUCCESS, objects);
     }
 
     /**
@@ -184,7 +166,7 @@ public class ConnectionUtil {
      * @return
      */
     public boolean isHotline(String jid) {
-        Map<String, String> hotlines = CurrentPreference.getInstance().getHotLineList();
+        List<String> hotlines = CurrentPreference.getInstance().getHotLineList();
         if(hotlines == null){
             hotlines = IMDatabaseManager.getInstance().searchHotlines();
             if(hotlines == null) {
@@ -194,7 +176,7 @@ public class ConnectionUtil {
             }
         }
 
-        return hotlines.containsKey(jid);
+        return hotlines.contains(jid);
     }
 
     /**
@@ -238,6 +220,39 @@ public class ConnectionUtil {
         } else {
             qtalkSDK.login(username, password);
         }
+    }
+
+    /**
+     * 新登录 通过接口获取token
+     * @param username
+     * @param password
+     */
+    public void pbLoginNew(final String username, String password){
+        //登录之前先登出
+        pbLogout();
+        CurrentPreference.getInstance().setUserid(username);
+        initNavConfig(true);
+        setInitialized(false);
+        try {
+            password = QChatRSA.QTalkEncodePassword(password);
+        } catch (Exception e) {
+            Logger.e("QChatRSAError:" + e.getLocalizedMessage());
+        }
+        LoginAPI.getNewLoginToken(username, password, new ProtocolCallback.UnitCallback<String[]>() {
+            @Override
+            public void onCompleted(String[] ss) {
+                if(ss != null && ss.length > 1){
+                    qtalkSDK.newLogin(ss[0],ss[1]);
+                }else {
+                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.LOGIN_FAILED, -99);
+                }
+            }
+
+            @Override
+            public void onFailure(String errMsg) {
+                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.LOGIN_FAILED, -99);
+            }
+        });
     }
 
     /**
@@ -298,16 +313,21 @@ public class ConnectionUtil {
     }
 
     //发送普通消息
-    public void sendTextOrEmojiMessage(IMMessage imMessage) {
-        //生成相对应的protoMessage
-        ProtoMessageOuterClass.ProtoMessage protoMessage = PbAssemblyUtil.getTextOrEmojiMessage(imMessage);
-        //把发送的信息放到数据库 im_message表中
-        IMDatabaseManager.getInstance().InsertChatMessage(imMessage, false);
-//        IMDatabaseManager.getInstance().InsertChatMessage(protoMessage, "2", "1");
-        //把发送的数据,放到im_sessionList表中
-        IMDatabaseManager.getInstance().InsertIMSessionList(imMessage, false);
-//        IMDatabaseManager.getInstance().InsertSessionList(protoMessage);
-        qtalkSDK.sendMessage(protoMessage);
+    public void sendTextOrEmojiMessage(final IMMessage imMessage) {
+        DispatchHelper.Async("sendMessage",false, new Runnable() {
+            @Override
+            public void run() {
+                //生成相对应的protoMessage
+                ProtoMessageOuterClass.ProtoMessage protoMessage = PbAssemblyUtil.getTextOrEmojiMessage(imMessage);
+                //把发送的信息放到数据库 im_message表中
+                IMDatabaseManager.getInstance().InsertChatMessage(imMessage, false);
+                //IMDatabaseManager.getInstance().InsertChatMessage(protoMessage, "2", "1");
+                //把发送的数据,放到im_sessionList表中
+                IMDatabaseManager.getInstance().InsertIMSessionList(imMessage, false);
+                //IMDatabaseManager.getInstance().InsertSessionList(protoMessage);
+                qtalkSDK.sendMessageSync(protoMessage);
+            }
+        });
     }
 
     public void sendTransMessage(IMMessage imMessage) {
@@ -355,7 +375,7 @@ public class ConnectionUtil {
         //拼接pb
         ProtoMessageOuterClass.ProtoMessage protoMessage = PbAssemblyUtil.getRevokeMessage(imMessage);
         //更新数据库消息
-        IMDatabaseManager.getInstance().UpdateRevokeChatMessage(imMessage.getId(), imMessage.getNick().getName() + "撤回了一条消息");
+        IMDatabaseManager.getInstance().UpdateRevokeChatMessage(imMessage.getId(), imMessage.getNick().getName() + "撤回了一条消息", imMessage.getMsgType());
         //发送消息
         qtalkSDK.sendMessage(protoMessage);
     }
@@ -388,6 +408,16 @@ public class ConnectionUtil {
     public void getUserCard(String jid, IMLogicManager.NickCallBack nickCallBack, boolean enforce, boolean toDB) {
         XMPPJID target = XMPPJID.parseJID(jid);
         IMLogicManager.getInstance().getUserInfoByUserId(target, IMLogicManager.getInstance().getMyself(), enforce, toDB, nickCallBack);
+    }
+
+    public List<UserHaveMedalStatus>  getUserMedalList(String xmppId){
+        return IMLogicManager.getInstance().getUserMedalList(xmppId);
+    }
+
+    //查询名片系统
+    public void getUserCard(String jid, IMLogicManager.NickCallBack nickCallBack) {
+        XMPPJID target = XMPPJID.parseJID(jid);
+        IMLogicManager.getInstance().getUserInfoByUserId(target, nickCallBack);
     }
 
     public Nick testgetnick(String jid){
@@ -1005,6 +1035,14 @@ public class ConnectionUtil {
         return messageList;
     }
 
+    public List<MedalListResponse.DataBean.MedalListBean> selectMedalList(){
+        return IMDatabaseManager.getInstance().selectMedalList();
+    }
+
+    public List<UserHaveMedalStatus> selectUserHaveMedalStatus(String userid,String host){
+        return IMDatabaseManager.getInstance().selectUserHaveMedalStatus(userid,host);
+    }
+
     public List<IMMessage> ParseHistoryGroupChatData(List<JSONMucHistorys.DataBean> list, String selfUser){
         String sql = "insert or ignore into IM_Message(MsgId, XmppId, \"From\", \"To\", Content, " +
                 "Platform, Type, State, Direction,LastUpdateTime,ReadedTag,MessageRaw,RealJid,ExtendedInfo) values" +
@@ -1546,7 +1584,7 @@ public class ConnectionUtil {
      * 缓存热线列表
      * @param hotlines
      */
-    public static void cacheHotlines(Map<String, String> hotlines) {
+    public static void cacheHotlines(List<String> hotlines) {
         IMDatabaseManager.getInstance().InsertHotlines(JsonUtils.getGson().toJson(hotlines));
     }
 
@@ -2086,7 +2124,7 @@ public class ConnectionUtil {
      * @param isAdmin
      */
     public void setGroupAdmin(String groupId,String xmppid,String nickName,boolean isAdmin){
-        ProtoMessageOuterClass.ProtoMessage protoMessage = PbAssemblyUtil.setGroupAdmin(groupId,xmppid,nickName,isAdmin);
+        ProtoMessageOuterClass.ProtoMessage protoMessage = PbAssemblyUtil.setGroupAdmin(groupId,xmppid,(nickName == null ? "" :nickName),isAdmin);
         qtalkSDK.sendMessage(protoMessage);
     }
 
@@ -2255,7 +2293,7 @@ public class ConnectionUtil {
         qtalkSDK.sendMessage(protoMessage);
     }
 
-    public void lanuchVideo(boolean isVideo,String caller,String callee){
+    public void lanuchChatVideo(boolean isVideo, String caller, String callee){
         Intent intent = new Intent("com.qunar.im.START_BROWSER");
         intent.setClassName(CommonConfig.globalContext, "com.qunar.im.ui.activity.QunarWebActvity");
         StringBuilder url = new StringBuilder(QtalkNavicationService.getInstance().getVideoHost());
@@ -2269,6 +2307,43 @@ public class ConnectionUtil {
         intent.putExtra(Constants.BundleKey.VIDEO_AUODIO_CALLEE,callee);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         CommonConfig.globalContext.startActivity(intent);
+    }
+
+    public void lanuchGroupVideo(String roomId,String groupName){
+        Intent intent = new Intent("com.qunar.im.START_BROWSER");
+        intent.setClassName(CommonConfig.globalContext, "com.qunar.im.ui.activity.QunarWebActvity");
+        //群视频使用webview加载，必须是https的，所以兼容导航是http的情况，强制转https
+        String videoUrl = QtalkNavicationService.getInstance().getVideoHost();
+        if(!videoUrl.startsWith("https://")) {
+            videoUrl.replace("http", "https");
+        }
+        StringBuilder url = new StringBuilder(videoUrl + "conference#/login");
+        Map<String,String> params = new HashMap<>();
+        params.put("userId",CurrentPreference.getInstance().getPreferenceUserId());
+        params.put("roomId",roomId);
+        params.put("topic", groupName);
+        params.put("plat", "2");
+        Protocol.spiltJointUrl(url,params);
+        intent.setData(Uri.parse(url.toString()));
+        intent.putExtra(Constants.BundleKey.IS_HIDE_BAR, true);
+        intent.putExtra(Constants.BundleKey.IS_VIDEO_AUDIO_CALL,true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        CommonConfig.globalContext.startActivity(intent);
+    }
+
+    /**
+     * 检查是否绑定了支付宝账户
+     */
+    public void checkAlipayAccount(){
+        IMPayManager.getInstance().checkAlipayAccount();
+    }
+
+    /**
+     * 绑定支付宝账户
+     * @param uid
+     */
+    public void bindAlipayAccount(String uid,String openId){
+        IMPayManager.getInstance().bindAlipayAccount(uid,openId);
     }
 
     /**

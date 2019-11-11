@@ -685,6 +685,15 @@ public class NativeApi {
     }
 
     /**
+     * 打开导航配置
+     */
+    public static void openNavConfig() {
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(CommonConfig.schema + "://qunarchat/openNavConfig"));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        CommonConfig.globalContext.startActivity(intent);
+    }
+
+    /**
      * 打开外部RN应用
      *
      */
@@ -725,4 +734,12 @@ public class NativeApi {
         CommonConfig.globalContext.startActivity(intent);
     }
 
+    public static void openUserMedal(String userId) {
+        // 打开聊天记录上下文
+
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(CommonConfig.schema + "://qunarchat/openMedalPage?"
+                + "&jid=" + userId));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        CommonConfig.globalContext.startActivity(intent);
+    }
 }

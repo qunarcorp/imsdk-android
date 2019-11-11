@@ -8,12 +8,20 @@ import android.util.Base64;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.orhanobut.logger.Logger;
+import com.qunar.im.base.module.VideoDataResponse;
+import com.qunar.im.base.util.IMUserDefaults;
+import com.qunar.im.common.CommonConfig;
+import com.qunar.im.core.services.FileProgressRequestBody;
 import com.qunar.im.other.CacheDataType;
+import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.PhotoUtil;
+import com.qunar.im.ui.view.CommonDialog;
 import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.base.common.CommonDownloader;
 import com.qunar.im.base.common.CommonUploader;
+import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.DownloadImageResult;
 import com.qunar.im.base.jsonbean.ExtendEmoImgInfo;
@@ -29,12 +37,7 @@ import com.qunar.im.base.jsonbean.UploadImageResult;
 import com.qunar.im.base.jsonbean.VideoMessageResult;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.UserConfigData;
-import com.qunar.im.ui.presenter.IAddEmojiconPresenter;
-import com.qunar.im.ui.presenter.IChatExtendMsg;
-import com.qunar.im.ui.presenter.IChatingPresenter;
-import com.qunar.im.ui.presenter.ISnapPresenter;
-import com.qunar.im.base.common.ConversitionType;
-import com.qunar.im.ui.presenter.views.IChatView;
+import com.qunar.im.base.module.VideoDataResponse;
 import com.qunar.im.base.protocol.ProgressRequestListener;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageStatus;
@@ -47,22 +50,37 @@ import com.qunar.im.base.transit.PbImageMessageQueue;
 import com.qunar.im.base.transit.UploadImageRequest;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.DataCenter;
-import com.qunar.im.ui.util.EmotionUtils;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
+import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
+import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
+import com.qunar.im.core.services.FileProgressRequestBody;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.other.CacheDataType;
 import com.qunar.im.protobuf.Event.QtalkEvent;
+import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
+import com.qunar.im.ui.presenter.IAddEmojiconPresenter;
+import com.qunar.im.ui.presenter.IChatExtendMsg;
+import com.qunar.im.ui.presenter.IChatingPresenter;
+import com.qunar.im.ui.presenter.ISnapPresenter;
+import com.qunar.im.ui.presenter.views.IChatView;
+import com.qunar.im.ui.util.EmotionUtils;
+import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.PhotoUtil;
+import com.qunar.im.ui.view.CommonDialog;
+import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
+import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
@@ -91,6 +109,8 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
     protected int curMsgNum = 0;
     protected int numPerPage = 20;
     protected boolean isFromChatRoom = false;
+
+    protected CommonDialog.Builder commonDialog;
 
     public void onEvent(EventBusEvent.UpdateVoiceMessage updateVoiceMessage) {
         if (updateVoiceMessage != null && updateVoiceMessage.message != null) {
@@ -132,6 +152,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         //挂载事件消息
         //挂载二人消息
         addEvent();
+//        chatView.getContext()
 //        EventBus.getDefault().register(this);
     }
 
@@ -141,9 +162,9 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         String refenceString = chatView.getRefenceString();//引用消息内容
         //qchat 二人会话 众包参数处理
         String s = addParams2Url(msg);
-        if(!TextUtils.isEmpty(refenceString)){
+        if (!TextUtils.isEmpty(refenceString)) {
             msg = refenceString + ChatTextHelper.textToHTML(s);
-        }else {
+        } else {
             msg = ChatTextHelper.textToHTML(s);
         }
         send2Server(msg);
@@ -155,7 +176,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
 
     protected abstract String addParams2Url(String msg);
 
-    protected void showUnReadCount(){
+    protected void showUnReadCount() {
         //TODO 可能有泄漏不可预知风险 暂时注释（会话左上角暂不刷新未读数）
 //        int total = connectionUtil.SelectUnReadCount();
 //        chatView.showUnReadCount(total);
@@ -205,6 +226,11 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
     }
 
     @Override
+    public void checkAlipayAccount() {
+        connectionUtil.checkAlipayAccount();
+    }
+
+    @Override
     public void close() {
         removeEvent();
     }
@@ -216,12 +242,12 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         uploadAndSendImage(message, chatView.getUploadImg());
     }
 
-    private void sendImageMessage(final IMMessage message, final String imgurl){
+    private void sendImageMessage(final IMMessage message, final String imgurl) {
         DispatchHelper.Async("sendImageMessage", new Runnable() {
             @Override
             public void run() {
                 try {
-                    if(TextUtils.isEmpty(imgurl)) return;
+                    if (TextUtils.isEmpty(imgurl)) return;
                     final String toid = chatView.getToId();
 
                     File imageFile = Glide.with(chatView.getContext())
@@ -273,7 +299,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
     }
 
     private void uploadAndSendImage(final IMMessage message, String filePath) {
-        if(filePath.startsWith("http")) {
+        if (filePath.startsWith("http")) {
             //图片url直接发送
             sendImageMessage(message, filePath);
             return;
@@ -286,7 +312,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         final int height = option.outHeight;
 
         final String img = ChatTextHelper.textToImgHtml("file://" + origalFile.getAbsolutePath(), width, height);
-        DataCenter.localImageMessagePath.put(message.getMessageId(),img);
+        DataCenter.localImageMessagePath.put(message.getMessageId(), img);
         message.setBody(img);
         message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypePhoto_VALUE);
         if (snapStatus) {
@@ -335,9 +361,9 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                     Logger.i("上传图片成功  msg url = " + result.httpUrl);
 //                    IMMessage newMsg = BeanCloneUtil.cloneTo(message);
                     File file = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(
-                            result.httpUrl));
+                            result.httpUrl, true));
                     FileUtils.copy(origalFile, file);
-                    String origal = ChatTextHelper.textToImgHtml(result.httpUrl,width, height);
+                    String origal = ChatTextHelper.textToImgHtml(result.httpUrl, width, height);
                     message.setBody(origal);
                     message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypePhoto_VALUE);
 //                    message.setExt(getImgExtendInfo(result.httpUrl,width,height));
@@ -408,16 +434,13 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         request.filePath = file;
         request.id = message.getId();
         request.FileType = UploadImageRequest.FILE;
-        request.progressRequestListener = new ProgressRequestListener() {
-            @Override
-            public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+        request.progressRequestListener = (bytesWritten, contentLength, done) -> {
 //                callback.updataProgress((int) (bytesWritten * 100 / contentLength), done);
-                message.setProgress((int) (bytesWritten * 100 / contentLength));
+            message.setProgress((int) (bytesWritten * 100 / contentLength));
 //                if (done) {
 //                    message.setMessageState(MessageStatus.LOCAL_STATUS_SUCCESS);
 //                }
-                chatView.updateUploadProgress(message, (int) (bytesWritten * 100 / contentLength), done);
-            }
+            chatView.updateUploadProgress(message, (int) (bytesWritten * 100 / contentLength), done);
         };
         request.requestComplete = new IUploadRequestComplete() {
             @Override
@@ -431,6 +454,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                     }
                     String fileSize = FileUtils.getFormatFileSize(file);
                     TransitFileJSON json = new TransitFileJSON(result.httpUrl, fileName, fileSize, message.getId(), (fileMd5 == null ? "" : fileMd5));
+                    json.LocalFile = file;
                     message.setBody(JsonUtils.getGson().toJson(json));
                     message.setExt(JsonUtils.getGson().toJson(json));
                     message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeFile_VALUE);
@@ -480,7 +504,8 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         IMMessage message = generateIMMessage();
         message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE);
 
-        uploadAndSendVideo(message, file);
+//        uploadAndSendVideo(message, file);
+        videoCheckAndSend(message, file);
     }
 
     @Override
@@ -502,6 +527,12 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
             ConnectionUtil.getInstance().sendTextOrEmojiMessage(message);
         }
     }
+
+
+//    private void newUploadAndSendVideo(final IMMessage message, final String file){
+//        final String firstFramPath = FileUtils.getFristFrameOfFile(file);
+//
+//    }
 
     private void uploadAndSendVideo(final IMMessage message, final String file) {
         final UploadImageRequest request = new UploadImageRequest();
@@ -547,7 +578,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                 public void onRequestComplete(String id, UploadImageResult result) {
                     if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
                         Logger.i("上传视频截图成功  msg url = " + result.httpUrl);
-                        File targetFile = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(result.httpUrl));
+                        File targetFile = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(result.httpUrl, true));
                         File sourceFile = new File(firstFramPath);
                         FileUtils.copy(sourceFile, targetFile);
                         sendVideoFile(file, message, result.httpUrl, width, height, isFromChatRoom);
@@ -646,6 +677,155 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         CommonUploader.getInstance().setUploadImageRequest(request);
     }
 
+
+    private void videoCheckAndSend(IMMessage message, String file) {
+        boolean userAble = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
+                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        + QtalkNavicationService.getInstance().getXmppdomain()
+                        + CommonConfig.isDebug
+                        + "videoUseAble", false);
+        if (userAble) {
+
+                newUploadAndSendVideo(message, file);
+
+        } else {
+
+//                needTran = true;
+            uploadAndSendVideo(message, file);
+
+
+        }
+    }
+
+    private void newUploadAndSendVideo(final IMMessage message, final String file) {
+        Photo photo = PhotoUtil.getPhoto(file);
+        final String firstFramPath = FileUtils.getFristFrameOfFile(file);
+        if (!TextUtils.isEmpty(firstFramPath)) {
+            //获取video信息展示在页面，防止失败无法展示消息
+            BitmapFactory.Options option = ImageUtils.getImageSize(firstFramPath);
+            final int width = option.outWidth;
+            final int height = option.outHeight;
+
+            final String fileName = file.substring(file.lastIndexOf("/") + 1);
+            final VideoMessageResult videoInfo = MessageUtils.getBasicVideoInfo(file);
+            videoInfo.FileName = fileName;
+            videoInfo.ThumbUrl = firstFramPath;
+            videoInfo.FileUrl = file;
+            videoInfo.Width = String.valueOf(width);
+            videoInfo.Height = String.valueOf(height);
+            videoInfo.LocalVideoOutPath = file;
+            videoInfo.newVideo = true;
+
+            message.setBody(firstFramPath);
+            message.setExt(JsonUtils.getGson().toJson(videoInfo));
+            message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE);
+            if (snapStatus) {
+                HttpUtil.handleSnapMessage(message);
+            }
+            HttpUtil.addEncryptMessageInfo(message.getToID(), message, ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE);
+            //发送消息，更新页面
+            chatView.setNewMsg2DialogueRegion(message);
+            curMsgNum++;
+
+            if (snapStatus) {
+                HttpUtil.handleSnapMessage(message);
+            }
+
+            IMDatabaseManager.getInstance().InsertChatMessage(message, false);
+            IMDatabaseManager.getInstance().InsertIMSessionList(message, false);
+            boolean needTran = false;
+            String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
+                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            + QtalkNavicationService.getInstance().getXmppdomain()
+                            + CommonConfig.isDebug
+                            + "videoTime");
+            if (TextUtils.isEmpty(time)) {
+                time = (16 * 1000) + "";
+            }
+            if (photo.duration > Long.parseLong(time)) {
+                needTran = false;
+            } else {
+                needTran = true;
+            }
+            boolean finalNeedTran = needTran;
+            HttpUtil.videoCheckAndUpload(file, needTran, new FileProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+//                    Logger.i("对话框上传视频:bytesWritten:"+bytesWritten+",contentLength:"+contentLength+",done:"+done);
+//                    chatView.updateUploadProgress(message, (int) (bytesWritten / contentLength), done);
+                    if (done) {
+                        Logger.i("对话框上传视频:bytesWritten:" + bytesWritten + ",contentLength:" + contentLength + ",done:" + done);
+                    }
+                }
+            }, new ProtocolCallback.UnitCallback<VideoDataResponse>() {
+                @Override
+                public void onCompleted(VideoDataResponse videoDataResponse) {
+                    if (videoDataResponse.getData().isReady()) {
+                        Logger.i("新版上传视频文件成功  msg url = " + videoDataResponse.getData().getTransUrl());
+
+                        if (finalNeedTran) {
+                            videoInfo.FileUrl = videoDataResponse.getData().getTransUrl();
+//                            videoInfo.ThumbUrl = videoDataResponse.getData().getFirstThumbUrl();
+                            videoInfo.fileMd5 = videoDataResponse.getData().getTransFileMd5();
+                            videoInfo.FileSize = String.valueOf(videoDataResponse.getData().getTransFileInfo().getVideoSize());
+                            videoInfo.Duration = (videoDataResponse.getData().getTransFileInfo().getDuration() / 1000) + "";
+                            videoInfo.FileName = videoDataResponse.getData().getTransFilename();
+                            videoInfo.Height = videoDataResponse.getData().getTransFileInfo().getHeight();
+                            videoInfo.Width = videoDataResponse.getData().getTransFileInfo().getWidth();
+                            videoInfo.newVideo = true;
+                        } else {
+                            videoInfo.FileUrl = videoDataResponse.getData().getOriginUrl();
+
+                            videoInfo.fileMd5 = videoDataResponse.getData().getOriginFileMd5();
+                            videoInfo.FileSize = String.valueOf(videoDataResponse.getData().getOriginFileInfo().getVideoSize());
+
+                            videoInfo.Duration = (videoDataResponse.getData().getOriginFileInfo().getDuration() / 1000) + "";
+                            videoInfo.FileName = videoDataResponse.getData().getOriginFilename();
+                            videoInfo.Height = videoDataResponse.getData().getOriginFileInfo().getHeight();
+                            videoInfo.Width = videoDataResponse.getData().getOriginFileInfo().getWidth();
+                            videoInfo.newVideo = false;
+                        }
+                        videoInfo.ThumbName = videoDataResponse.getData().getFirstThumb();
+                        videoInfo.ThumbUrl = videoDataResponse.getData().getFirstThumbUrl();
+                        videoInfo.LocalVideoOutPath = file;
+                        String jsonVideo = JsonUtils.getGson().toJson(videoInfo);
+                        message.setBody(jsonVideo);
+                        message.setExt(jsonVideo);
+                        message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE);
+
+                        if (snapStatus) {
+                            HttpUtil.handleSnapMessage(message);
+                        }
+                        HttpUtil.addEncryptMessageInfo(message.getToID(), message, ProtoMessageOuterClass.MessageType.MessageTypeSmallVideo_VALUE);
+                        if (isFromChatRoom) {
+                            ConnectionUtil.getInstance().sendGroupTextOrEmojiMessage(message);
+                        } else {
+                            ConnectionUtil.getInstance().sendTextOrEmojiMessage(message);
+                        }
+
+
+                    } else {
+                        Logger.i("新版上传视频失败1");
+                        message.setMessageState(MessageStatus.LOCAL_STATUS_FAILED);
+                        IMDatabaseManager.getInstance().UpdateChatStateMessage(message, false);
+                        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, message.getMessageId());
+                    }
+                }
+
+                @Override
+                public void onFailure(String errMsg) {
+                    Logger.i("新版上传视频失败2:" + errMsg);
+                    message.setMessageState(MessageStatus.LOCAL_STATUS_FAILED);
+                    IMDatabaseManager.getInstance().UpdateChatStateMessage(message, false);
+                    IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Chat_Message_Send_Failed, message.getMessageId());
+                }
+            });
+        } else {
+            chatView.showToast("不可发布");
+        }
+    }
+
+
     @Override
     public void reset() {
         curMsgNum = 0;
@@ -739,7 +919,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                 case ProtoMessageOuterClass.MessageType.MessageTypeFile_VALUE:
                     final TransitFileJSON jsonObject = JsonUtils.getGson().fromJson(message.getExt(), TransitFileJSON.class);
                     //上传文件并发送
-                    if(jsonObject == null) return;
+                    if (jsonObject == null) return;
                     uploadAndSendFile(message, jsonObject.HttpUrl, jsonObject.FileName);
 //                    HttpUtil.uploadAndSendFile(message, jsonObject.HttpUrl, jsonObject.FileName, (message.getType() == ConversitionType.MSG_TYPE_GROUP), new HttpUtil.SendCallback() {
 //                        @Override
@@ -760,7 +940,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
 //                    String file = message.getBody();
                     final VideoMessageResult videoMessageResult = JsonUtils.getGson().fromJson(message.getExt(), VideoMessageResult.class);
                     //上传并发送视频
-                    uploadAndSendVideo(message, videoMessageResult.FileUrl);
+                    videoCheckAndSend(message, videoMessageResult.FileUrl);
 //                    HttpUtil.uploadAndSendVideo(videoMessageResult.FileUrl, message, new HttpUtil.SendCallback() {
 //                        @Override
 //                        public void send() {
@@ -862,8 +1042,8 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
             public void onRequestComplete(String id, UploadImageResult result) {
                 if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
                     File file = MyDiskCache.getFile(
-                            QtalkStringUtils.addFilePathDomain(result.httpUrl
-                            ));
+                            QtalkStringUtils.addFilePathDomain(result.httpUrl,
+                                    true));
                     File originFile = new File(jsonLocation.fileUrl);
                     FileUtils.copy(originFile, file);
                     originFile.delete();
@@ -1015,7 +1195,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
     public void addEmojicon() {
 
         final String url = chatView.getUploadImg();
-        if(TextUtils.isEmpty(url)){
+        if (TextUtils.isEmpty(url)) {
             chatView.isEmotionAdd(false);
             return;
         }
@@ -1029,8 +1209,8 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         try {
             URL u = new URL(url);
             String path = u.getPath();
-            fileName = path.substring(path.lastIndexOf(File.separator)+1);
-            fileName= fileName.substring(0,fileName.lastIndexOf("."));
+            fileName = path.substring(path.lastIndexOf(File.separator) + 1);
+            fileName = fileName.substring(0, fileName.lastIndexOf("."));
             userConfigData.setSubkey(fileName);
 
             UserConfigData cache = IMDatabaseManager.getInstance().selectUserConfigValueForKey(userConfigData);
@@ -1041,13 +1221,13 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
             e.printStackTrace();
         }
 
-        HttpUtil.setUserConfig( userConfigData, new ProtocolCallback.UnitCallback<NewRemoteConfig>() {
+        HttpUtil.setUserConfig(userConfigData, new ProtocolCallback.UnitCallback<NewRemoteConfig>() {
             @Override
             public void onCompleted(NewRemoteConfig newRemoteConfig) {
-                if(newRemoteConfig.getData().getClientConfigInfos().size()>0){
+                if (newRemoteConfig.getData().getClientConfigInfos().size() > 0) {
                     ConnectionUtil.getInstance().refreshTheConfig(newRemoteConfig);
                     chatView.isEmotionAdd(true);
-                }else{
+                } else {
                     chatView.isEmotionAdd(false);
                 }
             }
@@ -1070,7 +1250,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                 return;
             }
             DownloadRequest downloadProcess = new DownloadRequest();
-            downloadProcess.url = QtalkStringUtils.addFilePathDomain(httpUrl);
+            downloadProcess.url = QtalkStringUtils.addFilePathDomain(httpUrl, true);
             downloadProcess.savePath = file.getAbsolutePath();
             downloadProcess.requestComplete = new IDownloadRequestComplete() {
                 @Override
@@ -1101,7 +1281,12 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
             }
             IMMessage message1 = generateIMMessage();
             message1.setId(message.getId());
-            message1.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE);
+
+            if ("4".equals(chatView.getChatType()) || "5".equals(chatView.getChatType())) {
+                message1.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE);
+            } else {
+                message1.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE);
+            }
             message1.setType(ConversitionType.MSG_TYPE_REVOKE);
 //            message1.setFromID(message.getFromID());
 //            message1.setToID(message.getToID());
@@ -1112,7 +1297,11 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                     chatView.getFromId() + "\"}");
             connectionUtil.sendRevokeMessage(message1);
             //把消息更新一下
-            message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE);
+            if ("4".equals(chatView.getChatType()) || "5".equals(chatView.getChatType())) {
+                message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeConsultRevoke_VALUE);
+            } else {
+                message.setMsgType(ProtoMessageOuterClass.MessageType.MessageTypeRevoke_VALUE);
+            }
             message.setType(ConversitionType.MSG_TYPE_REVOKE);
             message.setBody(message.getNick().getName() + "撤回了一条消息");
             chatView.refreshDataset();
@@ -1205,7 +1394,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                     file.delete();
                     if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
                         ExtendMessageEntity entity = new ExtendMessageEntity();
-                        String base64Url = Base64.encodeToString(QtalkStringUtils.addFilePathDomain(result.httpUrl).getBytes(),Base64.NO_WRAP);
+                        String base64Url = Base64.encodeToString(QtalkStringUtils.addFilePathDomain(result.httpUrl, true).getBytes(), Base64.NO_WRAP);
                         entity.auth = true;
                         entity.showbar = true;
                         if (chatView.getToId().contains("@conference")) {
@@ -1217,11 +1406,11 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
                         entity.desc = "点击查看全部";
                         String shareUrl = QtalkNavicationService.getInstance().getShareurl();
                         String params = "jdata=" + URLEncoder.encode(base64Url);
-                        if(shareUrl != null && shareUrl.indexOf("?") == -1){
+                        if (shareUrl != null && shareUrl.indexOf("?") == -1) {
                             entity.linkurl = shareUrl + "?" + params;
-                        }else if(shareUrl != null){
+                        } else if (shareUrl != null) {
                             entity.linkurl = shareUrl + "&" + params;
-                        }else {
+                        } else {
                             entity.linkurl = "";
                         }
                         String extJson = JsonUtils.getGson().toJson(entity);
@@ -1330,6 +1519,12 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         connectionUtil.addEvent(this, QtalkEvent.CLEAR_MESSAGE);
         connectionUtil.addEvent(this, QtalkEvent.NOTIFY_RTCMSG);
         connectionUtil.addEvent(this, QtalkEvent.Chat_Message_Read_State);
+
+        connectionUtil.addEvent(this, QtalkEvent.PAY_FAIL);
+        connectionUtil.addEvent(this, QtalkEvent.PAY_AUTH);
+        connectionUtil.addEvent(this, QtalkEvent.PAY_ORDER);
+        connectionUtil.addEvent(this, QtalkEvent.PAY_RED_ENVELOP_CHOICE);
+        connectionUtil.addEvent(this, QtalkEvent.SEND_MESSAGE_RENDER);
     }
 
     @Override
@@ -1356,6 +1551,12 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
         connectionUtil.removeEvent(this, QtalkEvent.CLEAR_MESSAGE);
         connectionUtil.removeEvent(this, QtalkEvent.NOTIFY_RTCMSG);
         connectionUtil.removeEvent(this, QtalkEvent.Chat_Message_Read_State);
+        connectionUtil.removeEvent(this, QtalkEvent.SEND_MESSAGE_RENDER);
+
+        connectionUtil.removeEvent(this, QtalkEvent.PAY_FAIL);
+        connectionUtil.removeEvent(this, QtalkEvent.PAY_AUTH);
+        connectionUtil.removeEvent(this, QtalkEvent.PAY_ORDER);
+        connectionUtil.removeEvent(this, QtalkEvent.PAY_RED_ENVELOP_CHOICE);
     }
 
     @Override

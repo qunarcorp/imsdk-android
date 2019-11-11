@@ -4,8 +4,69 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+
 
     <application>
+
+        <provider
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.utils.provider.EasyPhotosFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public" />
+        </provider>
+
+        <activity
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.ui.EasyPhotosActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EasyPhotosTheme" />
+
+        <activity
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.ui.PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EasyPhotosFullscreenTheme" />
+        <activity
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.ui.PuzzleActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EasyPhotosTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.ui.PuzzleSelectorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EasyPhotosTheme" />
+
+        <activity
+            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.ui.EasyCameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/EasyPhotosTheme">
+            <meta-data
+                android:name="android.max_aspect"
+                android:value="2.4" />
+            <!--适配华为（huawei）刘海屏-->
+            <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+            <!--适配小米（xiaomi）刘海屏-->
+            <meta-data
+                android:name="notch.config"
+                android:value="portrait|landscape" />
+        </activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
 
         <meta-data
             android:name="com.qunar.im.ui.view.bigimageview.glide.engine.OkHttpProgressGlideModule"
@@ -16,113 +77,121 @@
             android:name="com.qunar.im.ui.activity.PbChatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+
         <activity
             android:name="com.qunar.im.ui.activity.PbChatLocalSearchActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.PbChatSearchResultActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.ShareLocationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.ManageEmojiconActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.CalculateCacheActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
+
         <activity
             android:name="com.qunar.im.ui.activity.RobotInfoActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.QTalkUserLoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:theme="@style/AtomSplashTheme">
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="startalk" android:host="start_nav_config" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="start_nav_config"
+                    android:scheme="startalk" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.qunar.im.ui.activity.QtalkUserHostActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:theme="@style/AtomSplashTheme"/>
-
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name="com.qunar.im.ui.activity.RobotChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.RobotExtendChatActivity"
-            android:theme="@style/AtomSplashTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.qunar.im.ui.activity.EditPictureActivity" android:theme="@style/AtomSplashTheme"/>
+
+        <activity
+            android:name="com.qunar.im.ui.activity.EditPictureActivity"
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.RobotListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.DownloadFileActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.ReadToDestroyActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name="com.qunar.im.ui.activity.SettingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.AtListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.CloudChatRecordActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.ImageClipActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.PersonalInfoActivity"
             android:launchMode="singleTask"
@@ -133,7 +202,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-
         <activity
             android:name="com.qunar.im.ui.activity.ImageBrowersingActivity"
             android:launchMode="singleTask"
@@ -144,6 +212,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
+
         <activity
             android:name="com.qunar.im.ui.activity.ChatroomMembersActivity"
             android:launchMode="singleTask"
@@ -153,8 +222,8 @@
             android:name="com.qunar.im.ui.activity.SearchUserActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.ChatroomInvitationActivity"
             android:screenOrientation="portrait"
@@ -184,17 +253,33 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
-
         <activity
             android:name="com.qunar.im.ui.imagepicker.ui.ImagePreviewDelActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
-
         <activity
             android:name="com.qunar.im.ui.view.camera.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
+
+        <activity
+            android:name="com.qunar.im.ui.activity.CustomCaptureActvity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name="com.qunar.im.ui.activity.FlutterMedalActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/FlutterTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+            <meta-data
+                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+                android:value="true"/>
+        </activity>
 
         <!--<activity-->
         <!--android:name="com.qunar.im.ui.schema.QchatSchemeActivity"-->
@@ -209,22 +294,16 @@
         <!--</activity>-->
 
         <activity
-            android:name="com.qunar.im.ui.activity.CustomCaptureActvity"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AtomSplashTheme" />
-        <activity
             android:name="com.qunar.im.ui.view.zxing.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AtomSplashTheme" />
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.qunar.im.ui.activity.ChatRoomActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.LocalChatRecordActivity"
             android:screenOrientation="portrait"
@@ -232,8 +311,8 @@
         <activity
             android:name="com.qunar.im.ui.activity.SearchChatingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:theme="@style/AtomSplashTheme" />
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.QunarWebActvity"
             android:hardwareAccelerated="true"
@@ -250,10 +329,10 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name=".activity.UnReadChatListActivity"
+        <activity
+            android:name=".activity.UnReadChatListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.LocationActivity"
             android:screenOrientation="portrait"
@@ -270,21 +349,20 @@
             android:name="com.qunar.im.ui.activity.AddAuthMessageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
-            android:theme="@style/AtomSplashTheme" />
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.AnswerRequestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.BugreportActivity"
-            android:theme="@style/AtomSplashTheme"
-            />
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.AddBuddyActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.DepartmentActivity"
             android:screenOrientation="portrait"
@@ -292,7 +370,7 @@
         <activity
             android:name="com.qunar.im.ui.activity.VideoSelectorActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.FragmentActivity"
             android:screenOrientation="portrait"
@@ -300,34 +378,35 @@
         <activity
             android:name="com.qunar.im.ui.activity.NavConfigActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
-
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.qunar.im.ui.activity.NavConfigQRActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
-
-        <activity android:name="com.qunar.im.ui.activity.NavConfigAddActivity"
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.qunar.im.ui.activity.NavConfigAddActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/AtomSplashTheme"/>
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
             android:name="com.qunar.im.ui.activity.CountrySelectorActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <!--
-            android:theme="@style/NoTitleTranslucentTheme" -->
+            android:theme="@style/AtomSplashTheme" />
+
         <activity
             android:name="com.qunar.im.ui.activity.QChatLoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTranslucentTheme" />
+
         <activity
             android:name="com.qunar.im.ui.activity.ChatroomMemeberManagerActivity"
             android:screenOrientation="portrait"></activity>
+        <!--
+            android:theme="@style/NoTitleTranslucentTheme" -->
         <activity
             android:name="com.qunar.im.ui.activity.AdActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -335,156 +414,171 @@
             android:name="com.qunar.im.ui.activity.FontSizeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name="com.qunar.im.ui.activity.MyFilesActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.MyFilesActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.MyFilesDetailActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.MyFilesDetailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.DailyMindActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyMindActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.DailyPasswordBoxMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.DailyPasswordBoxSubActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyPasswordBoxMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.DailyPasswordBoxSubEditActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyPasswordBoxSubActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.DailyToDoListActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyPasswordBoxSubEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.DailyToDoListCreateActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyToDoListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.DailyNoteEditorActivity"
-            android:windowSoftInputMode="adjustResize"
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyToDoListCreateActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.DailyNoteListActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyNoteEditorActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.DailyNoteSubListActivity"
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyNoteListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <!-- 代收Activity -->
-        <activity android:name="com.qunar.im.ui.activity.CollectionActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.DailyNoteSubListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <!-- 代收会话详情页 -->
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.CollectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
         <activity
             android:name="com.qunar.im.ui.activity.CollectionChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"/>
-        <activity android:name="com.qunar.im.ui.activity.AccountSwitchActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <!-- 代收Activity -->
+        <activity
+            android:name="com.qunar.im.ui.activity.AccountSwitchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.AboutActivity"
+        <!-- 代收会话详情页 -->
+        <activity
+            android:name="com.qunar.im.ui.activity.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.AppiumTestActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.AppiumTestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.CodeActivty"
+        <activity
+            android:name="com.qunar.im.ui.activity.CodeActivty"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldReleaseCircleActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.VideoPlayActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldReleaseCircleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivityV2"
-            android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.QtalkOpenTravelCalendar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AtomSplashTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
-        <activity android:name="com.qunar.im.ui.activity.WorkWorldAtListActivity"
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldNoticeActivityV2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.QtalkOpenTravelCalendar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.WorkWorldAtListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AtomSplashTheme" />
 
-        <activity android:name=".activity.IdentitySelectActivity"
+        <activity
+            android:name=".activity.IdentitySelectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.BackgroundTipActivity"
-            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.BackgroundTipActivity"
             android:launchMode="singleTop"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.SearchChatPicVideoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.FindPwdStep1Activity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.SearchChatPicVideoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.FindPwdStep2Activity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.FindPwdStep1Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.FindPwdStep3Activity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.FindPwdStep2Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.MindWorkWorldActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.FindPwdStep3Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
-        <activity android:name="com.qunar.im.ui.activity.SelfWorkWorldActivity"
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.MindWorkWorldActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AtomSplashTheme"
-            />
+            android:theme="@style/AtomSplashTheme" />
+        <activity
+            android:name="com.qunar.im.ui.activity.SelfWorkWorldActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AtomSplashTheme" />
 
         <activity
             android:name=".view.bigimageview.view.ImagePreviewActivity"
-            android:theme="@style/Theme.ImagePreview"/>
-        <service
-            android:name="com.qunar.im.ui.services.PullPatchService"
-            android:exported="false" />
-        <service
-            android:name=".services.PullPasswordBoxService"
-            android:exported="false" />
-        <service
-            android:name="com.qunar.im.core.services.ClearLogService"
-            android:exported="false" />
-        <service android:name="com.qunar.im.core.services.FeedBackServcie"
-            android:exported="false" />
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote"></service>
+            android:theme="@style/Theme.ImagePreview" />
+<!--        <meta-data-->
+<!--            android:name="com.qunar.im.ui.view.bigimageview.glide.engine.OkHttpProgressGlideModule"-->
+<!--            android:value="GlideModule" />-->
 
-        <receiver
-            android:name="com.qunar.im.ui.broadcastreceivers.ConnectionStateReceiver"
-            android:label="NetworkConnStatusChgd">
-        </receiver>
-        <!--<receiver android:name="com.qunar.im.ui.broadcastreceivers.PushReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.qunar.ops.push.START_ACTIVITY" />-->
-                <!--<action android:name="com.qunar.ops.push.MSG_ARRIVED" />-->
-                <!--<action android:name="com.qunar.ops.push.CLEAR_NOTIFY" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--<receiver android:name="com.qunar.im.ui.broadcastreceivers.ShareReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.qunar.im.SHARE" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+<!--        <provider-->
+<!--            android:name="com.qunar.im.ui.util.easyphoto.easyphotos.utils.provider.EasyPhotosFileProvider"-->
+<!--            android:authorities="${applicationId}.provider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/file_paths_public" />-->
+<!--        </provider>-->
 
         <provider
             android:name="com.qunar.im.ui.imagepicker.ImagePickerProvider"
@@ -495,5 +589,53 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+
+        </provider>
+        <receiver
+            android:name="com.qunar.im.ui.broadcastreceivers.ConnectionStateReceiver"
+            android:label="NetworkConnStatusChgd"></receiver>
+        <receiver android:name="com.qunar.im.ui.broadcastreceivers.PushReceiver">
+            <intent-filter>
+                <action android:name="com.qunar.ops.push.START_ACTIVITY" />
+                <action android:name="com.qunar.ops.push.MSG_ARRIVED" />
+                <action android:name="com.qunar.ops.push.CLEAR_NOTIFY" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.qunar.im.ui.broadcastreceivers.ShareReceiver">
+            <intent-filter>
+                <action android:name="com.qunar.im.SHARE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.qunar.im.ui.services.PullPatchService"
+            android:exported="false" />
+        <service
+            android:name=".services.PullPasswordBoxService"
+            android:exported="false" />
+        <service
+            android:name="com.qunar.im.core.services.ClearLogService"
+            android:exported="false" />
+
+        <service
+            android:name="com.qunar.im.core.services.FeedBackServcie"
+            android:exported="false" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
     </application>
+<!--    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+<!--    <uses-permission android:name="android.permission.VIBRATE" />-->
+
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
 </manifest>

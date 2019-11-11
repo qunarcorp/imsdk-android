@@ -446,7 +446,7 @@ public class RobotSessionPresenter implements IRobotSessionPresenter, ICloudReco
             @Override
             public void onRequestComplete(String id, UploadImageResult result) {
                 if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
-                    message.setBody("发送了一段视频. [obj type=\"url\" value=\"" + QtalkStringUtils.addFilePathDomain(result.httpUrl)
+                    message.setBody("发送了一段视频. [obj type=\"url\" value=\"" + QtalkStringUtils.addFilePathDomain(result.httpUrl, true)
                             + "\"]");
                     videoInfo.FileUrl = result.httpUrl;
                     message.setExt(JsonUtils.getGson().toJson(videoInfo));
@@ -562,8 +562,8 @@ public class RobotSessionPresenter implements IRobotSessionPresenter, ICloudReco
             public void onRequestComplete(String id, UploadImageResult result) {
                 if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
                     File file = MyDiskCache.getFile(
-                            QtalkStringUtils.addFilePathDomain(result.httpUrl
-                            ));
+                            QtalkStringUtils.addFilePathDomain(result.httpUrl,
+                                    true));
                     File originFile = new File(jsonLocation.fileUrl);
                     FileUtils.copy(originFile, file);
                     originFile.delete();
@@ -805,6 +805,11 @@ public class RobotSessionPresenter implements IRobotSessionPresenter, ICloudReco
         if (chatView != null) {
 
         }
+    }
+
+    @Override
+    public void checkAlipayAccount() {
+
     }
 
     @Override

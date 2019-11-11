@@ -63,13 +63,10 @@ public class HomeMenuPopWindow extends PopupWindow{
         setBackgroundDrawable(new BitmapDrawable());
         // 设置点击其他地方 就消失 (只设置这个，没有效果)
         setOutsideTouchable(false);
-        setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                ((Activity)context).getWindow().setAttributes(lp);
-            }
+        setOnDismissListener(()-> {
+            WindowManager.LayoutParams layoutParams = ((Activity)context).getWindow().getAttributes();
+            layoutParams.alpha = 1.0f;
+            ((Activity)context).getWindow().setAttributes(layoutParams);
         });
     }
 

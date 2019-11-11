@@ -1,6 +1,7 @@
 package com.qunar.im.utils;
 
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
@@ -41,8 +42,12 @@ import com.qunar.im.base.module.AvailableRoomRequest;
 import com.qunar.im.base.module.AvailableRoomResponse;
 import com.qunar.im.base.module.CalendarTrip;
 import com.qunar.im.base.module.CityLocal;
+import com.qunar.im.base.module.DownLoadFileResponse;
 import com.qunar.im.base.module.FoundConfiguration;
 import com.qunar.im.base.module.IMMessage;
+import com.qunar.im.base.module.MedalListResponse;
+import com.qunar.im.base.module.MedalSingleUserStatusResponse;
+import com.qunar.im.base.module.MedalUserStatusResponse;
 import com.qunar.im.base.module.MedalsInfo;
 import com.qunar.im.base.module.MedalsInfoResponse;
 import com.qunar.im.base.module.ReleaseDataRequest;
@@ -50,6 +55,8 @@ import com.qunar.im.base.module.SetLikeData;
 import com.qunar.im.base.module.SetLikeDataResponse;
 import com.qunar.im.base.module.TripMemberCheckResponse;
 import com.qunar.im.base.module.UserConfigData;
+import com.qunar.im.base.module.VideoDataResponse;
+import com.qunar.im.base.module.VideoSetting;
 import com.qunar.im.base.module.WorkWorldAtShowResponse;
 import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldDetailsCommenData;
@@ -59,6 +66,7 @@ import com.qunar.im.base.module.WorkWorldMyReply;
 import com.qunar.im.base.module.WorkWorldNewCommentBean;
 import com.qunar.im.base.module.WorkWorldNoticeHistoryResponse;
 import com.qunar.im.base.module.WorkWorldResponse;
+import com.qunar.im.base.module.WorkWorldSearchShowResponse;
 import com.qunar.im.base.module.WorkWorldSingleResponse;
 import com.qunar.im.base.protocol.HttpRequestCallback;
 import com.qunar.im.base.protocol.HttpUrlConnectionHandler;
@@ -79,6 +87,7 @@ import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.FileUtils;
+import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
@@ -93,6 +102,8 @@ import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMMessageManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.manager.LoginComplateManager;
+import com.qunar.im.core.services.FileProgressRequestBody;
+import com.qunar.im.core.services.FileProgressResponseBody;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
@@ -105,6 +116,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -113,7 +125,9 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.Response;
 
 
 /**
@@ -447,9 +461,9 @@ public class HttpUtil {
                             } else {
                                 if (chatJson.getData().size() > 0) {
 //                                    new String();
-                                    List<IMMessage> messageList = ConnectionUtil.getInstance().ParseHistoryChatData(chatJson.getData(),CurrentPreference.getInstance().getPreferenceUserId());
+                                    List<IMMessage> messageList = ConnectionUtil.getInstance().ParseHistoryChatData(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
                                     callback.onCompleted(messageList);
-                                }else{
+                                } else {
                                     callback.onCompleted(null);
                                 }
                             }
@@ -462,7 +476,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
 
                 }
             });
@@ -549,9 +563,9 @@ public class HttpUtil {
                             } else {
                                 if (chatJson.getData().size() > 0) {
 //                                    new String();
-                                    List<IMMessage> messageList = ConnectionUtil.getInstance().ParseHistoryChatData(chatJson.getData(),CurrentPreference.getInstance().getPreferenceUserId());
+                                    List<IMMessage> messageList = ConnectionUtil.getInstance().ParseHistoryChatData(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
                                     callback.onCompleted(messageList);
-                                }else{
+                                } else {
                                     callback.onCompleted(null);
                                 }
                             }
@@ -564,7 +578,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
 
                 }
             });
@@ -775,7 +789,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
 
                 }
             });
@@ -1120,7 +1134,7 @@ public class HttpUtil {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });
@@ -1155,7 +1169,7 @@ public class HttpUtil {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });
@@ -1169,9 +1183,9 @@ public class HttpUtil {
             if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
                 return;
             }
-            String muUsernam = CurrentPreference.getInstance().getUserid();
+            String username = CurrentPreference.getInstance().getUserid();
             StringBuilder params = new StringBuilder("push/qtapi/token/setpersonmackey.qunar?username=");
-            params.append(muUsernam).append("&domain=")
+            params.append(username).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
                     .append("&os=android&version=").append(Protocol.VERSIONVALUE);
             params.append("&mac_key=").append(key);
@@ -1513,7 +1527,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("新版个人配置接口set" + e.getMessage());
                     callback.onFailure("");
 
@@ -1576,7 +1590,7 @@ public class HttpUtil {
                 public void onRequestComplete(String id, UploadImageResult result) {
                     if (result != null && !TextUtils.isEmpty(result.httpUrl)) {
                         Logger.i("上传视频截图成功  msg url = " + result.httpUrl);
-                        File targetFile = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(result.httpUrl));
+                        File targetFile = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(result.httpUrl, true));
                         File sourceFile = new File(firstFramPath);
                         FileUtils.copy(sourceFile, targetFile);
                         sendVideoFile(file, message, result.httpUrl, width, height, callback, isFromChatRoom);
@@ -1773,7 +1787,7 @@ public class HttpUtil {
                     Logger.i("上传图片成功  msg url = " + result.httpUrl);
 //                    IMMessage newMsg = BeanCloneUtil.cloneTo(message);
                     File file = MyDiskCache.getFile(QtalkStringUtils.addFilePathDomain(
-                            result.httpUrl));
+                            result.httpUrl, true));
                     FileUtils.copy(origalFile, file);
                     String origal = ChatTextHelper.textToImgHtml(result.httpUrl, width, height);
                     message.setBody(origal);
@@ -2192,7 +2206,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("新版个人配置接口set" + e.getMessage());
                     callback.onFailure("");
 
@@ -2238,19 +2252,6 @@ public class HttpUtil {
                         } else {
                             callback.onFailure("");
                         }
-// if (baseJson.ret) {
-// JSONMucHistorys chatJson = JsonUtils.getGson().fromJson(jsonObject.toString(), JSONMucHistorys.class);
-// if (chatJson.getData().size() > 0) {
-// IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
-// List<IMMessage> messageList;
-// messageList = IMDatabaseManager.getInstance().SelectHistoryGroupChatMessage(mucId, realJid, count, num);
-// callback.onCompleted(messageList);
-// } else {
-// callback.onCompleted(null);
-// }
-//
-//
-// }
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onFailure("");
@@ -2258,7 +2259,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("新版个人配置接口get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -2311,7 +2312,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("快捷回复接口get失败" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -2334,17 +2335,12 @@ public class HttpUtil {
             return;
         }
         try {
-            String q_ckey = Protocol.getCKEY();
-            Map<String, String> cookie = new HashMap<>();
-            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
-            String requestUrl = String.format("%s/qcadmin/getHotlineShopList.qunar", QtalkNavicationService.getInstance().getHttpUrl());
-
-            StringBuilder queryString = new StringBuilder(requestUrl + "?username=" + CurrentPreference.getInstance().getUserid() + "&host=" + QtalkNavicationService.getInstance().getXmppdomain()
-                    + "&line=" + CommonConfig.currentPlat);
-
-            HttpUrlConnectionHandler.executeGet(queryString.toString(), cookie, new HttpRequestCallback() {
+            String requestUrl = String.format("%s/admin/outer/qtalk/getHotlineList", QtalkNavicationService.getInstance().getHttpUrl());
+            Map<String,String> params = new HashMap<>();
+            params.put("username", CurrentPreference.getInstance().getUserid());
+            HttpUrlConnectionHandler.executePostJson(requestUrl, JsonUtils.getGson().toJson(params), new HttpRequestCallback() {
                 @Override
-                public void onComplete(InputStream response) {
+                public void onComplete(InputStream response){
                     try {
                         String resultString = Protocol.parseStream(response);
                         Logger.i("获取热线列表接口get成功:" + resultString);
@@ -2360,7 +2356,6 @@ public class HttpUtil {
                         callback.onFailure("");
                         Logger.i("获取热线列表接口get失败" + e.getMessage());
                     }
-
                 }
 
                 @Override
@@ -2498,7 +2493,19 @@ public class HttpUtil {
         if (result != null) {
             cv = result.version;
         }
-        if (isForce || cv < QtalkNavicationService.getInstance().getCheckconfigVersion() ||
+
+        /**
+         * 判断语言是否有更改
+         */
+        boolean isLangageChange = false;
+        String currSaveLangage = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(Constants.Preferences.System_Langage,"zh-CN");
+        String currSysLangage = DeviceUtil.getSystemLangage(CommonConfig.globalContext);
+        if(!TextUtils.isEmpty(currSysLangage) && !currSysLangage.equals(currSaveLangage)){
+            isLangageChange = true;
+            DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.System_Langage,currSysLangage);
+        }
+
+        if (isForce || isLangageChange || cv < QtalkNavicationService.getInstance().getCheckconfigVersion() ||
                 currentTime - navConfigUpdateTime > 24 * 60 * 60 * 1000) {
             getAbility(cv,
                     new ProtocolCallback.UnitCallback<String>() {
@@ -2533,6 +2540,7 @@ public class HttpUtil {
             requestBody.put("ver", GlobalConfigManager.getAppName());
             requestBody.put("p", "android");
             requestBody.put("v", QunarIMApp.getQunarIMApp().getVersion());
+            requestBody.put("language",DeviceUtil.getSystemLangage(CommonConfig.globalContext));
         } catch (JSONException e) {
 
         }
@@ -2551,7 +2559,7 @@ public class HttpUtil {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });
@@ -2572,7 +2580,7 @@ public class HttpUtil {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
         });
@@ -2610,7 +2618,7 @@ public class HttpUtil {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Call call, Exception e) {
 
             }
 
@@ -2662,7 +2670,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
 
                 }
 
@@ -2680,7 +2688,7 @@ public class HttpUtil {
     public static void notifyOnline() {
         HttpUrlConnectionHandler.executeGet(Protocol.getUrl(QtalkNavicationService.getInstance().getQcadminHost(), "css/online"), new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response){
                 if (response != null) {
                     String resultString = Protocol.parseStream(response);
                     Logger.i("notifyOnline:" + resultString);
@@ -2781,19 +2789,6 @@ public class HttpUtil {
                         } else {
                             callback.onFailure("");
                         }
-// if (baseJson.ret) {
-// JSONMucHistorys chatJson = JsonUtils.getGson().fromJson(jsonObject.toString(), JSONMucHistorys.class);
-// if (chatJson.getData().size() > 0) {
-// IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
-// List<IMMessage> messageList;
-// messageList = IMDatabaseManager.getInstance().SelectHistoryGroupChatMessage(mucId, realJid, count, num);
-// callback.onCompleted(messageList);
-// } else {
-// callback.onCompleted(null);
-// }
-//
-//
-// }
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onFailure("");
@@ -2801,7 +2796,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("日历列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -2849,19 +2844,6 @@ public class HttpUtil {
 
                             callback.onFailure(baseJson.errmsg);
                         }
-// if (baseJson.ret) {
-// JSONMucHistorys chatJson = JsonUtils.getGson().fromJson(jsonObject.toString(), JSONMucHistorys.class);
-// if (chatJson.getData().size() > 0) {
-// IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
-// List<IMMessage> messageList;
-// messageList = IMDatabaseManager.getInstance().SelectHistoryGroupChatMessage(mucId, realJid, count, num);
-// callback.onCompleted(messageList);
-// } else {
-// callback.onCompleted(null);
-// }
-//
-//
-// }
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onFailure("");
@@ -2869,7 +2851,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("日历列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -2919,19 +2901,6 @@ public class HttpUtil {
                         } else {
                             callback.onFailure(baseJson.errmsg);
                         }
-// if (baseJson.ret) {
-// JSONMucHistorys chatJson = JsonUtils.getGson().fromJson(jsonObject.toString(), JSONMucHistorys.class);
-// if (chatJson.getData().size() > 0) {
-// IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
-// List<IMMessage> messageList;
-// messageList = IMDatabaseManager.getInstance().SelectHistoryGroupChatMessage(mucId, realJid, count, num);
-// callback.onCompleted(messageList);
-// } else {
-// callback.onCompleted(null);
-// }
-//
-//
-// }
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onFailure("");
@@ -2939,7 +2908,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("可用房间列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -2985,19 +2954,6 @@ public class HttpUtil {
                         } else {
                             callback.onFailure("");
                         }
-// if (baseJson.ret) {
-// JSONMucHistorys chatJson = JsonUtils.getGson().fromJson(jsonObject.toString(), JSONMucHistorys.class);
-// if (chatJson.getData().size() > 0) {
-// IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId());
-// List<IMMessage> messageList;
-// messageList = IMDatabaseManager.getInstance().SelectHistoryGroupChatMessage(mucId, realJid, count, num);
-// callback.onCompleted(messageList);
-// } else {
-// callback.onCompleted(null);
-// }
-//
-//
-// }
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onFailure("");
@@ -3005,7 +2961,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("日历列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -3017,6 +2973,27 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getHotlineSeats(String customerName,String hotlineName,HttpRequestCallback callback){
+        String url = QtalkNavicationService.getInstance().getHttpUrl() + "/admin/outer/qtalk/hotlineSeatList.json";
+        Map<String,String> params = new HashMap<>();
+        params.put("customerName",customerName);
+        params.put("hotlineName",hotlineName);
+        params.put("host",QtalkNavicationService.getInstance().getXmppdomain());
+        HttpUrlConnectionHandler.executePostJson(url,JsonUtils.getGson().toJson(params),callback);
+    }
+
+    public static void transArtificial(String customerName,String hotlineName,String newCsrName,String reason,HttpRequestCallback callback){
+        String url = QtalkNavicationService.getInstance().getHttpUrl() + "/admin/outer/qtalk/transformSeat.json";
+        Map<String,String> params = new HashMap<>();
+        params.put("customerName",customerName);
+        params.put("hotlineName",hotlineName);
+        params.put("currentCsrName",CurrentPreference.getInstance().getUserid());
+        params.put("newCsrName",newCsrName);
+        params.put("reason",reason);
+        params.put("host",QtalkNavicationService.getInstance().getXmppdomain());
+        HttpUrlConnectionHandler.executePostJson(url,JsonUtils.getGson().toJson(params),callback);
     }
 
     public static void getDomainList(HttpRequestCallback callback){
@@ -3071,7 +3048,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("城市列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -3126,7 +3103,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("日历列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -3181,7 +3158,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("地址列表get" + e.getMessage());
                     callback.onFailure("");
                 }
@@ -3249,7 +3226,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onCompleted(false);
                     Logger.i("日历列表get" + e.getMessage());
 //                    callback.onFailure("");
@@ -3293,7 +3270,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onCompleted(false);
                     Logger.i("小拿进会话接口" + e.getMessage());
 //                    callback.onFailure("");
@@ -3352,7 +3329,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取勋章接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3396,12 +3373,13 @@ public class HttpUtil {
                             if (baseJsonResult.ret) {
                                 anonymousData = JsonUtils.getGson().fromJson(jsonObject.toString(), AnonymousData.class);
 
-
+                                callback.onCompleted(anonymousData);
+                                return;
                             }
 
 
                         }
-                        callback.onCompleted(anonymousData);
+                        callback.onFailure("获取失败");
 
 //
                     } catch (Exception e) {
@@ -3411,7 +3389,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取勋章接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3471,7 +3449,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取勋章接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3534,7 +3512,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取勋章接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3553,9 +3531,10 @@ public class HttpUtil {
     /**
      * 获取最新的帖子V2
      *
+     * @param isInsert
      * @param callback
      */
-    public static void refreshWorkWorldV2(int count, int attachCommentCount, int postType, final String owner, final String ownerHost, final long createTime, final ProtocolCallback.UnitCallback<WorkWorldResponse> callback) {
+    public static void refreshWorkWorldV2(int count, int attachCommentCount, int postType, final String owner, final String ownerHost, final long createTime, final boolean isInsert, final ProtocolCallback.UnitCallback<WorkWorldResponse> callback) {
         if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
             callback.doFailure();
             return;
@@ -3588,11 +3567,15 @@ public class HttpUtil {
                             BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
                             if (baseJsonResult.ret) {
                                 workWorldResponse = JsonUtils.getGson().fromJson(jsonObject.toString(), WorkWorldResponse.class);
-                                if (workWorldResponse.getData().getNewPost().size() == 0 && createTime == 0) {
-                                    IMDatabaseManager.getInstance().DeleteWorkWorldDeleteByAll(owner, ownerHost);
-                                } else {
-                                    IMDatabaseManager.getInstance().InsertWorkWorldByList(workWorldResponse.getData().getNewPost());
-                                    IMDatabaseManager.getInstance().UpdateWorkWorldDeleteState(workWorldResponse.getData().getDeletePost());
+                                if (isInsert) {
+
+
+                                    if (workWorldResponse.getData().getNewPost().size() == 0 && createTime == 0) {
+                                        IMDatabaseManager.getInstance().DeleteWorkWorldDeleteByAll(owner, ownerHost);
+                                    } else {
+                                        IMDatabaseManager.getInstance().InsertWorkWorldByList(workWorldResponse.getData().getNewPost());
+                                        IMDatabaseManager.getInstance().UpdateWorkWorldDeleteState(workWorldResponse.getData().getDeletePost());
+                                    }
                                 }
                             }
 
@@ -3608,7 +3591,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3678,7 +3661,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3750,7 +3733,80 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 3, 6);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 获取@我的消息
+     *
+     * @param callback
+     */
+    public static void getSearchWorkWorldMessage(int startNum, int pageNum, final long searchTime, String key, String searchType, final ProtocolCallback.UnitCallback<WorkWorldSearchShowResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+//            /newapi/cricle_camel/ownerCamel/getMyReply
+            String requestUrl = String.format("%s/cricle_camel/search", QtalkNavicationService.getInstance().getHttpUrl());
+//
+            Map<String, Object> map = new HashMap<>();
+            map.put("key", key);
+            map.put("searchTime", searchTime);
+            map.put("startNum", startNum);
+            map.put("pageNum", pageNum);
+            map.put("searchType", searchType);
+            QtalkHttpService.asyncPostJsonforString(requestUrl, JsonUtils.getGson().toJson(map), cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        WorkWorldSearchShowResponse workWorldResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+                                workWorldResponse = JsonUtils.getGson().fromJson(jsonObject.toString(), WorkWorldSearchShowResponse.class);
+//                                if (workWorldResponse.getData().getNewAtList().size() == 0 && createTime == 0) {
+//                                    IMDatabaseManager.getInstance().DeleteWorkWorldNoticeByEventType(Constants.WorkWorldState.COMMENTATMESSAGE);
+//                                    IMDatabaseManager.getInstance().DeleteWorkWorldNoticeByEventType(Constants.WorkWorldState.WORKWORLDATMESSAGE);
+//                                } else {
+//                                    IMDatabaseManager.getInstance().InsertWorkWorldNoticeByList(workWorldResponse.getData().getNewAtList(), true);
+//                                    IMDatabaseManager.getInstance().UpdateWorkWorldNoticeDeleteState(workWorldResponse.getData().getDeleteAtList());
+//                                }
+//                                IMDatabaseManager.getInstance().InsertWorkWorldByList(workWorldResponse.getData().getNewPost());
+//                                IMDatabaseManager.getInstance().UpdateWorkWorldDeleteState(workWorldResponse.getData().getDeletePost());
+                            }
+
+
+                        }
+                        callback.onCompleted(workWorldResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3819,7 +3875,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3882,7 +3938,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -3957,7 +4013,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4031,7 +4087,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4096,7 +4152,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4163,7 +4219,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4238,7 +4294,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4302,7 +4358,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4375,7 +4431,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4442,7 +4498,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新点赞接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4516,7 +4572,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈评论接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4588,7 +4644,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈评论接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4652,7 +4708,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈评论接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4714,7 +4770,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取最新朋友圈评论接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4777,7 +4833,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取指定朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4845,7 +4901,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取指定朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4912,7 +4968,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("获取指定朋友圈接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -4958,7 +5014,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("检查权限失败");
                 }
             });
@@ -5001,7 +5057,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("检查权限失败");
                 }
             });
@@ -5055,7 +5111,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("新版个人配置接口set" + e.getMessage());
                     callback.onFailure("");
 
@@ -5113,7 +5169,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     Logger.i("新版个人配置接口set" + e.getMessage());
                     callback.onFailure("");
 
@@ -5151,7 +5207,7 @@ public class HttpUtil {
                             BaseJsonResult baseJson = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
                             if (baseJson.ret) {
                                 callback.onCompleted(jsonObject.toString());
-                            }else{
+                            } else {
                                 callback.onFailure(baseJson.errmsg);
                             }
                         } else {
@@ -5166,7 +5222,7 @@ public class HttpUtil {
                 }
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(Call call, Exception e) {
                     callback.onFailure(e.getMessage());
                     Logger.i("接口出错" + e.getMessage());
 //                    callback.onFailure("");
@@ -5181,6 +5237,601 @@ public class HttpUtil {
         }
     }
 
+
+    public static void fileDownload(String fileUrl, final String fileName, FileProgressResponseBody.ProgressResponseListener progressResponseListener, final ProtocolCallback.UnitCallback<DownLoadFileResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+            QtalkHttpService.downLoad(fileUrl, cookie, progressResponseListener, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Logger.i("文件下载失败");
+                    callback.onFailure(e.getMessage());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response == null || response.code() != 200) {
+
+                        callback.onFailure("下载失败");
+                        return;
+                    }
+                    Logger.i("http文件下载成功");
+                    InputStream is = null;
+                    byte[] buf = new byte[2048];
+                    int len = 0;
+                    FileOutputStream fos = null;
+                    //储存下载文件的目录
+                    try {
+                        is = response.body().byteStream();
+                        long total = response.body().contentLength();
+                        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                        File file=new File(savePath,getNameFromUrl(url));
+                        File file = new File(path, fileName);
+                        fos = new FileOutputStream(file);
+                        long sum = 0;
+                        while ((len = is.read(buf)) != -1) {
+                            fos.write(buf, 0, len);
+                            ;
+                        }
+                        fos.flush();
+                        DownLoadFileResponse downLoadFileResponse = new DownLoadFileResponse();
+                        downLoadFileResponse.setFileName(fileName);
+                        downLoadFileResponse.setFilePath(file.getAbsolutePath());
+                        downLoadFileResponse.setFileMd5(com.qunar.im.utils.FileUtils.getFileMD5(file));
+                        callback.onCompleted(downLoadFileResponse);
+                        Logger.i("文件保存完成:" + file.getAbsolutePath());
+                        //下载完成
+                    } catch (Exception e) {
+                        callback.onFailure(e.getMessage());
+                        Logger.i("文件下载失败:" + e.getMessage());
+                    } finally {
+                        try {
+                            if (is != null)
+                                is.close();
+                        } catch (IOException e) {
+
+                        }
+                        try {
+                            if (fos != null) {
+                                fos.close();
+                            }
+                        } catch (IOException e) {
+
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailure(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 文件上传接口
+     *
+     * @param progressRequestListener
+     * @param callback
+     * @param needTrans
+     */
+    public static void videoUpLoad(String filePath, final FileProgressRequestBody.ProgressRequestListener progressRequestListener, boolean needTrans, final ProtocolCallback.UnitCallback<VideoDataResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+            Map<String, String> params = new HashMap<>();
+            boolean high = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
+                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            + QtalkNavicationService.getInstance().getXmppdomain()
+                            + CommonConfig.isDebug
+                            + "videoHigh", false);
+            params.put("highDefinition", high + "");
+            params.put("needTrans", needTrans + "");
+
+            String requestUrl = String.format("%s/video/upload", QtalkNavicationService.getInstance().getHttpUrl());
+//
+            QtalkHttpService.upLoadFile(requestUrl, filePath, params, cookie, progressRequestListener, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        VideoDataResponse videoDataResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+
+                                videoDataResponse = JsonUtils.getGson().fromJson(jsonObject.toString(), VideoDataResponse.class);
+                                if (videoDataResponse.getData().isReady()) {
+                                    callback.onCompleted(videoDataResponse);
+                                } else {
+                                    //此时应该发起文件上传接口
+                                    callback.onFailure("数据未准备成功");
+                                }
+                            } else {
+                                callback.onFailure(baseJsonResult.errmsg);
+                            }
+
+
+                        }
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 上传视频检查接口
+     *  @param needTrans
+     * @param callback
+     */
+    public static void videoCheckAndUpload(final String filePath, final boolean needTrans, final FileProgressRequestBody.ProgressRequestListener progressRequestListener, final ProtocolCallback.UnitCallback<VideoDataResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = String.format("%s/video/check", QtalkNavicationService.getInstance().getHttpUrl());
+//
+            Map<String, Object> map = new HashMap<>();
+            map.put("videoMd5", com.qunar.im.utils.FileUtils.getFileMD5(new File(filePath)));
+
+
+//            releaseDataRequest.setOwner( CurrentPreference.getInstance().getUserid());
+//            releaseDataRequest.setOwner_host(QtalkNavicationService.getInstance().getXmppdomain());
+
+            QtalkHttpService.asyncPostJsonforString(requestUrl, JsonUtils.getGson().toJson(map), cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        VideoDataResponse videoDataResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            Logger.i("上传视频检查:" + jsonObject.toString());
+                            if (baseJsonResult.ret) {
+
+                                videoDataResponse = JsonUtils.getGson().fromJson(jsonObject.toString(), VideoDataResponse.class);
+                                if (videoDataResponse.getData().isReady()) {
+                                    callback.onCompleted(videoDataResponse);
+                                } else {
+                                    //此时应该发起文件上传接口
+                                    videoUpLoad(filePath, progressRequestListener,needTrans,callback );
+                                }
+                            } else {
+                                callback.onFailure(baseJsonResult.errmsg);
+                            }
+
+
+                        }
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 10, 40);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 获得用户上传视频权限
+     *
+     * @param callback
+     */
+    public static void videoSetting(final ProtocolCallback.UnitCallback<VideoSetting> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = String.format("%s/video/getUserVideoConfig", QtalkNavicationService.getInstance().getHttpUrl());
+//
+
+//            releaseDataRequest.setOwner( CurrentPreference.getInstance().getUserid());
+//            releaseDataRequest.setOwner_host(QtalkNavicationService.getInstance().getXmppdomain());
+            QtalkHttpService.asyncPostJsonforString(requestUrl, "", cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        VideoSetting videoDataResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+
+                                videoDataResponse = JsonUtils.getGson().fromJson(jsonObject.toString(), VideoSetting.class);
+
+
+                                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                + QtalkNavicationService.getInstance().getXmppdomain()
+                                                + CommonConfig.isDebug
+
+                                                + "videoMaxTime", videoDataResponse.getData().getVideoMaxTimeLen()+"")
+                                        .synchronize();
+
+                                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                + QtalkNavicationService.getInstance().getXmppdomain()
+                                                + CommonConfig.isDebug
+
+                                                + "videoUseAble", videoDataResponse.getData().isUseAble())
+                                        .synchronize();
+
+
+                                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                + QtalkNavicationService.getInstance().getXmppdomain()
+                                                + CommonConfig.isDebug
+
+                                                + "videoHigh", videoDataResponse.getData().isHighDefinition())
+                                        .synchronize();
+
+                                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                + QtalkNavicationService.getInstance().getXmppdomain()
+                                                + CommonConfig.isDebug
+
+                                                + "videoSize", videoDataResponse.getData().getVideoFileSize() + "")
+                                        .synchronize();
+
+                                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
+                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                + QtalkNavicationService.getInstance().getXmppdomain()
+                                                + CommonConfig.isDebug
+
+                                                + "videoTime", videoDataResponse.getData().getVideoTimeLen() + "")
+                                        .synchronize();
+                                callback.onCompleted(videoDataResponse);
+
+//                                if(videoDataResponse.getData().isReady()){
+////                                    callback.onCompleted(videoDataResponse);
+////                                }else{
+////                                    //此时应该发起文件上传接口
+////                                    videoUpLoad(filePath,progressRequestListener,callback);
+////                                }
+                            } else {
+                                callback.onFailure(baseJsonResult.errmsg);
+                            }
+
+
+                        }
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取视频权限接口出错:" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 10, 40);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void getUrl(String url, final ProtocolCallback.UnitCallback<Boolean> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = url;
+            QtalkHttpService.asyncGetJson(requestUrl, cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+
+                        callback.onCompleted(true);
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onCompleted(false);
+                    Logger.i("小拿进会话接口" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * 获取全部勋章列表
+     *  @param
+     * @param callback
+     */
+    public static void getMedal(long version,  final ProtocolCallback.UnitCallback<MedalListResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = String.format("%s/medal/medalList.qunar", QtalkNavicationService.getInstance().getHttpUrl());
+            Map<String, Object> map = new HashMap<>();
+            map.put("version",version+"");
+//            map.put()
+
+//            releaseDataRequest.setOwner( CurrentPreference.getInstance().getUserid());
+//            releaseDataRequest.setOwner_host(QtalkNavicationService.getInstance().getXmppdomain());
+
+            QtalkHttpService.asyncPostJsonforString(requestUrl, JsonUtils.getGson().toJson(map), cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        MedalListResponse medalListResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+                                medalListResponse = JsonUtils.getGson().fromJson(jsonObject.toString(),MedalListResponse.class);
+                                IMDatabaseManager.getInstance().InsertMedalList(medalListResponse);
+
+                                IMDatabaseManager.getInstance().updateMedalListVersion(medalListResponse.getData().getVersion());
+                            }
+                        }
+
+//                        new String();
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 10, 40);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * 获取勋章用户状态
+     *  @param
+     * @param callback
+     */
+    public static void getUserMedalStatus(long version,  final ProtocolCallback.UnitCallback<MedalUserStatusResponse> callback) {
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = String.format("%s/medal/userMedalList.qunar", QtalkNavicationService.getInstance().getHttpUrl());
+//
+            Map<String, Object> map = new HashMap<>();
+            map.put("version",version+"");
+//            map.put()
+
+//            releaseDataRequest.setOwner( CurrentPreference.getInstance().getUserid());
+//            releaseDataRequest.setOwner_host(QtalkNavicationService.getInstance().getXmppdomain());
+
+            QtalkHttpService.asyncPostJsonforString(requestUrl, JsonUtils.getGson().toJson(map), cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        MedalUserStatusResponse medalListResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+                                medalListResponse = JsonUtils.getGson().fromJson(jsonObject.toString(),MedalUserStatusResponse.class);
+                                IMDatabaseManager.getInstance().InsertUserMedalStatusList(medalListResponse);
+                                IMLogicManager.getInstance().deleteMedalCache(medalListResponse);
+                                IMDatabaseManager.getInstance().updateUserMedalStatusListVersion(medalListResponse.getData().getVersion());
+                            }
+                        }
+
+//                        new String();
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 10, 40);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 修改勋章佩戴状态
+     * @param status 状态
+     * @param medalId 勋章id
+     */
+    public static void userMedalStatusModifyWithStatus(int status,int medalId,final ProtocolCallback.UnitCallback<MedalSingleUserStatusResponse> callback){
+        if (TextUtils.isEmpty(IMLogicManager.getInstance().getRemoteLoginKey())) {
+            callback.doFailure();
+            return;
+        }
+        try {
+            String q_ckey = Protocol.getCKEY();
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
+
+            String requestUrl = String.format("%s/medal/userMedalStatusModify.qunar", QtalkNavicationService.getInstance().getHttpUrl());
+//
+            Map<String, Object> map = new HashMap<>();
+            map.put("userId",CurrentPreference.getInstance().getUserid());
+            map.put("host",QtalkNavicationService.getInstance().getXmppdomain());
+            map.put("medalStatus",status);
+            map.put("medalId",medalId);
+
+//            map.put()
+
+//            releaseDataRequest.setOwner( CurrentPreference.getInstance().getUserid());
+//            releaseDataRequest.setOwner_host(QtalkNavicationService.getInstance().getXmppdomain());
+
+            QtalkHttpService.asyncPostJsonforString(requestUrl, JsonUtils.getGson().toJson(map), cookie, new QtalkHttpService.CallbackJson() {
+                @Override
+                public void onJsonResponse(JSONObject jsonObject) throws JSONException {
+                    try {
+                        new String();
+                        MedalSingleUserStatusResponse medalSingleUserStatusResponse = null;
+                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+                            if (baseJsonResult.ret) {
+                                medalSingleUserStatusResponse = JsonUtils.getGson().fromJson(jsonObject.toString(),MedalSingleUserStatusResponse.class);
+                                IMDatabaseManager.getInstance().updateUserMedalStatus(medalSingleUserStatusResponse);
+                                callback.onCompleted(medalSingleUserStatusResponse);
+
+                                IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.UPDATE_MEDAL_SELF);
+//                                IMDatabaseManager.getInstance().InsertUserMedalStatusList(medalListResponse);
+
+//                                IMDatabaseManager.getInstance().updateUserMedalStatusListVersion(medalListResponse.getData().getVersion());
+                            }else{
+                                callback.onFailure("失败");
+                            }
+                        }else{
+                            callback.onFailure("失败");
+                        }
+
+//                        MedalUserStatusResponse medalListResponse = null;
+//                        if (!TextUtils.isEmpty(jsonObject.toString())) {
+//                            BaseJsonResult baseJsonResult = JsonUtils.getGson().fromJson(jsonObject.toString(), BaseJsonResult.class);
+//                            if (baseJsonResult.ret) {
+//                                medalListResponse = JsonUtils.getGson().fromJson(jsonObject.toString(),MedalUserStatusResponse.class);
+//                                IMDatabaseManager.getInstance().InsertUserMedalStatusList(medalListResponse);
+//
+//                                IMDatabaseManager.getInstance().updateUserMedalStatusListVersion(medalListResponse.getData().getVersion());
+//                            }
+//                        }
+
+//                        new String();
+//                        callback.onCompleted(videoDataResponse);
+
+//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure("" + e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    callback.onFailure(e.getMessage());
+                    Logger.i("获取最新朋友圈接口出错" + e.getMessage());
+//                    callback.onFailure("");
+                }
+
+
+            }, 10, 40);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 

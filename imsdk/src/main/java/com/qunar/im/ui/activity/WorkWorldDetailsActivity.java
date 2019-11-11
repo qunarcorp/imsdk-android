@@ -36,10 +36,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.ui.util.easyphoto.easyphotos.utils.media.DurationUtils;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.AnonymousData;
@@ -79,6 +81,7 @@ import com.qunar.im.ui.imagepicker.util.Utils;
 import com.qunar.im.ui.imagepicker.view.GridSpacingItemDecoration;
 import com.qunar.im.ui.util.atmanager.AtManager;
 import com.qunar.im.ui.util.atmanager.WorkWorldAtManager;
+import com.qunar.im.ui.util.videoPlayUtil.VideoPlayUtil;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.WorkWorldLinkTouchMovementMethod;
@@ -111,6 +114,7 @@ import java.util.UUID;
 
 import static com.qunar.im.base.structs.MessageType.image;
 import static com.qunar.im.base.structs.MessageType.link;
+import static com.qunar.im.base.structs.MessageType.video;
 import static com.qunar.im.ui.activity.PbChatActivity.AT_MEMBER;
 import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.ANONYMOUS_NAME;
 import static com.qunar.im.ui.presenter.impl.ReleaseCircleManagerPresenter.REAL_NAME;
@@ -177,6 +181,10 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
     private LinearLayout link_ll;//连接区域
     private TextView link_title;//连接 标题
     private SimpleDraweeView link_icon; //连接图标
+    private RelativeLayout video_ll;//视频区域
+    private SimpleDraweeView video_image;//视频图片
+    private TextView video_time;//视频时常
+
 
     //本体view
     private RecyclerView comment_rc;//评论列表
@@ -219,6 +227,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             //此处应该请求借口开始操作
         }
 
+        initIdentity();
         defaultSize = com.qunar.im.base.util.Utils.dipToPixels(QunarIMApp.getContext(), 96);
         iconSize = com.qunar.im.base.util.Utils.dpToPx(QunarIMApp.getContext(), 32);
 
@@ -235,6 +244,19 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             }
         });
 
+    }
+
+    public void initIdentity() {
+        try {
+            String data = DataUtils.getInstance(this).getPreferences("workworldAnonymous" + workWorldItem.getUuid(), "");
+            if (!TextUtils.isEmpty(data)) {
+                mAnonymousData = JsonUtils.getGson().fromJson(data, AnonymousData.class);
+                identityType = ANONYMOUS_NAME;
+                initAnonymousHeader();
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -437,12 +459,14 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             case REAL_NAME:
                 identityType = REAL_NAME;
 
+                DataUtils.getInstance(this).removePreferences("workworldAnonymous" + workWorldItem.getUuid());
                 initRealHeader();
                 break;
 
             case ANONYMOUS_NAME:
                 identityType = ANONYMOUS_NAME;
                 mAnonymousData = (AnonymousData) data.getSerializableExtra(ANONYMOUS_DATA);
+                DataUtils.getInstance(this).putPreferences("workworldAnonymous" + workWorldItem.getUuid(), JsonUtils.getGson().toJson(mAnonymousData));
                 initAnonymousHeader();
 //                releaseCirclePresenter.getAnonymous();
                 break;
@@ -503,7 +527,6 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             TextView reply = view.findViewById(R.id.work_world_popwindow_reply);
             TextView cancle = view.findViewById(R.id.work_world_popwindow_cancle);
             TextView copy = view.findViewById(R.id.work_world_popwindow_copy);
-
 
 
             if (CurrentPreference.getInstance().getPreferenceUserId().equals(item.getFromUser() + "@" + item.getFromHost())) {
@@ -611,9 +634,9 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
 //                    @Override
 //                    public void run() {
                     if (nick != null) {
-                        comment_edittext.setHint("回复: " + nick.getName() + ": ");
+                        comment_edittext.setHint("回复: " + nick.getName() + " (200字以内)");
                     } else {
-                        comment_edittext.setHint("回复: " + nick.getXmppId() + ": ");
+                        comment_edittext.setHint("回复: " + nick.getXmppId() + " (200字以内)");
                     }
 //                    }
 //                });
@@ -623,7 +646,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             }, false, false);
 
         } else {
-            comment_edittext.setHint("回复: " + data.getAnonymousName() + ": ");
+            comment_edittext.setHint("回复: " + data.getAnonymousName() + " (200字以内)");
         }
 
         comment_edittext.requestFocus();
@@ -816,6 +839,39 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
 
         try {
             switch (contentData.getType()) {
+                case video:
+                    video_ll.setVisibility(View.VISIBLE);
+                    final String thumbUrl = QtalkStringUtils.addFilePathDomain(contentData.getVideoContent().ThumbUrl, true);
+                    final String fileUrl = QtalkStringUtils.addFilePathDomain(contentData.getVideoContent().FileUrl, true);
+                    final String fileSize = contentData.getVideoContent().FileSize;
+                    final String downLoadPath = contentData.getVideoContent().FileUrl;
+                    final String fileName = contentData.getVideoContent().FileName;
+                    final String localPath = contentData.getVideoContent().LocalVideoOutPath;
+                    final boolean onlyDownLoad = contentData.getVideoContent().newVideo;
+                    ProfileUtils.displayLinkImgByImageSrc(WorkWorldDetailsActivity.this, thumbUrl,getDrawable(R.drawable.atom_ui_link_default), (ImageView) video_image,
+                            Utils.dp2px(this,144), Utils.dp2px(this,144));
+//                    ProfileUtils.displayGravatarByImageSrc(mActivity,thumbUrl ,   (ImageView)helper.getView(R.id.re_video_image),
+//                                       mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image), mActivity.getResources().getDimensionPixelSize(R.dimen.atom_ui_video_image));
+                    video_time.setText(DurationUtils.format(Integer.parseInt(contentData.getVideoContent().Duration)));
+                    video_image.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(!TextUtils.isEmpty(localPath)&&new File(localPath).exists()){
+                                VideoPlayUtil.conAndWwOpen(WorkWorldDetailsActivity.this,localPath,fileName,thumbUrl,downLoadPath, !onlyDownLoad, fileSize);
+                            }else {
+
+                            VideoPlayUtil.conAndWwOpen(WorkWorldDetailsActivity.this,fileUrl,fileName,thumbUrl,downLoadPath, !onlyDownLoad, fileSize);
+                            }
+//                            Intent intent = new Intent(WorkWorldDetailsActivity.this, VideoPlayActivity.class);
+//                            intent.putExtra(VideoPlayActivity.PLAYPATH,fileUrl);
+//                            intent.putExtra(VideoPlayActivity.PLAYTHUMB,thumbUrl);
+//                            intent.putExtra(VideoPlayActivity.DOWNLOADPATH,downLoadPath);
+//                            intent.putExtra(VideoPlayActivity.SHOWSHARE,true);
+//                            intent.putExtra(VideoPlayActivity.FILENAME,fileName);
+//                            startActivity(intent);
+                        }
+                    });
+                    break;
                 case MessageType.link:
                     link_ll.setVisibility(View.VISIBLE);
                     link_title.setText(contentData.getLinkContent().title);
@@ -941,16 +997,15 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
                 TextView copy = view.findViewById(R.id.work_world_popwindow_copy);
 
 
-
-                    delete.setVisibility(View.GONE);
-                    reply.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+                reply.setVisibility(View.GONE);
                 copy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //获取剪贴板管理器：
                         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         // 创建普通字符型ClipData
-                        ClipData mClipData = ClipData.newPlainText("Label", ((WorkWorldSpannableTextView)cView).getText());
+                        ClipData mClipData = ClipData.newPlainText("Label", ((WorkWorldSpannableTextView) cView).getText());
                         // 将ClipData内容放到系统剪贴板里。
                         cm.setPrimaryClip(mClipData);
                         Toast.makeText(WorkWorldDetailsActivity.this, "复制", Toast.LENGTH_LONG).show();
@@ -984,6 +1039,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
         switch (contentData.getType()) {
             case link:
             case image:
+            case video:
                 sb = getSpannableString(exstr, textView, sb);
                 textView.setText(sb);
                 break;
@@ -1255,6 +1311,10 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
         link_ll = headView.findViewById(R.id.re_link_ll);
         link_icon = headView.findViewById(R.id.re_link_icon);
         link_title = headView.findViewById(R.id.re_link_title);
+
+        video_ll = headView.findViewById(R.id.re_video_ll);
+        video_image = headView.findViewById(R.id.re_video_image);
+        video_time = headView.findViewById(R.id.re_video_time);
 
     }
 
@@ -1597,7 +1657,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(localMore!=WorkWorldDetailsActivity.this.localMore){
+                    if (localMore != WorkWorldDetailsActivity.this.localMore) {
                         return;
                     }
 
@@ -1728,9 +1788,9 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
                     ((List<MultiItemEntity>) list).addAll(0, hotData);
                     workWorldDetailsAdapter.setNewData((List<MultiItemEntity>) list);
                     if (!allIsOk) {
-                        if(isLocal){
+                        if (isLocal) {
                             localMore = true;
-                        }else {
+                        } else {
                             localMore = false;
 
                         }
@@ -2004,7 +2064,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
                 if (clearText) {
                     comment_edittext.setText("");
                     toData = null;
-                    comment_edittext.setHint("快来说几句...");
+                    comment_edittext.setHint("快来说几句...(200字以内)");
                 }
 
 

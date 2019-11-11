@@ -2,7 +2,9 @@ package com.qunar.rn_service.rnmanage;
 
 import android.app.Activity;
 
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactInstanceManagerBuilder;
+import com.facebook.react.modules.i18nmanager.I18nManagerModule;
 import com.horcrux.svg.SvgPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 //import com.qunar.rn_service.rnpackage.CookieManagerPackage;
@@ -65,8 +67,10 @@ public class QtalkServiceRNViewInstanceManager {
                     .addPackage(new QtalkServiceReactPackage(activity))
                     .addPackage(new CookieManagerPackage())
                     .addPackage( new SvgPackage())
+                    .addPackage(new RNI18nPackage())
                     .setUseDeveloperSupport(CommonConfig.isDebug)
                     .setInitialLifecycleState(LifecycleState.RESUMED);
+
 
             String localBundleFile = getLocalBundleFilePath(activity);
 
