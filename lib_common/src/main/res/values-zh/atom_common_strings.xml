@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="atom_common_text_file">[文件]</string>
+    <string name="atom_common_text_location">[位置]</string>
+    <string name="atom_common_text_sharelocation">[共享位置]</string>
+    <string name="atom_common_text_newmsg">[新消息]</string>
+    <string name="atom_common_text_rich">[富文本消息]</string>
+    <string name="atom_common_text_notification">[通知消息]</string>
+    <string name="atom_common_text_system">[系统消息]</string>
+    <string name="atom_common_text_burn">[阅后即焚]</string>
+    <string name="atom_common_text_videomsg">[视频]</string>
+    <string name="atom_common_text_robotmsg">[机器人回复]</string>
+    <string name="atom_common_text_voice">[语音]</string>
+    <string name="atom_common_text_shake">[窗口抖动]</string>
+    <string name="atom_common_text_redpkg">[红包]</string>
+    <string name="atom_common_text_redpkgnoc">[红包领取通知]</string>
+    <string name="atom_common_text_aapay">[AA收款]</string>
+    <string name="atom_common_text_aapaynoc">[AA收款通知]</string>
+    <string name="atom_common_text_activity">[活动消息]</string>
+    <string name="atom_common_text_productdtl">[产品详情]</string>
+    <string name="atom_common_text_productlink">[产品链接]</string>
+    <string name="atom_common_text_sestransfer">[会话转移]</string>
+    <string name="atom_common_text_linkcard">[链接卡片]</string>
+    <string name="atom_common_text_recall">[撤销消息]</string>
+    <string name="atom_common_text_videocall">[实时视频]</string>
+    <string name="atom_common_text_audiocall">[实时音频]</string>
+    <string name="atom_common_text_videogroup">[群视频]</string>
+    <string name="atom_common_text_questionlist">[问题列表]</string>
+    <string name="atom_common_text_turntocs">[转人工]</string>
+    <string name="atom_common_text_sticker">[表情]</string>
+    <string name="atom_common_text_sourcecode">[代码段]</string>
+    <string name="atom_common_text_photo">[图片]</string>
+    <string name="atom_common_text_encryptmsg">[加密消息]</string>
+    <string name="atom_common_text_meetinginvite">[行程邀请]</string>
+    <string name="atom_common_text_grabmsg">[抢单消息]</string>
+
+    <string name="atom_ui_tip_client_too_low">发送端版本过低，视频无法接通</string>
+</resources>

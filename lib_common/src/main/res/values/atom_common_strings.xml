@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="atom_common_text_file">[File]</string>
+    <string name="atom_common_text_location">[Location]</string>
+    <string name="atom_common_text_sharelocation">[Share Location]</string>
+    <string name="atom_common_text_newmsg">[New Message]</string>
+    <string name="atom_common_text_rich">[Rich Text]</string>
+    <string name="atom_common_text_notification">[Notification]</string>
+    <string name="atom_common_text_system">[System Message]</string>
+    <string name="atom_common_text_burn">[Burn After Reading]</string>
+    <string name="atom_common_text_videomsg">[Video]</string>
+    <string name="atom_common_text_robotmsg">[Robot Message]</string>
+    <string name="atom_common_text_voice">[Voice]</string>
+    <string name="atom_common_text_shake">[Shake]</string>
+    <string name="atom_common_text_redpkg">[Red Package]</string>
+    <string name="atom_common_text_redpkgnoc">[Red Package Notification]</string>
+    <string name="atom_common_text_aapay">[AA Pay]</string>
+    <string name="atom_common_text_aapaynoc">[AA Pay Notification]</string>
+    <string name="atom_common_text_activity">[Activity]</string>
+    <string name="atom_common_text_productdtl">[Product Detail]</string>
+    <string name="atom_common_text_productlink">[Product Link]</string>
+    <string name="atom_common_text_sestransfer">[Session Transfer]</string>
+    <string name="atom_common_text_linkcard">[Link Card]</string>
+    <string name="atom_common_text_recall">[Recalled Message]</string>
+    <string name="atom_common_text_videocall">[Video Call]</string>
+    <string name="atom_common_text_audiocall">[Audio Call]</string>
+    <string name="atom_common_text_videogroup">[Video Group]</string>
+    <string name="atom_common_text_questionlist">[Question List]</string>
+    <string name="atom_common_text_turntocs">[Turn to Customer Service]</string>
+    <string name="atom_common_text_sticker">[Sticker]</string>
+    <string name="atom_common_text_sourcecode">[Source Code]</string>
+    <string name="atom_common_text_photo">[Photo]</string>
+    <string name="atom_common_text_encryptmsg">[Encrypt Message]</string>
+    <string name="atom_common_text_meetinginvite">[Meeting Invite]</string>
+    <string name="atom_common_text_grabmsg">[Grab Message]</string>
+
+    <string name="atom_ui_tip_client_too_low">Sender version is too low, suggest to update</string>
+</resources>
+
