@@ -100,6 +100,7 @@
             android:name="currentPlat"
             android:value="${currentPlat}" />
 
+        <!--                       push相关   start                           -->
         <service
             android:name="com.qunar.im.thirdpush.client.google.CustomFirebaseMessagingService"
             android:exported="false">
@@ -250,7 +251,7 @@
             </intent-filter>
         </receiver>
         <!--vivo push end-->
-        <!--                       push相关   start                           -->
+
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="appid=${HUAWEI_APPID}">
