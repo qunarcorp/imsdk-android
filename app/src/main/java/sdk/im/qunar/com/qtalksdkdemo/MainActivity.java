@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void configNavigation(View view) {
-        String url = "https://qim.qunar.com/package/static/qtalk/publicnav?c=qunar.com";//导航URl
+        String url = "";//导航URl
         if(TextUtils.isEmpty(url)){
             toast("请配置正确的导航地址");
             return;
@@ -78,8 +78,8 @@ public class MainActivity extends Activity {
                     }
                 });
             }else {
-                final String uid = "lihaibin.li";//用户名
-                final String password = "xxxlihaibin.li";//密码
+                final String uid = "";//用户名
+                final String password = "";//密码
                 QIMSdk.getInstance().login(uid, password, new QIMSdk.LoginStatesListener() {
                     @Override
                     public void isScuess(boolean b, String s) {
