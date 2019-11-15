@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/atom_ui_conner_bg"
+    android:padding="@dimen/dp_15">
+
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:src="@drawable/atom_ui_update_version_icon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#333333"
+        android:text="@string/atom_ui_new_version_update"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/dp_15"/>
+
+    <TextView
+        android:id="@+id/atom_ui_update_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_4"
+        android:lineSpacingExtra="@dimen/dp_4"
+        android:textColor="#888888"
+        android:textSize="@dimen/sp_16"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_40">
+
+        <TextView
+            android:id="@+id/atom_ui_not_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:textColor="#999999"
+            android:text="@string/atom_ui_next_time"
+            android:textSize="16sp"
+            android:background="@drawable/atom_ui_gray_color_corner"
+            />
+
+        <TextView
+            android:id="@+id/atom_ui_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/atom_ui_white"
+            android:background="@drawable/atom_ui_primary_color_corner"
+            android:text="@string/atom_ui_update_now"
+            android:textSize="16sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

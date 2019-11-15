@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/menu_web_share"
+        android:icon="@drawable/sharesession"
+        android:title="@string/atom_ui_sharecon" />
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="@drawable/copylink"
+        android:title="@string/atom_ui_copy_link" />
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/refresh"
+        android:title="@string/atom_ui_common_refresh" />
+    <item
+        android:id="@+id/menu_transfer"
+        android:icon="@drawable/sysshare"
+        android:title="@string/atom_ui_transfer_link" />
+</menu>
