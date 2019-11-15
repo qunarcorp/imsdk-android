@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:orientation="horizontal">
+
+
+
+
+    <View
+        android:id="@+id/green_p"
+        android:layout_width="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="5dp"
+        android:background="@drawable/atom_ui_green_p"></View>
+
+    <TextView
+        android:id="@+id/question_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+
+        android:layout_marginRight="14dp"
+        android:text="如何打印行程asdasdasdasdasdasdasdasdasdaasadasdadsadasdasdsdsadads单"
+        android:textColor="#333333"
+        android:textSize="15sp" />
+
+
+</LinearLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/translate"
+    >
+
+    <LinearLayout
+        android:layout_width="270dp"
+        android:layout_height="400dp"
+        android:background="@drawable/atom_ui_red_envlop_corner_bg"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/atom_ui_envelop_view"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:background="@drawable/atom_ui_red_envlop_bg">
+
+            <ImageView
+                android:id="@+id/atom_ui_envelop_img_dialog_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:src="@drawable/atom_ui_close_red"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/atom_ui_envelop_user_icon"
+                android:layout_width="@dimen/atom_ui_image_mid_size"
+                android:layout_height="@dimen/atom_ui_image_mid_size"
+                android:layout_below="@id/atom_ui_envelop_img_dialog_close"
+                android:layout_centerHorizontal="true"
+                fresco:atom_imagecache_actualImageScaleType="centerCrop"
+                fresco:atom_imagecache_roundAsCircle="true" />
+
+            <TextView
+                android:id="@+id/atom_ui_envelop_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFD4D4"
+                android:layout_below="@id/atom_ui_envelop_user_icon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_10"
+                android:textSize="15sp"
+                tools:text="范文慧"/>
+
+            <TextView
+                android:id="@+id/atom_ui_envelop_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/atom_ui_envelop_user_name"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_15"
+                android:textColor="@color/atom_ui_white"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="恭喜发财，大吉大利" />
+
+            <TextView
+                android:id="@+id/atom_ui_envelop_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/atom_ui_envelop_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_15"
+                android:textColor="@color/atom_ui_black_212121"
+                android:visibility="gone"
+                tools:text="红包已过期"/>
+
+            <ImageView
+                android:id="@+id/atom_ui_envelop_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/atom_ui_red_envlop_button"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FlutterTheme" parent="AtomAppTheme">
+        <item name="android:windowBackground">@color/atom_ui_white</item>
+        <item name="android:statusBarColor">@color/atom_ui_white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+<!--        <item name="android:windowAnimationStyle">@style/windowAnimation</item>-->
+    </style>
+</resources>

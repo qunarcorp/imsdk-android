@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/question_answer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/question_answer_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/question_answer_text"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            -->
+<!--            android:text="我的答案我的答案我的答案我的答案我的答案"-->
+<!--            android:textColor="#333333"-->
+<!--            android:textSize="15sp">-->
+
+<!--        </TextView>-->
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/question_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#eaeaea"
+        ></View>
+
+
+
+    <LinearLayout
+        android:id="@+id/question_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:orientation="vertical"
+       >
+        <TextView
+            android:id="@+id/question_button_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp"
+            android:text="是否有解决你的问题？"
+            android:textColor="#999999"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/question_button_yes"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_yes"
+
+                >
+
+            </ImageButton>
+            <TextView
+                android:id="@+id/question_button_yes_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="18dp"
+                android:text="是"
+                android:textColor="#999999"
+                android:textSize="14sp"
+                ></TextView>
+
+            <ImageButton
+                android:id="@+id/question_button_no"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginLeft="29dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/question_no"
+
+                >
+
+            </ImageButton>
+
+
+
+            <TextView
+                android:id="@+id/question_button_no_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="18dp"
+                android:text="是"
+                android:textColor="#999999"
+                android:textSize="14sp"
+               ></TextView>
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+    <View
+        android:id="@+id/question_divider2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#eaeaea"
+        >
+
+    </View>
+
+    <LinearLayout
+        android:id="@+id/question_list_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:visibility="visible"
+       >
+
+        <TextView
+            android:id="@+id/question_list_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="7dp"
+            android:text="你是否还需要咨询"
+
+            ></TextView>
+        <View
+            android:id="@+id/question_divider3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#eaeaea"
+            ></View>
+        <ListView
+            android:id="@+id/question_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="7dp"
+            android:divider="@null"
+            android:visibility="visible"
+            >
+
+        </ListView>
+        <LinearLayout
+            android:id="@+id/question_list_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:gravity="center"
+
+            android:orientation="horizontal"
+            android:paddingBottom="6dp"
+            android:visibility="visible"
+          >
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="展开"
+                android:textColor="#00cabe"
+                android:textSize="13sp"></TextView>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/question_an">
+
+            </ImageView>
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
