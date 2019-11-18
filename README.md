@@ -1,5 +1,5 @@
 Startalk, The Best open sourced instant messenger software in the world!
-* [Chinese Version(中文版)](https://github.com/startalkIM/imsdk-android/blob/master/README_zh_CN.md)
+* [Chinese Version(中文版)](https://github.com/qunarcorp/imsdk-android/blob/master/README_zh_CN.md)
 
 Public Cloud(Startalk App)
 =====
