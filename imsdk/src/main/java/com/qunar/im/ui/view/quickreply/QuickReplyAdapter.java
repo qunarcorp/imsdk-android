@@ -1,6 +1,6 @@
 package com.qunar.im.ui.view.quickreply;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;

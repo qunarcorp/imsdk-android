@@ -45,13 +45,13 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/work_world_isselect_rc"
 
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="56dp" />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/work_world_atlist_rc"
         android:background="#ffffff"
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.ui.presenter.IRobotInfoPresenter;
 import com.qunar.im.ui.presenter.impl.RobotInfoPresenter;
@@ -188,7 +189,7 @@ public class RobotInfoActivity extends IMBaseActivity implements IRobotInfoView,
 
     @Override
     public String getUserId() {
-        return com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid();
+        return CurrentPreference.getInstance().getUserid();
     }
 
     @Override

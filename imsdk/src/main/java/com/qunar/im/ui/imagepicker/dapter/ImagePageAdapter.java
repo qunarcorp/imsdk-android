@@ -1,10 +1,11 @@
 package com.qunar.im.ui.imagepicker.dapter;
 
 import android.app.Activity;
-import android.support.v4.view.PagerAdapter;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.base.module.ImageItem;

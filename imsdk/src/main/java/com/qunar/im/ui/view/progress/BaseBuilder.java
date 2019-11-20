@@ -2,8 +2,8 @@ package com.qunar.im.ui.view.progress;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 
 /**
  * Created by peng on 16-10-18. The Father Builder to the Progress

@@ -6,8 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
 import com.qunar.im.base.module.Nick;
@@ -36,7 +37,6 @@ import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.AppiumTestActivity;
 import com.qunar.im.ui.activity.TabMainActivity;
@@ -257,7 +257,7 @@ public class MineFragment extends BaseFragment implements IPersonalInfoView, IMy
 
     @Override
     public String getJid() {
-        return QtalkStringUtils.userId2Jid(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
+        return QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId());
     }
 
     @Override
@@ -383,7 +383,7 @@ public class MineFragment extends BaseFragment implements IPersonalInfoView, IMy
 
     @Override
     public String getUerId() {
-        return com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid();
+        return CurrentPreference.getInstance().getUserid();
     }
 
     public String Code2ServiceState(String code) {
@@ -449,7 +449,7 @@ public class MineFragment extends BaseFragment implements IPersonalInfoView, IMy
      * 显示客服状态
      */
     public void showMerchant() {
-        if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
+        if (CurrentPreference.getInstance().isMerchants()) {
             if (ll_service_state.getVisibility() != View.VISIBLE) {
                 line4.setVisibility(View.VISIBLE);
                 ll_service_state.setVisibility(View.VISIBLE);

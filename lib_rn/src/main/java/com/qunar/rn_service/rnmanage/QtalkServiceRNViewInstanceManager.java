@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactInstanceManagerBuilder;
-import com.facebook.react.modules.i18nmanager.I18nManagerModule;
 import com.horcrux.svg.SvgPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 //import com.qunar.rn_service.rnpackage.CookieManagerPackage;

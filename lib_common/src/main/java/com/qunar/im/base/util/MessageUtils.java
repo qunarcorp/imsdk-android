@@ -13,6 +13,7 @@ import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class MessageUtils {
         message.setId(id);
         message.setMessageID(id);
         message.setFromID(from);
-        message.setUserId(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
+        message.setUserId(CurrentPreference.getInstance().getPreferenceUserId());
         if (!TextUtils.isEmpty(chatType) && (chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_CONSULT))
                 || chatType.equals(String.valueOf(ConversitionType.MSG_TYPE_CONSULT_SERVER)))) {
 
@@ -113,7 +114,7 @@ public class MessageUtils {
         message.setRealfrom(from);
         message.setFromID(from);
         message.setToID(to);
-        message.setNickName(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserName());
+        message.setNickName(CurrentPreference.getInstance().getUserName());
 
         message.setTime(time);
         message.setDirection(IMMessage.DIRECTION_SEND);

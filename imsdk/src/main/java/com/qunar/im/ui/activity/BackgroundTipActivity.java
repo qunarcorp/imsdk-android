@@ -3,11 +3,9 @@ package com.qunar.im.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.QtNewActionBar;

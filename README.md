@@ -55,7 +55,7 @@ allprojects {
 
 ```gradle
 dependencies {
-  compile project(':imsdk')//compile 'com.qunar.im:sdk-im:3.0.6'
+  compile project(':imsdk')//compile 'com.qunar.im:sdk-im:3.0.7'
 }
 ```
 

@@ -39,7 +39,7 @@ import com.qunar.im.log.LogService;
 import com.qunar.im.log.QLog;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
@@ -357,7 +357,7 @@ public class QtalkPlugin extends ReactContextBaseJavaModule implements IMNotific
                     final String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
 
                     boolean show = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
-                            com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)
@@ -372,7 +372,7 @@ public class QtalkPlugin extends ReactContextBaseJavaModule implements IMNotific
                         if (!isHave) {
 
                             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                    .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                    .putObject(CurrentPreference.getInstance().getUserid()
                                             + QtalkNavicationService.getInstance().getXmppdomain()
                                             + CommonConfig.isDebug
                                             + MD5.hex(navurl)

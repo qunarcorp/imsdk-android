@@ -17,7 +17,7 @@ import com.qunar.im.ui.presenter.impl.ChatroomInfoPresenter;
 import com.qunar.im.ui.presenter.views.IChatMemberAdapter;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.MembersAdapter;
 import com.qunar.im.ui.view.MySearchView;

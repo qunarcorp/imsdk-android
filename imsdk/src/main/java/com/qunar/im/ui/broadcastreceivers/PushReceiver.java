@@ -19,8 +19,7 @@ import android.util.SparseIntArray;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.ui.presenter.ISystemPresenter;
-import com.qunar.im.ui.presenter.impl.SystemPresenter;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.base.shortutbadger.ShortcutBadger;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.JsonUtils;
@@ -32,7 +31,6 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.entity.OpsPushMessage;
@@ -64,7 +62,7 @@ public class PushReceiver extends BroadcastReceiver {
             MediaUtils.loadNewMsgSound(QunarIMApp.getContext(), CommonConfig.DEFAULT_NEW_MSG);
             return;
         }
-        if (!CommonConfig.isQtalk && com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
+        if (!CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants()) {
             int soundId = -1;
             try {
                 soundId = context.
@@ -96,7 +94,7 @@ public class PushReceiver extends BroadcastReceiver {
                 notificationManager = null;
             } else {
                 if (!CommonConfig.leave) return;
-                if (!com.qunar.im.protobuf.common.CurrentPreference.getInstance().isOfflinePush()) return;
+                if (!CurrentPreference.getInstance().isOfflinePush()) return;
                 Bundle extras = intent.getExtras();
                 if (extras == null || !extras.containsKey("message")) return;
                 String msg = extras.getString("message");
@@ -230,7 +228,7 @@ public class PushReceiver extends BroadcastReceiver {
         int unknowHashcode = 0;
 //        int unknowHashcode = 1916565926;//0;
         int hascode = unknowHashcode + id.hashCode();
-        if(!com.qunar.im.protobuf.common.CurrentPreference.getInstance().isShowContentPush()){
+        if(!CurrentPreference.getInstance().isShowContentPush()){
             title = "QTALK";
             message = "您有新消息，点击查看";
 //            hascode = str / 10 * 10 + title.hashCode();
@@ -313,7 +311,7 @@ public class PushReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder builder = new Notification.Builder(CommonConfig.globalContext);
-        boolean soundOn = com.qunar.im.protobuf.common.CurrentPreference.getInstance().isTurnOnMsgSound();
+        boolean soundOn = CurrentPreference.getInstance().isTurnOnMsgSound();
         int defaults = Notification.DEFAULT_LIGHTS;
         if (soundOn) {
 //            defaults |= Notification.DEFAULT_SOUND;
@@ -321,13 +319,13 @@ public class PushReceiver extends BroadcastReceiver {
                 builder.setSound(Uri.parse("android.resource://" + CommonConfig.globalContext.getPackageName()
                         + "/" + R.raw.atom_ui_new_msg));
             } else {
-                if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {//客服提示音
+                if (CurrentPreference.getInstance().isMerchants()) {//客服提示音
                     builder.setSound(Uri.parse("android.resource://" + CommonConfig.globalContext.getPackageName()
                             + "/" + R.raw.atom_ui_qcaht_consult_sound));
                 }
             }
         }
-        boolean vibrateOn = com.qunar.im.protobuf.common.CurrentPreference.getInstance().isTurnOnMsgShock();
+        boolean vibrateOn = CurrentPreference.getInstance().isTurnOnMsgShock();
         if (vibrateOn) {
             defaults |= Notification.DEFAULT_VIBRATE;
         }

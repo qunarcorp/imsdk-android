@@ -1,10 +1,11 @@
 package com.qunar.im.ui.util.easyphoto.easyphotos.Builder;
 
 import android.app.Activity;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import android.view.View;
 
 import com.qunar.im.ui.util.easyphoto.easyphotos.callback.SelectCallback;

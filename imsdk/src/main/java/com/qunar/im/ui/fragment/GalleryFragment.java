@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -16,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -39,7 +40,6 @@ import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.view.CommonDialog;
-import com.qunar.im.ui.view.bigimageview.ImageBrowsUtil;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
 import com.qunar.im.ui.view.zxing.decode.DecodeBitmap;
 import com.qunar.im.utils.QRUtil;

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.jsonbean.QRCodeAuthResultJson;
@@ -87,7 +88,7 @@ public class QRcodeLoginConfirmFragment extends DialogFragment implements View.O
     private void authData(final int phase, final int type){
         qrcodekey = b.getString("qrcodekey");
 //        UserVCard vCard = ProfileUtils.getLocalVCard(QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getUserId()));
-        Nick nick = ConnectionUtil.getInstance().getMyselfCard(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
+        Nick nick = ConnectionUtil.getInstance().getMyselfCard(CurrentPreference.getInstance().getPreferenceUserId());
         AuthData ad = new AuthData();
         ad.v = "1.0";
         ad.t = type + "";
@@ -111,7 +112,7 @@ public class QRcodeLoginConfirmFragment extends DialogFragment implements View.O
 //                }
                 ad.d = d;
             }else{
-                String json = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt();
+                String json = CurrentPreference.getInstance().getQvt();
                 QVTResponseResult qvtResponseResult = JsonUtils.getGson().fromJson(json, QVTResponseResult.class);
                 if(type == 1){
                     d.q = qvtResponseResult.data.qcookie;

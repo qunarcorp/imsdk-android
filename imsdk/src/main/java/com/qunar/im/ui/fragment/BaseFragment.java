@@ -3,7 +3,8 @@ package com.qunar.im.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.ui.R;

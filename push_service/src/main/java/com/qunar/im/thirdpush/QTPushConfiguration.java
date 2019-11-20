@@ -1,6 +1,5 @@
 package com.qunar.im.thirdpush;
 
-import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -170,7 +169,6 @@ public class QTPushConfiguration {
         return QPushClient.getUsePushName();
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
     private static void initNotificationChannel(Context context) {
         if(26 <= Build.VERSION.SDK_INT) {
             if (mNotificationManager == null) {

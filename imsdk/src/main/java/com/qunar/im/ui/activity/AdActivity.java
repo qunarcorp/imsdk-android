@@ -27,11 +27,9 @@ import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.MyWebView;
-import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
 import com.qunar.im.ui.view.medias.video.VideoView;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * Created by xinbo.wang on 2016-09-23.

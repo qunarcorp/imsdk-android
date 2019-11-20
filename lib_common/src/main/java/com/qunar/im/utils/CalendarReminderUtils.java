@@ -15,7 +15,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.CalendarTrip;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 import java.text.ParseException;
 import java.util.TimeZone;
@@ -76,7 +76,7 @@ public class CalendarReminderUtils {
             locan = TextUtils.isEmpty(bean.getAppointment())?bean.getTripLocale()+"-"+bean.getTripRoom():bean.getAppointment();
             start = DateUtil.string2Time(bean.getBeginTime(), "yyyy-MM-dd HH:mm:ss").getTime();
             end = DateUtil.string2Time(bean.getEndTime(), "yyyy-MM-dd HH:mm:ss").getTime();
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 //        String selection = "((" + CalendarContract.Events.ORIGINAL_SYNC_ID + " = ?))";
@@ -222,7 +222,7 @@ public class CalendarReminderUtils {
         try {
             start = DateUtil.string2Time(bean.getBeginTime(), "yyyy-MM-dd HH:mm:ss").getTime();
             end = DateUtil.string2Time(bean.getEndTime(), "yyyy-MM-dd HH:mm:ss").getTime();
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -311,7 +311,7 @@ public class CalendarReminderUtils {
         try {
             start = DateUtil.string2Time(bean.getBeginTime(), "yyyy-MM-dd HH:mm:ss").getTime();
             end = DateUtil.string2Time(bean.getEndTime(), "yyyy-MM-dd HH:mm:ss").getTime();
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

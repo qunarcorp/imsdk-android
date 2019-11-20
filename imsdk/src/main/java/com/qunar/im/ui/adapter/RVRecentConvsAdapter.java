@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.RecentConversation;
@@ -92,7 +93,7 @@ public class RVRecentConvsAdapter extends BaseQuickAdapter<RecentConversation, B
 
     @Override
     protected void convert(final BaseViewHolder holder, RecentConversation item) {
-        int fontSizeMode = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getFontSizeMode();
+        int fontSizeMode = CurrentPreference.getInstance().getFontSizeMode();
         float text1FontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_large);
         float textViewTimeFontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_smaller);
         float text2FontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_small);

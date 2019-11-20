@@ -2,9 +2,10 @@ package com.qunar.im.ui.util.videoPlayUtil;
 
 import android.app.Dialog;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.qunar.im.ui.util.easyphoto.easyphotos.EasyPhotos;
 import com.orhanobut.logger.Logger;

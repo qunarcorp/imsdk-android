@@ -18,7 +18,7 @@ package com.qunar.im.ui.view.emojiconTextView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;

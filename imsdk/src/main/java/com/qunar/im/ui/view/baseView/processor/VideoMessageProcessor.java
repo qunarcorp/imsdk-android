@@ -2,12 +2,13 @@ package com.qunar.im.ui.view.baseView.processor;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.interfaces.DraweeController;

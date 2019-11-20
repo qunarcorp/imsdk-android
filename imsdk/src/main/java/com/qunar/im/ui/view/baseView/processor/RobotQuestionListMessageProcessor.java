@@ -1,7 +1,7 @@
 package com.qunar.im.ui.view.baseView.processor;
 
 import android.content.Context;
-import android.support.design.widget.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -168,7 +168,7 @@ public class RobotQuestionListMessageProcessor extends DefaultMessageProcessor {
 
 //        bottomSheetDialog.setCanceledOnTouchOutside(false);
         //给布局设置透明背景色
-        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+        bottomSheetDialog.getDelegate().findViewById(com.google.android.material.R.id.design_bottom_sheet)
                 .setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
     }
 

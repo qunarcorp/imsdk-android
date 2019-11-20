@@ -1,7 +1,6 @@
 package com.qunar.im.ui.presenter.impl;
 
 import android.text.TextUtils;
-import android.text.style.ParagraphStyle;
 
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.common.QunarIMApp;

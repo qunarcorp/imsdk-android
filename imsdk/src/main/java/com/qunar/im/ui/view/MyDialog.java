@@ -3,7 +3,7 @@ package com.qunar.im.ui.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.widget.TextView;
 
 import com.qunar.im.ui.R;

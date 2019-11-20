@@ -7,7 +7,6 @@ import com.qunar.im.base.protocol.HttpUrlConnectionHandler;
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 

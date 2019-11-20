@@ -35,10 +35,9 @@ public class NativeApi {
     public static final String OUT_GROUP_LABEL = "外域群组";
     public static final String LOCAL_USER_LABEL = "本地用户";
     public static final String LOCAL_GROUP_LABEL = "本地群组";
-    public static final String ROBOT_DEFAULT_PORTRAIT = "https://qim.qunar.com/file/v2/download/perm/612752b6f60c3379077f71493d4e02ae.png";
-    public static final String OUT_GROUP_DEFAULT_PORTRAIT = "https://qim.qunar.com/file/v2/download/perm/2227ff2e304cb44a1980e9c1a3d78164.png";
-    public static final String LOCAL_USER_DEFAULT_PORTRAIT = "https://qim.qunar.com/file/v2/download/perm/3ca05f2d92f6c0034ac9aee14d341fc7.png";
-    public static final String LOCAL_GROUP_DEFAULT_PORTRAIT = "https://qim.qunar.com/file/v2/download/perm/2227ff2e304cb44a1980e9c1a3d78164.png";
+    public static final String OUT_GROUP_DEFAULT_PORTRAIT = "";
+    public static final String LOCAL_USER_DEFAULT_PORTRAIT = "";
+    public static final String LOCAL_GROUP_DEFAULT_PORTRAIT = "";
     public static final int ROBOT_SINGLE_CHAT_EVENT = 8;
     public static final int OUT_GROUP_CHAT_EVENT = 1;
     public static final int LOCAL_GROUP_EVENT = 1;

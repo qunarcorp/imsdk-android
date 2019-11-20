@@ -6,34 +6,30 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
+import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.IMGroup;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.log.LogDatabaseManager;
-import com.qunar.im.ui.presenter.impl.QChatLoginPresenter;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.common.BackgroundExecutor;
-import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.RecentConversation;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.MemoryCache;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.log.LogDatabaseManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.thirdpush.QTPushConfiguration;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.PbChatActivity;
@@ -42,13 +38,11 @@ import com.qunar.im.ui.fragment.ConversationFragment;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.ui.imagepicker.loader.GlideImageLoader;
 import com.qunar.im.ui.imagepicker.view.CropImageView;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.rn_service.fragment.RNContactsFragment;
+import com.qunar.im.ui.presenter.impl.QChatLoginPresenter;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.AppFrontBackHelper;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.ui.util.ProfileUtils;
-import com.qunar.im.utils.ConnectionUtil;
+import com.qunar.rn_service.fragment.RNContactsFragment;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 
@@ -86,23 +80,17 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
 
         try {
             PackageInfo pi = CommonConfig.globalContext.getPackageManager().getPackageInfo(CommonConfig.globalContext.getPackageName(), 0);
+            GlobalConfigManager.appVersion = pi.versionCode;
             QunarIMApp.getQunarIMApp().setVersion(pi.versionCode);
             QunarIMApp.getQunarIMApp().setVersionName(pi.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        BackgroundExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                QunarIMApp.getQunarIMApp().RegisterContext(CommonConfig.globalContext);
-            }
-        });
+        QunarIMApp.getQunarIMApp().RegisterContext(CommonConfig.globalContext);
         CommonConfig.DEFAULT_GRAVATAR = R.drawable.atom_ui_default_gravatar;
         CommonConfig.SYS_ICON = R.drawable.atom_ui_rbt_system;
         CommonConfig.DEFAULT_NEW_MSG = R.raw.atom_ui_new_msg;
         CommonConfig.DEFAULT_GROUP = R.drawable.atom_ui_ic_my_chatroom;
-
-        QunarIMApp.getQunarIMApp().setIsDebug(CommonConfig.isDebug);
 
         initDoMain(application);
 

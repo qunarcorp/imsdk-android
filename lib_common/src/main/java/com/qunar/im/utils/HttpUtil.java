@@ -96,6 +96,7 @@ import com.qunar.im.base.util.PhoneInfoUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.enums.MessageState;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMLogicManager;
@@ -108,7 +109,6 @@ import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 
 import org.json.JSONArray;
@@ -337,7 +337,7 @@ public class HttpUtil {
 
         HttpUrlConnectionHandler.executeGet(requestUrl, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 try {
                     String resultString = Protocol.parseStream(response);
 
@@ -1187,7 +1187,7 @@ public class HttpUtil {
             StringBuilder params = new StringBuilder("push/qtapi/token/setpersonmackey.qunar?username=");
             params.append(username).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
-                    .append("&os=android&version=").append(Protocol.VERSIONVALUE);
+                    .append("&os=android&version=").append(QunarIMApp.getQunarIMApp().getVersion());
             params.append("&mac_key=").append(key);
             params.append("&platname=").append(name);
             params.append("&pkgname=").append(CommonConfig.globalContext.getApplicationInfo().packageName);
@@ -1250,7 +1250,7 @@ public class HttpUtil {
             StringBuilder params = new StringBuilder("push/qtapi/token/delpersonmackey.qunar?username=");
             params.append(muUsernam).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
-                    .append("&os=android&version=").append(Protocol.VERSIONVALUE);
+                    .append("&os=android&version=").append(QunarIMApp.getQunarIMApp().getVersion());
             params.append("&mac_key=").append(uuid);
             params.append("&platname=").append(name);
             Protocol.addBasicParamsOnHead(params);
@@ -1313,7 +1313,7 @@ public class HttpUtil {
             StringBuilder params = new StringBuilder("push/qtapi/token/setgroupnotification.qunar?username=");
             params.append(muUsernam).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
-                    .append("&os=android&version=").append(Protocol.VERSIONVALUE);
+                    .append("&os=android&version=").append(QunarIMApp.getQunarIMApp().getVersion());
             params.append("&muc_name=").append(QtalkStringUtils.parseId(mucJid));
             params.append("&subscribe_flag=").append(status);
             params.append("&muc_domain=").append(QtalkStringUtils.parseDomain(mucJid));
@@ -1371,7 +1371,7 @@ public class HttpUtil {
             StringBuilder params = new StringBuilder("push/qtapi/token/setmsgsettings.qunar?username=");
             params.append(muUsernam).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
-                    .append("&os=android&version=").append(Protocol.VERSIONVALUE);
+                    .append("&os=android&version=").append(QunarIMApp.getQunarIMApp().getVersion());
             params.append("&index=").append(index);
             params.append("&status=").append(status);
             Protocol.addBasicParamsOnHead(params);
@@ -1426,7 +1426,7 @@ public class HttpUtil {
             StringBuilder params = new StringBuilder("push/qtapi/token/getmsgsettings.qunar?username=");
             params.append(muUsernam).append("&domain=")
                     .append(QtalkNavicationService.getInstance().getXmppdomain())
-                    .append("&os=android&version=").append(Protocol.VERSIONVALUE);
+                    .append("&os=android&version=").append(QunarIMApp.getQunarIMApp().getVersion());
             Protocol.addBasicParamsOnHead(params);
             String rooturl = QtalkNavicationService.getInstance().getJavaUrl();
             if (TextUtils.isEmpty(rooturl)) {
@@ -1985,7 +1985,7 @@ public class HttpUtil {
         String url = QtalkNavicationService.getInstance().getQcadminHost() + "/seat/getSeatList.json?shopId=" + jid;
         HttpUrlConnectionHandler.executeGet(url, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 String resultString = Protocol.parseStream(response);
                 SeatList seats = JsonUtils.getGson().fromJson(resultString, SeatList.class);
                 callback.onCompleted(seats);
@@ -2010,7 +2010,7 @@ public class HttpUtil {
      */
     public static void getMultiChatOfflineMsg(String chatName, long timestamp, int num, int direction, final ProtocolCallback.UnitCallback<GroupChatOfflineResult> callback) {
         StringBuilder queryString = new StringBuilder("domain/get_muc_msg?");
-        if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+        if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
             callback.doFailure();
             return;
         }
@@ -2063,7 +2063,7 @@ public class HttpUtil {
     public static void setRemoteConfig(List<RemoteConfig.ConfigItem> jsonDatas, final ProtocolCallback.UnitCallback<RemoteConfig> callback) {
         try {
             StringBuilder queryString = new StringBuilder("conf/set_person?");
-            if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
                 if (callback != null) callback.doFailure();
                 return;
             }
@@ -2102,7 +2102,7 @@ public class HttpUtil {
         Protocol.addBasicParamsOnHead(sb);
         HttpUrlConnectionHandler.executeGet(sb.toString(), new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 String resultString = Protocol.parseStream(response);
                 callback.onCompleted(resultString);
             }
@@ -2125,7 +2125,7 @@ public class HttpUtil {
     public static void getRemoteConfig(List<RemoteConfig.ConfigItem> jsonDatas, final ProtocolCallback.UnitCallback<RemoteConfig> callback) {
         try {
             StringBuilder queryString = new StringBuilder("conf/get_person?");
-            if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
                 if (callback != null) callback.doFailure();
                 return;
             }
@@ -2688,7 +2688,7 @@ public class HttpUtil {
     public static void notifyOnline() {
         HttpUrlConnectionHandler.executeGet(Protocol.getUrl(QtalkNavicationService.getInstance().getQcadminHost(), "css/online"), new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response){
+            public void onComplete(InputStream response) throws IOException {
                 if (response != null) {
                     String resultString = Protocol.parseStream(response);
                     Logger.i("notifyOnline:" + resultString);
@@ -2720,7 +2720,7 @@ public class HttpUtil {
         sb.append(opsUrl);
         String t = System.currentTimeMillis() + "";
         sb.append("?p=android");
-        sb.append("&v=").append(Protocol.VERSIONVALUE);
+        sb.append("&v=").append(QunarIMApp.getQunarIMApp().getVersion());
         sb.append("&t=").append(t);
 /*        k值为  base64(k1).
         k1的值为 u=用户名&k=md5(k2)
@@ -5333,7 +5333,7 @@ public class HttpUtil {
             cookie.put("Cookie", "q_ckey=" + q_ckey + ";");
             Map<String, String> params = new HashMap<>();
             boolean high = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + CommonConfig.isDebug
                             + "videoHigh", false);
@@ -5492,7 +5492,7 @@ public class HttpUtil {
 
 
                                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                        .putObject(CurrentPreference.getInstance().getUserid()
                                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                                 + CommonConfig.isDebug
 
@@ -5500,7 +5500,7 @@ public class HttpUtil {
                                         .synchronize();
 
                                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                        .putObject(CurrentPreference.getInstance().getUserid()
                                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                                 + CommonConfig.isDebug
 
@@ -5509,7 +5509,7 @@ public class HttpUtil {
 
 
                                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                        .putObject(CurrentPreference.getInstance().getUserid()
                                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                                 + CommonConfig.isDebug
 
@@ -5517,7 +5517,7 @@ public class HttpUtil {
                                         .synchronize();
 
                                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                        .putObject(CurrentPreference.getInstance().getUserid()
                                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                                 + CommonConfig.isDebug
 
@@ -5525,7 +5525,7 @@ public class HttpUtil {
                                         .synchronize();
 
                                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                        .putObject(CurrentPreference.getInstance().getUserid()
                                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                                 + CommonConfig.isDebug
 

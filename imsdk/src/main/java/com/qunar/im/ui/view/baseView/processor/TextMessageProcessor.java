@@ -59,7 +59,6 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.base.util.glide.GlideRoundTransform;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;

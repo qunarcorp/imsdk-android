@@ -1,13 +1,16 @@
 package com.qunar.im.ui.schema;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-
 import com.qunar.im.base.protocol.Protocol;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.common.CommonConfig;
 import com.qunar.im.ui.activity.IMBaseActivity;
 
 import java.util.HashMap;
@@ -46,6 +49,11 @@ public class QchatSchemeActivity extends IMBaseActivity {
              */
 
             HashMap<String, String> map = Protocol.splitParams(data);
+            //首页路由
+            if(map.containsKey("isTransferHome") && "true".equals(map.get("isTransferHome"))) {
+                jumpHomeScheme(this);
+            }
+
             deal(type, map, intent);
         }
         else {
@@ -53,6 +61,23 @@ public class QchatSchemeActivity extends IMBaseActivity {
         }
     }
 
+    private void jumpHomeScheme(Context context) {
+        //获取本应用程序信息
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = context.getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String schema = "";
+        if(applicationInfo != null){
+            schema = applicationInfo.metaData.getString("MAIN_SCHEMA");
+        }
+        Intent i = new Intent("android.intent.action.VIEW",
+                Uri.parse(CommonConfig.schema + "://"+ (TextUtils.isEmpty(schema)?"start_main_activity":schema)));
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
 
 
     /**

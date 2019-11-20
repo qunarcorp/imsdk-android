@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.qunar.im.base.callbacks.BasicCallback;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.UserVCard;
@@ -17,7 +18,6 @@ import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
@@ -123,7 +123,7 @@ public class QchatPersonalInfoPresenter implements IPersonalInfoPresenter,ICheck
         if (vCard.gravantarVersion > -1&&!TextUtils.isEmpty(vCard.gravantarUrl)) {
             if(TextUtils.isEmpty(CurrentPreference.getInstance().getPreferenceUserId())) {
                 CurrentPreference.getInstance().setPreferenceUserId(vCard.nickname);
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().setMerchants(vCard.type.equals("merchant"));
+                CurrentPreference.getInstance().setMerchants(vCard.type.equals("merchant"));
             }
             String url = QtalkStringUtils.getGravatar(vCard.gravantarUrl,true);
             FacebookImageUtil.loadWithCache(url,personalInfoView.getImagetView(),
@@ -135,7 +135,7 @@ public class QchatPersonalInfoPresenter implements IPersonalInfoPresenter,ICheck
                         @Override
                         public void onSuccess(UserVCard userVCard) {
                             CurrentPreference.getInstance().setPreferenceUserId(userVCard.nickname);
-                            com.qunar.im.protobuf.common.CurrentPreference.getInstance().setMerchants(userVCard.type.equals("merchant"));
+                            CurrentPreference.getInstance().setMerchants(userVCard.type.equals("merchant"));
                         }
 
                         @Override

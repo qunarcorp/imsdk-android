@@ -3,7 +3,7 @@ package com.qunar.im.ui.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.qunar.im.base.common.DailyMindConstants;
 import com.qunar.im.base.jsonbean.DailyMindMain;

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.qunar.im.base.jsonbean.DepartmentResult;
 import com.qunar.im.base.module.DepartmentItem;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IInvitedFriendsPresenter;
 import com.qunar.im.ui.presenter.views.IInvitedFriendsView;
 import com.qunar.im.base.util.Constants;
@@ -105,11 +106,11 @@ public class InvitedFriendsPresenter implements IInvitedFriendsPresenter ,IMNoti
         myFriends.setpId(rootNode.getpId());
         map.get(rootNode.getId()).add(myFriends);
         map.put(myFriends.getId(), new LinkedList<Node>());
-        if (!CommonConfig.isQtalk && com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
+        if (!CommonConfig.isQtalk && CurrentPreference.getInstance().isMerchants()) {
             List<DepartmentItem> departmentItems = null;//dataModel.getOrganizationOfFriends();
 
             staticId = 0;
-            String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+            String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(CurrentPreference.getInstance().getUserid()
                     + QtalkNavicationService.getInstance().getXmppdomain()
                     + Constants.Preferences.qchat_org, "");
             if(!TextUtils.isEmpty(qchatorg)){

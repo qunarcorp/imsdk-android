@@ -6,6 +6,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldResponse;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.WorkWorldPresenter;
 import com.qunar.im.ui.presenter.views.WorkWorldView;
 import com.qunar.im.base.protocol.ProtocolCallback;
@@ -68,7 +69,7 @@ public class WorkWorldManagerPresenter implements WorkWorldPresenter, IMNotifica
         mView.workworldshowNewData(list);
 
         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                .putObject(CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
@@ -184,7 +185,7 @@ public class WorkWorldManagerPresenter implements WorkWorldPresenter, IMNotifica
             public void onCompleted(WorkWorldResponse workWorldResponse) {
                 mView.workworldshowNewData(workWorldResponse.getData().getNewPost());
                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        .putObject(CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -204,7 +205,7 @@ public class WorkWorldManagerPresenter implements WorkWorldPresenter, IMNotifica
 //            public void onCompleted(WorkWorldResponse workWorldResponse) {
 //                mView.workworldshowNewData(workWorldResponse.getData().getNewPost());
 //                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-//                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+//                        .putObject(CurrentPreference.getInstance().getUserid()
 //                                + QtalkNavicationService.getInstance().getXmppdomain()
 //                                + CommonConfig.isDebug
 //                                + MD5.hex(navurl)

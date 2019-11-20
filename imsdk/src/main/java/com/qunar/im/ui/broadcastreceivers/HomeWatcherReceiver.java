@@ -9,8 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.qunar.im.base.util.LogUtil;
-import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.ui.services.PushServiceUtils;
 
 /**
  * home键监听
@@ -33,9 +31,9 @@ public class HomeWatcherReceiver extends BroadcastReceiver {
             LogUtil.i(LOG_TAG, "reason: " + reason);
 
             if (SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason)) {
-                if(CurrentPreference.getInstance().isTurnOnPsuh()) {
-                    PushServiceUtils.startAMDService(context);
-                }
+//                if(CurrentPreference.getInstance().isTurnOnPsuh()) {
+//                    PushServiceUtils.startAMDService(context);
+//                }
                 LogUtil.i(LOG_TAG, "homekey");
 
             } else if (SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {

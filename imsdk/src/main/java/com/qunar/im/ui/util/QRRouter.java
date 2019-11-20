@@ -13,7 +13,7 @@ import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.ChatroomInfoActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;

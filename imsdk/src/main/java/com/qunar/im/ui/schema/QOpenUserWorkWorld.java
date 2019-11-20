@@ -2,12 +2,10 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.MindWorkWorldActivity;
-import com.qunar.im.ui.activity.PbChatActivity;
 import com.qunar.im.ui.activity.SelfWorkWorldActivity;
-import com.qunar.im.ui.activity.WorkWorldActivity;
 
 import java.util.Map;
 

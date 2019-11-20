@@ -2,7 +2,6 @@ package com.qunar.im.ui.view.faceGridView;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -12,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;

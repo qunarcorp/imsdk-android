@@ -16,7 +16,7 @@ import com.qunar.im.ui.presenter.impl.RobotSessionPresenter;
 import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.ui.events.WeiDaoOrderEvent;
 import com.qunar.im.utils.QtalkStringUtils;

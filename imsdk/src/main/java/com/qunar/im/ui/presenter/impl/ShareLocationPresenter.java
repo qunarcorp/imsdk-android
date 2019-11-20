@@ -9,7 +9,7 @@ import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.Calendar;

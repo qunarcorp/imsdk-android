@@ -20,12 +20,12 @@ import com.qunar.im.base.structs.PushSettinsStatus;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.IMUserDefaults;
-import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.MemoryCache;
 import com.qunar.im.base.util.PhoneInfoUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.manager.IMCoreManager;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMLogicManager;
@@ -33,8 +33,6 @@ import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.LoginType;
-import com.qunar.im.protobuf.common.ParamIsEmptyException;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.protobuf.dispatch.DispatcherQueue;
@@ -42,7 +40,7 @@ import com.qunar.im.protobuf.utils.StringUtils;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.DeviceInfoManager;
 import com.qunar.im.utils.MD5;
-import com.qunar.im.protobuf.stream.PbAssemblyUtil;
+import com.qunar.im.utils.PbAssemblyUtil;
 import com.qunar.im.utils.PubKeyUtil;
 import com.qunar.im.utils.QtalkDiskLogStrategy;
 import com.qunar.im.utils.QtalkStringUtils;
@@ -109,8 +107,8 @@ public class QtalkSDK {
         }
         IMDatabaseManager.getInstance().initialize(userName, CommonConfig.globalContext);
         //在数据库初始化之出 把 声音震动提醒放入内存
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
+        CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
+        CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
 
     }
 
@@ -237,15 +235,15 @@ public class QtalkSDK {
                 final String userName = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, Constants.Preferences.lastuserid);
                 //记住 这个token就是密码, 没有经过base64的密码 没有加 /0xxx/0的密码
                 final String token = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, Constants.Preferences.usertoken);
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().setToken(token);
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().setUserid(userName);
+                CurrentPreference.getInstance().setToken(token);
+                CurrentPreference.getInstance().setUserid(userName);
 
                 IMDatabaseManager.getInstance().initialize(userName, CommonConfig.globalContext);
                 IMDatabaseManager.getInstance().insertUserIdToCacheData(QtalkStringUtils.userId2Jid(userName));
                 //在初始化数据库,还没建立连接之前,获取到时间戳,并保存
                 String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
                 String str = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -253,7 +251,7 @@ public class QtalkSDK {
 
                 //获取朋友圈时间戳
                 String wwuuid = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -261,7 +259,7 @@ public class QtalkSDK {
 
                 //获取朋友圈时间戳
                 String wwtime = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -275,7 +273,7 @@ public class QtalkSDK {
                         Logger.i("获取历史记录时间戳为空,初始化两天时间时间戳");
                     }
                     IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                            .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            .putObject(CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)
@@ -292,7 +290,7 @@ public class QtalkSDK {
 //
 //                        }
                     IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                            .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            .putObject(CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)
@@ -300,7 +298,7 @@ public class QtalkSDK {
                             .synchronize();
 
                     IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                            .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            .putObject(CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)
@@ -311,7 +309,7 @@ public class QtalkSDK {
 
                 //设置最新的群readmark时间戳
                 String rmt = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -319,7 +317,7 @@ public class QtalkSDK {
                 if(TextUtils.isEmpty(rmt)){
                     String localGroupRMTime = IMDatabaseManager.getInstance().getLatestGroupRMTime();
                     IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                            .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            .putObject(CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)
@@ -329,8 +327,6 @@ public class QtalkSDK {
                 coreManager.login(userName, token);
             } catch (IOException e) {
                 Logger.e(e, "login failed - IOException");
-            } catch (ParamIsEmptyException e) {
-                Logger.e(e, "login failed - ParamIsEmptyException");
             }
         }
     };
@@ -389,7 +385,7 @@ public class QtalkSDK {
             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                     .putObject(Constants.Preferences.usertoken, password)
                     .synchronize();
-            com.qunar.im.protobuf.common.CurrentPreference.getInstance().setToken(password);
+            CurrentPreference.getInstance().setToken(password);
             //username放入sp
             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                     .putObject(Constants.Preferences.lastuserid, userName)
@@ -421,7 +417,7 @@ public class QtalkSDK {
         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                 .putObject(Constants.Preferences.usertoken, password)
                 .synchronize();
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setToken(password);
+        CurrentPreference.getInstance().setToken(password);
         //username放入sp
         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                 .putObject(Constants.Preferences.lastuserid, userName)
@@ -495,7 +491,7 @@ public class QtalkSDK {
         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                 .putObject(Constants.Preferences.usertoken, pwd)
                 .synchronize();
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setToken(token);
+        CurrentPreference.getInstance().setToken(token);
         //username放入sp
         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
                 .putObject(Constants.Preferences.lastuserid, userName)

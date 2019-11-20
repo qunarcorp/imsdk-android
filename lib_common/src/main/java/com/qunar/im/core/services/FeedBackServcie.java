@@ -24,7 +24,7 @@ import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.DeviceUtil;
 import com.qunar.im.utils.UnzipUtils;
 
@@ -199,7 +199,7 @@ public class FeedBackServcie {
                                 }else {
                                     sendNotify(false);
                                 }
-                            } catch (Exception e) {
+                            } catch (IOException e) {
                                 sendNotify(false);
                             }
 

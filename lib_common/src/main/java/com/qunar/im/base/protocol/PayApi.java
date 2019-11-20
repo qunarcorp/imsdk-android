@@ -2,7 +2,7 @@ package com.qunar.im.base.protocol;
 
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -31,6 +31,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
 import com.qunar.im.ui.R;
+import com.qunar.im.ui.util.easyphoto.cameralibrary.util.ScreenUtils;
 import com.qunar.im.ui.view.kpswitch.IPanelHeightTarget;
 
 
@@ -392,9 +393,9 @@ public class KeyboardUtil {
                 }
 
             } else {
-
-                final int phoneDisplayHeight = contentView.getResources()
-                        .getDisplayMetrics().heightPixels;
+                //适配华为全面屏手机获取屏幕高度不对
+//                final int phoneDisplayHeight = contentView.getResources().getDisplayMetrics().heightPixels;
+                final int phoneDisplayHeight = ScreenUtils.getFullActivityHeight(contentView.getContext());
                 if (!isTranslucentStatus
                         && phoneDisplayHeight == actionBarOverlayLayoutHeight) {
                     // no space to settle down the status bar, switch to fullscreen,

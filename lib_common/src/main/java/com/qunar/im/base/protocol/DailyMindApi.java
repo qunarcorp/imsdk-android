@@ -1,7 +1,6 @@
 package com.qunar.im.base.protocol;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.qunar.im.base.common.DailyMindConstants;
 import com.qunar.im.base.jsonbean.BaseJsonResult;
@@ -11,7 +10,7 @@ import com.qunar.im.base.jsonbean.DailyMindSub;
 import com.qunar.im.base.jsonbean.DailyMindSubList;
 import com.qunar.im.base.jsonbean.GeneralJson;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,7 +90,7 @@ public class DailyMindApi {
                         String qid = requestParams.get("qid");
                         unitCallback.onCompleted(qid);
                     }
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -127,7 +126,7 @@ public class DailyMindApi {
                             unitCallback.onCompleted(dailyMindSub);
                         }
                     }
-                } catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

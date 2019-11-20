@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.rastermill.Cacheable;
 
 import com.qunar.im.base.util.MemoryCache;
 
@@ -19,7 +20,7 @@ import java.io.InputStream;
  *
  */
 
-public class AnimatedGifDrawable extends AnimationDrawable implements MemoryCache.Cacheable{
+public class AnimatedGifDrawable extends AnimationDrawable implements Cacheable {
 
     private int mCurrentIndex = 0;
 

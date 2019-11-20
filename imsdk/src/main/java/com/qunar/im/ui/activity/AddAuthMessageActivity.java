@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.impl.BuddyPresenter;
 import com.qunar.im.ui.presenter.views.IBuddyView;
 import com.qunar.im.base.util.EventBusEvent;
@@ -79,7 +80,7 @@ public class AddAuthMessageActivity extends IMBaseActivity implements IBuddyView
         mBuddyPresenter = new BuddyPresenter();
         mBuddyPresenter.setBuddyView(this);
         mBuddyPresenter.addFriend();
-        et_reason.setText(getText(R.string.atom_ui_my_is) + com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserName());
+        et_reason.setText(getText(R.string.atom_ui_my_is) + CurrentPreference.getInstance().getUserName());
 
     }
 

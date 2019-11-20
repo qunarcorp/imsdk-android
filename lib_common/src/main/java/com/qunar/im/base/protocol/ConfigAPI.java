@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.qunar.im.base.jsonbean.RemoteConfig;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.QtalkNavicationService;
 
 import java.io.InputStream;
@@ -19,7 +20,7 @@ public class ConfigAPI {
     {
         try {
             StringBuilder queryString = new StringBuilder("conf/get_person?");
-            if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
                 callback.doFailure();
                 return;
             }
@@ -56,7 +57,7 @@ public class ConfigAPI {
     {
         try {
             StringBuilder queryString = new StringBuilder("conf/set_person?");
-            if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+            if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
                 if(callback!=null)callback.doFailure();
                 return;
             }

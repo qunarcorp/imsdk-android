@@ -8,6 +8,7 @@ import com.qunar.im.base.jsonbean.GeneralJson;
 import com.qunar.im.base.jsonbean.QChatLoginResult;
 import com.qunar.im.base.jsonbean.QVTResponseResult;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.ILoginPresenter;
 import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.base.protocol.LoginAPI;
@@ -26,7 +27,6 @@ import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 
 import de.greenrobot.event.EventBus;
@@ -65,7 +65,7 @@ public class QChatLoginPresenter implements ILoginPresenter, IMNotificaitonCente
 
     @Override
     public void login() {
-        String qvt = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt();
+        String qvt = CurrentPreference.getInstance().getQvt();
         if (!TextUtils.isEmpty(qvt)) {
             loginByToken(plat);
             return;
@@ -96,9 +96,9 @@ public class QChatLoginPresenter implements ILoginPresenter, IMNotificaitonCente
                     qvtResponseResult.data.tcookie = qchatUesr.tcookie;
                     qvtResponseResult.data.vcookie = qchatUesr.vcookie;
                     qvtResponseResult.data.qcookie = qchatUesr.qcookie;
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt(JsonUtils.getGson().toJson(qvtResponseResult));
+                    CurrentPreference.getInstance().setQvt(JsonUtils.getGson().toJson(qvtResponseResult));
                     DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.qchat_qvt, JsonUtils.getGson().toJson(qvtResponseResult));
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setMerchants(qchatUesr.type.equals("merchant"));
+                    CurrentPreference.getInstance().setMerchants(qchatUesr.type.equals("merchant"));
                     loginByToken(plat);
                 } else {
                     int errcode = 100;
@@ -118,7 +118,7 @@ public class QChatLoginPresenter implements ILoginPresenter, IMNotificaitonCente
     }
 
     public void loginByToken(final String plat) {
-        LoginAPI.getQchatToken(PhoneInfoUtils.getUniqueID(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt(),plat, new ProtocolCallback.UnitCallback<GeneralJson>() {
+        LoginAPI.getQchatToken(PhoneInfoUtils.getUniqueID(), CurrentPreference.getInstance().getQvt(),plat, new ProtocolCallback.UnitCallback<GeneralJson>() {
             @Override
             public void onCompleted(GeneralJson generalJson) {
                 if (generalJson.ret && generalJson.data != null) {
@@ -179,7 +179,7 @@ public class QChatLoginPresenter implements ILoginPresenter, IMNotificaitonCente
     @Override
     public void autoLogin() {
         LogUtil.d("qchat", "autoLogin");
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt(DataUtils.getInstance(CommonConfig.globalContext).getPreferences(Constants.Preferences.qchat_qvt, ""));
+        CurrentPreference.getInstance().setQvt(DataUtils.getInstance(CommonConfig.globalContext).getPreferences(Constants.Preferences.qchat_qvt, ""));
         final String userName = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, Constants.Preferences.lastuserid);
         final String password = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, Constants.Preferences.usertoken);
         if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {

@@ -110,7 +110,7 @@ public class IMPayManager {
     public void bindAlipayAccount(String uid,String openId){
         PayApi.bind_alipay_account(uid,openId, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 String resultString = Protocol.parseStream(response);
                 Logger.i("bind_alipay_account",resultString);
             }

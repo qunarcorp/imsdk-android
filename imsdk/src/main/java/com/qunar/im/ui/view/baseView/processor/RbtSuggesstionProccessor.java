@@ -1,6 +1,6 @@
 package com.qunar.im.ui.view.baseView.processor;
 
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 

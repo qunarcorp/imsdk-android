@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.qunar.im.base.jsonbean.RemindDataBean;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.ClickRemindView;

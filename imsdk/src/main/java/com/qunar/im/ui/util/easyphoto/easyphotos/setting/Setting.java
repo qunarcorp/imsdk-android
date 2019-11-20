@@ -1,6 +1,6 @@
 package com.qunar.im.ui.util.easyphoto.easyphotos.setting;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.view.View;
 
 import com.qunar.im.ui.util.easyphoto.easyphotos.callback.VideoPlayCallback;

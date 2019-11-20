@@ -68,26 +68,20 @@ public class MainActivity extends Activity {
         if (!QIMSdk.getInstance().isConnected()){
             final ProgressDialog pd = ProgressDialog.show(this, "提示", "正在登录中。。。");
             if(QIMSdk.getInstance().isCanAutoLogin()){
-                QIMSdk.getInstance().autoLogin(new QIMSdk.LoginStatesListener() {
-                    @Override
-                    public void isScuess(boolean b, String s) {
-                        logcat_text.append(s);
-                        pd.dismiss();
-                        autoLoginButton.setText(s);
-                        toast(s);
-                    }
+                QIMSdk.getInstance().autoLogin((b, s) -> {
+                    logcat_text.append(s);
+                    pd.dismiss();
+                    autoLoginButton.setText(s);
+                    toast(s);
                 });
             }else {
                 final String uid = "";//用户名
                 final String password = "";//密码
-                QIMSdk.getInstance().login(uid, password, new QIMSdk.LoginStatesListener() {
-                    @Override
-                    public void isScuess(boolean b, String s) {
-                        logcat_text.append("Uid：" + uid + "\n" + "Password：" + password);
-                        pd.dismiss();
-                        autoLoginButton.setText(s);
-                        toast(s);
-                    }
+                QIMSdk.getInstance().login(uid, password, (b, s) -> {
+                    logcat_text.append("Uid：" + uid + "\n" + "Password：" + password);
+                    pd.dismiss();
+                    autoLoginButton.setText(s);
+                    toast(s);
                 });
             }
 
@@ -126,11 +120,6 @@ public class MainActivity extends Activity {
     }
 
     private void toast(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
 }

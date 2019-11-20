@@ -7,12 +7,13 @@ import android.os.Message;
 import android.os.Parcelable;
 import android.support.rastermill.FrameSequence;
 import android.support.rastermill.FrameSequenceDrawable;
-import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

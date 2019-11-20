@@ -10,7 +10,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.support.rastermill.FrameSequence;
 import android.support.rastermill.FrameSequenceDrawable;
 import android.text.SpannableString;

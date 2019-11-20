@@ -1,6 +1,6 @@
 package com.qunar.im.ui.view.tableLayout.listener;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 public interface CustomTabEntity {
     String getTabTitle();

@@ -7,13 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
-import com.qunar.im.base.module.ReleaseContentData;
 import com.qunar.im.base.module.WorkWorldDeleteResponse;
 import com.qunar.im.base.module.WorkWorldItem;
-import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.WorkWorldNoticeActivityV2;
 import com.qunar.im.ui.activity.WorkWorldReleaseCircleActivity;
@@ -159,7 +158,7 @@ public class WorkWorldFragment extends BaseFragment implements WorkWorldView {
             bottomSheetDialog.setContentView(view);
 //
             //给布局设置透明背景色
-            bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+            bottomSheetDialog.getDelegate().findViewById(com.google.android.material.R.id.design_bottom_sheet)
                     .setBackgroundColor(getActivity().getResources().getColor(android.R.color.transparent));
 
 

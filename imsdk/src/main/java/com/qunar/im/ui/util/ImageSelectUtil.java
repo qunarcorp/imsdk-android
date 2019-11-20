@@ -1,10 +1,12 @@
 package com.qunar.im.ui.util;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.util.easyphoto.easyphotos.EasyPhotos;
 import com.qunar.im.ui.util.easyphoto.easyphotos.callback.SelectCallback;
 import com.qunar.im.ui.util.easyphoto.easyphotos.callback.VideoPlayCallback;
@@ -27,19 +29,19 @@ public class ImageSelectUtil {
 
     public static void initVideoSetting() {
         String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + "videoTime");
 
         String size = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + "videoSize");
 
         String maxTime = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + "videoMaxTime");

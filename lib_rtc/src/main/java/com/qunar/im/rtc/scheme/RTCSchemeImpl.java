@@ -2,7 +2,7 @@ package com.qunar.im.rtc.scheme;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.qunar.im.base.jsonbean.WebRtcJson;
 import com.qunar.im.base.module.IMMessage;

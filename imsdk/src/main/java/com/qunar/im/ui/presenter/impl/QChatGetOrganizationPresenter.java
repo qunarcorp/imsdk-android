@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.qunar.im.base.jsonbean.DepartmentResult;
 import com.qunar.im.base.module.DepartmentItem;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IFriendsManagePresenter;
 import com.qunar.im.ui.presenter.views.IFriendsManageView;
 import com.qunar.im.base.protocol.Protocol;
@@ -50,7 +51,7 @@ public class QChatGetOrganizationPresenter implements IFriendsManagePresenter {
             return;
         isLoadingDept = true;
         List<DepartmentItem> mDeptDataList;
-        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(CurrentPreference.getInstance().getUserid()
                 + QtalkNavicationService.getInstance().getXmppdomain()
                 + Constants.Preferences.qchat_org, "");
         if(!TextUtils.isEmpty(qchatorg)){
@@ -99,7 +100,7 @@ public class QChatGetOrganizationPresenter implements IFriendsManagePresenter {
     @Override
     public void forceUpdateContacts() {
         LogUtil.d("debug", "forceUpdateContacts entrance");
-        if (TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getVerifyKey())) {
+        if (TextUtils.isEmpty(CurrentPreference.getInstance().getVerifyKey())) {
             if(friendsManageView!=null)
                 friendsManageView.resetListView();
             return;
@@ -111,7 +112,7 @@ public class QChatGetOrganizationPresenter implements IFriendsManagePresenter {
         isLoadingDept = true;
         staticId = 0;
         //qchat组织架构缓存
-        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(CurrentPreference.getInstance().getUserid()
                 + QtalkNavicationService.getInstance().getXmppdomain()
                 + Constants.Preferences.qchat_org, "");
         if(!TextUtils.isEmpty(qchatorg)){

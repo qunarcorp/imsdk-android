@@ -9,10 +9,9 @@ import com.qunar.im.ui.presenter.IMainPresenter;
 import com.qunar.im.ui.presenter.views.IMainView;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.enums.LoginStatus;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 
 /**
@@ -159,7 +158,7 @@ public class MainPresenter implements IMainPresenter, IMNotificaitonCenter.Notif
 
                     int count = ConnectionUtil.getInstance().selectWorkWorldNotice();
                     boolean workWorldUnReadState = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
-                            com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + CommonConfig.isDebug
                                     + MD5.hex(navurl)

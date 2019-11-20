@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.qunar.im.base.protocol.Protocol;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 /**
  * Created by wangyuwang on 16-3-11.

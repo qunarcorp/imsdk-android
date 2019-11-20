@@ -19,9 +19,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -61,7 +61,7 @@ import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.other.QtalkSDK;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.broadcastreceivers.ShareReceiver;
 import com.qunar.im.ui.imagepicker.ImagePicker;
@@ -753,7 +753,7 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
             }
         });
         //qchat登录页显示反馈按钮
-        if(!CommonConfig.isQtalk && mUrl.contains("user.qunar.com/mobile/login.jsp")){
+        if(!CommonConfig.isQtalk){
             setActionBarRightSpecial(R.string.atom_ui_new_feedback);
             setActionBarRightIconSpecialClick(v -> {
                 Intent intent = new Intent(QunarWebActvity.this, BugreportActivity.class);
@@ -962,6 +962,20 @@ public class QunarWebActvity extends IMBaseActivity implements BottomDialog.OnIt
 
     @Override
     public void onBackPressed() {
+        if(isVideoAudioCall) {
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                mWebView.evaluateJavascript("javascript:closePeerConn()",
+                        new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String s) {
+                                Logger.i("lex onReceiveValue " + s);
+                            }
+                        });
+            } else {
+                mWebView.loadUrl("javascript:closePeerConn()");
+            }
+
+        }
         if (mWebView.getUrl() == null || mWebView.getUrl().contains("home.do") ||
                 Constants.BundleValue.HONGBAO.equals(from)) {
             this.finish();

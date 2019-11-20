@@ -12,13 +12,14 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import android.text.TextUtils;
 import android.util.LruCache;
 import android.view.View;
@@ -46,7 +47,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.core.manager.IMLogicManager;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.FeedBackServcie;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -58,12 +59,9 @@ import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.Event.ConnectionErrorEvent;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
-import com.qunar.im.thirdpush.QTPushConfiguration;
-import com.qunar.im.protobuf.utils.JSONUtils;
 import com.qunar.im.thirdpush.core.QPushClient;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.broadcastreceivers.ConnectionStateReceiver;
@@ -411,7 +409,7 @@ public class TabMainActivity extends IMBaseActivity implements PermissionCallbac
         if (!CommonConfig.isQtalk && TextUtils.isEmpty(DataUtils.getInstance(this).getPreferences(Constants.Preferences.qchat_qvt, ""))) {
             IMUserDefaults.getStandardUserDefaults().newEditor(this).removeObject(Constants.Preferences.usertoken).synchronize();
         }
-        boolean autoLogin = com.qunar.im.protobuf.common.CurrentPreference.getInstance().isAutoLogin();
+        boolean autoLogin = CurrentPreference.getInstance().isAutoLogin();
         if (autoLogin) {
             Logger.i("判断是否可以自动登录:" + connectionUtil.isCanAutoLogin());
             if (!connectionUtil.isCanAutoLogin()) {

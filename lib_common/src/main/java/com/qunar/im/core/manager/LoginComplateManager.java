@@ -12,6 +12,7 @@ import com.qunar.im.base.module.VideoSetting;
 import com.qunar.im.base.module.WorkWorldNoticeHistoryResponse;
 import com.qunar.im.base.module.WorkWorldResponse;
 import com.qunar.im.base.structs.WorkWorldItemState;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.log.LogConstans;
 import com.qunar.im.log.LogService;
 import com.qunar.im.log.QLog;
@@ -44,12 +45,11 @@ import com.qunar.im.core.services.ClearLogService;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.entity.XMPPJID;
-import com.qunar.im.protobuf.stream.PbAssemblyUtil;
 import com.qunar.im.utils.CalendarSynchronousUtil;
 import com.qunar.im.utils.MD5;
+import com.qunar.im.utils.PbAssemblyUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,7 +174,7 @@ public class LoginComplateManager {
             Logger.i("time8:" + (a8e - a8s));
 
             long a9s = System.currentTimeMillis();
-            HttpUtil.getMyCapability(false);
+            HttpUtil.getMyCapability(true);
             long a9e = System.currentTimeMillis();
             Logger.i("time9:" + (a9e - a9s));
 
@@ -405,8 +405,8 @@ public class LoginComplateManager {
             public void onCompleted(PushSettingResponseBean pushSettingResponseBean) {
                 if (pushSettingResponseBean.isRet()) {
                     IMDatabaseManager.getInstance().updatePushSettingAllState(pushSettingResponseBean.getData().getPush_flag());
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
+                    CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
+                    CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
 
                 }
             }
@@ -600,7 +600,7 @@ public class LoginComplateManager {
 
     public static void getQchatDepInfo() {
 //        IMNotificaitonCenter.getInstance().postMainThreadNotificationName(QtalkEvent.Update_Buddy);//更新好友列表
-        String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+        String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext, CurrentPreference.getInstance().getUserid()
                 + QtalkNavicationService.getInstance().getXmppdomain()
                 + Constants.Preferences.buddytime);
 //        long tiem = IMUserDefaults.getStandardUserDefaults().get
@@ -609,7 +609,7 @@ public class LoginComplateManager {
             long newTime = System.currentTimeMillis();
             if ((newTime - lastTime) > 24 * 60 * 60 * 1000) {
 //                IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-//                        .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+//                        .putObject(CurrentPreference.getInstance().getUserid()
 //                                + QtalkNavicationService.getInstance().getXmppdomain()
 //                                + "buddyTime", String.valueOf(newTime))
 //                        .synchronize();
@@ -622,7 +622,7 @@ public class LoginComplateManager {
         Logger.i("发送了请求QCHAT组织架构人员请求");
         //不知道这段代码有啥用 先注释
 //        int version = 0;// IMDatabaseManager.getInstance().getIncrementUsersCount();
-//        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+//        String qchatorg = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(CurrentPreference.getInstance().getUserid()
 //                + QtalkNavicationService.getInstance().getXmppdomain()
 //                + Constants.Preferences.qchat_org, "");
 //        if (!TextUtils.isEmpty(qchatorg)) {
@@ -633,14 +633,14 @@ public class LoginComplateManager {
             public void onCompleted(DepartmentResult departmentResult) {
                 if (departmentResult != null) {
                     //qchat组织架构缓存
-                    DataUtils.getInstance(CommonConfig.globalContext).putPreferences(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    DataUtils.getInstance(CommonConfig.globalContext).putPreferences(CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + Constants.Preferences.qchat_org, JsonUtils.getGson().toJson(departmentResult));
 
                     String time = String.valueOf(System.currentTimeMillis());
 
                     IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                            .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                            .putObject(CurrentPreference.getInstance().getUserid()
                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                     + Constants.Preferences.buddytime, time)
                             .synchronize();
@@ -736,7 +736,7 @@ public class LoginComplateManager {
         final String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
 
         boolean show = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
@@ -757,7 +757,7 @@ public class LoginComplateManager {
                         if (!isHave) {
 
                             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                    .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                    .putObject(CurrentPreference.getInstance().getUserid()
                                             + QtalkNavicationService.getInstance().getXmppdomain()
                                             + CommonConfig.isDebug
                                             + MD5.hex(navurl)
@@ -785,14 +785,14 @@ public class LoginComplateManager {
 //        long start = System.currentTimeMillis();
 
         String timeId = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
                         + "lastwwuuid");
 //        long lastMessageTime = IMDatabaseManager.getInstance().getLastestMessageTime();
         String timeStr = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
@@ -803,7 +803,7 @@ public class LoginComplateManager {
             public void onCompleted(WorkWorldNoticeHistoryResponse workWorldNoticeHistoryResponse) {
 
                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                        .removeObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        .removeObject(CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)
@@ -811,7 +811,7 @@ public class LoginComplateManager {
                         .synchronize();
 
                 IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                        .removeObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                        .removeObject(CurrentPreference.getInstance().getUserid()
                                 + QtalkNavicationService.getInstance().getXmppdomain()
                                 + CommonConfig.isDebug
                                 + MD5.hex(navurl)

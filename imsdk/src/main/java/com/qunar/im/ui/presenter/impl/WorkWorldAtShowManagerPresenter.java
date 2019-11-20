@@ -2,7 +2,6 @@ package com.qunar.im.ui.presenter.impl;
 
 import com.qunar.im.base.module.WorkWorldAtShowItem;
 import com.qunar.im.base.module.WorkWorldAtShowResponse;
-import com.qunar.im.base.module.WorkWorldMyReply;
 import com.qunar.im.base.module.WorkWorldNoticeItem;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;

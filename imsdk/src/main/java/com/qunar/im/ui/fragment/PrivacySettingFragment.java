@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IChangeBuddyPrivacySetting;
 import com.qunar.im.ui.presenter.impl.BuddyPrivacySettingPresenter;
 import com.qunar.im.ui.R;
@@ -69,7 +70,7 @@ public class PrivacySettingFragment extends BaseFragment implements View.OnClick
     public void onStart()
     {
         super.onStart();
-        presenter.getMode(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
+        presenter.getMode(CurrentPreference.getInstance().getPreferenceUserId());
     }
 
 

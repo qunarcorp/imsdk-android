@@ -8,8 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -455,7 +455,7 @@ public class VideoPlayActivity extends AppCompatActivity {
         fragment.startActivity(intent);
     }
 
-    public static void start(android.support.v4.app.Fragment fragment) {
+    public static void start(androidx.fragment.app.Fragment fragment) {
         Intent intent = new Intent(fragment.getContext(), VideoPlayActivity.class);
         fragment.startActivity(intent);
 

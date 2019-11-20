@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.module.RobotConversation;
 import com.qunar.im.base.util.ChatTextHelper;
@@ -74,7 +75,7 @@ public class RobotConvAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        int fontSizeMode = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getFontSizeMode();
+        int fontSizeMode = CurrentPreference.getInstance().getFontSizeMode();
         float text1FontSize=context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_large);
         float textViewTimeFontSize=context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_smaller);
         float text2FontSize=context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_small);

@@ -7,7 +7,6 @@ import com.qunar.im.base.module.Nick;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.fragment.WorkWorldFragment;
-import com.qunar.im.ui.presenter.impl.WorkWorldManagerPresenter;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 import com.qunar.im.utils.ConnectionUtil;

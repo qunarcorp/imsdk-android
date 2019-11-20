@@ -17,7 +17,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 import java.io.File;
 

@@ -1,12 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-//    buildToolsVersion '25.0.0'
+    compileSdkVersion project.compileSdkVersion as int
     defaultConfig {
         applicationId "sdk.im.qunar.com.qtalksdkdemo"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion project.minSdkVersion as int
+        targetSdkVersion project.targetSdkVersion as int
         versionCode 206
         versionName "8.36"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -110,16 +109,8 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile ('com.android.support.constraint:constraint-layout:1.0.2'){
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
-    testCompile 'junit:junit:4.12'
-
-    implementation project(':imsdk')//implementation 'com.startalk.im:sdk-im:3.0.6'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    implementation project(':imsdk')//implementation 'com.startalk.im:sdk-im:3.0.7'
 }

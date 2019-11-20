@@ -8,7 +8,6 @@ import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.ui.activity.NavConfigActivity;
 import com.qunar.im.ui.entity.NavConfigInfo;
 
 import java.util.ArrayList;

@@ -10,20 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.gson.reflect.TypeToken;
-import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.DomainResult;
 import com.qunar.im.base.protocol.LoginAPI;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
-import com.qunar.im.base.util.DataUtils;
-import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
-import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.entity.NavConfigInfo;
-import com.qunar.im.ui.sdk.QIMSdk;
-import com.qunar.im.ui.util.NavConfigUtils;
 import com.qunar.im.ui.view.QtNewActionBar;
 
 import java.util.ArrayList;

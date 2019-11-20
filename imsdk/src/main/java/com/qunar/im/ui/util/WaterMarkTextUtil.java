@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,7 +22,7 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 
 public class WaterMarkTextUtil {
@@ -185,7 +185,7 @@ public class WaterMarkTextUtil {
             canvas.rotate(-rotate);
             canvas.drawText(gText,0,0,mTextPaint);
             /**保存画布*/
-            canvas.save(Canvas.ALL_SAVE_FLAG);
+            canvas.save();
             canvas.restore();
             //生成平铺的bitmapDrawable
             BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(), bitmap);

@@ -10,6 +10,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 
@@ -35,8 +36,8 @@ public class QTalkProjectType extends ReactContextBaseJavaModule {
             WritableNativeMap map = new WritableNativeMap();
 
             map.putBoolean("isQTalk", CommonConfig.isQtalk);
-            map.putString("domain", com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
-            map.putString("fullname", com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserName());
+            map.putString("domain", CurrentPreference.getInstance().getPreferenceUserId());
+            map.putString("fullname", CurrentPreference.getInstance().getUserName());
             String qckey = Login.getCKey();
             map.putString("c_key", qckey);
             // qchat
@@ -52,8 +53,8 @@ public class QTalkProjectType extends ReactContextBaseJavaModule {
             map.putBoolean("isShowWorkWorld", IMDatabaseManager.getInstance().SelectWorkWorldPremissions());
             Logger.i("获取发现："
                     + " isQTalk=" + CommonConfig.isQtalk
-                    + " domain=" + com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId()
-                    + " fullname=" + com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserName()
+                    + " domain=" + CurrentPreference.getInstance().getPreferenceUserId()
+                    + " fullname=" + CurrentPreference.getInstance().getUserName()
                     + " isSupplier=" + isMerchant
                     + " showOA=" + QtalkNavicationService.getInstance().getNavConfigResult().imConfig.showOA);
 

@@ -1,6 +1,6 @@
 package com.qunar.im.ui.view.baseView.processor;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;

@@ -6,6 +6,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.BuddyRequest;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IAnswerBuddyPresenter;
 import com.qunar.im.ui.presenter.IBuddyPresenter;
 import com.qunar.im.ui.presenter.IFriendsManagePresenter;
@@ -161,9 +162,9 @@ public class BuddyPresenter implements IFriendsManagePresenter, IBuddyPresenter,
 //        IMLogic.instance().requestFriends(QtalkStringUtils.userId2Jid(mBuddyView.getTargetId())
 //                , type, type == 1 ? mBuddyView.getRequestReason() : type == 2 ? mBuddyView.getAnswerForQuestion() : "");
         if(type!=2){
-            ConnectionUtil.getInstance().verifyFriend(mBuddyView.getTargetId(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId());
+            ConnectionUtil.getInstance().verifyFriend(mBuddyView.getTargetId(), CurrentPreference.getInstance().getPreferenceUserId());
         }else{
-            ConnectionUtil.getInstance().verifyFriend(mBuddyView.getTargetId(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId(),mBuddyView.getAnswerForQuestion());
+            ConnectionUtil.getInstance().verifyFriend(mBuddyView.getTargetId(), CurrentPreference.getInstance().getPreferenceUserId(),mBuddyView.getAnswerForQuestion());
         }
 
         if (type == 1) {

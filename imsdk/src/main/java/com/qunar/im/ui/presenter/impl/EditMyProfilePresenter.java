@@ -4,9 +4,7 @@ import android.text.TextUtils;
 import android.util.LruCache;
 
 import com.orhanobut.logger.Logger;
-import com.qunar.im.base.jsonbean.GetMoodResult;
 import com.qunar.im.base.jsonbean.RemoteConfig;
-import com.qunar.im.base.jsonbean.SetMoodResult;
 import com.qunar.im.base.jsonbean.SetVCardResult;
 import com.qunar.im.ui.presenter.IEditMyProfilePresenter;
 import com.qunar.im.ui.presenter.views.IMyProfileView;
@@ -16,14 +14,12 @@ import com.qunar.im.base.protocol.VCardAPI;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.core.manager.IMDatabaseManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 

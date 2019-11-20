@@ -12,7 +12,7 @@ package com.qunar.im.rtc.webrtc.util;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.orhanobut.logger.Logger;

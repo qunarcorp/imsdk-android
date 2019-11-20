@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.qunar.im.ui.presenter.IProfilePresenter;
 import com.qunar.im.ui.presenter.impl.ProfilePresenter;
 import com.qunar.im.ui.presenter.views.IChangeFontSizeView;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ResourceUtils;
 import com.qunar.im.ui.view.QtNewActionBar;
