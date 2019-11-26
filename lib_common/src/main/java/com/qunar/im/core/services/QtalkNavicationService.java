@@ -313,12 +313,18 @@ public class QtalkNavicationService {
         Logger.i("初始化导航当前URL:" + navurl);
         if (withCheck /*|| currentTime - navConfigUpdateTime > 2 * 60 * 60 * 10001*/ || this.isDebugEnvironment()) {
 
-            final String navConfigUrl = TextUtils.isEmpty(navurl) ? this.getNavicationUrl() : navurl;
-
-            Logger.i("初始化导航重新获取URL:" + navConfigUrl);
+            String navConfigUrl = TextUtils.isEmpty(navurl) ? this.getNavicationUrl() : navurl;
             if(TextUtils.isEmpty(navConfigUrl) || !navConfigUrl.startsWith("http")){
                 return;
+            }else if(!navConfigUrl.contains("nauth=")){
+                if(navConfigUrl.indexOf("?") == -1){
+                    navConfigUrl += "?nauth=true";
+                }else {
+                    navConfigUrl += "&nauth=true";
+                }
             }
+
+            Logger.i("初始化导航重新获取URL:" + navConfigUrl);
             getServerConfig(navConfigUrl, new ProtocolCallback.UnitCallback<NavConfigResult>() {
                 @Override
                 public void onCompleted(final NavConfigResult navConfigResult) {
