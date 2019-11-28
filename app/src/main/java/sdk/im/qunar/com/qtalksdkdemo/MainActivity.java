@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void goToChat(View view){
-        QIMSdk.getInstance().goToChatConv(this,"hubo.hu@qunar.com",0);
+        QIMSdk.getInstance().goToChatConv(this,"jid",0);
     }
 
     /**
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void goToGroup(View view){
-        QIMSdk.getInstance().goToGroupConv(this,"a9e35fe11afc4578a54bb133055042d6@conference.qunar.com",1);
+        QIMSdk.getInstance().goToGroupConv(this,"groupid",1);
     }
 
     public void startMainActivity(View view) {
