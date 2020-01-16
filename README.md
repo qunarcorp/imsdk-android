@@ -7,7 +7,7 @@ Based on Startalk server and client-side, users can build their own domain,
 Sign up an account, create new domains, add users, download client app, and configure navigation for domain,
 After the 5 steps above, you own strong IM abilities.
 
-Download client app[Download](https://im.qunar.com/new/#/download)
+Download client app[Download](https://i.startalk.im/home/#/download)
 
 - Android
 
