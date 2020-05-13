@@ -16,11 +16,12 @@ buildscript {
 
 allprojects {
     repositories {
-        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        maven { url 'https://dl.google.com/dl/android/maven2' }
         maven {
-            url "https://raw.githubusercontent.com/froyomu/im/master"
+            url "https://jitpack.io"
         }
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url "https://maven.google.com" }
+        maven { url 'https://dl.google.com/dl/android/maven2' }
         maven {
             url "http://developer.huawei.com/repo/"
         }
@@ -28,7 +29,7 @@ allprojects {
             url "http://jcenter.bintray.com/"
         }
         maven {
-            url "https://jitpack.io"
+            url "https://raw.githubusercontent.com/froyomu/im/master"
         }
         google()
         jcenter()
