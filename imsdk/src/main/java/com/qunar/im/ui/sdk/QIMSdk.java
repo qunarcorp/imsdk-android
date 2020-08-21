@@ -295,7 +295,16 @@ public class QIMSdk implements IMNotificaitonCenter.NotificationCenterDelegate {
             }
             return;
         }
-        ConnectionUtil.getInstance().pbLogin(uid,password,true);
+        switch (QtalkNavicationService.getInstance().getLoginType()){
+            case SMSLogin:
+                break;
+            case PasswordLogin:
+                ConnectionUtil.getInstance().pbLogin(uid,password,true);
+            case NewPasswordLogin:
+                ConnectionUtil.getInstance().pbLoginNew(uid,password);
+                break;
+
+        }
     }
 
     /**
