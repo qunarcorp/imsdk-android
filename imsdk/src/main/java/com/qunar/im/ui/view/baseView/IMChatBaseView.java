@@ -28,6 +28,7 @@ import com.qunar.im.base.util.AESTools;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.Utils;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
@@ -185,7 +186,7 @@ public class IMChatBaseView extends RelativeLayout implements IMessageItem {
     }
 
     public void initFontSize() {
-        switch (com.qunar.im.protobuf.common.CurrentPreference.getInstance().getFontSizeMode()) {
+        switch (CurrentPreference.getInstance().getFontSizeMode()) {
             case 1:
                 mLeftNickName.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         context.getResources().

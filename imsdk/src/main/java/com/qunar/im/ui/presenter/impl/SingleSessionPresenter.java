@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.Constants;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
@@ -34,11 +35,8 @@ import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
-import com.qunar.im.ui.R;
 import com.qunar.im.ui.presenter.ICloudRecordPresenter;
 import com.qunar.im.ui.presenter.IShakeMessagePresenter;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import org.json.JSONArray;
@@ -242,7 +240,7 @@ public class SingleSessionPresenter extends ChatPresenter implements ICloudRecor
         transferConsult.u = chatView.getRealJid();
         transferConsult.r = chatView.getInputMsg();
         transferConsult.d = QtalkNavicationService.getInstance().getXmppdomain();
-        transferConsult.f = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid();
+        transferConsult.f = CurrentPreference.getInstance().getUserid();
         transferConsult.rt = QtalkStringUtils.parseLocalpart(chatView.getTransferId());
         transferConsult.toId = toServer.getToID();
         transferConsult.retId = UUID.randomUUID().toString();

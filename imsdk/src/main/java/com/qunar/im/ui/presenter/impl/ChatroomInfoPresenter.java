@@ -9,7 +9,7 @@ import com.qunar.im.base.module.ChatRoom;
 import com.qunar.im.base.module.ChatRoomMember;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.Nick;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IChatroomInfoPresenter;
 import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.ui.presenter.views.IChatRoomInfoView;

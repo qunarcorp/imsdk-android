@@ -1,5 +1,6 @@
 package com.qunar.im.ui.presenter.impl;
 
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.ui.presenter.IChatMemberPresenter;
@@ -43,7 +44,7 @@ public class ChatMemberPresenter implements IChatMemberPresenter {
         for (; i < memberList.size(); i++) {
             GroupMember member = memberList.get(i);
             if (member.getMemberId().equals(
-                    QtalkStringUtils.userId2Jid(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId()))) {
+                    QtalkStringUtils.userId2Jid(CurrentPreference.getInstance().getPreferenceUserId()))) {
                 myPower = Integer.parseInt(member.getAffiliation());
             }
             if (Integer.parseInt(member.getAffiliation()) > GroupMember.ADMIN) {

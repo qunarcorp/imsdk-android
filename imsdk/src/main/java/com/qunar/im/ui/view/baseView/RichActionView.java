@@ -3,7 +3,7 @@ package com.qunar.im.ui.view.baseView;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;

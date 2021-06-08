@@ -2,7 +2,7 @@ package com.qunar.im.ui.view.baseView.processor;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +14,7 @@ import com.qunar.im.base.util.BinaryUtil;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.view.baseView.AAShoukView;

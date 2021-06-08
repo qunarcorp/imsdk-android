@@ -11,7 +11,7 @@ import com.qunar.im.base.util.AccountSwitchUtils;
 import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 
 import java.util.List;

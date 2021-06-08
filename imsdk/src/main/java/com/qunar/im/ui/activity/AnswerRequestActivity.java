@@ -25,7 +25,7 @@ import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.graphics.BitmapHelper;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.QtNewActionBar;
 

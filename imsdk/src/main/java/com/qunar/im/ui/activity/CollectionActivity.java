@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.qunar.im.base.module.MultiItemEntity;
@@ -13,7 +13,7 @@ import com.qunar.im.ui.presenter.impl.CollectionPresenter;
 import com.qunar.im.ui.presenter.views.ICollectionPresenter;
 import com.qunar.im.ui.presenter.views.ICollectionView;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.CollectionAdapter;
 

@@ -33,7 +33,7 @@ import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.base.util.IMUserDefaults;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.AccountAdapter;

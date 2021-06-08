@@ -52,12 +52,11 @@ import com.qunar.im.other.CacheDataType;
 import com.qunar.im.other.IQTalkLoginDelegate;
 import com.qunar.im.other.QtalkSDK;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.protobuf.entity.XMPPJID;
-import com.qunar.im.protobuf.stream.PbAssemblyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -2314,9 +2313,7 @@ public class ConnectionUtil {
         intent.setClassName(CommonConfig.globalContext, "com.qunar.im.ui.activity.QunarWebActvity");
         //群视频使用webview加载，必须是https的，所以兼容导航是http的情况，强制转https
         String videoUrl = QtalkNavicationService.getInstance().getVideoHost();
-        if(!videoUrl.startsWith("https://")) {
-            videoUrl.replace("http", "https");
-        }
+
         StringBuilder url = new StringBuilder(videoUrl + "conference#/login");
         Map<String,String> params = new HashMap<>();
         params.put("userId",CurrentPreference.getInstance().getPreferenceUserId());

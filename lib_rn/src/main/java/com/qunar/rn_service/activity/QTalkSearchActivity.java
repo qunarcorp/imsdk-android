@@ -2,7 +2,7 @@ package com.qunar.rn_service.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 
 import com.facebook.react.ReactInstanceManager;
@@ -11,7 +11,7 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.qunar.im.base.module.SearchKeyData;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.rn_service.rnplugins.QimRNBModule;
 
 import java.util.ArrayList;

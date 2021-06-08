@@ -1,9 +1,10 @@
 package com.qunar.im.ui.view.faceGridView;
 
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
+
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 

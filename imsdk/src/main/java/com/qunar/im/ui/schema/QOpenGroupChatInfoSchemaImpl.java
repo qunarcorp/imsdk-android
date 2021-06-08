@@ -3,7 +3,7 @@ package com.qunar.im.ui.schema;
 import android.content.Intent;
 
 import com.qunar.im.base.util.Constants;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.util.ReflectUtil;
 import com.qunar.im.utils.ConnectionUtil;

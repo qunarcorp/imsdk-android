@@ -1,18 +1,11 @@
 package com.qunar.im.ui.activity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
-import com.qunar.im.base.module.Nick;
-import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.fragment.WorkWorldFragment;
 import com.qunar.im.ui.fragment.WorkWorldNoticeFragment;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
-import com.qunar.im.utils.ConnectionUtil;
-
-import static com.qunar.im.ui.fragment.WorkWorldFragment.WorkWordJID;
 
 public class WorkWorldNoticeActivityV2 extends SwipeBackActivity {
     protected QtNewActionBar qtNewActionBar;//头部导航

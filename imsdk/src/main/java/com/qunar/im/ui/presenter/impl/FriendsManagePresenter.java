@@ -2,15 +2,11 @@ package com.qunar.im.ui.presenter.impl;
 
 import android.text.TextUtils;
 
-import com.qunar.im.base.jsonbean.IncrementUsersResult;
 import com.qunar.im.base.module.DepartmentItem;
 import com.qunar.im.ui.presenter.IFriendsManagePresenter;
 import com.qunar.im.ui.presenter.views.IFriendsManageView;
-import com.qunar.im.base.protocol.Protocol;
-import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.InternDatas;
-import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.common.CommonConfig;
 

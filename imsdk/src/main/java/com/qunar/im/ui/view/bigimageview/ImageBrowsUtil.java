@@ -1,20 +1,12 @@
 package com.qunar.im.ui.view.bigimageview;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.zxing.Result;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.IMMessage;
@@ -22,7 +14,6 @@ import com.qunar.im.base.module.ImageItemWorkWorldItem;
 import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.presenter.views.IBrowsingConversationImageView;
 import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.util.easyphoto.easyphotos.EasyPhotos;
@@ -39,10 +30,8 @@ import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

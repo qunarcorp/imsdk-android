@@ -4,10 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -111,7 +112,7 @@ public class WorkWorldActivity extends SwipeBackActivity implements WorkWorldVie
             bottomSheetDialog.setContentView(view);
 //
             //给布局设置透明背景色
-            bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+            bottomSheetDialog.getDelegate().findViewById(com.google.android.material.R.id.design_bottom_sheet)
                     .setBackgroundColor(WorkWorldActivity.this.getResources().getColor(android.R.color.transparent));
 
 

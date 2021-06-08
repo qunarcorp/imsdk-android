@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-
 android {
     compileSdkVersion project.compileSdkVersion as int
-//    buildToolsVersion '26.0.02'
 
     defaultConfig {
         minSdkVersion project.minSdkVersion as int
@@ -37,11 +34,10 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
-    api 'com.startalk.im:sdk-base:3.0.6'
-    api 'com.startalk.im:pay:15.6.5'
 
-    api 'com.android.support:appcompat-v7:27.1.0'
-    api 'com.android.support:support-v4:27.1.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.startalk.im:sdk-base:3.0.7'
+    api 'com.startalk.im:pay:15.6.5'
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
 }
-//apply from: 'release.gradle'

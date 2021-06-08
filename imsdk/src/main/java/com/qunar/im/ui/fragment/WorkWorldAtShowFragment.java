@@ -3,16 +3,16 @@ package com.qunar.im.ui.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.MultiItemEntity;
@@ -22,11 +22,8 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.WorkWorldDetailsActivity;
 import com.qunar.im.ui.adapter.RecycleViewDivider;
 import com.qunar.im.ui.adapter.WorkWorldAtShowAdapter;
-import com.qunar.im.ui.adapter.WorkWorldDetailsAdapter;
 import com.qunar.im.ui.presenter.WorkWorldAtShowPresenter;
-import com.qunar.im.ui.presenter.WorkWorldNoticePresenter;
 import com.qunar.im.ui.presenter.impl.WorkWorldAtShowManagerPresenter;
-import com.qunar.im.ui.presenter.impl.WorkWorldNoticeManagerPresenter;
 import com.qunar.im.ui.presenter.views.WorkWorldAtShowView;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
 

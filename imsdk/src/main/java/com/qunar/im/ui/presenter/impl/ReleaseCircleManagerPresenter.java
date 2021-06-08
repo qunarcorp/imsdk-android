@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
 import com.orhanobut.logger.Logger;
@@ -127,7 +128,7 @@ public class ReleaseCircleManagerPresenter implements ReleaseCirclePresenter {
 
         boolean needTran = false;
         String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + "videoTime");

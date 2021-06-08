@@ -56,7 +56,7 @@ import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.utils.QtalkStringUtils;

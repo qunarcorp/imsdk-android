@@ -14,13 +14,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.RequiresApi;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -73,7 +74,7 @@ import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.ReleaseCircleGridAdapter;
 import com.qunar.im.ui.adapter.WorkWorldDetailsAdapter;
@@ -584,7 +585,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
             bottomSheetDialog.setContentView(view);
 //
             //给布局设置透明背景色
-            bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+            bottomSheetDialog.getDelegate().findViewById(com.google.android.material.R.id.design_bottom_sheet)
                     .setBackgroundColor(WorkWorldDetailsActivity.this.getResources().getColor(android.R.color.transparent));
 
 
@@ -1025,7 +1026,7 @@ public class WorkWorldDetailsActivity extends SwipeBackActivity implements AtMan
                 bottomSheetDialog.setContentView(view);
 //
                 //给布局设置透明背景色
-                bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet)
+                bottomSheetDialog.getDelegate().findViewById(com.google.android.material.R.id.design_bottom_sheet)
                         .setBackgroundColor(WorkWorldDetailsActivity.this.getResources().getColor(android.R.color.transparent));
 
 

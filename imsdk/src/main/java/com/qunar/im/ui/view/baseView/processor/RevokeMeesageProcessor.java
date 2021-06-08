@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.adapter.ChatViewAdapter;
 import com.qunar.im.ui.view.baseView.IMessageItem;
 

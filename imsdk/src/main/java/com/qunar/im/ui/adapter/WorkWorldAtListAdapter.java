@@ -3,25 +3,21 @@ package com.qunar.im.ui.adapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.ui.view.IconView;
-import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

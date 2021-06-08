@@ -91,6 +91,7 @@ import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.base.view.faceGridView.EmoticionMap;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMPayManager;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -103,7 +104,6 @@ import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.permission.PermissionUtils;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.thirdpush.core.QPushClient;
@@ -1027,7 +1027,6 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
                 //todo:进行menu操作
             }
         });
-        //这个监听目前没研究做什么
         pbChatViewAdapter.setGravatarHandler(new ChatViewAdapter.GravatarHandler() {
             @Override
             public void requestGravatarEvent(String jid, final String imageSrc, final SimpleDraweeView view) {
@@ -3327,7 +3326,7 @@ public class PbChatActivity extends SwipeBackActivity implements AtManager.AtTex
 
 
                                     String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                                            com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                            CurrentPreference.getInstance().getUserid()
                                                     + QtalkNavicationService.getInstance().getXmppdomain()
                                                     + CommonConfig.isDebug
                                                     + "videoMaxTime");

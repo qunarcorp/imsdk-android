@@ -15,7 +15,7 @@ import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.protobuf.entity.XMPPJID;

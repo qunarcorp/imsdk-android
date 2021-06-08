@@ -415,7 +415,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
 
     public void onInfo(int what, int extra) {
         Log.d(TAG, "onInfo what - " + what + " extra - " + extra);
-        if(extra!=0){
+        if(extra!=0&&extra<361){
             setTextureViewRotation(extra);
         }
         if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {

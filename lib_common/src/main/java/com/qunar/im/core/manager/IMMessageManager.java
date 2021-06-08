@@ -1,6 +1,6 @@
 package com.qunar.im.core.manager;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
@@ -15,6 +15,7 @@ import com.qunar.im.base.util.DataUtils;
 import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.enums.MessageState;
 import com.qunar.im.core.services.QtalkHttpService;
 import com.qunar.im.core.services.QtalkNavicationService;
@@ -63,21 +64,21 @@ public class IMMessageManager {
         long start = System.currentTimeMillis();
         String navurl = DataUtils.getInstance(CommonConfig.globalContext).getPreferences(QtalkNavicationService.NAV_CONFIG_CURRENT_URL, "");
         String timeId = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
                         + "lastMessageId");
 //        long lastMessageTime = IMDatabaseManager.getInstance().getLastestMessageTime();
         String timeStr = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
                         + "lastMessageTime");
 
         latestGroupReadMarkTime = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + MD5.hex(navurl)
@@ -132,7 +133,7 @@ public class IMMessageManager {
 
         if (chatRequest && groupRequest && headlineRequest && chatStateRequest) {
             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                    .removeObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    .removeObject(CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + CommonConfig.isDebug
                             + MD5.hex(navurl)
@@ -140,7 +141,7 @@ public class IMMessageManager {
                     .synchronize();
 
             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                    .removeObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    .removeObject(CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + CommonConfig.isDebug
                             + MD5.hex(navurl)
@@ -150,7 +151,7 @@ public class IMMessageManager {
         }
         if(groupReadMarkRequest){
             IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                    .removeObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    .removeObject(CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + CommonConfig.isDebug
                             + MD5.hex(navurl)
@@ -348,7 +349,7 @@ public class IMMessageManager {
                         Logger.i("json群聊接口返回的数据size:" + mucJson.getData().size());
                         lastMessageTime = mucJson.getData().get(mucJson.getData().size() - 1).getT();
                         inputObject.put("time", lastMessageTime);
-                        boolean success = IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(mucJson.getData(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId(),false);
+                        boolean success = IMDatabaseManager.getInstance().bulkInsertGroupHistoryFroJson(mucJson.getData(), CurrentPreference.getInstance().getPreferenceUserId(),false);
                         if (groupRequest) {
                             groupRequest = success;
                         }
@@ -495,7 +496,7 @@ public class IMMessageManager {
                         Logger.i("json系统消息接口返回的数据size:" + chatJson.getData().size());
                         lastMessageTime = chatJson.getData().get(chatJson.getData().size() - 1).getT();
                         inputObject.put("time", lastMessageTime);
-                        boolean success = IMDatabaseManager.getInstance().bulkInsertChatHistoryFroJson(chatJson.getData(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId(), false);
+                        boolean success = IMDatabaseManager.getInstance().bulkInsertChatHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId(), false);
                         if (headlineRequest) {
                             headlineRequest = success;
                         }
@@ -668,7 +669,7 @@ public class IMMessageManager {
                         lastMessageTime = chatJson.getData().get(chatJson.getData().size() - 1).getT();
 //                        stateTime = chatJson.getData().get(chatJson.getData().size() - 1).getMessage().getMsec_times();
                         inputObject.put("time", lastMessageTime);
-                        boolean success = IMDatabaseManager.getInstance().bulkInsertChatHistoryFroJson(chatJson.getData(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId(), false);
+                        boolean success = IMDatabaseManager.getInstance().bulkInsertChatHistoryFroJson(chatJson.getData(), CurrentPreference.getInstance().getPreferenceUserId(), false);
                         if (chatRequest) {
                             chatRequest = success;
                         }

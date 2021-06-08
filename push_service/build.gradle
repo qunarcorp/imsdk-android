@@ -31,12 +31,10 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api project(':lib_common')
     api 'de.greenrobot:eventbus:2.2.1'
-    api 'com.huawei.android.hms:push:2.6.0.301'
-    api 'com.meizu.flyme.internet:push-internal:3.8.4'
-    implementation ('com.google.firebase:firebase-messaging:18.0.0') {
+    implementation 'com.huawei.android.hms:push:2.6.0.301'
+    implementation 'com.huawei.android.hms:base:2.6.0.301'
+    implementation 'com.meizu.flyme.internet:push-internal:3.8.4'
+    implementation ('com.google.firebase:firebase-messaging:20.0.0') {
         exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.google.firebase', module: 'firebase-iid'
     }
-    implementation 'com.google.firebase:firebase-iid:18.0.0'
 }
-//apply from: 'release.gradle'

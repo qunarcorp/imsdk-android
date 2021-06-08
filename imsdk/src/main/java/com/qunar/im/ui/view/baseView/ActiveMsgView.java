@@ -15,7 +15,7 @@ import com.qunar.im.ui.util.FacebookImageUtil;
 import com.qunar.im.base.jsonbean.ActivityMessageEntity;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.QunarWebActvity;
 

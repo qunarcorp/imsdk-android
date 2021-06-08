@@ -3,8 +3,8 @@ package com.qunar.im.ui.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.qunar.im.base.module.WorkWorldItem;

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.jsonbean.GetDepartmentResult;
+import com.qunar.im.ui.presenter.views.IOrganizationView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;

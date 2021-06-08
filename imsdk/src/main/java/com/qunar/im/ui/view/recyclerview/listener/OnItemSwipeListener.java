@@ -1,7 +1,7 @@
 package com.qunar.im.ui.view.recyclerview.listener;
 
 import android.graphics.Canvas;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by luoxw on 2016/6/23.

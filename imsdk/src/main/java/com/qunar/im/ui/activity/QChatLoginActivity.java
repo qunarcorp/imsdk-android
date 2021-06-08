@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.ui.presenter.ILoginPresenter;
@@ -69,8 +70,8 @@ public class QChatLoginActivity extends IMBaseActivity implements
         tb_padding = Utils.dipToPixels(QChatLoginActivity.this, 10);
         bindViews();
         initViews();
-        if (!TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt())) {
-            com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt("");
+        if (!TextUtils.isEmpty(CurrentPreference.getInstance().getQvt())) {
+            CurrentPreference.getInstance().setQvt("");
         }
 
         go2WebLogin();
@@ -227,9 +228,9 @@ public class QChatLoginActivity extends IMBaseActivity implements
                     String jsonStr = bundle.getExtras().getString(Constants.BundleKey.WEB_LOGIN_RESULT);
                     if (!TextUtils.isEmpty(jsonStr)) {
                         DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.qchat_qvt, jsonStr);
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt(jsonStr);
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setRememberMe(true);
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setAutoLogin(true);
+                        CurrentPreference.getInstance().setQvt(jsonStr);
+                        CurrentPreference.getInstance().setRememberMe(true);
+                        CurrentPreference.getInstance().setAutoLogin(true);
                         loginPresenter.login();
                     }
                 }
@@ -251,7 +252,7 @@ public class QChatLoginActivity extends IMBaseActivity implements
         Intent intent = new Intent(QChatLoginActivity.this, QunarWebActvity.class);
         intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.UC_LOGIN);
         intent.putExtra(WebMsgActivity.IS_HIDE_BAR, !CommonConfig.isDebug);
-        intent.setData(Uri.parse("https://user.qunar.com/mobile/login.jsp?ret=" +
+        intent.setData(Uri.parse("" +
                 Constants.BundleKey.WEB_LOGIN_RESULT + "&loginType=mobile&onlyLogin=true"));
         startActivityForResult(intent, WEB_LOGIN);
     }
@@ -318,8 +319,8 @@ public class QChatLoginActivity extends IMBaseActivity implements
         }
 //        super.presenter.getMyCapability();
 
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setRememberMe(true);
-        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setAutoLogin(true);
+        CurrentPreference.getInstance().setRememberMe(true);
+        CurrentPreference.getInstance().setAutoLogin(true);
 
         getHandler().post(new Runnable() {
             @Override

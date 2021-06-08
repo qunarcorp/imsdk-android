@@ -14,7 +14,7 @@ import com.qunar.im.ui.presenter.IProfilePresenter;
 import com.qunar.im.ui.presenter.impl.ProfilePresenter;
 import com.qunar.im.ui.presenter.views.IProfileView;
 import com.qunar.im.base.util.MediaUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.services.PushServiceUtils;

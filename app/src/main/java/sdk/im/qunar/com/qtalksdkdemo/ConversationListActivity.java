@@ -1,8 +1,9 @@
 package sdk.im.qunar.com.qtalksdkdemo;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.qunar.im.ui.fragment.ConversationFragment;
 

@@ -2,7 +2,6 @@ package com.qunar.im.ui.view.baseView;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ResourceUtils;
 import com.qunar.im.ui.view.medias.play.PlayVoiceView;
@@ -88,7 +88,7 @@ public class ViewPool {
                         ((PlayVoiceView)v).onCreate();
                     }
                     else if (v instanceof TextView) {
-                        int fontSizeMode = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getFontSizeMode();
+                        int fontSizeMode = CurrentPreference.getInstance().getFontSizeMode();
                         float fontSize=context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_medium);
                         switch (fontSizeMode)
                         {

@@ -68,26 +68,20 @@ public class MainActivity extends Activity {
         if (!QIMSdk.getInstance().isConnected()){
             final ProgressDialog pd = ProgressDialog.show(this, "提示", "正在登录中。。。");
             if(QIMSdk.getInstance().isCanAutoLogin()){
-                QIMSdk.getInstance().autoLogin(new QIMSdk.LoginStatesListener() {
-                    @Override
-                    public void isScuess(boolean b, String s) {
-                        logcat_text.append(s);
-                        pd.dismiss();
-                        autoLoginButton.setText(s);
-                        toast(s);
-                    }
+                QIMSdk.getInstance().autoLogin((b, s) -> {
+                    logcat_text.append(s);
+                    pd.dismiss();
+                    autoLoginButton.setText(s);
+                    toast(s);
                 });
             }else {
                 final String uid = "";//用户名
                 final String password = "";//密码
-                QIMSdk.getInstance().login(uid, password, new QIMSdk.LoginStatesListener() {
-                    @Override
-                    public void isScuess(boolean b, String s) {
-                        logcat_text.append("Uid：" + uid + "\n" + "Password：" + password);
-                        pd.dismiss();
-                        autoLoginButton.setText(s);
-                        toast(s);
-                    }
+                QIMSdk.getInstance().login(uid, password, (b, s) -> {
+                    logcat_text.append("Uid：" + uid + "\n" + "Password：" + password);
+                    pd.dismiss();
+                    autoLoginButton.setText(s);
+                    toast(s);
                 });
             }
 
@@ -101,7 +95,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void goToChat(View view){
-        QIMSdk.getInstance().goToChatConv(this,"hubo.hu@qunar.com",0);
+        QIMSdk.getInstance().goToChatConv(this,"jid",0);
     }
 
     /**
@@ -109,7 +103,7 @@ public class MainActivity extends Activity {
      * @param view
      */
     public void goToGroup(View view){
-        QIMSdk.getInstance().goToGroupConv(this,"a9e35fe11afc4578a54bb133055042d6@conference.qunar.com",1);
+        QIMSdk.getInstance().goToGroupConv(this,"groupid",1);
     }
 
     public void startMainActivity(View view) {
@@ -126,11 +120,6 @@ public class MainActivity extends Activity {
     }
 
     private void toast(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        runOnUiThread(() -> Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show());
     }
 }

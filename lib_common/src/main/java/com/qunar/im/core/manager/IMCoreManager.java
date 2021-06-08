@@ -5,8 +5,7 @@ import android.content.Context;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.util.Constants;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.data.cache.IMUserCacheManager;
-import com.qunar.im.protobuf.common.ParamIsEmptyException;
+import com.qunar.im.cache.IMUserCacheManager;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.utils.StringUtils;
 import com.qunar.im.utils.DeviceInfoManager;
@@ -26,7 +25,7 @@ public class IMCoreManager {
         public static final String MyHeaderImageSrc = "kMyHeaderImageSrc";
     }
 
-    public void login(String userName, String password) throws IOException, ParamIsEmptyException {
+    public void login(String userName, String password) throws IOException {
         Logger.i("将登陆数据放入相对应内存中,username:"+userName+",password:"+password);
         DeviceInfoManager.getInstance().setUserName(userName.toLowerCase());
         IMUserCacheManager.getInstance().putConfig(Constants.Preferences.lastuserid, userName.toLowerCase());

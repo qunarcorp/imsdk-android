@@ -30,7 +30,6 @@ import com.qunar.im.ui.imagepicker.zoomview.PhotoViewAttacher;
 import com.qunar.im.ui.util.QRRouter;
 import com.qunar.im.ui.util.ShareUtil;
 import com.qunar.im.ui.view.CommonDialog;
-import com.qunar.im.ui.view.bigimageview.ImageBrowsUtil;
 import com.qunar.im.ui.view.bigimageview.tool.utility.image.DownloadPictureUtil;
 import com.qunar.im.ui.view.zxing.decode.DecodeBitmap;
 

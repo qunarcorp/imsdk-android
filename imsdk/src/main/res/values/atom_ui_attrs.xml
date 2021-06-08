@@ -437,4 +437,76 @@
         <attr name="fletPaddingBottom" format="reference|dimension" />
         <attr name="fletBackground" format="reference|color" />
     </declare-styleable>
+    <declare-styleable name="atom_imagecache_GenericDraweeView">
+
+        <!-- Fade duration in milliseconds. -->
+        <attr name="atom_imagecache_fadeDuration" format="integer"/>
+
+        <!-- Images -
+        Scale types must match values in ScaleType.fromString (ScalingUtils.java).
+        For drawables that should not be scaled, such as those with the android:tileMode
+        attribute set, use the value 'none'. -->
+
+        <!-- Aspect ratio (width / height) of the view, not necessarily of the images. -->
+        <attr name="atom_imagecache_viewAspectRatio" format="float"/>
+
+        <!-- A drawable or color to be be used as a placeholder. -->
+        <attr name="atom_imagecache_placeholderImage" format="reference"/>
+        <!-- Scale type of the placeholder image. Ignored if placeholderImage is not specified. -->
+        <attr name="atom_imagecache_placeholderImageScaleType" format="string"/>
+
+        <!-- A drawable to be be used as a retry image. -->
+        <attr name="atom_imagecache_retryImage" format="reference"/>
+        <!-- Scale type of the retry image. Ignored if retryImage is not specified. -->
+        <attr name="atom_imagecache_retryImageScaleType" format="string"/>
+
+        <!-- A drawable to be be used as a failure image. -->
+        <attr name="atom_imagecache_failureImage" format="reference"/>
+        <!-- Scale type of the failure image. Ignored if failureImage is not specified. -->
+        <attr name="atom_imagecache_failureImageScaleType" format="string"/>
+
+        <!-- A drawable to be be used as a progress bar. -->
+        <attr name="atom_imagecache_progressBarImage" format="reference"/>
+        <!-- Scale type of the progress bar. Ignored if progressBarImage is not specified. -->
+        <attr name="atom_imagecache_progressBarImageScaleType" format="string"/>
+        <!-- Progress bar Auto Rotate interval in milliseconds -->
+        <attr name="atom_imagecache_progressBarAutoRotateInterval" format="integer"/>
+
+        <!-- Scale type of the actual image. -->
+        <attr name="atom_imagecache_actualImageScaleType" format="string"/>
+
+        <!-- A drawable or color to be used as a background. -->
+        <attr name="atom_imagecache_backgroundImage" format="reference"/>
+
+        <!-- A drawable or color to be used as an overlay. -->
+        <attr name="atom_imagecache_overlayImage" format="reference"/>
+
+        <!-- A drawable or color to be used as a pressed-state-overlay -->
+        <attr name="atom_imagecache_pressedStateOverlayImage" format="reference"/>
+
+        <!-- Rounding params -
+        Declares attributes for rounding shape, mode and border. -->
+
+        <!-- Round as circle. -->
+        <attr name="atom_imagecache_roundAsCircle" format="boolean"/>
+        <!-- Rounded corner radius. Ignored if roundAsCircle is used. -->
+        <attr name="atom_imagecache_roundedCornerRadius" format="dimension"/>
+        <!-- Round the top-left corner. Ignored if roundAsCircle is used. -->
+        <attr name="atom_imagecache_roundTopLeft" format="boolean"/>
+        <!-- Round the top-right corner. Ignored if roundAsCircle is used. -->
+        <attr name="atom_imagecache_roundTopRight" format="boolean"/>
+        <!-- Round the bottom-right corner. Ignored if roundAsCircle is used. -->
+        <attr name="atom_imagecache_roundBottomRight" format="boolean"/>
+        <!-- Round the bottom-left corner. Ignored if roundAsCircle is used. -->
+        <attr name="atom_imagecache_roundBottomLeft" format="boolean"/>
+        <!-- Round by overlying color. -->
+        <attr name="atom_imagecache_roundWithOverlayColor" format="color"/>
+        <!-- Rounding border width-->
+        <attr name="atom_imagecache_roundingBorderWidth" format="dimension"/>
+        <!-- Rounding border color -->
+        <attr name="atom_imagecache_roundingBorderColor" format="color"/>
+        <!-- Rounding border padding -->
+        <attr name="atom_imagecache_roundingBorderPadding" format="dimension" />
+
+    </declare-styleable>
 </resources>

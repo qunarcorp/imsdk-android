@@ -1,6 +1,6 @@
 package com.qunar.im.ui.util.easyphoto.easyphotos.models.ad;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 

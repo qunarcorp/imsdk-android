@@ -31,7 +31,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.view.multilLevelTreeView.Node;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.InvitationAdapter;
 import com.qunar.im.ui.adapter.InviteToChatroomHorizonalListviewAdapter;

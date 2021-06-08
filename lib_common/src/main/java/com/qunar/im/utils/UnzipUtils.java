@@ -1,6 +1,6 @@
 package com.qunar.im.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.core.services.FeedBackServcie;

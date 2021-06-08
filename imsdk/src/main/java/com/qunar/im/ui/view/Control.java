@@ -1,12 +1,10 @@
 package com.qunar.im.ui.view;
 
 import android.app.Activity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 

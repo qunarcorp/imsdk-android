@@ -16,11 +16,11 @@ import com.qunar.im.base.module.UserConfigData;
 import com.qunar.im.base.structs.MessageStatus;
 import com.qunar.im.base.structs.PushSettinsStatus;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.other.CacheDataType;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.ui.presenter.IConversationsManagePresenter;
@@ -272,11 +272,11 @@ public class PbConversationManagePresenter implements IConversationsManagePresen
         if (message.getMsgType() != ProtoMessageOuterClass.MessageType.MessageTypeGroupNotify_VALUE) {
             if (System.currentTimeMillis() - lastMsgTime > 500
                     && message.getDirection() == IMMessage.DIRECTION_RECV) {
-                if (!com.qunar.im.protobuf.common.CurrentPreference.getInstance().isBack()) {
-                    if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isTurnOnMsgSound()) {
+                if (!CurrentPreference.getInstance().isBack()) {
+                    if (CurrentPreference.getInstance().isTurnOnMsgSound()) {
                         ringtone();
                     }
-                    if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isTurnOnMsgShock() ||
+                    if (CurrentPreference.getInstance().isTurnOnMsgShock() ||
                             message.getMsgType() == ProtoMessageOuterClass.MessageType.MessageTypeShock_VALUE) {
                         vibrator();
                     }
@@ -380,15 +380,15 @@ public class PbConversationManagePresenter implements IConversationsManagePresen
                 if (isAtMe(imMessage.getBody())) {
                     showAtMessage();
                 }
-                if (!TextUtils.isEmpty(imMessage.getRealfrom()) && !imMessage.getRealfrom().equals(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getPreferenceUserId())) {
+                if (!TextUtils.isEmpty(imMessage.getRealfrom()) && !imMessage.getRealfrom().equals(CurrentPreference.getInstance().getPreferenceUserId())) {
                     prompt(imMessage);
                 }
                 break;
             //收到登陆状态提醒
             case QtalkEvent.LOGIN_EVENT:
                 if (args[0].equals(LoginStatus.Login)) {
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
+                    CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
+                    CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
 
                     showRecentConvs();
 

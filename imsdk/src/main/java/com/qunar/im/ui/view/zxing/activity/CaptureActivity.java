@@ -38,7 +38,6 @@ import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.NavConfigActivity;
 import com.qunar.im.ui.activity.PictureSelectorActivity;
-import com.qunar.im.ui.activity.QTalkUserLoginActivity;
 import com.qunar.im.ui.imagepicker.ImagePicker;
 import com.qunar.im.base.module.ImageItem;
 import com.qunar.im.ui.imagepicker.ui.ImageGridActivity;

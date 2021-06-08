@@ -1,29 +1,21 @@
 package com.qunar.im.ui.activity;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.qunar.im.base.module.MultiItemEntity;
-import com.qunar.im.base.module.WorkWorldDetailsLabelData;
-import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.module.WorkWorldNoticeItem;
 import com.qunar.im.ui.presenter.WorkWorldNoticePresenter;
 import com.qunar.im.ui.presenter.impl.WorkWorldNoticeManagerPresenter;
 import com.qunar.im.ui.presenter.views.WorkWorldNoticeView;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.adapter.RecycleViewDivider;
-import com.qunar.im.ui.adapter.WorkWorldAdapter;
 import com.qunar.im.ui.adapter.WorkWorldDetailsAdapter;
-import com.qunar.im.ui.adapter.WorkWorldNoticeAdapter;
 import com.qunar.im.ui.view.QtNewActionBar;
 import com.qunar.im.ui.view.swipBackLayout.SwipeBackActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

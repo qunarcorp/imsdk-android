@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.IFriendsManagePresenter;
 import com.qunar.im.ui.presenter.impl.BuddyPresenter;
 import com.qunar.im.ui.presenter.views.IFriendsManageView;
@@ -172,12 +173,12 @@ public class BuddiesFragment extends BaseFragment implements IFriendsManageView 
         }else {
             headerView.changeRobotVisible(false);
         }
-        if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
+        if (CurrentPreference.getInstance().isMerchants()) {
             headerView.changeOrgVisible(true);
         }else if(CommonConfig.isQtalk){
             headerView.changeOrgVisible(QtalkNavicationService.getInstance().isShowOrganizational());
         }
-//        else if(!com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()&&
+//        else if(!CurrentPreference.getInstance().isMerchants()&&
 //                !CommonConfig.showQchatGroup){
 //            headerView.setLayoutParams(new AbsListView.
 //                    LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,1));

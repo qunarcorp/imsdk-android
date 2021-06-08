@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.qunar.im.base.util.Constants;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.util.ReflectUtil;

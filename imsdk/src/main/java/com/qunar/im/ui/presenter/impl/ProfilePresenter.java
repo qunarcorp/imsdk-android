@@ -7,7 +7,7 @@ import com.qunar.im.ui.presenter.views.IProfileView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.PushSettinsStatus;
 import com.qunar.im.core.manager.IMDatabaseManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 /**
  * Created by xinbo.wang on 2015/4/2.

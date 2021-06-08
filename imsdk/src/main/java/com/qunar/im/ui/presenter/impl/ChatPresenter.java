@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger;
 import com.qunar.im.base.module.VideoDataResponse;
 import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.FileProgressRequestBody;
 import com.qunar.im.other.CacheDataType;
 import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
@@ -37,7 +38,6 @@ import com.qunar.im.base.jsonbean.UploadImageResult;
 import com.qunar.im.base.jsonbean.VideoMessageResult;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.UserConfigData;
-import com.qunar.im.base.module.VideoDataResponse;
 import com.qunar.im.base.protocol.ProgressRequestListener;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.structs.MessageStatus;
@@ -52,21 +52,16 @@ import com.qunar.im.base.util.ChatTextHelper;
 import com.qunar.im.base.util.DataCenter;
 import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.FileUtils;
-import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.InternDatas;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.MessageUtils;
 import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.base.view.faceGridView.EmoticonEntity;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
-import com.qunar.im.core.services.FileProgressRequestBody;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.other.CacheDataType;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.ui.presenter.IAddEmojiconPresenter;
@@ -75,12 +70,6 @@ import com.qunar.im.ui.presenter.IChatingPresenter;
 import com.qunar.im.ui.presenter.ISnapPresenter;
 import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.ui.util.EmotionUtils;
-import com.qunar.im.ui.util.easyphoto.easyphotos.models.album.entity.Photo;
-import com.qunar.im.ui.util.easyphoto.easyphotos.utils.PhotoUtil;
-import com.qunar.im.ui.view.CommonDialog;
-import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.io.File;
@@ -680,7 +669,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
 
     private void videoCheckAndSend(IMMessage message, String file) {
         boolean userAble = IMUserDefaults.getStandardUserDefaults().getBooleanValue(CommonConfig.globalContext,
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                CurrentPreference.getInstance().getUserid()
                         + QtalkNavicationService.getInstance().getXmppdomain()
                         + CommonConfig.isDebug
                         + "videoUseAble", false);
@@ -735,7 +724,7 @@ public abstract class ChatPresenter implements IChatingPresenter, ISnapPresenter
             IMDatabaseManager.getInstance().InsertIMSessionList(message, false);
             boolean needTran = false;
             String time = IMUserDefaults.getStandardUserDefaults().getStringValue(CommonConfig.globalContext,
-                    com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                    CurrentPreference.getInstance().getUserid()
                             + QtalkNavicationService.getInstance().getXmppdomain()
                             + CommonConfig.isDebug
                             + "videoTime");

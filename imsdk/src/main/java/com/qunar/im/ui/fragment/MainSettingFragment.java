@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.IdRes;
+import androidx.annotation.IdRes;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.ILoginPresenter;
 import com.qunar.im.ui.presenter.IServiceStatePresenter;
 import com.qunar.im.ui.presenter.impl.LoginPresenter;
@@ -31,7 +32,6 @@ import com.qunar.im.ui.presenter.impl.ServiceStatePresenter;
 import com.qunar.im.ui.presenter.views.IServiceStateView;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.AboutActivity;
 import com.qunar.im.ui.activity.BugreportActivity;
@@ -387,7 +387,7 @@ public class MainSettingFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public String getUerId() {
-        return com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid();
+        return CurrentPreference.getInstance().getUserid();
     }
 
     public String Code2ServiceState(String code) {
@@ -446,7 +446,7 @@ public class MainSettingFragment extends BaseFragment implements View.OnClickLis
      * 显示客服状态
      */
     public void showMerchant() {
-        if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isMerchants()) {
+        if (CurrentPreference.getInstance().isMerchants()) {
             serviceStatePresenter.getServiceState();
         } else {
             setting_service_mode_container.setVisibility(View.GONE);

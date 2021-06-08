@@ -18,8 +18,6 @@ import com.qunar.im.ui.view.baseView.IMessageItem;
 import com.qunar.im.ui.view.baseView.NoLineClickSpan;
 import com.qunar.im.utils.HttpUtil;
 
-import java.util.HashMap;
-
 /**
  * Created by xinbo.wang on 2016-12-06.
  */

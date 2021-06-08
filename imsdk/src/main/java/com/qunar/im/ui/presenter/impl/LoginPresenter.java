@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.QunarIMApp;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.presenter.ILoginPresenter;
 import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.base.util.AccountSwitchUtils;
@@ -15,7 +16,6 @@ import com.qunar.im.core.enums.LoginStatus;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 
 import de.greenrobot.event.EventBus;
@@ -103,7 +103,7 @@ public class LoginPresenter implements ILoginPresenter, IMNotificaitonCenter.Not
 //                            CurrentPreference.getInstance().getUserId());
 //                    getVirtualUser();
 //                    initUserInfo();
-                    AccountSwitchUtils.addAccount(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid(), com.qunar.im.protobuf.common.CurrentPreference.getInstance().getToken(), getCurrentNavName(), getCurrentNavUrl());
+                    AccountSwitchUtils.addAccount(CurrentPreference.getInstance().getUserid(), CurrentPreference.getInstance().getToken(), getCurrentNavName(), getCurrentNavUrl());
                     loginView.setLoginResult(true, 0);
                     loginView.getVirtualUserRole(true);
                 } else if (args[0].equals(LoginStatus.Updating)) {

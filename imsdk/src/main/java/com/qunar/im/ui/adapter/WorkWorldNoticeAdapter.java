@@ -1,7 +1,5 @@
 package com.qunar.im.ui.adapter;
 
-import android.view.MenuInflater;
-
 import com.qunar.im.base.module.MultiItemEntity;
 import com.qunar.im.ui.view.recyclerview.BaseMultiItemQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;

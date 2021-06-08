@@ -30,7 +30,7 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 

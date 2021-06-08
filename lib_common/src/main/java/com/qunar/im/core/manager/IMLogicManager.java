@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LruCache;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.common.ConversitionType;
@@ -38,6 +39,7 @@ import com.qunar.im.base.util.EventBusEvent;
 import com.qunar.im.base.util.IMUserDefaults;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.other.QtalkSDK;
@@ -45,19 +47,17 @@ import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.protobuf.Interfaces.IGroupEventReceivedDelegate;
 import com.qunar.im.protobuf.Interfaces.IIMEventReceivedDelegate;
 import com.qunar.im.protobuf.Interfaces.IMessageReceivedDelegate;
-import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.protobuf.common.ParamIsEmptyException;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.protobuf.dispatch.DispatcherQueue;
 import com.qunar.im.protobuf.entity.XMPPJID;
-import com.qunar.im.protobuf.stream.PbAssemblyUtil;
-import com.qunar.im.protobuf.stream.PbParseUtil;
 import com.qunar.im.protobuf.stream.ProtobufSocket;
 import com.qunar.im.protobuf.utils.StringUtils;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
+import com.qunar.im.utils.PbAssemblyUtil;
+import com.qunar.im.utils.PbParseUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import org.json.JSONArray;
@@ -74,6 +74,7 @@ import java.util.TimerTask;
 import de.greenrobot.event.EventBus;
 
 /**
+ * 有反射调用reConnectionForce方法 不要修改类&包名
  * Created by may on 2017/6/29.
  */
 
@@ -1082,7 +1083,7 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
     }
 
 
-    public void login(String username, String password) throws IOException, ParamIsEmptyException {
+    public void login(String username, String password) throws IOException {
         if (_protocolType == IMProtocol.PROTOCOL_PROTOBUF) {
             _pbSocket.setHostName(QtalkNavicationService.getInstance().getXmppHost());
             _pbSocket.setDomain(QtalkNavicationService.getInstance().getXmppdomain());
@@ -1518,7 +1519,7 @@ public class IMLogicManager implements IMessageReceivedDelegate, IGroupEventRece
                                            return;
                                        }
                                         IMUserDefaults.getStandardUserDefaults().newEditor(CommonConfig.globalContext)
-                                                .putObject(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getUserid()
+                                                .putObject(CurrentPreference.getInstance().getUserid()
                                                         + QtalkNavicationService.getInstance().getXmppdomain()
                                                         + CommonConfig.isDebug
                                                         + MD5.hex(navurl)

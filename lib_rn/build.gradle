@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 android {
     compileSdkVersion project.compileSdkVersion as int
-//    buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion project.minSdkVersion as int
@@ -56,6 +55,7 @@ dependencies {
     implementation 'de.greenrobot:eventbus:2.2.1'
     //日期选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
-    implementation 'com.android.support:recyclerview-v7:27.1.0'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 }
+//apply from: 'release.gradle'

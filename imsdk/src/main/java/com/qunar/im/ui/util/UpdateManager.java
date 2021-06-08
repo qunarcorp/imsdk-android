@@ -13,7 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,7 +35,7 @@ import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.imagepicker.util.ProviderUtil;
 
@@ -58,7 +58,7 @@ public class UpdateManager {
 
     private  String API_URL;
 
-    private static final String STARTALK_URL = "https://im.qunar.com/package/newapi";
+    private static final String STARTALK_URL = "";
 
     private static final int DOWN_NOSDCARD = 0;
     private static final int DOWN_UPDATE = 1;
@@ -197,6 +197,9 @@ public class UpdateManager {
                 return;
         }
         String url = API_URL + this.curVersionCode;// + "&cpu=" + Build.CPU_ABI;
+        if(!url.startsWith("http")){
+            return;
+        }
         if(isForce) url+="&f=1";
         StringBuilder stringBuilder = new StringBuilder(url);
         Protocol.addBasicParamsOnHead(stringBuilder);

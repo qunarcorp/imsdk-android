@@ -1,13 +1,14 @@
 package com.qunar.im.ui.view.chatExtFunc;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.qunar.im.ui.R;
 

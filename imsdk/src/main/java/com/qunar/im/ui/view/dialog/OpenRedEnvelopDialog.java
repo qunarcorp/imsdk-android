@@ -3,7 +3,6 @@ package com.qunar.im.ui.view.dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +20,11 @@ import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.manager.IMPayManager;
 import com.qunar.im.protobuf.Event.QtalkEvent;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.activity.PersonalInfoActivity;
 import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.utils.ConnectionUtil;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**

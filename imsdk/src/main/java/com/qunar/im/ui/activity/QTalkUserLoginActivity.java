@@ -38,17 +38,16 @@ import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.NetworkUtils;
 import com.qunar.im.base.util.Utils;
 import com.qunar.im.common.CommonConfig;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.protobuf.dispatch.DispatchHelper;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.presenter.ILoginPresenter;
 import com.qunar.im.ui.presenter.factory.LoginFactory;
-import com.qunar.im.ui.presenter.impl.QTalkPublicLoginPresenter;
 import com.qunar.im.ui.presenter.views.ILoginView;
 import com.qunar.im.ui.sdk.QIMSdk;
 import com.qunar.im.ui.presenter.ILoginPresenter;
@@ -410,7 +409,7 @@ public class QTalkUserLoginActivity extends IMBaseLoginActivity implements View.
         qtuser_password_et.setText("");
         qtuer_remember_me_cbx.setEnabled(false);
 
-        if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isRememberMe()) {
+        if (CurrentPreference.getInstance().isRememberMe()) {
             final String userName = CurrentPreference.getInstance().getUserid();
             if (userName != null) {
                 qtuser_username_et.setText(userName);
@@ -655,7 +654,7 @@ public class QTalkUserLoginActivity extends IMBaseLoginActivity implements View.
                         bundle.getExtras().containsKey(Constants.BundleKey.WEB_LOGIN_RESULT)) {
                     String jsonStr = bundle.getExtras().getString(Constants.BundleKey.WEB_LOGIN_RESULT);
                     if(!TextUtils.isEmpty(jsonStr)) {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt(jsonStr);
+                        CurrentPreference.getInstance().setQvt(jsonStr);
                         loginPresenter.login();
                     }
                 }
@@ -833,7 +832,7 @@ public class QTalkUserLoginActivity extends IMBaseLoginActivity implements View.
         Intent intent = new Intent(QTalkUserLoginActivity.this, QunarWebActvity.class);
         intent.putExtra(Constants.BundleKey.WEB_FROM, Constants.BundleValue.UC_LOGIN);
         intent.putExtra(WebMsgActivity.IS_HIDE_BAR, true);
-        intent.setData(Uri.parse("https://user.qunar.com/mobile/login.jsp?ret=" +
+        intent.setData(Uri.parse("" +
                 Constants.BundleKey.WEB_LOGIN_RESULT + "&loginType=mobile"));
         startActivityForResult(intent, WEB_LOGIN);
     }

@@ -11,7 +11,7 @@ import com.qunar.im.ui.presenter.views.IChatView;
 import com.qunar.im.base.protocol.MessageAPI;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.ListUtil;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.utils.QtalkStringUtils;
 

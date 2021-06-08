@@ -10,10 +10,8 @@ import android.text.style.ForegroundColorSpan;
 import com.qunar.im.base.jsonbean.AtInfo;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.RecentConversation;
 import com.qunar.im.base.structs.MessageStatus;
-import com.qunar.im.core.manager.IMLogicManager;
 
 import java.util.List;
 import java.util.Map;

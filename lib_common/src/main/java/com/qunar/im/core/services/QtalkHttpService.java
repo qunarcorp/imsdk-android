@@ -1,6 +1,6 @@
 package com.qunar.im.core.services;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;

@@ -12,10 +12,9 @@ import com.qunar.im.ui.presenter.views.ILocalChatRecordView;
 import com.qunar.im.base.protocol.ProtocolCallback;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
-import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.protobuf.utils.XmlUtils;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
-import com.qunar.im.protobuf.utils.XmlUtils;
+import com.qunar.im.utils.XmlUtils;
 import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.QtalkStringUtils;
 

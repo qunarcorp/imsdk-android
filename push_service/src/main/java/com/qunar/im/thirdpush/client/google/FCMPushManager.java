@@ -1,7 +1,7 @@
 package com.qunar.im.thirdpush.client.google;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +31,7 @@ public class FCMPushManager implements QPushManager {
                 @Override
                 public void onComplete(@NonNull Task<InstanceIdResult> task) {
                     if(!task.isSuccessful()) {
-                        Logger.i("获取firebase service token 失败 ");
+                        Logger.i("获取firebase service token 失败 " + task.getException());
                     } else {
                         String token = task.getResult().getToken();
                         Logger.i("获取firebase service token : " + token);

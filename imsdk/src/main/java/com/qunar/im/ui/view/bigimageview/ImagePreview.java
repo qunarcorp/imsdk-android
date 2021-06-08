@@ -3,15 +3,14 @@ package com.qunar.im.ui.view.bigimageview;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.view.bigimageview.bean.ImageInfo;
-import com.qunar.im.ui.view.bigimageview.tool.utility.common.NetworkUtil;
 import com.qunar.im.ui.view.bigimageview.view.ImagePreviewActivity;
 import com.qunar.im.ui.view.bigimageview.view.listener.OnBigImageClickListener;
 import com.qunar.im.ui.view.bigimageview.view.listener.OnBigImageLongClickListener;

@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.qunar.im.base.jsonbean.GeneralJson;
 import com.qunar.im.base.protocol.OpsAPI;
 import com.qunar.im.base.protocol.ProtocolCallback;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.utils.QtalkStringUtils;
 

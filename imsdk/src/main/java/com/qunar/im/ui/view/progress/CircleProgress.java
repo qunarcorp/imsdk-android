@@ -2,8 +2,8 @@ package com.qunar.im.ui.view.progress;
 
 import android.content.Context;
 import android.graphics.*;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 /**
  * Created by peng on 16-10-18. The CircleProgress class extends BaseProgress

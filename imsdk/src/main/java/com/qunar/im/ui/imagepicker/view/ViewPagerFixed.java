@@ -1,9 +1,10 @@
 package com.qunar.im.ui.imagepicker.view;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * 修复图片在ViewPager控件中缩放报错的BUG

@@ -45,25 +45,20 @@ import com.qunar.im.base.common.BackgroundExecutor;
 import com.qunar.im.base.common.CommonUploader;
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.jsonbean.LeadInfo;
-import com.qunar.im.base.jsonbean.LogInfo;
 import com.qunar.im.base.jsonbean.NewRemoteConfig;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
 import com.qunar.im.base.jsonbean.SetMucVCardResult;
 import com.qunar.im.base.jsonbean.SetVCardResult;
-import com.qunar.im.base.jsonbean.SetWorkWorldRemindResponse;
 import com.qunar.im.base.jsonbean.UploadImageResult;
 import com.qunar.im.base.module.AreaLocal;
 import com.qunar.im.base.module.AvailableRoomRequest;
 import com.qunar.im.base.module.AvailableRoomResponse;
 import com.qunar.im.base.module.CalendarTrip;
-import com.qunar.im.base.module.CityLocal;
 import com.qunar.im.base.module.GroupMember;
 import com.qunar.im.base.module.IMMessage;
-import com.qunar.im.base.module.MedalsInfo;
 import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.TripMemberCheckResponse;
 import com.qunar.im.base.module.UserConfigData;
-import com.qunar.im.base.protocol.HttpRequestCallback;
 import com.qunar.im.base.protocol.NativeApi;
 import com.qunar.im.base.protocol.PayApi;
 import com.qunar.im.base.protocol.Protocol;
@@ -90,19 +85,12 @@ import com.qunar.im.core.manager.IMDatabaseManager;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.manager.IMNotificaitonCenter;
 import com.qunar.im.core.services.QtalkNavicationService;
-import com.qunar.im.core.utils.GlobalConfigManager;
-import com.qunar.im.google.auth.OtpProvider;
-import com.qunar.im.log.LogConstans;
-import com.qunar.im.log.LogService;
-import com.qunar.im.log.QLog;
-import com.qunar.im.other.CacheDataType;
+import com.qunar.im.auth.OtpProvider;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.Event.QtalkEvent;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.CalendarSynchronousUtil;
-import com.qunar.im.utils.ConnectionUtil;
-import com.qunar.im.utils.HttpUtil;
 import com.qunar.im.utils.MD5;
 import com.qunar.im.utils.QRUtil;
 import com.qunar.im.utils.QtalkStringUtils;
@@ -1935,7 +1923,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             @Override
             public void onCompleted(Boolean aBoolean) {
                 ConnectionUtil.getInstance().setPushState(PushSettinsStatus.SOUND_INAPP, state ? 1 : 0);
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
+                CurrentPreference.getInstance().setTurnOnMsgSound(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.SOUND_INAPP));
                 map.putBoolean("ok", true);
                 callback.invoke(map);
             }
@@ -1970,7 +1958,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
             @Override
             public void onCompleted(Boolean aBoolean) {
                 ConnectionUtil.getInstance().setPushState(PushSettinsStatus.VIBRATE_INAPP, state ? 1 : 0);
-                com.qunar.im.protobuf.common.CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
+                CurrentPreference.getInstance().setTurnOnMsgShock(ConnectionUtil.getInstance().getPushStateBy(PushSettinsStatus.VIBRATE_INAPP));
                 map.putBoolean("ok", true);
                 callback.invoke(map);
             }
@@ -3431,7 +3419,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
     public void getDomainList(final Callback callback){
         HttpUtil.getDomainList(new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 WritableNativeMap map = new WritableNativeMap();
                 try{
                     String resultString = Protocol.parseStream(response);
@@ -3476,7 +3464,7 @@ public class QimRNBModule extends ReactContextBaseJavaModule implements IMNotifi
         params.put("limit",String.valueOf(limit));
         HttpUtil.searchDomainUser(url, params, new HttpRequestCallback() {
             @Override
-            public void onComplete(InputStream response) {
+            public void onComplete(InputStream response) throws IOException {
                 try{
                     String resultString = Protocol.parseStream(response);
                     WritableNativeMap map = new WritableNativeMap();

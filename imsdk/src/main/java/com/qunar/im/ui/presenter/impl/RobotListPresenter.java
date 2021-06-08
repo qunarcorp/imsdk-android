@@ -18,7 +18,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.base.util.NetworkUtils;
 import com.qunar.im.core.manager.IMDatabaseManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.utils.QtalkStringUtils;
 
 import java.util.ArrayList;

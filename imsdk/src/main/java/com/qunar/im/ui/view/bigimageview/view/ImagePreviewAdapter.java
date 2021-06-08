@@ -3,8 +3,9 @@ package com.qunar.im.ui.view.bigimageview.view;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;

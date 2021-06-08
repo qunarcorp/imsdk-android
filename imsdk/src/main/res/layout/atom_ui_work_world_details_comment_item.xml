@@ -109,13 +109,13 @@
             fresco:emojiconTextOverideTouch="true"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/child_comment_rc"
         android:layout_marginLeft="57dp"
         android:layout_height="wrap_content">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
     <View
         android:id="@+id/deleteLine"
         android:layout_marginLeft="57dp"

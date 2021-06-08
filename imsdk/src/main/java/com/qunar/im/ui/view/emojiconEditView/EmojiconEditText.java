@@ -18,7 +18,7 @@ package com.qunar.im.ui.view.emojiconEditView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 import com.qunar.im.base.util.Utils;

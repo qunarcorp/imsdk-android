@@ -36,11 +36,10 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.ListUtil;
 import com.qunar.im.base.util.glide.GlideCircleTransform;
 import com.qunar.im.base.util.graphics.BitmapHelper;
-import com.qunar.im.base.util.graphics.ImageUtils;
 import com.qunar.im.base.util.graphics.MyDiskCache;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.view.bigimageview.view.MyGlideUrl;
 import com.qunar.im.utils.ConnectionUtil;
 import com.qunar.im.utils.QtalkStringUtils;
@@ -49,7 +48,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import de.greenrobot.event.EventBus;
 

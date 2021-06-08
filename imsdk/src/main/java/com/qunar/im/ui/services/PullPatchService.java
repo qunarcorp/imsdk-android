@@ -3,7 +3,7 @@ package com.qunar.im.ui.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,7 +21,7 @@ import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.common.CommonConfig;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 
 import java.io.File;
 import java.io.FileOutputStream;

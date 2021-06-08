@@ -2,14 +2,9 @@ package com.qunar.im.ui.schema;
 
 import android.content.Intent;
 
-import com.qunar.im.base.module.UserHaveMedalStatus;
-import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.core.manager.IMDatabaseManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.activity.IMBaseActivity;
 import com.qunar.im.ui.util.ReflectUtil;
 
-import java.util.List;
 import java.util.Map;
 
 public class QOpenRnMySetting implements QChatSchemaService{

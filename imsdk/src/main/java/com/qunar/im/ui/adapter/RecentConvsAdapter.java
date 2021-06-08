@@ -8,7 +8,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +23,12 @@ import com.qunar.im.base.module.Nick;
 import com.qunar.im.base.module.RecentConversation;
 import com.qunar.im.base.common.ConversitionType;
 import com.qunar.im.base.util.ChatTextHelper;
-import com.qunar.im.base.util.Constants;
 import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.InternDatas;
-import com.qunar.im.base.util.LogUtil;
 import com.qunar.im.ui.util.ProfileUtils;
-import com.qunar.im.common.CommonConfig;
 import com.qunar.im.core.manager.IMLogicManager;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.ui.R;
-import com.qunar.im.ui.util.ResourceUtils;
 import com.qunar.im.ui.view.IconView;
 import com.qunar.im.ui.view.recentView.ChatRender;
 import com.qunar.im.ui.view.recentView.CommonHolderView;
@@ -46,7 +41,6 @@ import com.qunar.im.ui.view.recentView.IRecentRender;
 import com.qunar.im.ui.view.recentView.RobotRender;
 import com.qunar.im.utils.QtalkStringUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -152,7 +146,7 @@ public class RecentConvsAdapter extends BaseAdapter {
             holder = (CommonHolderView) convertView.getTag();
         }
         holder.mConverLineView.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
-//        int fontSizeMode = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getFontSizeMode();
+//        int fontSizeMode = CurrentPreference.getInstance().getFontSizeMode();
 //        float text1FontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_large);
 //        float textViewTimeFontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_smaller);
 //        float text2FontSize = context.getResources().getDimensionPixelSize(R.dimen.atom_ui_text_size_small);

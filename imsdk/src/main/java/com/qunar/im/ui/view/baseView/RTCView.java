@@ -21,7 +21,7 @@ import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.common.CommonConfig;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.protobuf.common.ProtoMessageOuterClass;
 import com.qunar.im.rtc.webrtc.WebRTCStatus;
 import com.qunar.im.ui.R;

@@ -1,9 +1,7 @@
 package com.qunar.im.ui.presenter.impl;
 
-import com.qunar.im.base.module.WorkWorldAtShowResponse;
 import com.qunar.im.base.module.WorkWorldSearchShowResponse;
 import com.qunar.im.base.protocol.ProtocolCallback;
-import com.qunar.im.protobuf.common.CurrentPreference;
 import com.qunar.im.ui.presenter.WorkWorldAtShowPresenter;
 import com.qunar.im.ui.presenter.views.WorkWorldAtShowView;
 import com.qunar.im.utils.HttpUtil;

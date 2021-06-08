@@ -4,11 +4,11 @@ import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
 import com.qunar.im.base.jsonbean.BaseJsonResult;
-import com.qunar.im.base.jsonbean.GeneralJson;
 import com.qunar.im.base.jsonbean.QVTResponseResult;
 import com.qunar.im.base.jsonbean.SeatStatusResult;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.base.util.LogUtil;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.services.QtalkNavicationService;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class ThirdProviderAPI {
     private static final String TAG = ThirdProviderAPI.class.getSimpleName();
 
     public static void setServiceStatus(String userId,String statusCode,String sid,final ProtocolCallback.UnitCallback<Boolean> callback) {
-        String qvtStr = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt();
+        String qvtStr = CurrentPreference.getInstance().getQvt();
         if (!TextUtils.isEmpty(qvtStr)) {
             QVTResponseResult qvtResponseResult = JsonUtils.getGson().fromJson(qvtStr, QVTResponseResult.class);
             Map<String, String> cookie = new HashMap<>();
@@ -44,7 +44,7 @@ public class ThirdProviderAPI {
                         result = JsonUtils.getGson().fromJson(resultString
                                 , BaseJsonResult.class);
                         r = result != null && result.ret;
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         Logger.i("setServiceStatus->>",e.getLocalizedMessage());
                     }
 
@@ -65,7 +65,7 @@ public class ThirdProviderAPI {
     }
 
     public static void getServiceStatus(String userId,final ProtocolCallback.UnitCallback<List<SeatStatusResult.SeatStatus>> callback) {
-        String qvtStr = com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt();
+        String qvtStr = CurrentPreference.getInstance().getQvt();
         if (!TextUtils.isEmpty(qvtStr)) {
             QVTResponseResult qvtResponseResult = JsonUtils.getGson().fromJson(qvtStr, QVTResponseResult.class);
             Map<String, String> cookie = new HashMap<>();
@@ -81,7 +81,7 @@ public class ThirdProviderAPI {
                         Logger.i("getServiceStatus" + resultString);
                         SeatStatusResult statusResult = JsonUtils.getGson().fromJson(resultString,SeatStatusResult.class);
                         seatStatuses = statusResult.data;
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         LogUtil.e(TAG,"error",e);
                     }
                     callback.onCompleted(seatStatuses);

@@ -2,7 +2,6 @@ package com.qunar.im.ui.view.baseView.processor;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import com.qunar.im.base.jsonbean.RemindDataBean;
 import com.qunar.im.base.module.IMMessage;
 import com.qunar.im.base.module.WorkWorldItem;
 import com.qunar.im.base.util.JsonUtils;
-import com.qunar.im.protobuf.common.CurrentPreference;
-import com.qunar.im.ui.activity.QunarWebActvity;
 import com.qunar.im.ui.activity.WorkWorldDetailsActivity;
 import com.qunar.im.ui.view.baseView.ClickRemindView;
 import com.qunar.im.ui.view.baseView.IMessageItem;

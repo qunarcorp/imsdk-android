@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +25,7 @@ import android.widget.Toast;
 
 import com.qunar.im.base.common.QunarIMApp;
 import com.qunar.im.base.module.Nick;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.core.utils.GlobalConfigManager;
 import com.qunar.im.permission.PermissionCallback;
 import com.qunar.im.permission.PermissionDispatcher;
@@ -42,7 +41,8 @@ import com.qunar.im.core.services.QtalkHttpRequest;
 import com.qunar.im.core.services.QtalkNavicationService;
 import com.qunar.im.other.IQTalkLoginDelegate;
 import com.qunar.im.other.TestAccount;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.permission.PermissionCallback;
+import com.qunar.im.permission.PermissionDispatcher;
 import com.qunar.im.protobuf.common.LoginType;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.util.ParseErrorEvent;
@@ -127,8 +127,8 @@ public class  LoginActivity extends IMBaseLoginActivity implements View.OnClickL
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         initViews();
-        if (!TextUtils.isEmpty(com.qunar.im.protobuf.common.CurrentPreference.getInstance().getQvt())) {
-            com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt("");
+        if (!TextUtils.isEmpty(CurrentPreference.getInstance().getQvt())) {
+            CurrentPreference.getInstance().setQvt("");
         }
     }
 
@@ -253,7 +253,7 @@ public class  LoginActivity extends IMBaseLoginActivity implements View.OnClickL
             verify_code_container.setVisibility(View.GONE);
             remember_me_cbx.setEnabled(false);
         }
-        if (com.qunar.im.protobuf.common.CurrentPreference.getInstance().isRememberMe()) {
+        if (CurrentPreference.getInstance().isRememberMe()) {
             final String userName = CurrentPreference.getInstance().getUserid();
             if (userName != null) {
                 editText_username.setText(userName);
@@ -467,7 +467,7 @@ public class  LoginActivity extends IMBaseLoginActivity implements View.OnClickL
                         bundle.getExtras().containsKey(Constants.BundleKey.WEB_LOGIN_RESULT)) {
                     String jsonStr = bundle.getExtras().getString(Constants.BundleKey.WEB_LOGIN_RESULT);
                     if (!TextUtils.isEmpty(jsonStr)) {
-                        com.qunar.im.protobuf.common.CurrentPreference.getInstance().setQvt(jsonStr);
+                        CurrentPreference.getInstance().setQvt(jsonStr);
                         DataUtils.getInstance(CommonConfig.globalContext).putPreferences(Constants.Preferences.qchat_qvt, jsonStr);
                         loginPresenter.login();
                     }

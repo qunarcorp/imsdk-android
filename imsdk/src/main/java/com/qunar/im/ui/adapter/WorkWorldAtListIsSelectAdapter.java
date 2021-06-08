@@ -1,7 +1,6 @@
 package com.qunar.im.ui.adapter;
 
 import android.app.Activity;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +14,6 @@ import com.qunar.im.ui.util.ProfileUtils;
 import com.qunar.im.ui.view.recyclerview.BaseQuickAdapter;
 import com.qunar.im.ui.view.recyclerview.BaseViewHolder;
 import com.qunar.im.utils.ConnectionUtil;
-
-import java.util.List;
 
 public class WorkWorldAtListIsSelectAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     private Activity mActivity;

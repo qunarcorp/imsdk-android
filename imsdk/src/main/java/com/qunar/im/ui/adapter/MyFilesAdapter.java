@@ -17,7 +17,7 @@ import com.qunar.im.base.util.DateTimeUtils;
 import com.qunar.im.base.util.FileUtils;
 import com.qunar.im.base.util.JsonUtils;
 import com.qunar.im.core.manager.IMLogicManager;
-import com.qunar.im.protobuf.common.CurrentPreference;
+import com.qunar.im.common.CurrentPreference;
 import com.qunar.im.ui.R;
 import com.qunar.im.ui.activity.MyFilesActivity;
 import com.qunar.im.ui.activity.MyFilesDetailActivity;

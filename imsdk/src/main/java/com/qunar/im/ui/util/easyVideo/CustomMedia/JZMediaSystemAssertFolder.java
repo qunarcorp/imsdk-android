@@ -8,7 +8,7 @@ import android.media.PlaybackParams;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.view.Surface;
 
 import com.qunar.im.ui.util.easyVideo.JZMediaInterface;
